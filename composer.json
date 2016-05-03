@@ -1,0 +1,25 @@
+{
+  "name": "mpociot/laravel-apidoc-generator",
+  "license": "MIT",
+  "description": "Generate beautiful API documentation from your Laravel / Lumen application",
+  "keywords": ["API","Documentation","Laravel"],
+  "homepage": "http://github.com/mpociot/apidoc",
+  "authors": [
+    {
+      "name": "Marcel Pociot",
+      "email": "m.pociot@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "laravel/framework": "~5.0",
+    "phpdocumentor/reflection-docblock": "~2.0"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-0": {
+      "Mpociot\\ApiDoc": "src/"
+    }
+  }
+}
