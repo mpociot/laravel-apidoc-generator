@@ -62,9 +62,15 @@ class GenerateDocumentation extends Command
         }
 
         if ($actAs !== null) {
-            $userModel = config('auth.providers.users.model');
-            $user = $userModel::find($actAs);
-            $this->laravel['auth']->guard()->setUser($user);
+            if (version_compare($this->laravel->version(),'5.2.0', '<')) {
+                $userModel = config('auth.model');
+                $user = $userModel::find($actAs);
+                $this->laravel['auth']->setUser($user);
+            } else {
+                $userModel = config('auth.providers.users.model');
+                $user = $userModel::find($actAs);
+                $this->laravel['auth']->guard()->setUser($user);
+            }
         }
 
         $routes = Route::getRoutes();

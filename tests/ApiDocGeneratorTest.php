@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\ApiDocGenerator;
@@ -55,6 +56,21 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
         $this->assertEquals(['DELETE'], $parsed['methods']);
     }
 
+    public function testCanParseFormRequestRules()
+    {
+        \Illuminate\Support\Facades\Route::post('/post', 'TestController@parseFormRequestRules');
+        $route = new Route(['POST'], '/post', ['uses' => 'TestController@parseFormRequestRules']);
+        $parsed = $this->generator->processRoute($route);
+        $parameters = $parsed['parameters'];
+        $this->assertArrayHasKey('required_attribute', $parameters);
+
+        $required_attribute = $parameters['required_attribute'];
+
+        $this->assertTrue( $required_attribute['required'] );
+        $this->assertEquals( 'string', $required_attribute['type'] );
+        $this->assertCount( 0, $required_attribute['description'] );
+    }
+
 }
 
 class TestController extends Controller
@@ -76,4 +92,19 @@ class TestController extends Controller
         return '';
     }
 
+    public function parseFormRequestRules(TestRequest $request)
+    {
+        return '';
+    }
+
+}
+
+class TestRequest extends FormRequest 
+{
+    public function rules()
+    {
+        return [
+            'required_attribute' => 'required'
+        ];
+    }
 }
