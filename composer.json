@@ -3,7 +3,7 @@
   "license": "MIT",
   "description": "Generate beautiful API documentation from your Laravel / Lumen application",
   "keywords": ["API","Documentation","Laravel"],
-  "homepage": "http://github.com/mpociot/apidoc",
+  "homepage": "http://github.com/mpociot/laravel-apidoc-generator",
   "authors": [
     {
       "name": "Marcel Pociot",
