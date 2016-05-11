@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc;
 
 use Illuminate\Support\ServiceProvider;
 use Mpociot\ApiDoc\Commands\GenerateDocumentation;
+use Mpociot\ApiDoc\Commands\UpdateDocumentation;
 
 class ApiDocGeneratorServiceProvider extends ServiceProvider
 {
@@ -26,9 +27,13 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         $this->app['apidoc.generate'] = $this->app->share(function () {
             return new GenerateDocumentation();
         });
+        $this->app['apidoc.update'] = $this->app->share(function () {
+            return new UpdateDocumentation();
+        });
 
         $this->commands(
-            'apidoc.generate'
+            'apidoc.generate',
+            'apidoc.update',
         );
     }
 

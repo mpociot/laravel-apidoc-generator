@@ -11,10 +11,6 @@ use Symfony\Component\Process\Process;
 
 class GenerateDocumentation extends Command
 {
-    /**
-     * The Whiteboard repository URL
-     */
-    const WHITEBOARD_REPOSITORY = 'https://github.com/mpociot/whiteboard.git';
 
     /**
      * The name and signature of the console command.
@@ -33,7 +29,7 @@ class GenerateDocumentation extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Generate your API documentation from existing Laravel routes.';
 
     /**
      * Create a new command instance.
