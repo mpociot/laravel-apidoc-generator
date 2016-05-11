@@ -61,6 +61,8 @@ This package uses the HTTP controller doc blocks to create a table of contents a
  public function foo()
 ```
 
+**Result:** ![Doc block result](http://marcelpociot.com/documentarian/doc_block.png)
+
 #### Form request validation rules
 
 To display a list of valid parameters, your API methods accepts, this package uses Laravels [Form Requests Validation](https://laravel.com/docs/5.2/validation#form-request-validation).
@@ -72,9 +74,13 @@ public function rules()
     return [
         'title' => 'required|max:255',
         'body' => 'required',
+        'type' => 'in:foo,bar',
+        'thumbnail' => 'required_if:type,foo|image'
     ];
 }
 ```
+
+**Result:** ![Form Request](http://marcelpociot.com/documentarian/form_request.png)
 
 #### API responses
 
