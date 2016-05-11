@@ -1,6 +1,6 @@
 ## Laravel API Documentation Generator
 
-Automatically generate your API documentation from your existing Laravel routes.
+Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.com/whiteboard/).
 
 `php artisan api:gen --routePrefix=settings/api/*`
 

@@ -31,10 +31,10 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
             return new UpdateDocumentation();
         });
 
-        $this->commands(
+        $this->commands([
             'apidoc.generate',
             'apidoc.update',
-        );
+        ]);
     }
 
 }
