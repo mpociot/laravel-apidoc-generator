@@ -108,6 +108,18 @@ class ApiDocGenerator
     }
 
     /**
+     * @param $arr
+     * @param $first
+     * @param $last
+     * @return string
+     */
+    protected function fancy_implode($arr, $first, $last)
+    {
+        array_push($arr, implode($last, array_splice($arr, -2)));
+        return implode($first, $arr);
+    }
+
+    /**
      * @param $rule
      * @param $attributeData
      */
@@ -121,30 +133,96 @@ class ApiDocGenerator
             case 'required':
                 $attributeData['required'] = true;
                 break;
+            case 'accepted':
+                $attributeData['type'] = 'boolean';
+                break;
+            case 'after':
+                $attributeData['type'] = 'date';
+                $attributeData['description'][] = 'Must be a date after: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
+                break;
+            case 'alpha':
+                $attributeData['description'][] = 'Only alphabetic characters allowed';
+                break;
+            case 'alpha_dash':
+                $attributeData['description'][] = 'Allowed: alpha-numeric characters, as well as dashes and underscores.';
+                break;
+            case 'alpha_num':
+                $attributeData['description'][] = 'Only alpha-numeric characters allowed';
+                break;
             case 'in':
-                $attributeData['description'][] = implode(' or ', $parameters);
+                $attributeData['description'][] = $this->fancy_implode($parameters, ', ', ' or ');
                 break;
             case 'not_in':
-                $attributeData['description'][] = 'Not in: ' . implode(' or ', $parameters);
+                $attributeData['description'][] = 'Not in: ' . $this->fancy_implode($parameters, ', ', ' or ');
                 break;
             case 'min':
+                $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Minimum: `' . $parameters[0] . '`';
                 break;
             case 'max':
+                $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Maximum: `' . $parameters[0] . '`';
                 break;
             case 'between':
-                $attributeData['description'][] = 'Between: `' . $parameters[0] . '` and ' . $parameters[1];
+                $attributeData['type'] = 'numeric';
+                $attributeData['description'][] = 'Between: `' . $parameters[0] . '` and `' . $parameters[1] . '`';
+                break;
+            case 'before':
+                $attributeData['type'] = 'date';
+                $attributeData['description'][] = 'Must be a date preceding: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
                 break;
             case 'date_format':
-                $attributeData['description'][] = 'Date format: ' . $parameters[0];
+                $attributeData['type'] = 'date';
+                $attributeData['description'][] = 'Date format: `' . $parameters[0] . '`';
+                break;
+            case 'different':
+                $attributeData['description'][] = 'Must have a different value than parameter: `' . $parameters[0] . '`';
+                break;
+            case 'digits':
+                $attributeData['type'] = 'numeric';
+                $attributeData['description'][] = 'Must have an exact length of `' . $parameters[0] . '`';
+                break;
+            case 'digits_between':
+                $attributeData['type'] = 'numeric';
+                $attributeData['description'][] = 'Must have a length between `' . $parameters[0] . '` and `' . $parameters[1] . '`';
+                break;
+            case 'image':
+                $attributeData['description'][] = 'Must be an image (jpeg, png, bmp, gif, or svg)';
+                break;
+            case 'json':
+                $attributeData['type'] = 'string';
+                $attributeData['description'][] = 'Must be a valid JSON string.';
                 break;
             case 'mimetypes':
             case 'mimes':
-                $attributeData['description'][] = 'Allowed mime types: ' . implode(', ', $parameters);
+                $attributeData['description'][] = 'Allowed mime types: ' . $this->fancy_implode($parameters, ', ', ' or ');
                 break;
             case 'required_if':
                 $attributeData['description'][] = 'Required if `' . $parameters[0] . '` is `' . $parameters[1] . '`';
+                break;
+            case 'required_unless':
+                $attributeData['description'][] = 'Required unless `' . $parameters[0] . '` is `' . $parameters[1] . '`';
+                break;
+            case 'required_with':
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' or ') . ' are present.';
+                break;
+            case 'required_with_all':
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' and ') . ' are present.';
+                break;
+            case 'required_without':
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' or ') . ' are not present.';
+                break;
+            case 'required_without_all':
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' and ') . ' are not present.';
+                break;
+            case 'same':
+                $attributeData['description'][] = 'Must be the same as `' . $parameters[0] . '`';
+                break;
+            case 'size':
+                $attributeData['description'][] = 'Must have the size of `' . $parameters[0] . '`';
+                break;
+            case 'timezone':
+                $attributeData['description'][] = 'Must be a valid timezone identifier';
                 break;
             case 'exists':
                 $attributeData['description'][] = 'Valid ' . Str::singular($parameters[0]) . ' ' . $parameters[1];
@@ -152,12 +230,17 @@ class ApiDocGenerator
             case 'active_url':
                 $attributeData['type'] = 'url';
                 break;
+            case 'regex':
+                $attributeData['type'] = 'string';
+                $attributeData['description'][] = 'Must match this regular expression: `' . $parameters[0] . '`';
+                break;
             case 'boolean':
+            case 'array':
+            case 'date':
             case 'email':
             case 'image':
             case 'string':
             case 'integer':
-            case 'json':
             case 'numeric':
             case 'url':
             case 'ip':

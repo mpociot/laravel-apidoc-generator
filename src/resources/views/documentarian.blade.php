@@ -10,7 +10,7 @@ includes:
 search: true
 
 toc_footers:
-- <a href='http://github.com/mpociot/whiteboard'>Documentation Powered by Whiteboard</a>
+- <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Whiteboard</a>
 ---
 
 # Info
@@ -36,6 +36,7 @@ curl "{{config('app.url')}}/{{$parsedRoute['uri']}}" \
 -d "{{$attribute}}"="dummy" \
 @endforeach
 @endif
+
 ```
 
 ```javascript
@@ -68,6 +69,7 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 @foreach($parsedRoute['methods'] as $method)
 `{{$method}} {{$parsedRoute['uri']}}`
+
 @endforeach
 @if(count($parsedRoute['parameters']))
 

@@ -62,13 +62,240 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
         $route = new Route(['POST'], '/post', ['uses' => 'TestController@parseFormRequestRules']);
         $parsed = $this->generator->processRoute($route);
         $parameters = $parsed['parameters'];
-        $this->assertArrayHasKey('required_attribute', $parameters);
 
-        $required_attribute = $parameters['required_attribute'];
+        $testRequest = new TestRequest();
+        $rules = $testRequest->rules();
 
-        $this->assertTrue( $required_attribute['required'] );
-        $this->assertEquals( 'string', $required_attribute['type'] );
-        $this->assertCount( 0, $required_attribute['description'] );
+        foreach ($rules as $name => $rule) {
+            $attribute = $parameters[$name];
+
+            switch ($name){
+
+                case 'required':
+                    $this->assertTrue( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+
+
+                case 'accepted':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'boolean', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+
+                case 'active_url':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'url', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'alpha':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Only alphabetic characters allowed', $attribute['description'][0]);
+                    break;
+                case 'alpha_dash':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Allowed: alpha-numeric characters, as well as dashes and underscores.', $attribute['description'][0]);
+                    break;
+                case 'alpha_num':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Only alpha-numeric characters allowed', $attribute['description'][0]);
+                    break;
+                case 'array':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'array', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'between':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Between: `5` and `200`', $attribute['description'][0]);
+                    break;
+                case 'before':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'date', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must be a date preceding: `Saturday, 23-Apr-16 14:31:00 UTC`', $attribute['description'][0]);
+                    break;
+                case 'boolean':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'boolean', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'date':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'date', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'date_format':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'date', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Date format: `j.n.Y H:iP`', $attribute['description'][0]);
+                    break;
+                case 'different':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must have a different value than parameter: `alpha_num`', $attribute['description'][0]);
+                    break;
+                case 'digits':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must have an exact length of `2`', $attribute['description'][0]);
+                    break;
+                case 'digits_between':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must have a length between `2` and `10`', $attribute['description'][0]);
+                    break;
+                case 'email':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'email', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'exists':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Valid user firstname', $attribute['description'][0]);
+                    break;
+                case 'image':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'image', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must be an image (jpeg, png, bmp, gif, or svg)', $attribute['description'][0]);
+                    break;
+                case 'in':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('jpeg, png, bmp, gif or svg', $attribute['description'][0]);
+                    break;
+                case 'integer':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'integer', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'ip':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'ip', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'json':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must be a valid JSON string.', $attribute['description'][0]);
+                    break;
+                case 'max':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Maximum: `10`', $attribute['description'][0]);
+                    break;
+                case 'min':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Minimum: `20`', $attribute['description'][0]);
+                    break;
+                case 'mimes':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Allowed mime types: jpeg, bmp or png', $attribute['description'][0]);
+                    break;
+                case 'not_in':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Not in: foo or bar', $attribute['description'][0]);
+                    break;
+                case 'numeric':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+                case 'regex':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must match this regular expression: `(.*)`', $attribute['description'][0]);
+                    break;
+                case 'required_if':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Required if `foo` is `bar`', $attribute['description'][0]);
+                    break;
+                case 'required_unless':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Required unless `foo` is `bar`', $attribute['description'][0]);
+                    break;
+                case 'required_with':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Required if the parameters foo, bar or baz are present.', $attribute['description'][0]);
+                    break;
+                case 'required_with_all':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Required if the parameters foo, bar and baz are present.', $attribute['description'][0]);
+                    break;
+                case 'required_without':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Required if the parameters foo, bar or baz are not present.', $attribute['description'][0]);
+                    break;
+                case 'required_without_all':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Required if the parameters foo, bar and baz are not present.', $attribute['description'][0]);
+                    break;
+                case 'same':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must be the same as `foo`', $attribute['description'][0]);
+                    break;
+                case 'size':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must have the size of `51`', $attribute['description'][0]);
+                    break;
+                case 'timezone':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
+                    $this->assertCount( 1, $attribute['description'] );
+                    $this->assertEquals('Must be a valid timezone identifier', $attribute['description'][0]);
+                    break;
+                case 'url':
+                    $this->assertFalse( $attribute['required'] );
+                    $this->assertEquals( 'url', $attribute['type'] );
+                    $this->assertCount( 0, $attribute['description'] );
+                    break;
+
+            }
+
+        }
+
     }
 
 }
@@ -104,7 +331,43 @@ class TestRequest extends FormRequest
     public function rules()
     {
         return [
-            'required_attribute' => 'required'
+            'required' => 'required',
+            'accepted' => 'accepted',
+            'after' => 'after:2016-04-23 14:31:00',
+            'active_url' => 'active_url',
+            'alpha' => 'alpha',
+            'alpha_dash' => 'alpha_dash',
+            'alpha_num' => 'alpha_num',
+            'array' => 'array',
+            'before' => 'before:2016-04-23 14:31:00',
+            'between' => 'between:5,200',
+            'boolean' => 'boolean',
+            'date' => 'date',
+            'date_format' => 'date_format:j.n.Y H:iP',
+            'different' => 'different:alpha_num',
+            'digits' => 'digits:2',
+            'digits_between' => 'digits_between:2,10',
+            'exists' => 'exists:users,firstname',
+            'in' => 'in:jpeg,png,bmp,gif,svg',
+            'integer' => 'integer',
+            'ip' => 'ip',
+            'json' => 'json',
+            'min' => 'min:20',
+            'max' => 'max:10',
+            'mimes' => 'mimes:jpeg,bmp,png',
+            'not_in' => 'not_in:foo,bar',
+            'numeric' => 'numeric',
+            'regex' => 'regex:(.*)',
+            'required_if' => 'required_if:foo,bar',
+            'required_unless' => 'required_unless:foo,bar',
+            'required_with' => 'required_with:foo,bar,baz',
+            'required_with_all' => 'required_with_all:foo,bar,baz',
+            'required_without' => 'required_without:foo,bar,baz',
+            'required_without_all' => 'required_without_all:foo,bar,baz',
+            'same' => 'same:foo',
+            'size' => 'size:51',
+            'timezone' => 'timezone',
+            'url' => 'url',
         ];
     }
 }

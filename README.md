@@ -1,33 +1,30 @@
-## Laravel API Documentation Generator (WIP)
+# Documentarian
+#### Simply write beautiful API documentation.
+========
 
-`php artisan api:gen --routePrefix=settings/api/*`
+This project is a PHP port of the popular [Slate](https://github.com/tripit/slate) API documentation tool.
 
+> If PHP is not your thing and you're more into nodeJS, why not give [Whiteboard](https://github.com/mpociot/whiteboard) a try?
 
-### Install
+<a href="http://www.marcelpociot.com/whiteboard/"><img src="http://www.marcelpociot.com/git/whiteboard_responsive.jpg" style="width: 100%" alt="Documentarian" /></a>
 
-Require this package with composer using the following command:
+Check out a Documentarian [example API documentation](http://www.marcelpociot.com/whiteboard/).
 
-```bash
-composer require mpociot/laravel-apidoc-generator
-```
-Go to your `config/app.php` and add the service provider:
-
-```php
-Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class
-```
-
-### Usage
+The documentation is available at [http://marcelpociot.com/documentarian/installation](http://marcelpociot.com/documentarian/installation)
 
 
-```
-php artisan api:generate 
-    {--output=public/docs : The output path for the generated documentation}
-    {--routePrefix= : The route prefix to use for generation - * can be used as a wildcard}
-    {--routes=* : The route names to use for generation - if no routePrefix is provided}
-    {--actAsUserId= : The user ID to use for API response calls}
-```
+### Slate / Whiteboard compatibility
+Since both Documentarian and Slate use regular markdown files to render the API documentation, your existing Slate API documentation should work just fine. If you encounter any issues, please [submit an issue](https://github.com/mpociot/documentarian/issues).
 
+### In depth documentation
+For further documentation, read the [Slate Wiki](https://github.com/tripit/slate/wiki).
 
-### License
+### Documentations built with Documentarian
 
-The Laravel API Documentation Generator is free software licensed under the MIT license.
+Feel free to submit a PR with a link to your documentation.
+
+### Contributors
+
+Slate was built by [Robert Lord](https://lord.io) while at [TripIt](http://tripit.com).
+
+Documentarian was built by Marcel Pociot.

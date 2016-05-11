@@ -5,6 +5,7 @@ namespace Mpociot\ApiDoc\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Route;
 use Mpociot\ApiDoc\ApiDocGenerator;
+use Mpociot\Documentarian\Documentarian;
 use phpDocumentor\Reflection\DocBlock;
 use Symfony\Component\Process\Process;
 
@@ -94,20 +95,12 @@ class GenerateDocumentation extends Command
     {
         $outputPath = $this->option('output');
 
-        $markdown = view('apidoc::whiteboard')->with('parsedRoutes', $parsedRoutes);
+        $documentarian = new Documentarian();
+
+        $markdown = view('apidoc::documentarian')->with('parsedRoutes', $parsedRoutes);
 
         if (!is_dir($outputPath)) {
-            $this->cloneWhiteboardRepository();
-
-            if ($this->confirm('Would you like to install the NPM dependencies?', true)) {
-                $process = (new Process('npm set progress=false && npm install', $outputPath))->setTimeout(null);
-                if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
-                    $process->setTty(true);
-                }
-                $process->run(function ($type, $line) {
-                    $this->info($line);
-                });
-            }
+            $documentarian->create($outputPath);
         }
 
         file_put_contents($outputPath . DIRECTORY_SEPARATOR . 'source' . DIRECTORY_SEPARATOR . 'index.md', $markdown);
@@ -116,36 +109,9 @@ class GenerateDocumentation extends Command
 
         $this->info('Generating API HTML code');
 
-        $process = (new Process('npm run-script generate', $outputPath))->setTimeout(null);
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
-            $process->setTty(true);
-        }
-        $process->run(function ($type, $line) {
-            $this->info($line);
-        });
+        $documentarian->generate($outputPath);
 
         $this->info('Wrote HTML documentation to: ' . $outputPath . '/public/index.html');
-    }
-
-    /**
-     * Clone the Whiteboard nodejs repository
-     */
-    private function cloneWhiteboardRepository()
-    {
-        $outputPath = $this->option('output');
-
-        mkdir($outputPath, 0777, true);
-
-        // Clone whiteboard
-        $this->info('Cloning whiteboard repository.');
-
-        $process = (new Process('git clone ' . self::WHITEBOARD_REPOSITORY . ' ' . $outputPath))->setTimeout(null);
-        if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
-            $process->setTty(true);
-        }
-        $process->run(function ($type, $line) {
-            $this->info($line);
-        });
     }
 
 }

@@ -1,5 +1,5 @@
 {
-  "name": "mpociot/laravel-apidoc-generator",
+  "name": "mpociot/laravel-apidoc-generators",
   "license": "MIT",
   "description": "Generate beautiful API documentation from your Laravel / Lumen application",
   "keywords": ["API","Documentation","Laravel"],
@@ -13,7 +13,8 @@
   "require": {
     "php": ">=7.0.0",
     "laravel/framework": "~5.0",
-    "phpdocumentor/reflection-docblock": "~2.0"
+    "phpdocumentor/reflection-docblock": "~2.0",
+    "mpociot/documentarian": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "~5.0",
