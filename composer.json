@@ -14,7 +14,7 @@
     "php": ">=7.0.0",
     "laravel/framework": "~5.0",
     "phpdocumentor/reflection-docblock": "~2.0",
-    "mpociot/documentarian": "dev-master"
+    "mpociot/documentarian": "^0.2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~5.0",
