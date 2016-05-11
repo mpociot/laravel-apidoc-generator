@@ -113,8 +113,11 @@ class ApiDocGenerator
      * @param $last
      * @return string
      */
-    protected function fancy_implode($arr, $first, $last)
+    protected function fancyImplode($arr, $first, $last)
     {
+        $arr = array_map(function ($value) {
+            return '`' . $value . '`';
+        }, $arr);
         array_push($arr, implode($last, array_splice($arr, -2)));
         return implode($first, $arr);
     }
@@ -150,17 +153,15 @@ class ApiDocGenerator
                 $attributeData['description'][] = 'Only alpha-numeric characters allowed';
                 break;
             case 'in':
-                $attributeData['description'][] = $this->fancy_implode($parameters, ', ', ' or ');
+                $attributeData['description'][] = $this->fancyImplode($parameters, ', ', ' or ');
                 break;
             case 'not_in':
-                $attributeData['description'][] = 'Not in: ' . $this->fancy_implode($parameters, ', ', ' or ');
+                $attributeData['description'][] = 'Not in: ' . $this->fancyImplode($parameters, ', ', ' or ');
                 break;
             case 'min':
-                $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Minimum: `' . $parameters[0] . '`';
                 break;
             case 'max':
-                $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Maximum: `' . $parameters[0] . '`';
                 break;
             case 'between':
@@ -195,7 +196,7 @@ class ApiDocGenerator
                 break;
             case 'mimetypes':
             case 'mimes':
-                $attributeData['description'][] = 'Allowed mime types: ' . $this->fancy_implode($parameters, ', ', ' or ');
+                $attributeData['description'][] = 'Allowed mime types: ' . $this->fancyImplode($parameters, ', ', ' or ');
                 break;
             case 'required_if':
                 $attributeData['description'][] = 'Required if `' . $parameters[0] . '` is `' . $parameters[1] . '`';
@@ -204,16 +205,16 @@ class ApiDocGenerator
                 $attributeData['description'][] = 'Required unless `' . $parameters[0] . '` is `' . $parameters[1] . '`';
                 break;
             case 'required_with':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' or ') . ' are present.';
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' or ') . ' are present.';
                 break;
             case 'required_with_all':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' and ') . ' are present.';
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' and ') . ' are present.';
                 break;
             case 'required_without':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' or ') . ' are not present.';
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' or ') . ' are not present.';
                 break;
             case 'required_without_all':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancy_implode($parameters, ', ', ' and ') . ' are not present.';
+                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' and ') . ' are not present.';
                 break;
             case 'same':
                 $attributeData['description'][] = 'Must be the same as `' . $parameters[0] . '`';

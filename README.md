@@ -1,6 +1,12 @@
-## Laravel API Documentation Generator (WIP)
+## Laravel API Documentation Generator
 
 `php artisan api:gen --routePrefix=settings/api/*`
+
+![image](http://img.shields.io/packagist/v/mpociot/laravel-apidoc-generator.svg?style=flat)
+![image](http://img.shields.io/packagist/l/mpociot/laravel-apidoc-generator.svg?style=flat)
+[![codecov.io](https://codecov.io/github/mpociot/laravel-apidoc-generator/coverage.svg?branch=master)](https://codecov.io/github/mpociot/laravel-apidoc-generator?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mpociot/laravel-apidoc-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mpociot/laravel-apidoc-generator/?branch=master)
+[![Build Status](https://travis-ci.org/mpociot/laravel-apidoc-generator.svg?branch=master)](https://travis-ci.org/mpociot/laravel-apidoc-generator)
 
 
 ### Install

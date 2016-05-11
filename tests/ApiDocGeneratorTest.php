@@ -179,7 +179,7 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('jpeg, png, bmp, gif or svg', $attribute['description'][0]);
+                    $this->assertEquals('`jpeg`, `png`, `bmp`, `gif` or `svg`', $attribute['description'][0]);
                     break;
                 case 'integer':
                     $this->assertFalse( $attribute['required'] );
@@ -199,13 +199,13 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
                     break;
                 case 'max':
                     $this->assertFalse( $attribute['required'] );
-                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
                     $this->assertEquals('Maximum: `10`', $attribute['description'][0]);
                     break;
                 case 'min':
                     $this->assertFalse( $attribute['required'] );
-                    $this->assertEquals( 'numeric', $attribute['type'] );
+                    $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
                     $this->assertEquals('Minimum: `20`', $attribute['description'][0]);
                     break;
@@ -213,13 +213,13 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('Allowed mime types: jpeg, bmp or png', $attribute['description'][0]);
+                    $this->assertEquals('Allowed mime types: `jpeg`, `bmp` or `png`', $attribute['description'][0]);
                     break;
                 case 'not_in':
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('Not in: foo or bar', $attribute['description'][0]);
+                    $this->assertEquals('Not in: `foo` or `bar`', $attribute['description'][0]);
                     break;
                 case 'numeric':
                     $this->assertFalse( $attribute['required'] );
@@ -248,25 +248,25 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('Required if the parameters foo, bar or baz are present.', $attribute['description'][0]);
+                    $this->assertEquals('Required if the parameters `foo`, `bar` or `baz` are present.', $attribute['description'][0]);
                     break;
                 case 'required_with_all':
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('Required if the parameters foo, bar and baz are present.', $attribute['description'][0]);
+                    $this->assertEquals('Required if the parameters `foo`, `bar` and `baz` are present.', $attribute['description'][0]);
                     break;
                 case 'required_without':
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('Required if the parameters foo, bar or baz are not present.', $attribute['description'][0]);
+                    $this->assertEquals('Required if the parameters `foo`, `bar` or `baz` are not present.', $attribute['description'][0]);
                     break;
                 case 'required_without_all':
                     $this->assertFalse( $attribute['required'] );
                     $this->assertEquals( 'string', $attribute['type'] );
                     $this->assertCount( 1, $attribute['description'] );
-                    $this->assertEquals('Required if the parameters foo, bar and baz are not present.', $attribute['description'][0]);
+                    $this->assertEquals('Required if the parameters `foo`, `bar` and `baz` are not present.', $attribute['description'][0]);
                     break;
                 case 'same':
                     $this->assertFalse( $attribute['required'] );
