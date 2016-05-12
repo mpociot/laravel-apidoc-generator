@@ -79,7 +79,7 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 
 
                 case 'accepted':
-                    $this->assertFalse( $attribute['required'] );
+                    $this->assertTrue( $attribute['required'] );
                     $this->assertEquals( 'boolean', $attribute['type'] );
                     $this->assertCount( 0, $attribute['description'] );
                     break;

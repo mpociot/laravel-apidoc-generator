@@ -137,6 +137,7 @@ class ApiDocGenerator
                 $attributeData['required'] = true;
                 break;
             case 'accepted':
+                $attributeData['required'] = true;
                 $attributeData['type'] = 'boolean';
                 break;
             case 'after':
