@@ -143,12 +143,12 @@ class ApiDocGenerator
             case 'accepted':
                 $attributeData['required'] = true;
                 $attributeData['type'] = 'boolean';
-                $attributeData['value'] = $faker->url;
+                $attributeData['value'] = true;
                 break;
             case 'after':
                 $attributeData['type'] = 'date';
                 $attributeData['description'][] = 'Must be a date after: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
-                $attributeData['value'] = date(DATE_RFC850, strtotime('+1 day',strtotime($parameters[0])));
+                $attributeData['value'] = date(DATE_RFC850, strtotime('+1 day', strtotime($parameters[0])));
                 break;
             case 'alpha':
                 $attributeData['description'][] = 'Only alphabetic characters allowed';
@@ -182,7 +182,7 @@ class ApiDocGenerator
             case 'before':
                 $attributeData['type'] = 'date';
                 $attributeData['description'][] = 'Must be a date preceding: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
-                $attributeData['value'] = date(DATE_RFC850, strtotime('-1 day',strtotime($parameters[0])));
+                $attributeData['value'] = date(DATE_RFC850, strtotime('-1 day', strtotime($parameters[0])));
                 break;
             case 'date_format':
                 $attributeData['type'] = 'date';
@@ -207,7 +207,7 @@ class ApiDocGenerator
             case 'json':
                 $attributeData['type'] = 'string';
                 $attributeData['description'][] = 'Must be a valid JSON string.';
-                $attributeData['value'] = json_encode(['foo','bar','baz']);
+                $attributeData['value'] = json_encode(['foo', 'bar', 'baz']);
                 break;
             case 'mimetypes':
             case 'mimes':
@@ -253,27 +253,45 @@ class ApiDocGenerator
                 $attributeData['description'][] = 'Must match this regular expression: `' . $parameters[0] . '`';
                 break;
             case 'boolean':
-                $attributeData['value'] = $faker->boolean();
-            case 'array':
-                $attributeData['value'] = $faker->word;
-            case 'date':
-                $attributeData['value'] = $faker->date();
-            case 'email':
-                $attributeData['value'] = $faker->safeEmail;
-            case 'string':
-                $attributeData['value'] = $faker->word;
-            case 'integer':
-                $attributeData['value'] = $faker->randomNumber();
-            case 'numeric':
-                $attributeData['value'] = $faker->randomNumber();
-            case 'url':
-                $attributeData['value'] = $faker->url;
-            case 'ip':
+                $attributeData['value'] = true;
                 $attributeData['type'] = $rule;
                 break;
-            default:
+            case 'array':
                 $attributeData['value'] = $faker->word;
-            break;
+                $attributeData['type'] = $rule;
+                break;
+            case 'date':
+                $attributeData['value'] = $faker->date();
+                $attributeData['type'] = $rule;
+                break;
+            case 'email':
+                $attributeData['value'] = $faker->safeEmail;
+                $attributeData['type'] = $rule;
+                break;
+            case 'string':
+                $attributeData['value'] = $faker->word;
+                $attributeData['type'] = $rule;
+                break;
+            case 'integer':
+                $attributeData['value'] = $faker->randomNumber();
+                $attributeData['type'] = $rule;
+                break;
+            case 'numeric':
+                $attributeData['value'] = $faker->randomNumber();
+                $attributeData['type'] = $rule;
+                break;
+            case 'url':
+                $attributeData['value'] = $faker->url;
+                $attributeData['type'] = $rule;
+                break;
+            case 'ip':
+                $attributeData['value'] = $faker->ipv4;
+                $attributeData['type'] = $rule;
+                break;
+        }
+
+        if ($attributeData['value'] === '') {
+            $attributeData['value'] = $faker->word;
         }
     }
 
