@@ -2,8 +2,8 @@
 title: API Reference
 
 language_tabs:
-- javascript
 - bash
+- javascript
 
 includes:
 
@@ -19,67 +19,66 @@ Welcome to the generated API reference.
 
 # Available routes
 @foreach($parsedRoutes as $parsedRoute)
-    @if($parsedRoute['title'] != '')## {{ $parsedRoute['title']}}
-    @else## {{$parsedRoute['uri']}}
-    @endif
-    @if($parsedRoute['description'])
+@if($parsedRoute['title'] != '')## {{ $parsedRoute['title']}}
+@else## {{$parsedRoute['uri']}}
+@endif
+@if($parsedRoute['description'])
 
-        {{$parsedRoute['description']}}
-    @endif
+{{$parsedRoute['description']}}
+@endif
 
-    > Example request:
+> Example request:
 
-    ```bash
-    curl "{{config('app.url')}}/{{$parsedRoute['uri']}}" \
-    -H "Accept: application/json"@if(count($parsedRoute['parameters'])) \
-    @foreach($parsedRoute['parameters'] as $attribute => $parameter)
-        -d "{{$attribute}}"="{{$parameter['value']}}" \
-    @endforeach
-    @endif
+```bash
+curl "{{config('app.url')}}/{{$parsedRoute['uri']}}" \
+-H "Accept: application/json"@if(count($parsedRoute['parameters'])) \
+@foreach($parsedRoute['parameters'] as $attribute => $parameter)
+    -d "{{$attribute}}"="{{$parameter['value']}}" \
+@endforeach
+@endif
 
-    ```
+```
 
-    ```javascript
-    var settings = {
+```javascript
+var settings = {
     "async": true,
     "crossDomain": true,
     "url": "{{config('app.url')}}/{{$parsedRoute['uri']}}",
     "method": "{{$parsedRoute['methods'][0]}}",
     @if(count($parsedRoute['parameters']))
-        "data": {!! str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT)) !!},
+"data": {!! str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT)) !!},
     @endif
     "headers": {
     "accept": "application/json"
     }
-    }
+}
 
-    $.ajax(settings).done(function (response) {
-    console.log(response);
-    });
+$.ajax(settings).done(function (response) {
+console.log(response);
+});
+```
+
+@if(in_array('GET',$parsedRoute['methods']))
+    > Example response:
+
+    ```json
+    {!! $parsedRoute['response'] !!}
     ```
+@endif
 
-    @if(in_array('GET',$parsedRoute['methods']))
-        > Example response:
+### HTTP Request
+@foreach($parsedRoute['methods'] as $method)
+`{{$method}} {{$parsedRoute['uri']}}`
 
-        ```json
-        {!! $parsedRoute['response'] !!}
-        ```
-    @endif
+@endforeach
+@if(count($parsedRoute['parameters']))
+#### Parameters
 
-    ### HTTP Request
-    @foreach($parsedRoute['methods'] as $method)
-        `{{$method}} {{$parsedRoute['uri']}}`
-
-    @endforeach
-    @if(count($parsedRoute['parameters']))
-
-        #### Parameters
-
-        Parameter | Type | Status | Description
-        --------- | ------- | ------- | ------- | -----------
-        @foreach($parsedRoute['parameters'] as $attribute => $parameter)
-            {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! implode(' ',$parameter['description']) !!}
-        @endforeach
-    @endif
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+@foreach($parsedRoute['parameters'] as $attribute => $parameter)
+    {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! implode(' ',$parameter['description']) !!}
+@endforeach
+@endif
 
 @endforeach
