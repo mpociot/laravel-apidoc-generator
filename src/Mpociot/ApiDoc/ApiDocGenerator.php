@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc;
 
+use Faker\Factory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
@@ -38,6 +39,7 @@ class ApiDocGenerator
                 'required' => false,
                 'type' => 'string',
                 'default' => '',
+                'value' => '',
                 'description' => []
             ];
             foreach ($rules as $rule) {
@@ -128,6 +130,8 @@ class ApiDocGenerator
      */
     protected function parseRule($rule, &$attributeData)
     {
+        $faker = Factory::create();
+
         $parsedRule = $this->parseStringRule($rule);
         $parsedRule[0] = $this->normalizeRule($parsedRule[0]);
         list($rule, $parameters) = $parsedRule;
@@ -139,13 +143,16 @@ class ApiDocGenerator
             case 'accepted':
                 $attributeData['required'] = true;
                 $attributeData['type'] = 'boolean';
+                $attributeData['value'] = $faker->url;
                 break;
             case 'after':
                 $attributeData['type'] = 'date';
                 $attributeData['description'][] = 'Must be a date after: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
+                $attributeData['value'] = date(DATE_RFC850, strtotime('+1 day',strtotime($parameters[0])));
                 break;
             case 'alpha':
                 $attributeData['description'][] = 'Only alphabetic characters allowed';
+                $attributeData['value'] = $faker->word;
                 break;
             case 'alpha_dash':
                 $attributeData['description'][] = 'Allowed: alpha-numeric characters, as well as dashes and underscores.';
@@ -155,9 +162,11 @@ class ApiDocGenerator
                 break;
             case 'in':
                 $attributeData['description'][] = $this->fancyImplode($parameters, ', ', ' or ');
+                $attributeData['value'] = $faker->randomElement($parameters);
                 break;
             case 'not_in':
                 $attributeData['description'][] = 'Not in: ' . $this->fancyImplode($parameters, ', ', ' or ');
+                $attributeData['value'] = $faker->word;
                 break;
             case 'min':
                 $attributeData['description'][] = 'Minimum: `' . $parameters[0] . '`';
@@ -168,10 +177,12 @@ class ApiDocGenerator
             case 'between':
                 $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Between: `' . $parameters[0] . '` and `' . $parameters[1] . '`';
+                $attributeData['value'] = $faker->numberBetween($parameters[0], $parameters[1]);
                 break;
             case 'before':
                 $attributeData['type'] = 'date';
                 $attributeData['description'][] = 'Must be a date preceding: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
+                $attributeData['value'] = date(DATE_RFC850, strtotime('-1 day',strtotime($parameters[0])));
                 break;
             case 'date_format':
                 $attributeData['type'] = 'date';
@@ -183,17 +194,20 @@ class ApiDocGenerator
             case 'digits':
                 $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Must have an exact length of `' . $parameters[0] . '`';
+                $attributeData['value'] = $faker->randomNumber($parameters[0], true);
                 break;
             case 'digits_between':
                 $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = 'Must have a length between `' . $parameters[0] . '` and `' . $parameters[1] . '`';
                 break;
             case 'image':
+                $attributeData['type'] = 'image';
                 $attributeData['description'][] = 'Must be an image (jpeg, png, bmp, gif, or svg)';
                 break;
             case 'json':
                 $attributeData['type'] = 'string';
                 $attributeData['description'][] = 'Must be a valid JSON string.';
+                $attributeData['value'] = json_encode(['foo','bar','baz']);
                 break;
             case 'mimetypes':
             case 'mimes':
@@ -225,29 +239,41 @@ class ApiDocGenerator
                 break;
             case 'timezone':
                 $attributeData['description'][] = 'Must be a valid timezone identifier';
+                $attributeData['value'] = $faker->timezone;
                 break;
             case 'exists':
                 $attributeData['description'][] = 'Valid ' . Str::singular($parameters[0]) . ' ' . $parameters[1];
                 break;
             case 'active_url':
                 $attributeData['type'] = 'url';
+                $attributeData['value'] = $faker->url;
                 break;
             case 'regex':
                 $attributeData['type'] = 'string';
                 $attributeData['description'][] = 'Must match this regular expression: `' . $parameters[0] . '`';
                 break;
             case 'boolean':
+                $attributeData['value'] = $faker->boolean();
             case 'array':
+                $attributeData['value'] = $faker->word;
             case 'date':
+                $attributeData['value'] = $faker->date();
             case 'email':
-            case 'image':
+                $attributeData['value'] = $faker->safeEmail;
             case 'string':
+                $attributeData['value'] = $faker->word;
             case 'integer':
+                $attributeData['value'] = $faker->randomNumber();
             case 'numeric':
+                $attributeData['value'] = $faker->randomNumber();
             case 'url':
+                $attributeData['value'] = $faker->url;
             case 'ip':
                 $attributeData['type'] = $rule;
                 break;
+            default:
+                $attributeData['value'] = $faker->word;
+            break;
         }
     }
 

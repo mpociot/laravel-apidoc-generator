@@ -33,7 +33,7 @@ Welcome to the generated API reference.
 curl "{{config('app.url')}}/{{$parsedRoute['uri']}}" \
 -H "Accept: application/json"@if(count($parsedRoute['parameters'])) \
 @foreach($parsedRoute['parameters'] as $attribute => $parameter)
--d "{{$attribute}}"="dummy" \
+-d "{{$attribute}}"="{{$parameter['value']}}" \
 @endforeach
 @endif
 
