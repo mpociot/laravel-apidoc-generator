@@ -110,7 +110,7 @@ As an optional parameter, you can use `--location` to tell the update command wh
 
 ## Further modification
 
-This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarion guide](http://marcelpociot.com/documentarian/installation).
+This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarian guide](http://marcelpociot.com/documentarian/installation).
 
 ### License
 
