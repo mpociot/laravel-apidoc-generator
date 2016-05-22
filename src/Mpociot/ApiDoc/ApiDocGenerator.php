@@ -92,9 +92,9 @@ class ApiDocGenerator
         $reflectionMethod = $reflection->getMethod($method);
 
         foreach ($reflectionMethod->getParameters() as $parameter) {
-            $parameterType = $parameter->getType();
-            if (!is_null($parameterType) && class_exists($parameterType)) {
-                $className = $parameterType->__toString();
+            $parameterType = $parameter->getClass();
+            if (!is_null($parameterType) && class_exists($parameterType->name)) {
+                $className = $parameterType->name;
                 $parameterReflection = new $className;
                 if ($parameterReflection instanceof FormRequest) {
                     if (method_exists($parameterReflection, 'validator')) {
