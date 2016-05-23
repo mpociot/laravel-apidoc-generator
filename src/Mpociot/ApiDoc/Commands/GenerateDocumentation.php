@@ -83,7 +83,7 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param $parsedRoutes
+     * @param  $parsedRoutes
      */
     private function writeMarkdown($parsedRoutes)
     {
