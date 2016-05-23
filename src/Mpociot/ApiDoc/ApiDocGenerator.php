@@ -14,9 +14,9 @@ use ReflectionClass;
 
 class ApiDocGenerator
 {
-
     /**
      * @param Route $route
+     *
      * @return array
      */
     public function processRoute(Route $route)
@@ -30,7 +30,7 @@ class ApiDocGenerator
             'methods' => $route->getMethods(),
             'uri' => $route->getUri(),
             'parameters' => [],
-            'response' => ($response->headers->get('Content-Type') === 'application/json') ? json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT) : $response->getContent()
+            'response' => ($response->headers->get('Content-Type') === 'application/json') ? json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT) : $response->getContent(),
         ];
 
         $validator = Validator::make([], $this->getRouteRules($routeAction['uses']));
@@ -40,7 +40,7 @@ class ApiDocGenerator
                 'type' => 'string',
                 'default' => '',
                 'value' => '',
-                'description' => []
+                'description' => [],
             ];
             foreach ($rules as $rule) {
                 $this->parseRule($rule, $attributeData);
@@ -53,17 +53,20 @@ class ApiDocGenerator
 
     /**
      * @param \Illuminate\Routing\Route $route
+     *
      * @return \Illuminate\Http\Response
      */
     private function getRouteResponse(Route $route)
     {
         $methods = $route->getMethods();
         $response = $this->callRoute(array_shift($methods), $route->getUri());
+
         return $response;
     }
 
     /**
      * @param $route
+     *
      * @return string
      */
     private function getRouteDescription($route)
@@ -74,15 +77,16 @@ class ApiDocGenerator
 
         $comment = $reflectionMethod->getDocComment();
         $phpdoc = new DocBlock($comment);
+
         return [
             'short' => $phpdoc->getShortDescription(),
-            'long' => $phpdoc->getLongDescription()->getContents()
+            'long' => $phpdoc->getLongDescription()->getContents(),
         ];
     }
 
-
     /**
      * @param $route
+     *
      * @return array
      */
     private function getRouteRules($route)
@@ -93,7 +97,7 @@ class ApiDocGenerator
 
         foreach ($reflectionMethod->getParameters() as $parameter) {
             $parameterType = $parameter->getClass();
-            if (!is_null($parameterType) && class_exists($parameterType->name)) {
+            if (! is_null($parameterType) && class_exists($parameterType->name)) {
                 $className = $parameterType->name;
                 $parameterReflection = new $className;
                 if ($parameterReflection instanceof FormRequest) {
@@ -113,14 +117,16 @@ class ApiDocGenerator
      * @param $arr
      * @param $first
      * @param $last
+     *
      * @return string
      */
     protected function fancyImplode($arr, $first, $last)
     {
         $arr = array_map(function ($value) {
-            return '`' . $value . '`';
+            return '`'.$value.'`';
         }, $arr);
         array_push($arr, implode($last, array_splice($arr, -2)));
+
         return implode($first, $arr);
     }
 
@@ -147,7 +153,7 @@ class ApiDocGenerator
                 break;
             case 'after':
                 $attributeData['type'] = 'date';
-                $attributeData['description'][] = 'Must be a date after: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
+                $attributeData['description'][] = 'Must be a date after: `'.date(DATE_RFC850, strtotime($parameters[0])).'`';
                 $attributeData['value'] = date(DATE_RFC850, strtotime('+1 day', strtotime($parameters[0])));
                 break;
             case 'alpha':
@@ -165,40 +171,40 @@ class ApiDocGenerator
                 $attributeData['value'] = $faker->randomElement($parameters);
                 break;
             case 'not_in':
-                $attributeData['description'][] = 'Not in: ' . $this->fancyImplode($parameters, ', ', ' or ');
+                $attributeData['description'][] = 'Not in: '.$this->fancyImplode($parameters, ', ', ' or ');
                 $attributeData['value'] = $faker->word;
                 break;
             case 'min':
-                $attributeData['description'][] = 'Minimum: `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Minimum: `'.$parameters[0].'`';
                 break;
             case 'max':
-                $attributeData['description'][] = 'Maximum: `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Maximum: `'.$parameters[0].'`';
                 break;
             case 'between':
                 $attributeData['type'] = 'numeric';
-                $attributeData['description'][] = 'Between: `' . $parameters[0] . '` and `' . $parameters[1] . '`';
+                $attributeData['description'][] = 'Between: `'.$parameters[0].'` and `'.$parameters[1].'`';
                 $attributeData['value'] = $faker->numberBetween($parameters[0], $parameters[1]);
                 break;
             case 'before':
                 $attributeData['type'] = 'date';
-                $attributeData['description'][] = 'Must be a date preceding: `' . date(DATE_RFC850, strtotime($parameters[0])) . '`';
+                $attributeData['description'][] = 'Must be a date preceding: `'.date(DATE_RFC850, strtotime($parameters[0])).'`';
                 $attributeData['value'] = date(DATE_RFC850, strtotime('-1 day', strtotime($parameters[0])));
                 break;
             case 'date_format':
                 $attributeData['type'] = 'date';
-                $attributeData['description'][] = 'Date format: `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Date format: `'.$parameters[0].'`';
                 break;
             case 'different':
-                $attributeData['description'][] = 'Must have a different value than parameter: `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Must have a different value than parameter: `'.$parameters[0].'`';
                 break;
             case 'digits':
                 $attributeData['type'] = 'numeric';
-                $attributeData['description'][] = 'Must have an exact length of `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Must have an exact length of `'.$parameters[0].'`';
                 $attributeData['value'] = $faker->randomNumber($parameters[0], true);
                 break;
             case 'digits_between':
                 $attributeData['type'] = 'numeric';
-                $attributeData['description'][] = 'Must have a length between `' . $parameters[0] . '` and `' . $parameters[1] . '`';
+                $attributeData['description'][] = 'Must have a length between `'.$parameters[0].'` and `'.$parameters[1].'`';
                 break;
             case 'image':
                 $attributeData['type'] = 'image';
@@ -211,38 +217,38 @@ class ApiDocGenerator
                 break;
             case 'mimetypes':
             case 'mimes':
-                $attributeData['description'][] = 'Allowed mime types: ' . $this->fancyImplode($parameters, ', ', ' or ');
+                $attributeData['description'][] = 'Allowed mime types: '.$this->fancyImplode($parameters, ', ', ' or ');
                 break;
             case 'required_if':
-                $attributeData['description'][] = 'Required if `' . $parameters[0] . '` is `' . $parameters[1] . '`';
+                $attributeData['description'][] = 'Required if `'.$parameters[0].'` is `'.$parameters[1].'`';
                 break;
             case 'required_unless':
-                $attributeData['description'][] = 'Required unless `' . $parameters[0] . '` is `' . $parameters[1] . '`';
+                $attributeData['description'][] = 'Required unless `'.$parameters[0].'` is `'.$parameters[1].'`';
                 break;
             case 'required_with':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' or ') . ' are present.';
+                $attributeData['description'][] = 'Required if the parameters '.$this->fancyImplode($parameters, ', ', ' or ').' are present.';
                 break;
             case 'required_with_all':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' and ') . ' are present.';
+                $attributeData['description'][] = 'Required if the parameters '.$this->fancyImplode($parameters, ', ', ' and ').' are present.';
                 break;
             case 'required_without':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' or ') . ' are not present.';
+                $attributeData['description'][] = 'Required if the parameters '.$this->fancyImplode($parameters, ', ', ' or ').' are not present.';
                 break;
             case 'required_without_all':
-                $attributeData['description'][] = 'Required if the parameters ' . $this->fancyImplode($parameters, ', ', ' and ') . ' are not present.';
+                $attributeData['description'][] = 'Required if the parameters '.$this->fancyImplode($parameters, ', ', ' and ').' are not present.';
                 break;
             case 'same':
-                $attributeData['description'][] = 'Must be the same as `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Must be the same as `'.$parameters[0].'`';
                 break;
             case 'size':
-                $attributeData['description'][] = 'Must have the size of `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Must have the size of `'.$parameters[0].'`';
                 break;
             case 'timezone':
                 $attributeData['description'][] = 'Must be a valid timezone identifier';
                 $attributeData['value'] = $faker->timezone;
                 break;
             case 'exists':
-                $attributeData['description'][] = 'Valid ' . Str::singular($parameters[0]) . ' ' . $parameters[1];
+                $attributeData['description'][] = 'Valid '.Str::singular($parameters[0]).' '.$parameters[1];
                 break;
             case 'active_url':
                 $attributeData['type'] = 'url';
@@ -250,7 +256,7 @@ class ApiDocGenerator
                 break;
             case 'regex':
                 $attributeData['type'] = 'string';
-                $attributeData['description'][] = 'Must match this regular expression: `' . $parameters[0] . '`';
+                $attributeData['description'][] = 'Must match this regular expression: `'.$parameters[0].'`';
                 break;
             case 'boolean':
                 $attributeData['value'] = true;
@@ -305,6 +311,7 @@ class ApiDocGenerator
      * @param  array $files
      * @param  array $server
      * @param  string $content
+     *
      * @return \Illuminate\Http\Response
      */
     public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
@@ -333,6 +340,7 @@ class ApiDocGenerator
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
      * @param  array $headers
+     *
      * @return array
      */
     protected function transformHeadersToServerVars(array $headers)
@@ -343,8 +351,8 @@ class ApiDocGenerator
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
 
-            if (!starts_with($name, $prefix) && $name != 'CONTENT_TYPE') {
-                $name = $prefix . $name;
+            if (! starts_with($name, $prefix) && $name != 'CONTENT_TYPE') {
+                $name = $prefix.$name;
             }
 
             $server[$name] = $value;
@@ -357,6 +365,7 @@ class ApiDocGenerator
      * Parse a string based rule.
      *
      * @param  string $rules
+     *
      * @return array
      */
     protected function parseStringRule($rules)
@@ -380,6 +389,7 @@ class ApiDocGenerator
      *
      * @param  string $rule
      * @param  string $parameter
+     *
      * @return array
      */
     protected function parseParameters($rule, $parameter)
@@ -395,6 +405,7 @@ class ApiDocGenerator
      * Normalizes a rule so that we can accept short types.
      *
      * @param  string $rule
+     *
      * @return string
      */
     protected function normalizeRule($rule)
