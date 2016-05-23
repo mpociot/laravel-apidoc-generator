@@ -8,7 +8,6 @@ use Mpociot\ApiDoc\Commands\UpdateDocumentation;
 
 class ApiDocGeneratorServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap the application events.
      *
@@ -20,7 +19,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the API doc commands
+     * Register the API doc commands.
      */
     public function register()
     {
@@ -36,5 +35,4 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
             'apidoc.update',
         ]);
     }
-
 }
