@@ -28,7 +28,7 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
         $route = new Route(['GET'], '/api/test', ['uses' => 'TestController@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
 
-        $this->assertEquals('Example title', $parsed['title']);
+        $this->assertEquals('Example title.', $parsed['title']);
         $this->assertEquals("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
     }
 
