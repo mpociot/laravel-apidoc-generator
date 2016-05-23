@@ -7,12 +7,13 @@ php:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --prefer-source --no-interaction
+  - travis_retry composer install --prefer-dist --no-interaction
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml
 
 before_install:
   - pip install --user codecov
+
 after_success:
   - codecov
