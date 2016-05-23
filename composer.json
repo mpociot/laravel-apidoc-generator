@@ -1,29 +1,33 @@
 {
-  "name": "mpociot/laravel-apidoc-generator",
-  "license": "MIT",
-  "description": "Generate beautiful API documentation from your Laravel / Lumen application",
-  "keywords": ["API","Documentation","Laravel"],
-  "homepage": "http://github.com/mpociot/laravel-apidoc-generator",
-  "authors": [
-    {
-      "name": "Marcel Pociot",
-      "email": "m.pociot@gmail.com"
+    "name": "mpociot/laravel-apidoc-generator",
+    "license": "MIT",
+    "description": "Generate beautiful API documentation from your Laravel / Lumen application",
+    "keywords": [
+        "API",
+        "Documentation",
+        "Laravel"
+    ],
+    "homepage": "http://github.com/mpociot/laravel-apidoc-generator",
+    "authors": [
+        {
+            "name": "Marcel Pociot",
+            "email": "m.pociot@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "laravel/framework": "~5.0",
+        "phpdocumentor/reflection-docblock": "~2.0",
+        "mpociot/documentarian": "^0.2.0",
+        "fzaninotto/faker": "^1.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "orchestra/testbench": "~3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Mpociot\\ApiDoc": "src/"
+        }
     }
-  ],
-  "require": {
-    "php": ">=5.5.0",
-    "laravel/framework": "~5.0",
-    "phpdocumentor/reflection-docblock": "~2.0",
-    "mpociot/documentarian": "^0.2.0",
-    "fzaninotto/faker": "^1.6"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.0",
-    "orchestra/testbench": "~3.0"
-  },
-  "autoload": {
-    "psr-0": {
-      "Mpociot\\ApiDoc": "src/"
-    }
-  }
 }
