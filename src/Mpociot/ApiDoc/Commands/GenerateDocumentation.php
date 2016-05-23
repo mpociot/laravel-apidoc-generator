@@ -41,7 +41,7 @@ class GenerateDocumentation extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return false|null
      */
     public function handle()
     {

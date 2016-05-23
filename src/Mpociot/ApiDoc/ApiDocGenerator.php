@@ -114,9 +114,9 @@ class ApiDocGenerator
     }
 
     /**
-     * @param $arr
-     * @param $first
-     * @param $last
+     * @param  array  $arr
+     * @param  string  $first
+     * @param  string  $last
      *
      * @return string
      */
