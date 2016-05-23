@@ -24,11 +24,9 @@ class ApiDocGenerator
         $routeAction = $route->getAction();
         $response = $this->getRouteResponse($route);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
-        if ($response->headers->get('Content-Type') === 'application/json')
-        {
+        if ($response->headers->get('Content-Type') === 'application/json') {
             $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
-        } else
-        {
+        } else {
             $content = $response->getContent();
         }
         $routeData = [
