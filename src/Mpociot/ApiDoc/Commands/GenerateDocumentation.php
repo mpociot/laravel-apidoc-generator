@@ -3,8 +3,8 @@
 namespace Mpociot\ApiDoc\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Route;
 use Mpociot\ApiDoc\ApiDocGenerator;
+use Illuminate\Support\Facades\Route;
 use Mpociot\Documentarian\Documentarian;
 
 class GenerateDocumentation extends Command
