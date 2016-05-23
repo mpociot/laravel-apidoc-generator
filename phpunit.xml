@@ -12,6 +12,10 @@
     <testsuites>
         <testsuite name="Versionable Suite">
             <directory>tests/</directory>
+            <exclude>
+                <file>src/Mpociot/ApiDoc/ApiDocGeneratorServiceProvider.php</file>
+                <file>src/resources/views/documentarian.blade.php</file>
+            </exclude>
         </testsuite>
     </testsuites>
     <filter>
