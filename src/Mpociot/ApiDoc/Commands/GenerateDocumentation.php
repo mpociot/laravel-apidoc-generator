@@ -45,7 +45,6 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $generator = new ApiDocGenerator();
         $allowedRoutes = $this->option('routes');
         $routePrefix = $this->option('routePrefix');
         $actAs = $this->option('actAsUserId');
@@ -69,6 +68,8 @@ class GenerateDocumentation extends Command
         }
 
         $routes = Route::getRoutes();
+
+        $generator = new ApiDocGenerator();
 
         /* @var \Illuminate\Routing\Route $route */
         $parsedRoutes = [];
