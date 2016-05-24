@@ -1,11 +1,15 @@
 <?php
 
-use Illuminate\Routing\Route;
-use Illuminate\Routing\Controller;
-use Mpociot\ApiDoc\ApiDocGenerator;
-use Illuminate\Foundation\Http\FormRequest;
+namespace Mpociot\ApiDoc\Tests;
 
-class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
+use Illuminate\Routing\Route;
+use Orchestra\Testbench\TestCase;
+use Mpociot\ApiDoc\ApiDocGenerator;
+use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
+use Illuminate\Support\Facades\Route as RouteFacade;
+
+class ApiDocGeneratorTest extends TestCase
 {
     /**
      * @var \Mpociot\ApiDoc\ApiDocGenerator
@@ -24,8 +28,8 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 
     public function testCanParseMethodDescription()
     {
-        \Illuminate\Support\Facades\Route::get('/api/test', 'TestController@parseMethodDescription');
-        $route = new Route(['GET'], '/api/test', ['uses' => 'TestController@parseMethodDescription']);
+        RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
+        $route = new Route(['GET'], '/api/test', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
 
         $this->assertSame('Example title.', $parsed['title']);
@@ -34,32 +38,32 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 
     public function testCanParseRouteMethods()
     {
-        \Illuminate\Support\Facades\Route::get('/get', 'TestController@dummy');
-        \Illuminate\Support\Facades\Route::post('/post', 'TestController@dummy');
-        \Illuminate\Support\Facades\Route::put('/put', 'TestController@dummy');
-        \Illuminate\Support\Facades\Route::delete('/delete', 'TestController@dummy');
+        RouteFacade::get('/get', TestController::class.'@dummy');
+        RouteFacade::post('/post', TestController::class.'@dummy');
+        RouteFacade::put('/put', TestController::class.'@dummy');
+        RouteFacade::delete('/delete', TestController::class.'@dummy');
 
-        $route = new Route(['GET'], '/get', ['uses' => 'TestController@parseMethodDescription']);
+        $route = new Route(['GET'], '/get', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
         $this->assertSame(['GET', 'HEAD'], $parsed['methods']);
 
-        $route = new Route(['POST'], '/post', ['uses' => 'TestController@parseMethodDescription']);
+        $route = new Route(['POST'], '/post', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
         $this->assertSame(['POST'], $parsed['methods']);
 
-        $route = new Route(['PUT'], '/put', ['uses' => 'TestController@parseMethodDescription']);
+        $route = new Route(['PUT'], '/put', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
         $this->assertSame(['PUT'], $parsed['methods']);
 
-        $route = new Route(['DELETE'], '/delete', ['uses' => 'TestController@parseMethodDescription']);
+        $route = new Route(['DELETE'], '/delete', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
         $this->assertSame(['DELETE'], $parsed['methods']);
     }
 
     public function testCanParseFormRequestRules()
     {
-        \Illuminate\Support\Facades\Route::post('/post', 'TestController@parseFormRequestRules');
-        $route = new Route(['POST'], '/post', ['uses' => 'TestController@parseFormRequestRules']);
+        RouteFacade::post('/post', TestController::class.'@parseFormRequestRules');
+        $route = new Route(['POST'], '/post', ['uses' => TestController::class.'@parseFormRequestRules']);
         $parsed = $this->generator->processRoute($route);
         $parameters = $parsed['parameters'];
 
@@ -291,75 +295,5 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 
             }
         }
-    }
-}
-
-class TestController extends Controller
-{
-    public function dummy()
-    {
-        return '';
-    }
-
-    /**
-     * Example title.
-     *
-     * This will be the long description.
-     * It can also be multiple lines long.
-     */
-    public function parseMethodDescription()
-    {
-        return '';
-    }
-
-    public function parseFormRequestRules(TestRequest $request)
-    {
-        return '';
-    }
-}
-
-class TestRequest extends FormRequest
-{
-    public function rules()
-    {
-        return [
-            'required' => 'required',
-            'accepted' => 'accepted',
-            'after' => 'after:2016-04-23 14:31:00',
-            'active_url' => 'active_url',
-            'alpha' => 'alpha',
-            'alpha_dash' => 'alpha_dash',
-            'alpha_num' => 'alpha_num',
-            'array' => 'array',
-            'before' => 'before:2016-04-23 14:31:00',
-            'between' => 'between:5,200',
-            'boolean' => 'boolean',
-            'date' => 'date',
-            'date_format' => 'date_format:j.n.Y H:iP',
-            'different' => 'different:alpha_num',
-            'digits' => 'digits:2',
-            'digits_between' => 'digits_between:2,10',
-            'exists' => 'exists:users,firstname',
-            'in' => 'in:jpeg,png,bmp,gif,svg',
-            'integer' => 'integer',
-            'ip' => 'ip',
-            'json' => 'json',
-            'min' => 'min:20',
-            'max' => 'max:10',
-            'mimes' => 'mimes:jpeg,bmp,png',
-            'not_in' => 'not_in:foo,bar',
-            'numeric' => 'numeric',
-            'regex' => 'regex:(.*)',
-            'required_if' => 'required_if:foo,bar',
-            'required_unless' => 'required_unless:foo,bar',
-            'required_with' => 'required_with:foo,bar,baz',
-            'required_with_all' => 'required_with_all:foo,bar,baz',
-            'required_without' => 'required_without:foo,bar,baz',
-            'required_without_all' => 'required_without_all:foo,bar,baz',
-            'same' => 'same:foo',
-            'size' => 'size:51',
-            'timezone' => 'timezone',
-            'url' => 'url',
-        ];
     }
 }

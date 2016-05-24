@@ -29,5 +29,10 @@
         "psr-0": {
             "Mpociot\\ApiDoc": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mpociot\\ApiDoc\\Tests\\": "tests/"
+        }
     }
 }
