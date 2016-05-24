@@ -24,13 +24,18 @@ class ApiDocGenerator
         $routeAction = $route->getAction();
         $response = $this->getRouteResponse($route);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
+        if ($response->headers->get('Content-Type') === 'application/json') {
+            $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+        } else {
+            $content = $response->getContent();
+        }
         $routeData = [
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $route->getMethods(),
             'uri' => $route->getUri(),
             'parameters' => [],
-            'response' => ($response->headers->get('Content-Type') === 'application/json') ? json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT) : $response->getContent(),
+            'response' => $content,
         ];
 
         $validator = Validator::make([], $this->getRouteRules($routeAction['uses']));
