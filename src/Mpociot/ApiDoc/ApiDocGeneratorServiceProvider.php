@@ -20,6 +20,8 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
 
     /**
      * Register the API doc commands.
+     *
+     * @return void
      */
     public function register()
     {

@@ -41,7 +41,7 @@ class GenerateDocumentation extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return false|null
      */
     public function handle()
     {
@@ -83,7 +83,9 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param $parsedRoutes
+     * @param  array  $parsedRoutes
+     *
+     * @return void
      */
     private function writeMarkdown($parsedRoutes)
     {

@@ -15,7 +15,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class ApiDocGenerator
 {
     /**
-     * @param Route $route
+     * @param  \Illuminate\Routing\Route  $route
      *
      * @return array
      */
@@ -52,7 +52,7 @@ class ApiDocGenerator
     }
 
     /**
-     * @param \Illuminate\Routing\Route $route
+     * @param  \Illuminate\Routing\Route  $route
      *
      * @return \Illuminate\Http\Response
      */
@@ -65,7 +65,7 @@ class ApiDocGenerator
     }
 
     /**
-     * @param $route
+     * @param  \Illuminate\Routing\Route  $route
      *
      * @return string
      */
@@ -85,7 +85,7 @@ class ApiDocGenerator
     }
 
     /**
-     * @param $route
+     * @param  \Illuminate\Routing\Route  $route
      *
      * @return array
      */
@@ -114,9 +114,9 @@ class ApiDocGenerator
     }
 
     /**
-     * @param $arr
-     * @param $first
-     * @param $last
+     * @param  array  $arr
+     * @param  string  $first
+     * @param  string  $last
      *
      * @return string
      */
@@ -131,8 +131,10 @@ class ApiDocGenerator
     }
 
     /**
-     * @param $rule
-     * @param $attributeData
+     * @param  string  $rule
+     * @param  array  $attributeData
+     *
+     * @return void
      */
     protected function parseRule($rule, &$attributeData)
     {
@@ -304,13 +306,13 @@ class ApiDocGenerator
     /**
      * Call the given URI and return the Response.
      *
-     * @param  string $method
-     * @param  string $uri
-     * @param  array $parameters
-     * @param  array $cookies
-     * @param  array $files
-     * @param  array $server
-     * @param  string $content
+     * @param  string  $method
+     * @param  string  $uri
+     * @param  array  $parameters
+     * @param  array  $cookies
+     * @param  array  $files
+     * @param  array  $server
+     * @param  string  $content
      *
      * @return \Illuminate\Http\Response
      */
@@ -339,7 +341,7 @@ class ApiDocGenerator
     /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
-     * @param  array $headers
+     * @param  array  $headers
      *
      * @return array
      */
@@ -364,7 +366,7 @@ class ApiDocGenerator
     /**
      * Parse a string based rule.
      *
-     * @param  string $rules
+     * @param  string  $rules
      *
      * @return array
      */
@@ -387,8 +389,8 @@ class ApiDocGenerator
     /**
      * Parse a parameter list.
      *
-     * @param  string $rule
-     * @param  string $parameter
+     * @param  string  $rule
+     * @param  string  $parameter
      *
      * @return array
      */
