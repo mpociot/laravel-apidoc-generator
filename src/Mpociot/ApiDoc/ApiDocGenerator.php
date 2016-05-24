@@ -3,14 +3,14 @@
 namespace Mpociot\ApiDoc;
 
 use Faker\Factory;
-use Illuminate\Foundation\Http\FormRequest;
+use ReflectionClass;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
+use phpDocumentor\Reflection\DocBlock;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use phpDocumentor\Reflection\DocBlock;
-use ReflectionClass;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ApiDocGenerator
 {

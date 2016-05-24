@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Routing\Controller;
 use Illuminate\Routing\Route;
+use Illuminate\Routing\Controller;
 use Mpociot\ApiDoc\ApiDocGenerator;
+use Illuminate\Foundation\Http\FormRequest;
 
 class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 {
