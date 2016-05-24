@@ -28,8 +28,8 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
         $route = new Route(['GET'], '/api/test', ['uses' => 'TestController@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
 
-        $this->assertEquals('Example title.', $parsed['title']);
-        $this->assertEquals("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
+        $this->assertSame('Example title.', $parsed['title']);
+        $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
     }
 
     public function testCanParseRouteMethods()
@@ -41,19 +41,19 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 
         $route = new Route(['GET'], '/get', ['uses' => 'TestController@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertEquals(['GET', 'HEAD'], $parsed['methods']);
+        $this->assertSame(['GET', 'HEAD'], $parsed['methods']);
 
         $route = new Route(['POST'], '/post', ['uses' => 'TestController@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertEquals(['POST'], $parsed['methods']);
+        $this->assertSame(['POST'], $parsed['methods']);
 
         $route = new Route(['PUT'], '/put', ['uses' => 'TestController@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertEquals(['PUT'], $parsed['methods']);
+        $this->assertSame(['PUT'], $parsed['methods']);
 
         $route = new Route(['DELETE'], '/delete', ['uses' => 'TestController@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertEquals(['DELETE'], $parsed['methods']);
+        $this->assertSame(['DELETE'], $parsed['methods']);
     }
 
     public function testCanParseFormRequestRules()
@@ -73,219 +73,219 @@ class ApiDocGeneratorTest extends Orchestra\Testbench\TestCase
 
                 case 'required':
                     $this->assertTrue($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'accepted':
                     $this->assertTrue($attribute['required']);
-                    $this->assertEquals('boolean', $attribute['type']);
+                    $this->assertSame('boolean', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'active_url':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('url', $attribute['type']);
+                    $this->assertSame('url', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'alpha':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Only alphabetic characters allowed', $attribute['description'][0]);
+                    $this->assertSame('Only alphabetic characters allowed', $attribute['description'][0]);
                     break;
                 case 'alpha_dash':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Allowed: alpha-numeric characters, as well as dashes and underscores.', $attribute['description'][0]);
+                    $this->assertSame('Allowed: alpha-numeric characters, as well as dashes and underscores.', $attribute['description'][0]);
                     break;
                 case 'alpha_num':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Only alpha-numeric characters allowed', $attribute['description'][0]);
+                    $this->assertSame('Only alpha-numeric characters allowed', $attribute['description'][0]);
                     break;
                 case 'array':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('array', $attribute['type']);
+                    $this->assertSame('array', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'between':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('numeric', $attribute['type']);
+                    $this->assertSame('numeric', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Between: `5` and `200`', $attribute['description'][0]);
+                    $this->assertSame('Between: `5` and `200`', $attribute['description'][0]);
                     break;
                 case 'before':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('date', $attribute['type']);
+                    $this->assertSame('date', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must be a date preceding: `Saturday, 23-Apr-16 14:31:00 UTC`', $attribute['description'][0]);
+                    $this->assertSame('Must be a date preceding: `Saturday, 23-Apr-16 14:31:00 UTC`', $attribute['description'][0]);
                     break;
                 case 'boolean':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('boolean', $attribute['type']);
+                    $this->assertSame('boolean', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'date':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('date', $attribute['type']);
+                    $this->assertSame('date', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'date_format':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('date', $attribute['type']);
+                    $this->assertSame('date', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Date format: `j.n.Y H:iP`', $attribute['description'][0]);
+                    $this->assertSame('Date format: `j.n.Y H:iP`', $attribute['description'][0]);
                     break;
                 case 'different':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must have a different value than parameter: `alpha_num`', $attribute['description'][0]);
+                    $this->assertSame('Must have a different value than parameter: `alpha_num`', $attribute['description'][0]);
                     break;
                 case 'digits':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('numeric', $attribute['type']);
+                    $this->assertSame('numeric', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must have an exact length of `2`', $attribute['description'][0]);
+                    $this->assertSame('Must have an exact length of `2`', $attribute['description'][0]);
                     break;
                 case 'digits_between':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('numeric', $attribute['type']);
+                    $this->assertSame('numeric', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must have a length between `2` and `10`', $attribute['description'][0]);
+                    $this->assertSame('Must have a length between `2` and `10`', $attribute['description'][0]);
                     break;
                 case 'email':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('email', $attribute['type']);
+                    $this->assertSame('email', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'exists':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Valid user firstname', $attribute['description'][0]);
+                    $this->assertSame('Valid user firstname', $attribute['description'][0]);
                     break;
                 case 'image':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('image', $attribute['type']);
+                    $this->assertSame('image', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must be an image (jpeg, png, bmp, gif, or svg)', $attribute['description'][0]);
+                    $this->assertSame('Must be an image (jpeg, png, bmp, gif, or svg)', $attribute['description'][0]);
                     break;
                 case 'in':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('`jpeg`, `png`, `bmp`, `gif` or `svg`', $attribute['description'][0]);
+                    $this->assertSame('`jpeg`, `png`, `bmp`, `gif` or `svg`', $attribute['description'][0]);
                     break;
                 case 'integer':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('integer', $attribute['type']);
+                    $this->assertSame('integer', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'ip':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('ip', $attribute['type']);
+                    $this->assertSame('ip', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'json':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must be a valid JSON string.', $attribute['description'][0]);
+                    $this->assertSame('Must be a valid JSON string.', $attribute['description'][0]);
                     break;
                 case 'max':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Maximum: `10`', $attribute['description'][0]);
+                    $this->assertSame('Maximum: `10`', $attribute['description'][0]);
                     break;
                 case 'min':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Minimum: `20`', $attribute['description'][0]);
+                    $this->assertSame('Minimum: `20`', $attribute['description'][0]);
                     break;
                 case 'mimes':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Allowed mime types: `jpeg`, `bmp` or `png`', $attribute['description'][0]);
+                    $this->assertSame('Allowed mime types: `jpeg`, `bmp` or `png`', $attribute['description'][0]);
                     break;
                 case 'not_in':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Not in: `foo` or `bar`', $attribute['description'][0]);
+                    $this->assertSame('Not in: `foo` or `bar`', $attribute['description'][0]);
                     break;
                 case 'numeric':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('numeric', $attribute['type']);
+                    $this->assertSame('numeric', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
                 case 'regex':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must match this regular expression: `(.*)`', $attribute['description'][0]);
+                    $this->assertSame('Must match this regular expression: `(.*)`', $attribute['description'][0]);
                     break;
                 case 'required_if':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Required if `foo` is `bar`', $attribute['description'][0]);
+                    $this->assertSame('Required if `foo` is `bar`', $attribute['description'][0]);
                     break;
                 case 'required_unless':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Required unless `foo` is `bar`', $attribute['description'][0]);
+                    $this->assertSame('Required unless `foo` is `bar`', $attribute['description'][0]);
                     break;
                 case 'required_with':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Required if the parameters `foo`, `bar` or `baz` are present.', $attribute['description'][0]);
+                    $this->assertSame('Required if the parameters `foo`, `bar` or `baz` are present.', $attribute['description'][0]);
                     break;
                 case 'required_with_all':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Required if the parameters `foo`, `bar` and `baz` are present.', $attribute['description'][0]);
+                    $this->assertSame('Required if the parameters `foo`, `bar` and `baz` are present.', $attribute['description'][0]);
                     break;
                 case 'required_without':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Required if the parameters `foo`, `bar` or `baz` are not present.', $attribute['description'][0]);
+                    $this->assertSame('Required if the parameters `foo`, `bar` or `baz` are not present.', $attribute['description'][0]);
                     break;
                 case 'required_without_all':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Required if the parameters `foo`, `bar` and `baz` are not present.', $attribute['description'][0]);
+                    $this->assertSame('Required if the parameters `foo`, `bar` and `baz` are not present.', $attribute['description'][0]);
                     break;
                 case 'same':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must be the same as `foo`', $attribute['description'][0]);
+                    $this->assertSame('Must be the same as `foo`', $attribute['description'][0]);
                     break;
                 case 'size':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must have the size of `51`', $attribute['description'][0]);
+                    $this->assertSame('Must have the size of `51`', $attribute['description'][0]);
                     break;
                 case 'timezone':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('string', $attribute['type']);
+                    $this->assertSame('string', $attribute['type']);
                     $this->assertCount(1, $attribute['description']);
-                    $this->assertEquals('Must be a valid timezone identifier', $attribute['description'][0]);
+                    $this->assertSame('Must be a valid timezone identifier', $attribute['description'][0]);
                     break;
                 case 'url':
                     $this->assertFalse($attribute['required']);
-                    $this->assertEquals('url', $attribute['type']);
+                    $this->assertSame('url', $attribute['type']);
                     $this->assertCount(0, $attribute['description']);
                     break;
 
