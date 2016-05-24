@@ -358,7 +358,7 @@ class ApiDocGenerator
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
 
-            if (! starts_with($name, $prefix) && $name != 'CONTENT_TYPE') {
+            if (! starts_with($name, $prefix) && $name !== 'CONTENT_TYPE') {
                 $name = $prefix.$name;
             }
 
@@ -401,7 +401,7 @@ class ApiDocGenerator
      */
     protected function parseParameters($rule, $parameter)
     {
-        if (strtolower($rule) == 'regex') {
+        if (strtolower($rule) === 'regex') {
             return [$parameter];
         }
 
