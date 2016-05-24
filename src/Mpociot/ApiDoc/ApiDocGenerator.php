@@ -64,9 +64,8 @@ class ApiDocGenerator
     private function getRouteResponse(Route $route)
     {
         $methods = $route->getMethods();
-        $response = $this->callRoute(array_shift($methods), $route->getUri());
 
-        return $response;
+        return $this->callRoute(array_shift($methods), $route->getUri());
     }
 
     /**
