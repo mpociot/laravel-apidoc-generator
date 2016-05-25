@@ -357,7 +357,7 @@ class ApiDocGenerator
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
 
-            if (! starts_with($name, $prefix) && $name !== 'CONTENT_TYPE') {
+            if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
                 $name = $prefix.$name;
             }
 
