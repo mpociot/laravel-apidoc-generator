@@ -12,9 +12,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 abstract class AbstractGenerator
 {
-
     /**
      * @param Route $route
+     *
      * @return mixed
      */
     abstract protected function getUri(Route $route);
@@ -30,9 +30,11 @@ abstract class AbstractGenerator
     /**
      * @param array $routeData
      * @param array $routeAction
+     *
      * @return mixed
      */
-    protected function getParameters($routeData, $routeAction) {
+    protected function getParameters($routeData, $routeAction)
+    {
         $validator = Validator::make([], $this->getRouteRules($routeAction['uses']));
         foreach ($validator->getRules() as $attribute => $rules) {
             $attributeData = [
@@ -65,10 +67,10 @@ abstract class AbstractGenerator
         return $this->callRoute(array_shift($methods), $uri);
     }
 
-
     /**
      * @param Route $route
      * @param array $bindings
+     *
      * @return mixed
      */
     protected function addRouteModelBindings(Route $route, $bindings)
@@ -77,6 +79,7 @@ abstract class AbstractGenerator
         foreach ($bindings as $model => $id) {
             $uri = str_replace('{'.$model.'}', $id, $uri);
         }
+
         return $uri;
     }
 
@@ -100,7 +103,6 @@ abstract class AbstractGenerator
         ];
     }
 
-
     /**
      * @param  string  $route
      *
@@ -117,6 +119,7 @@ abstract class AbstractGenerator
                 return $tag->getContent();
             }
         }
+
         return 'general';
     }
 

@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Request;
 
 class LaravelGenerator extends AbstractGenerator
 {
-
     /**
      * @param Route $route
+     *
      * @return mixed
      */
     protected function getUri(Route $route)
@@ -27,11 +27,11 @@ class LaravelGenerator extends AbstractGenerator
     public function processRoute(Route $route, $bindings = [])
     {
         $response = $this->getRouteResponse($route, $bindings);
-        
+
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
-        
+
         if ($response->headers->get('Content-Type') === 'application/json') {
             $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
         } else {
@@ -39,7 +39,7 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return $this->getParameters([
-            'resource'    => $routeGroup,
+            'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $route->getMethods(),
@@ -83,5 +83,4 @@ class LaravelGenerator extends AbstractGenerator
 
         return $response;
     }
-    
 }

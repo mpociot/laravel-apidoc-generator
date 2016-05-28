@@ -5,7 +5,6 @@ namespace Mpociot\ApiDoc\Tests;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\AbstractGenerator;
 use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Illuminate\Support\Facades\Route as RouteFacade;
