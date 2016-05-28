@@ -3,8 +3,9 @@
 namespace Mpociot\ApiDoc\Tests;
 
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\ApiDocGenerator;
+use Mpociot\ApiDoc\AbstractGenerator;
 use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Illuminate\Support\Facades\Route as RouteFacade;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Route as RouteFacade;
 class ApiDocGeneratorTest extends TestCase
 {
     /**
-     * @var \Mpociot\ApiDoc\ApiDocGenerator
+     * @var \Mpociot\ApiDoc\AbstractGenerator
      */
     protected $generator;
 
@@ -23,7 +24,7 @@ class ApiDocGeneratorTest extends TestCase
     {
         parent::setUp();
 
-        $this->generator = new ApiDocGenerator();
+        $this->generator = new LaravelGenerator();
     }
 
     public function testCanParseMethodDescription()

@@ -1,43 +1,38 @@
 <?php
 
-namespace Mpociot\ApiDoc;
+namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\App;
 use phpDocumentor\Reflection\DocBlock;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ApiDocGenerator
+abstract class AbstractGenerator
 {
+
     /**
-     * @param  \Illuminate\Routing\Route  $route
+     * @param Route $route
+     * @return mixed
+     */
+    abstract protected function getUri(Route $route);
+
+    /**
+     * @param  \Illuminate\Routing\Route $route
+     * @param array $bindings
      *
      * @return array
      */
-    public function processRoute(Route $route)
-    {
-        $routeAction = $route->getAction();
-        $response = $this->getRouteResponse($route);
-        $routeDescription = $this->getRouteDescription($routeAction['uses']);
-        if ($response->headers->get('Content-Type') === 'application/json') {
-            $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
-        } else {
-            $content = $response->getContent();
-        }
-        $routeData = [
-            'title' => $routeDescription['short'],
-            'description' => $routeDescription['long'],
-            'methods' => $route->getMethods(),
-            'uri' => $route->getUri(),
-            'parameters' => [],
-            'response' => $content,
-        ];
+    abstract public function processRoute(Route $route, $bindings = []);
 
+    /**
+     * @param array $routeData
+     * @param array $routeAction
+     * @return mixed
+     */
+    protected function getParameters($routeData, $routeAction) {
         $validator = Validator::make([], $this->getRouteRules($routeAction['uses']));
         foreach ($validator->getRules() as $attribute => $rules) {
             $attributeData = [
@@ -61,11 +56,28 @@ class ApiDocGenerator
      *
      * @return \Illuminate\Http\Response
      */
-    private function getRouteResponse(Route $route)
+    protected function getRouteResponse(Route $route, $bindings)
     {
+        $uri = $this->addRouteModelBindings($route, $bindings);
+
         $methods = $route->getMethods();
 
-        return $this->callRoute(array_shift($methods), $route->getUri());
+        return $this->callRoute(array_shift($methods), $uri);
+    }
+
+
+    /**
+     * @param Route $route
+     * @param array $bindings
+     * @return mixed
+     */
+    protected function addRouteModelBindings(Route $route, $bindings)
+    {
+        $uri = $this->getUri($route);
+        foreach ($bindings as $model => $id) {
+            $uri = str_replace('{'.$model.'}', $id, $uri);
+        }
+        return $uri;
     }
 
     /**
@@ -73,7 +85,7 @@ class ApiDocGenerator
      *
      * @return string
      */
-    private function getRouteDescription($route)
+    protected function getRouteDescription($route)
     {
         list($class, $method) = explode('@', $route);
         $reflection = new ReflectionClass($class);
@@ -88,12 +100,32 @@ class ApiDocGenerator
         ];
     }
 
+
     /**
-     * @param  \Illuminate\Routing\Route  $route
+     * @param  string  $route
+     *
+     * @return string
+     */
+    protected function getRouteGroup($route)
+    {
+        list($class, $method) = explode('@', $route);
+        $reflection = new ReflectionClass($class);
+        $comment = $reflection->getDocComment();
+        $phpdoc = new DocBlock($comment);
+        foreach ($phpdoc->getTags() as $tag) {
+            if ($tag->getName() === 'resource') {
+                return $tag->getContent();
+            }
+        }
+        return 'general';
+    }
+
+    /**
+     * @param  $route
      *
      * @return array
      */
-    private function getRouteRules($route)
+    protected function getRouteRules($route)
     {
         list($class, $method) = explode('@', $route);
         $reflection = new ReflectionClass($class);
@@ -320,27 +352,7 @@ class ApiDocGenerator
      *
      * @return \Illuminate\Http\Response
      */
-    public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-    {
-        $kernel = App::make('Illuminate\Contracts\Http\Kernel');
-        App::instance('middleware.disable', true);
-
-        $server = [
-            'CONTENT_TYPE' => 'application/json',
-            'Accept' => 'application/json',
-        ];
-
-        $request = Request::create(
-            $uri, $method, $parameters,
-            $cookies, $files, $this->transformHeadersToServerVars($server), $content
-        );
-
-        $response = $kernel->handle($request);
-
-        $kernel->terminate($request, $response);
-
-        return $response;
-    }
+    abstract public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null);
 
     /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.

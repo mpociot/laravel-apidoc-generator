@@ -18,7 +18,11 @@ toc_footers:
 Welcome to the generated API reference.
 
 # Available routes
-@foreach($parsedRoutes as $parsedRoute)
+@foreach($parsedRoutes as $group => $routes)
+@if($group)
+#{{$group}}
+@endif
+@foreach($routes as $parsedRoute)
 @if($parsedRoute['title'] != '')## {{ $parsedRoute['title']}}
 @else## {{$parsedRoute['uri']}}
 @endif
@@ -59,11 +63,11 @@ console.log(response);
 ```
 
 @if(in_array('GET',$parsedRoute['methods']))
-    > Example response:
+> Example response:
 
-    ```json
-    {!! $parsedRoute['response'] !!}
-    ```
+```json
+{!! str_limit(json_encode(json_decode($parsedRoute['response']), JSON_PRETTY_PRINT)) !!}
+```
 @endif
 
 ### HTTP Request
@@ -81,4 +85,5 @@ Parameter | Type | Status | Description
 @endforeach
 @endif
 
+@endforeach
 @endforeach
