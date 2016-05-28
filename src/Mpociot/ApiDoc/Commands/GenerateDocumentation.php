@@ -120,6 +120,7 @@ class GenerateDocumentation extends Command
             list($name, $id) = explode(',', $binding);
             $resultBindings[$name] = $id;
         }
+
         return $resultBindings;
     }
 
@@ -128,7 +129,7 @@ class GenerateDocumentation extends Command
      */
     private function setUserToBeImpersonated($actAs)
     {
-        if (!empty($actAs)) {
+        if (! empty($actAs)) {
             if (version_compare($this->laravel->version(), '5.2.0', '<')) {
                 $userModel = config('auth.model');
                 $user = $userModel::find($actAs);
@@ -157,6 +158,7 @@ class GenerateDocumentation extends Command
      * @param AbstractGenerator  $generator
      * @param $allowedRoutes
      * @param $routePrefix
+     *
      * @return array
      */
     private function processLaravelRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix)
@@ -170,6 +172,7 @@ class GenerateDocumentation extends Command
                 $this->info('Processed route: '.$route->getUri());
             }
         }
+
         return $parsedRoutes;
     }
 
@@ -177,6 +180,7 @@ class GenerateDocumentation extends Command
      * @param AbstractGenerator $generator
      * @param $allowedRoutes
      * @param $routePrefix
+     *
      * @return array
      */
     private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix)
@@ -190,6 +194,7 @@ class GenerateDocumentation extends Command
                 $this->info('Processed route: '.$route->uri());
             }
         }
+
         return $parsedRoutes;
     }
 }

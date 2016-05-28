@@ -4,11 +4,9 @@ namespace Mpociot\ApiDoc\Generators;
 
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Request;
 
 class DingoGenerator extends AbstractGenerator
 {
-
     /**
      * @param  \Illuminate\Routing\Route $route
      * @param array $bindings
@@ -22,7 +20,7 @@ class DingoGenerator extends AbstractGenerator
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
-        
+
         if ($response->headers->get('Content-Type') === 'application/json') {
             $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
         } else {
@@ -30,7 +28,7 @@ class DingoGenerator extends AbstractGenerator
         }
 
         return $this->getParameters([
-            'resource'    => $routeGroup,
+            'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $route->getMethods(),
@@ -39,7 +37,6 @@ class DingoGenerator extends AbstractGenerator
             'response' => $content,
         ], $routeAction);
     }
-
 
     /**
      * {@inheritdoc}
@@ -56,5 +53,4 @@ class DingoGenerator extends AbstractGenerator
     {
         return $route->uri();
     }
-    
 }
