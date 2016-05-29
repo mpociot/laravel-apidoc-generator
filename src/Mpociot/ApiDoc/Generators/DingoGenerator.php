@@ -2,18 +2,17 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
 
 class DingoGenerator extends AbstractGenerator
 {
     /**
-     * @param  \Illuminate\Routing\Route $route
+     * @param $route
      * @param array $bindings
      *
      * @return array
      */
-    public function processRoute(Route $route, $bindings = [])
+    public function processRoute($route, $bindings = [])
     {
         $response = $this->getRouteResponse($route, $bindings);
 
@@ -49,7 +48,7 @@ class DingoGenerator extends AbstractGenerator
     /**
      * {@inheritdoc}
      */
-    protected function getUri(Route $route)
+    protected function getUri($route)
     {
         return $route->uri();
     }
