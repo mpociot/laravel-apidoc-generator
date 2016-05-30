@@ -13,11 +13,11 @@ use Illuminate\Foundation\Http\FormRequest;
 abstract class AbstractGenerator
 {
     /**
-     * @param Route $route
+     * @param $route
      *
      * @return mixed
      */
-    abstract protected function getUri(Route $route);
+    abstract protected function getUri($route);
 
     /**
      * @param  \Illuminate\Routing\Route $route
@@ -25,7 +25,7 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    abstract public function processRoute(Route $route, $bindings = []);
+    abstract public function processRoute($route, $bindings = []);
 
     /**
      * @param array $routeData
@@ -54,11 +54,11 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  \Illuminate\Routing\Route  $route
+     * @param  $route
      *
      * @return \Illuminate\Http\Response
      */
-    protected function getRouteResponse(Route $route, $bindings)
+    protected function getRouteResponse($route, $bindings)
     {
         $uri = $this->addRouteModelBindings($route, $bindings);
 
@@ -68,12 +68,12 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param Route $route
+     * @param $route
      * @param array $bindings
      *
      * @return mixed
      */
-    protected function addRouteModelBindings(Route $route, $bindings)
+    protected function addRouteModelBindings($route, $bindings)
     {
         $uri = $this->getUri($route);
         foreach ($bindings as $model => $id) {

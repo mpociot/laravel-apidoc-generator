@@ -13,7 +13,7 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return mixed
      */
-    protected function getUri(Route $route)
+    protected function getUri($route)
     {
         return $route->getUri();
     }
@@ -24,7 +24,7 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return array
      */
-    public function processRoute(Route $route, $bindings = [])
+    public function processRoute($route, $bindings = [])
     {
         $response = $this->getRouteResponse($route, $bindings);
 

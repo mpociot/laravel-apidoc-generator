@@ -2,7 +2,7 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
-use Illuminate\Support\Facades\App;
+use Exception;
 
 class DingoGenerator extends AbstractGenerator
 {
@@ -14,26 +14,23 @@ class DingoGenerator extends AbstractGenerator
      */
     public function processRoute($route, $bindings = [])
     {
-        $response = $this->getRouteResponse($route, $bindings);
-
+        try {
+            $response = $this->getRouteResponse($route, $bindings);
+        } catch( Exception $e){
+            $response = '';
+        }
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
-
-        if ($response->headers->get('Content-Type') === 'application/json') {
-            $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
-        } else {
-            $content = $response->getContent();
-        }
 
         return $this->getParameters([
             'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $route->getMethods(),
-            'uri' => $route->getUri(),
+            'uri' => $route->uri(),
             'parameters' => [],
-            'response' => $content,
+            'response' => $response,
         ], $routeAction);
     }
 
