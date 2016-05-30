@@ -16,7 +16,7 @@ class DingoGenerator extends AbstractGenerator
     {
         try {
             $response = $this->getRouteResponse($route, $bindings);
-        } catch( Exception $e){
+        } catch (Exception $e) {
             $response = '';
         }
         $routeAction = $route->getAction();

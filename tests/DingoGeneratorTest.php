@@ -3,13 +3,11 @@
 namespace Mpociot\ApiDoc\Tests;
 
 use Dingo\Api\Provider\LaravelServiceProvider;
-use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Illuminate\Support\Facades\Route as RouteFacade;
 
 class DingoGeneratorTest extends TestCase
 {
@@ -21,7 +19,7 @@ class DingoGeneratorTest extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            LaravelServiceProvider::class
+            LaravelServiceProvider::class,
         ];
     }
 
