@@ -5,7 +5,6 @@ namespace Mpociot\ApiDoc\Generators;
 use Faker\Factory;
 use ReflectionClass;
 use Illuminate\Support\Str;
-use Illuminate\Routing\Route;
 use phpDocumentor\Reflection\DocBlock;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
