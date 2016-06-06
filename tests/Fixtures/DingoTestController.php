@@ -6,7 +6,6 @@ use Illuminate\Routing\Controller;
 
 class DingoTestController extends Controller
 {
-
     public function dummy()
     {
         return '';

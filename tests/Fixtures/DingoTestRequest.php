@@ -6,7 +6,6 @@ use Dingo\Api\Http\FormRequest;
 
 class DingoTestRequest extends FormRequest
 {
-
     public function rules()
     {
         return [
