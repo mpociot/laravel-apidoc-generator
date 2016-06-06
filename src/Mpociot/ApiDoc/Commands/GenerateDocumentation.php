@@ -168,8 +168,12 @@ class GenerateDocumentation extends Command
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->getUri())) {
-                $parsedRoutes[] = $generator->processRoute($route, $bindings);
-                $this->info('Processed route: '.$route->getUri());
+                if ($this->isValidRoute($route)) {
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings);
+                    $this->info('Processed route: '.$route->getUri());
+                } else {
+                    $this->warn('Skipping route: '.$route->getUri().' - contains closure.');
+                }
             }
         }
 
@@ -196,5 +200,14 @@ class GenerateDocumentation extends Command
         }
 
         return $parsedRoutes;
+    }
+
+    /**
+     * @param $route
+     * @return bool
+     */
+    private function isValidRoute($route)
+    {
+        return !is_callable($route->getAction()['uses']);
     }
 }
