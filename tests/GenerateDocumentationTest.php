@@ -7,7 +7,6 @@ use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Illuminate\Support\Facades\Route as RouteFacade;
 
@@ -30,6 +29,7 @@ class GenerateDocumentationTest extends TestCase
 
     /**
      * @param \Illuminate\Foundation\Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app)
@@ -45,13 +45,13 @@ class GenerateDocumentationTest extends TestCase
 
     public function testConsoleCommandDoesNotWorkWithClosure()
     {
-        RouteFacade::get('/api/closure', function(){
+        RouteFacade::get('/api/closure', function () {
             return 'foo';
         });
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
 
         $output = $this->artisan('api:generate', [
-            '--routePrefix' => 'api/*'
+            '--routePrefix' => 'api/*',
         ]);
         $this->assertContains('Skipping route: api/closure - contains closure.', $output);
         $this->assertContains('Processed route: api/test', $output);
@@ -60,11 +60,13 @@ class GenerateDocumentationTest extends TestCase
     /**
      * @param string $command
      * @param array $parameters
+     *
      * @return mixed
      */
     public function artisan($command, $parameters = [])
     {
         $this->app[Kernel::class]->call($command, $parameters);
+
         return $this->app[Kernel::class]->output();
     }
 }
