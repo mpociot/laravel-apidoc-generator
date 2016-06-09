@@ -135,17 +135,15 @@ abstract class AbstractGenerator
 
         foreach ($reflectionMethod->getParameters() as $parameter) {
             $parameterType = $parameter->getClass();
-            if (! is_null($parameterType) && class_exists($parameterType->name)) {
-                $className = $parameterType->name;
-                $parameterReflection = new $className;
-                if ($parameterReflection instanceof FormRequest) {
-                    if (method_exists($parameterReflection, 'validator')) {
-                        return $parameterReflection->validator()->getRules();
-                    } else {
-                        return $parameterReflection->rules();
-                    }
-                }
+            if (is_null($parameterType) && ! class_exists($parameterType->name)) {
+                continue;
             }
+            $className = $parameterType->name;
+            $parameterReflection = new $className;
+            if ($parameterReflection instanceof FormRequest && method_exists($parameterReflection, 'validator')) {
+                return $parameterReflection->validator()->getRules();
+            } 
+            return $parameterReflection->rules();
         }
 
         return [];
