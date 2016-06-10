@@ -143,7 +143,7 @@ abstract class AbstractGenerator
             if ($parameterReflection instanceof FormRequest && method_exists($parameterReflection, 'validator')) {
                 return $parameterReflection->validator()->getRules();
             }
-             
+
             return $parameterReflection->rules();
         }
 
