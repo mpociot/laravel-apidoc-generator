@@ -19,7 +19,7 @@
         "fzaninotto/faker": "^1.6",
         "laravel/framework": "~5.0",
         "mpociot/documentarian": "^0.2.0",
-        "phpdocumentor/reflection-docblock": "^2.0 || ^3.0.2"
+        "phpdocumentor/reflection-docblock": "^2.0"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0",
