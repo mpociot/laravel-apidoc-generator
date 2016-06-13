@@ -57,6 +57,19 @@ class GenerateDocumentationTest extends TestCase
         $this->assertContains('Processed route: api/test', $output);
     }
 
+    public function testGeneratedMarkdownFileIsCorrect()
+    {
+        RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
+
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+        
+        $generatedMarkdown = file_get_contents(__DIR__ . '/../public/docs/source/index.md');
+        $fixtureMarkdown   = file_get_contents(__DIR__ . '/Fixtures/index.md');
+        $this->assertSame($generatedMarkdown, $fixtureMarkdown);
+    }
+
     /**
      * @param string $command
      * @param array $parameters
