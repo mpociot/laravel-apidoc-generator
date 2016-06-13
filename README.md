@@ -44,6 +44,8 @@ Option | Description
 `routePrefix` | The route prefix to use for generation - `*` can be used as a wildcard
 `routes` | The route names to use for generation - Required if no routePrefix is provided
 `actAsUserId` | The user ID to use for authenticated API response calls
+`noResponseCalls` | Disable API response calls
+`actAsUserId` | The user ID to use for authenticated API response calls
 `router` | The router to use, when processing the route files (can be Laravel or Dingo - defaults to Laravel)
 `bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id` 
 
@@ -94,6 +96,12 @@ If your API needs an authenticated user, you can use the `actAsUserId` option to
 
 ```sh
 $ php artisan api:generate --routePrefix=api/* --actAsUserId=1
+```
+
+If you don't want to automatically perform API response calls, use the `noResponseCalls` option.
+
+```sh
+$ php artisan api:generate --routePrefix=api/* --noResponseCalls
 ```
 
 > Note: The example API responses work best with seeded data.

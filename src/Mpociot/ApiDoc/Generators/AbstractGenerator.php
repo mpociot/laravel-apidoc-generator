@@ -21,10 +21,11 @@ abstract class AbstractGenerator
     /**
      * @param  \Illuminate\Routing\Route $route
      * @param array $bindings
-     *
+     * @param bool $withResponse
+     * 
      * @return array
      */
-    abstract public function processRoute($route, $bindings = []);
+    abstract public function processRoute($route, $bindings = [], $withResponse = true);
 
     /**
      * @param array $routeData

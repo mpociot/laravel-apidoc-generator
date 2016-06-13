@@ -21,6 +21,7 @@ class GenerateDocumentation extends Command
                             {--output=public/docs : The output path for the generated documentation}
                             {--routePrefix= : The route prefix to use for generation}
                             {--routes=* : The route names to use for generation}
+                            {--noResponseCalls : The user ID to use for API response calls}
                             {--actAsUserId= : The user ID to use for API response calls}
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--bindings= : Route Model Bindings}
@@ -163,13 +164,14 @@ class GenerateDocumentation extends Command
      */
     private function processLaravelRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix)
     {
+        $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->getUri())) {
                 if ($this->isValidRoute($route)) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings);
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
                     $this->info('Processed route: '.$route->getUri());
                 } else {
                     $this->warn('Skipping route: '.$route->getUri().' - contains closure.');
@@ -189,12 +191,13 @@ class GenerateDocumentation extends Command
      */
     private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix)
     {
+        $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri())) {
-                $parsedRoutes[] = $generator->processRoute($route, $bindings);
+                $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
                 $this->info('Processed route: '.$route->uri());
             }
         }

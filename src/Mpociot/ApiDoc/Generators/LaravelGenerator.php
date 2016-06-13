@@ -21,12 +21,17 @@ class LaravelGenerator extends AbstractGenerator
     /**
      * @param  \Illuminate\Routing\Route $route
      * @param array $bindings
+     * @param bool $withResponse
      *
      * @return array
      */
-    public function processRoute($route, $bindings = [])
+    public function processRoute($route, $bindings = [], $withResponse = true)
     {
-        $response = $this->getRouteResponse($route, $bindings);
+        $response = '';
+
+        if ($withResponse) {
+            $response = $this->getRouteResponse($route, $bindings);
+        }
 
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);

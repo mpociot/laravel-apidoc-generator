@@ -7,18 +7,22 @@ use Exception;
 class DingoGenerator extends AbstractGenerator
 {
     /**
-     * @param $route
+     * @param \Illuminate\Routing\Route $route
      * @param array $bindings
-     *
+     * @param bool $withResponse
+     * 
      * @return array
      */
-    public function processRoute($route, $bindings = [])
+    public function processRoute($route, $bindings = [], $withResponse = true)
     {
-        try {
-            $response = $this->getRouteResponse($route, $bindings);
-        } catch (Exception $e) {
-            $response = '';
+        $response = '';
+        
+        if ($withResponse) {
+            try {
+                $response = $this->getRouteResponse($route, $bindings);
+            } catch (Exception $e) {}
         }
+        
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
