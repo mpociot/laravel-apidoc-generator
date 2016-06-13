@@ -10,19 +10,20 @@ class DingoGenerator extends AbstractGenerator
      * @param \Illuminate\Routing\Route $route
      * @param array $bindings
      * @param bool $withResponse
-     * 
+     *
      * @return array
      */
     public function processRoute($route, $bindings = [], $withResponse = true)
     {
         $response = '';
-        
+
         if ($withResponse) {
             try {
                 $response = $this->getRouteResponse($route, $bindings);
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
-        
+
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
