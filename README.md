@@ -47,7 +47,18 @@ Option | Description
 `noResponseCalls` | Disable API response calls
 `actAsUserId` | The user ID to use for authenticated API response calls
 `router` | The router to use, when processing the route files (can be Laravel or Dingo - defaults to Laravel)
-`bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id` 
+`bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id`
+
+## Publish rule descriptions for customisation or translate.
+
+ For default, this package returns the descriptions in the main language of the application. But provides the possibility of publish the language files for customisation or translate.
+
+ ```sh
+ $ php artisan vendor:publish
+ ```
+
+ After to publish you can customize or translate the descriptions in the language you want by editing the files in `public/vendor/apidoc/resources/lang`.
+
 
 ### How does it work?
 
