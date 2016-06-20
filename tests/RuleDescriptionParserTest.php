@@ -76,7 +76,7 @@ class RuleDescriptionParserTest extends TestCase
     {
         return [ApiDocGeneratorServiceProvider::class];
     }
-    
+
     /**
      * Define environment setup.
      *
