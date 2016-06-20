@@ -3,11 +3,12 @@
 namespace Mpociot\ApiDoc\Tests;
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Generators\LaravelGenerator;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
+use Orchestra\Testbench\TestCase;
 
 class ApiDocGeneratorTest extends TestCase
 {
@@ -15,6 +16,13 @@ class ApiDocGeneratorTest extends TestCase
      * @var \Mpociot\ApiDoc\AbstractGenerator
      */
     protected $generator;
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            ApiDocGeneratorServiceProvider::class,
+        ];
+    }
 
     /**
      * Setup the test environment.
