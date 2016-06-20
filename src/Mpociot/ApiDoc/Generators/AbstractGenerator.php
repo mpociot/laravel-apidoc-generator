@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
 use ReflectionClass;
-use phpDocumentor\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock;
 
 abstract class AbstractGenerator
 {
