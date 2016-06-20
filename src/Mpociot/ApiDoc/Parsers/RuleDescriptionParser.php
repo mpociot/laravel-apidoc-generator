@@ -30,7 +30,7 @@ class RuleDescriptionParser
 
     /**
      * @param string|array $parameters
-     * 
+     *
      * @return $this
      */
     public function with($parameters)
@@ -42,7 +42,7 @@ class RuleDescriptionParser
 
     /**
      * @param $key
-     * 
+     *
      * @return string
      */
     protected function translateWithAttributes($key)
@@ -58,7 +58,7 @@ class RuleDescriptionParser
 
     /**
      * @param null $rule
-     * 
+     *
      * @return static
      */
     public static function parse($rule = null)
