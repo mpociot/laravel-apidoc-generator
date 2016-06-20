@@ -9,8 +9,6 @@ class RuleDescriptionParser
     private $parameters = [];
 
     /**
-     * RuleDescriptionParser constructor.
-     * 
      * @param null $rule
      */
     public function __construct($rule = null)
@@ -19,8 +17,6 @@ class RuleDescriptionParser
     }
 
     /**
-     * Returns the description in the main language of the application.
-     * 
      * @return array|string
      */
     public function getDescription()
@@ -33,7 +29,6 @@ class RuleDescriptionParser
     }
 
     /**
-     * Sets the parameters for the description string.
      * @param string|array $parameters
      * 
      * @return $this
@@ -46,7 +41,6 @@ class RuleDescriptionParser
     }
 
     /**
-     * Returns the description string with the replaced attributes.
      * @param $key
      * 
      * @return string
@@ -63,7 +57,6 @@ class RuleDescriptionParser
     }
 
     /**
-     * Provides a named constructor.
      * @param null $rule
      * 
      * @return static

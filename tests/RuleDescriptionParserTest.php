@@ -52,7 +52,7 @@ class RuleDescriptionParserTest extends TestCase
         $expected = 'Only alphabetic characters allowed';
         $rule = new RuleDescriptionParser('alpha');
 
-        $actual = $rule->with("dummy parameter")->getDescription();
+        $actual = $rule->with('dummy parameter')->getDescription();
 
         $this->assertEquals($expected, $actual);
     }
