@@ -66,7 +66,7 @@ console.log(response);
 > Example response:
 
 ```json
-{!! str_limit(json_encode(json_decode($parsedRoute['response']), JSON_PRETTY_PRINT)) !!}
+{!! json_encode(json_decode($parsedRoute['response']), JSON_PRETTY_PRINT) !!}
 ```
 @endif
 
