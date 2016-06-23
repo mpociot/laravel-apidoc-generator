@@ -25,4 +25,22 @@ class TestController extends Controller
     {
         return '';
     }
+
+    public function fetchRouteResponse()
+    {
+        $fixture = new \stdClass();
+        $fixture->id = 1;
+        $fixture->name = 'banana';
+        $fixture->color = 'red';
+        $fixture->weight = 300;
+        $fixture->delicious = 1;
+
+        return [
+            'id'        => (int) $fixture->id,
+            'name'      => ucfirst($fixture->name),
+            'color'     => ucfirst($fixture->color),
+            'weight'    => $fixture->weight . ' grams',
+            'delicious' => (bool) $fixture->delicious,
+        ];
+    }
 }

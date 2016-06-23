@@ -60,6 +60,7 @@ class GenerateDocumentationTest extends TestCase
     public function testGeneratedMarkdownFileIsCorrect()
     {
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
+        RouteFacade::get('/api/fetch', TestController::class.'@fetchRouteResponse');
 
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
