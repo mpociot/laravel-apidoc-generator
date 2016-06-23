@@ -36,10 +36,10 @@ class TestController extends Controller
         $fixture->delicious = 1;
 
         return [
-            'id'        => (int) $fixture->id,
-            'name'      => ucfirst($fixture->name),
-            'color'     => ucfirst($fixture->color),
-            'weight'    => $fixture->weight . ' grams',
+            'id' => (int) $fixture->id,
+            'name' => ucfirst($fixture->name),
+            'color' => ucfirst($fixture->color),
+            'weight' => $fixture->weight.' grams',
             'delicious' => (bool) $fixture->delicious,
         ];
     }
