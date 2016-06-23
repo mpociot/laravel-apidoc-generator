@@ -8,12 +8,14 @@ class RuleDescriptionParser
 
     private $parameters = [];
 
+    const DEFAULT_LOCALE = 'en';
+
     /**
      * @param null $rule
      */
     public function __construct($rule = null)
     {
-        $this->rule = $rule;
+        $this->rule = "apidoc::rules.{$rule}";
     }
 
     /**
@@ -21,11 +23,7 @@ class RuleDescriptionParser
      */
     public function getDescription()
     {
-        $key = "apidoc::rules.{$this->rule}";
-
-        $description = $this->parameters ? $this->translateWithAttributes($key) : trans($key);
-
-        return $description != $key ? $description : [];
+        return $this->ruleDescriptionExist() ? $this->makeDescription() : [];
     }
 
     /**
@@ -35,25 +33,45 @@ class RuleDescriptionParser
      */
     public function with($parameters)
     {
-        is_array($parameters) ? $this->parameters += $parameters : $this->parameters[] = $parameters;
+        is_array($parameters) ?
+            $this->parameters += $parameters :
+            $this->parameters[] = $parameters;
 
         return $this;
     }
 
     /**
-     * @param $key
+     * @return bool
+     */
+    protected function ruleDescriptionExist()
+    {
+        return trans()->hasForLocale($this->rule) || trans()->hasForLocale($this->rule, self::DEFAULT_LOCALE);
+    }
+
+    /**
+     * @return string
+     */
+    protected function makeDescription()
+    {
+        $description = trans()->hasForLocale($this->rule) ?
+                            trans()->get($this->rule) :
+                            trans()->get($this->rule, [], self::DEFAULT_LOCALE);
+
+        return $this->replaceAttributes($description);
+    }
+
+    /**
+     * @param string $description$
      *
      * @return string
      */
-    protected function translateWithAttributes($key)
+    protected function replaceAttributes($description)
     {
-        $translate = trans($key);
-
         foreach ($this->parameters as $parameter) {
-            $translate = preg_replace('/:attribute/', $parameter, $translate, 1);
+            $description = preg_replace('/:attribute/', $parameter, $description, 1);
         }
 
-        return $translate;
+        return $description;
     }
 
     /**
