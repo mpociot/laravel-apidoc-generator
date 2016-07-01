@@ -2,8 +2,6 @@
 
 namespace Mpociot\ApiDoc\Parsers;
 
-use Illuminate\Support\Facades\App;
-
 class RuleDescriptionParser
 {
     private $rule;
@@ -43,16 +41,16 @@ class RuleDescriptionParser
     }
 
     /**
-    * @return bool
-    */
+     * @return bool
+     */
     protected function ruleDescriptionExist()
     {
         return trans()->has($this->rule) || trans()->has($this->rule, self::DEFAULT_LOCALE);
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     protected function makeDescription()
     {
         $description = trans()->hasForLocale($this->rule) ?
