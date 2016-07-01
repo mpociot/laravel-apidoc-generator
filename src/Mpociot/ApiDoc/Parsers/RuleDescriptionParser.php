@@ -33,8 +33,8 @@ class RuleDescriptionParser
      */
     public function with($parameters)
     {
-        is_array($parameters) ? 
-            $this->parameters += $parameters : 
+        is_array($parameters) ?
+            $this->parameters += $parameters :
             $this->parameters[] = $parameters;
 
         return $this;
