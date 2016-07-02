@@ -10,10 +10,6 @@ use Orchestra\Testbench\TestCase;
 
 class RuleDescriptionParserTest extends TestCase
 {
-    const LANG_PATH = __DIR__.'/../src/resources/lang';
-
-    const LANG_TEST_PATH = __DIR__.'/fixtures/resources/lang';
-
     public function testReturnsAnEmptyDescriptionIfARuleIsNotParsed()
     {
         $rule = new RuleDescriptionParser();
@@ -37,24 +33,24 @@ class RuleDescriptionParserTest extends TestCase
     public function testReturnsADescriptionInMainLanguageIfAvailable()
     {
         $file = new Filesystem();
-        $file->copyDirectory(self::LANG_TEST_PATH, self::LANG_PATH);
+        $file->copyDirectory(__DIR__.'/fixtures/resources/lang', __DIR__.'/../src/resources/lang');
         App::setLocale('es');
 
         $actual = RuleDescriptionParser::parse('alpha')->getDescription();
 
-        $file->deleteDirectory(self::LANG_PATH.'/es');
+        $file->deleteDirectory(__DIR__.'/../src/resources/lang/es');
         $this->assertEquals('Solo caracteres alfabeticos permitidos', $actual);
     }
 
     public function testReturnsDescriptionInDefaultLanguageIfNotAvailableInMainLanguage()
     {
         $file = new Filesystem();
-        $file->copyDirectory(self::LANG_TEST_PATH, self::LANG_PATH);
+        $file->copyDirectory(__DIR__.'/fixtures/resources/lang', __DIR__.'/../src/resources/lang');
         App::setLocale('es');
 
         $actual = RuleDescriptionParser::parse('alpha_num')->getDescription();
 
-        $file->deleteDirectory(self::LANG_PATH.'/es');
+        $file->deleteDirectory(__DIR__.'/../src/resources/lang/es');
         $this->assertEquals('Only alpha-numeric characters allowed', $actual);
     }
 
