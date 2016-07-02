@@ -3,7 +3,6 @@
 namespace Mpociot\ApiDoc\Tests;
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\App;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser;
 use Orchestra\Testbench\TestCase;
@@ -34,7 +33,6 @@ class RuleDescriptionParserTest extends TestCase
     {
         $file = new Filesystem();
         $file->copyDirectory(__DIR__.'/fixtures/resources/lang', __DIR__.'/../src/resources/lang');
-        App::setLocale('es');
 
         $actual = RuleDescriptionParser::parse('alpha')->getDescription();
 
@@ -46,7 +44,6 @@ class RuleDescriptionParserTest extends TestCase
     {
         $file = new Filesystem();
         $file->copyDirectory(__DIR__.'/fixtures/resources/lang', __DIR__.'/../src/resources/lang');
-        App::setLocale('es');
 
         $actual = RuleDescriptionParser::parse('alpha_num')->getDescription();
 
@@ -109,6 +106,7 @@ class RuleDescriptionParserTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        $app['config']->set('app.locale', 'es'); // Just to be different to default language.
         $app['config']->set('app.fallback_locale', 'ch'); // Just to be different to default language.
     }
 }
