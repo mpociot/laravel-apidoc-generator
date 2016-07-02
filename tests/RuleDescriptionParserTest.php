@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
+use Illuminate\Filesystem\Filesystem;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser;
 use Orchestra\Testbench\TestCase;
@@ -20,12 +21,34 @@ class RuleDescriptionParserTest extends TestCase
         $this->assertInstanceOf(RuleDescriptionParser::class, RuleDescriptionParser::parse());
     }
 
-    public function testReturnsADescriptionInTheMainLanguageOfTheApplication()
+    public function testReturnsADescriptionInDefaultLanguage()
     {
         $expected = 'Only alphabetic characters allowed';
         $rule = new RuleDescriptionParser('alpha');
 
         $this->assertEquals($expected, $rule->getDescription());
+    }
+
+    public function testReturnsADescriptionInMainLanguageIfAvailable()
+    {
+        $file = new Filesystem();
+        $file->copyDirectory(__DIR__.'/fixtures/resources/lang', __DIR__.'/../src/resources/lang');
+
+        $actual = RuleDescriptionParser::parse('alpha')->getDescription();
+
+        $file->deleteDirectory(__DIR__.'/../src/resources/lang/es');
+        $this->assertEquals('Solo caracteres alfabeticos permitidos', $actual);
+    }
+
+    public function testReturnsDescriptionInDefaultLanguageIfNotAvailableInMainLanguage()
+    {
+        $file = new Filesystem();
+        $file->copyDirectory(__DIR__.'/fixtures/resources/lang', __DIR__.'/../src/resources/lang');
+
+        $actual = RuleDescriptionParser::parse('alpha_num')->getDescription();
+
+        $file->deleteDirectory(__DIR__.'/../src/resources/lang/es');
+        $this->assertEquals('Only alpha-numeric characters allowed', $actual);
     }
 
     public function testReturnsAnEmptyDescriptionIfNotAvailable()
@@ -39,32 +62,29 @@ class RuleDescriptionParserTest extends TestCase
 
     public function testAllowsToPassParametersToTheDescription()
     {
-        $expected = 'Must have an exact length of `2`';
         $rule = new RuleDescriptionParser('digits');
 
         $actual = $rule->with(2)->getDescription();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals('Must have an exact length of `2`', $actual);
     }
 
     public function testOnlyPassesParametersIfTheDescriptionAllows()
     {
-        $expected = 'Only alphabetic characters allowed';
         $rule = new RuleDescriptionParser('alpha');
 
         $actual = $rule->with('dummy parameter')->getDescription();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals('Only alphabetic characters allowed', $actual);
     }
 
     public function testAllowsToPassMultipleParametersToTheDescription()
     {
-        $expected = 'Required if `2 + 2` is `4`';
         $rule = new RuleDescriptionParser('required_if');
 
         $actual = $rule->with(['2 + 2', 4])->getDescription();
 
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals('Required if `2 + 2` is `4`', $actual);
     }
 
     /**
@@ -80,12 +100,13 @@ class RuleDescriptionParserTest extends TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application   $app
      *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('app.locale', 'en');
+        $app['config']->set('app.locale', 'es'); // Just to be different to default language.
+        $app['config']->set('app.fallback_locale', 'ch'); // Just to be different to default language.
     }
 }
