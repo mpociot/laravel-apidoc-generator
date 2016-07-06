@@ -19,7 +19,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'apidoc');
 
         $this->publishes([
-            __DIR__.'/../../resources/lang' => resource_path('lang/vendor/apidoc'),
+            __DIR__.'/../../resources/lang' => $this->resource_path('lang/vendor/apidoc'),
         ]);
     }
 
@@ -41,5 +41,17 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
             'apidoc.generate',
             'apidoc.update',
         ]);
+    }
+
+    /**
+     * Return a fully qualified path to a given file.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function resource_path($path = '')
+    {
+        return app()->basePath().'/resources'.($path ? '/'.$path : $path);
     }
 }
