@@ -50,14 +50,13 @@ Option | Description
 
 ## Publish rule descriptions for customisation or translation.
 
- By default, this package returns the descriptions in the main language of the application. 
- You can publish the packages language files, to customise and translate the documentation output.
+ By default, this package returns the descriptions in english. You can publish the packages language files, to customise and translate the documentation output.
 
  ```sh
  $ php artisan vendor:publish
  ```
 
- After the files are published you can customise or translate the descriptions in the language you want by editing the files in `public/vendor/apidoc/resources/lang`.
+ After the files are published you can customise or translate the descriptions in the language you want by renaming the `en` folder and editing the files in `public/vendor/apidoc/resources/lang`.
 
 
 ### How does it work?
