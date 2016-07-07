@@ -73,7 +73,7 @@ class GenerateDocumentation extends Command
         } else {
             $parsedRoutes = $this->processDingoRoutes($generator, $allowedRoutes, $routePrefix);
         }
-        $parsedRoutes = collect($parsedRoutes)->sortBy('resource')->groupBy('resource');
+        $parsedRoutes = collect($parsedRoutes)->groupBy('resource')->sortBy('resource');
 
         $this->writeMarkdown($parsedRoutes);
     }
