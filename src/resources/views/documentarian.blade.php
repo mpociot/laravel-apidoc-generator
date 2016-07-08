@@ -66,7 +66,11 @@ console.log(response);
 > Example response:
 
 ```json
+@if(is_object($parsedRoute['response']) || is_array($parsedRoute['response']))
+{!! json_encode($parsedRoute['response'], JSON_PRETTY_PRINT) !!}
+@else
 {!! json_encode(json_decode($parsedRoute['response']), JSON_PRETTY_PRINT) !!}
+@endif
 ```
 @endif
 
