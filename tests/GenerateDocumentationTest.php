@@ -71,6 +71,20 @@ class GenerateDocumentationTest extends TestCase
         $this->assertSame($generatedMarkdown, $fixtureMarkdown);
     }
 
+    public function testAddsBindingsToGetRouteRules()
+    {
+        RouteFacade::get('/api/test/{foo}', TestController::class.'@addRouteBindingsToRequestClass');
+
+        $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+            '--bindings' => 'foo,bar'
+        ]);
+        
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        
+        $this->assertContains('Not in: `bar`', $generatedMarkdown);
+    }
+
     /**
      * @param string $command
      * @param array $parameters

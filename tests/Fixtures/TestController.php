@@ -26,6 +26,11 @@ class TestController extends Controller
         return '';
     }
 
+    public function addRouteBindingsToRequestClass(DynamicRequest $request)
+    {
+        return '';
+    }
+
     public function fetchRouteResponse()
     {
         $fixture = new \stdClass();

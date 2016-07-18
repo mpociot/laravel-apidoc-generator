@@ -51,7 +51,7 @@ class LaravelGenerator extends AbstractGenerator
             'uri' => $route->getUri(),
             'parameters' => [],
             'response' => $content,
-        ], $routeAction);
+        ], $routeAction, $bindings);
     }
 
     /**
