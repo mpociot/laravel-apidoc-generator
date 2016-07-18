@@ -93,7 +93,7 @@ class GenerateDocumentation extends Command
 
         $markdown = view('apidoc::documentarian')
             ->with('outputPath', $this->option('output'))
-            ->with('showPostmanCollectionButton', !$this->option('noPostmanCollection'))
+            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
             ->with('parsedRoutes', $parsedRoutes->all());
 
         if (! is_dir($outputPath)) {
@@ -228,14 +228,16 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * Generate Postman collection JSON file
+     * Generate Postman collection JSON file.
      *
      * @param Collection $routes
+     *
      * @return string
      */
     private function generatePostmanCollection(Collection $routes)
     {
         $writer = new CollectionWriter($routes);
+
         return $writer->getCollection();
     }
 }
