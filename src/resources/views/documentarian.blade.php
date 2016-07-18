@@ -16,6 +16,9 @@ toc_footers:
 # Info
 
 Welcome to the generated API reference.
+@if($showPostmanCollectionButton)
+[Get Postman Collection]({{$outputPath}}/collection.json)
+@endif
 
 # Available routes
 @foreach($parsedRoutes as $group => $routes)

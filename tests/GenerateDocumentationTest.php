@@ -79,10 +79,26 @@ class GenerateDocumentationTest extends TestCase
             '--routePrefix' => 'api/*',
             '--bindings' => 'foo,bar'
         ]);
-        
+
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
-        
+
         $this->assertContains('Not in: `bar`', $generatedMarkdown);
+    }
+
+    public function testGeneratedPostmanCollectionFileIsCorrect()
+    {
+        RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
+        RouteFacade::post('/api/fetch', TestController::class.'@fetchRouteResponse');
+
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
+        $generatedCollection->info->_postman_id = '';
+
+        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection.json'));
+        $this->assertEquals($generatedCollection, $fixtureCollection);
     }
 
     /**

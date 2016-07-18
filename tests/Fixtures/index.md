@@ -16,6 +16,7 @@ toc_footers:
 # Info
 
 Welcome to the generated API reference.
+[Get Postman Collection](public/docs/collection.json)
 
 # Available routes
 #general

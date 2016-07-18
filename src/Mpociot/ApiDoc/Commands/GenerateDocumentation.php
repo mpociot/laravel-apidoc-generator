@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Mpociot\ApiDoc\Generators\AbstractGenerator;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
+use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\Documentarian\Documentarian;
 
 class GenerateDocumentation extends Command
@@ -21,7 +22,8 @@ class GenerateDocumentation extends Command
                             {--output=public/docs : The output path for the generated documentation}
                             {--routePrefix= : The route prefix to use for generation}
                             {--routes=* : The route names to use for generation}
-                            {--noResponseCalls : The user ID to use for API response calls}
+                            {--noResponseCalls : Disable API response calls}
+                            {--noPostmanCollection : Disable Postman collection creation}
                             {--actAsUserId= : The user ID to use for API response calls}
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--bindings= : Route Model Bindings}
@@ -89,7 +91,10 @@ class GenerateDocumentation extends Command
 
         $documentarian = new Documentarian();
 
-        $markdown = view('apidoc::documentarian')->with('parsedRoutes', $parsedRoutes->all());
+        $markdown = view('apidoc::documentarian')
+            ->with('outputPath', $this->option('output'))
+            ->with('showPostmanCollectionButton', !$this->option('noPostmanCollection'))
+            ->with('parsedRoutes', $parsedRoutes->all());
 
         if (! is_dir($outputPath)) {
             $documentarian->create($outputPath);
@@ -104,6 +109,13 @@ class GenerateDocumentation extends Command
         $documentarian->generate($outputPath);
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/public/index.html');
+
+
+        if ($this->option('noPostmanCollection') !== true) {
+            $this->info('Generating Postman collection');
+
+            file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
+        }
     }
 
     /**
@@ -213,5 +225,17 @@ class GenerateDocumentation extends Command
     private function isValidRoute($route)
     {
         return ! is_callable($route->getAction()['uses']);
+    }
+
+    /**
+     * Generate Postman collection JSON file
+     *
+     * @param Collection $routes
+     * @return string
+     */
+    private function generatePostmanCollection(Collection $routes)
+    {
+        $writer = new CollectionWriter($routes);
+        return $writer->getCollection();
     }
 }

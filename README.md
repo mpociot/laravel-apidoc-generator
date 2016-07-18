@@ -44,6 +44,7 @@ Option | Description
 `routePrefix` | The route prefix to use for generation - `*` can be used as a wildcard
 `routes` | The route names to use for generation - Required if no routePrefix is provided
 `noResponseCalls` | Disable API response calls
+`noPostmanCollection` | Disable Postman collection creation
 `actAsUserId` | The user ID to use for authenticated API response calls
 `router` | The router to use, when processing the route files (can be Laravel or Dingo - defaults to Laravel)
 `bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id`
@@ -116,6 +117,11 @@ $ php artisan api:generate --routePrefix=api/* --noResponseCalls
 
 > Note: The example API responses work best with seeded data.
 
+#### Postman collections
+
+The generator automatically creates a Postman collection file, which you can import to use within your [Postman App](https://www.getpostman.com/apps) for even simpler API testing and usage.
+
+If you don't want to create a Postman collection, use the `--noPostmanCollection` option, when generating the API documentation.
 
 ## Modify the generated documentation
 
