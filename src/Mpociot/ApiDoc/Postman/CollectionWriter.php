@@ -14,6 +14,7 @@ class CollectionWriter
 
     /**
      * CollectionWriter constructor.
+     *
      * @param Collection $routeGroups
      */
     public function __construct(Collection $routeGroups)
@@ -29,7 +30,7 @@ class CollectionWriter
                 'name' => '',
                 '_postman_id' => Uuid::uuid1()->toString(),
                 'description' => '',
-                'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json'
+                'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
             ],
             'item' => $this->routeGroups->map(function ($routes, $groupName) {
                 return [
@@ -48,20 +49,19 @@ class CollectionWriter
                                             'key' => $key,
                                             'value' => isset($parameter['value']) ? $parameter['value'] : '',
                                             'type' => 'text',
-                                            'enabled' => true
+                                            'enabled' => true,
                                         ];
                                     })->values()->toArray(),
                                 ],
                                 'description' => $route['description'],
-                                'response' => []
-                            ]
+                                'response' => [],
+                            ],
                         ];
-                    })->toArray()
+                    })->toArray(),
                 ];
-            })->values()->toArray()
+            })->values()->toArray(),
         ];
 
         return json_encode($collection);
     }
-
 }
