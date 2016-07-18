@@ -77,7 +77,7 @@ class GenerateDocumentationTest extends TestCase
 
         $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
-            '--bindings' => 'foo,bar'
+            '--bindings' => 'foo,bar',
         ]);
 
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
