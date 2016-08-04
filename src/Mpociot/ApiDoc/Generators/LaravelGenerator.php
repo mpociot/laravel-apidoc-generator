@@ -27,21 +27,22 @@ class LaravelGenerator extends AbstractGenerator
      */
     public function processRoute($route, $bindings = [], $withResponse = true)
     {
-        $response = '';
-
         if ($withResponse) {
             $response = $this->getRouteResponse($route, $bindings);
+            
+            if ($response->headers->get('Content-Type') === 'application/json') {
+                $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+            } else {
+                $content = $response->getContent();
+            }
+        } else {
+            $content = '';
         }
 
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
 
-        if ($response->headers->get('Content-Type') === 'application/json') {
-            $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
-        } else {
-            $content = $response->getContent();
-        }
 
         return $this->getParameters([
             'resource' => $routeGroup,
