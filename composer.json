@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "fzaninotto/faker": "^1.6",
+        "fzaninotto/faker": "~1.0",
         "laravel/framework": "~5.0",
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0",
