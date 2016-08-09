@@ -144,7 +144,7 @@ abstract class AbstractGenerator
             if (! is_null($parameterType) && class_exists($parameterType->name)) {
                 $className = $parameterType->name;
 
-                if (is_subclass_of($className,FormRequest::class)) {
+                if (is_subclass_of($className, FormRequest::class)) {
                     $parameterReflection = new $className;
                     // Add route parameter bindings
                     $parameterReflection->query->add($bindings);
