@@ -48,4 +48,9 @@ class TestController extends Controller
             'delicious' => (bool) $fixture->delicious,
         ];
     }
+
+    public function dependencyInjection(DependencyInjection $dependency, TestRequest $request)
+    {
+        return '';
+    }
 }

@@ -68,6 +68,14 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertSame(['DELETE'], $parsed['methods']);
     }
 
+    public function testCanParseDependencyInjectionInControllerMethods()
+    {
+        RouteFacade::post('/post', TestController::class.'@dependencyInjection');
+        $route = new Route(['POST'], '/post', ['uses' => TestController::class.'@dependencyInjection']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+    }
+
     public function testCanParseFormRequestRules()
     {
         RouteFacade::post('/post', TestController::class.'@parseFormRequestRules');
