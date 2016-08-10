@@ -88,10 +88,28 @@ class GenerateDocumentation extends Command
     private function writeMarkdown($parsedRoutes)
     {
         $outputPath = $this->option('output');
+        $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
+
+        $infoText = view('apidoc::partials.info')
+            ->with('outputPath', $this->option('output'))
+            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
+
+        /**
+         * In case the target file already exists, we should check if the documentation was modified
+         * and skip the modified parts of the routes.
+         */
+        if (file_exists($targetFile)) {
+            $generatedDocumentation = file_get_contents($targetFile);
+
+            if (preg_match("/<!-- START_INFO -->(.*)<!-- END_INFO -->/is", $generatedDocumentation, $generatedInfoText)) {
+                $infoText = trim($generatedInfoText[1],"\n");
+            }
+        }
 
         $documentarian = new Documentarian();
 
         $markdown = view('apidoc::documentarian')
+            ->with('infoText', $infoText)
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
             ->with('parsedRoutes', $parsedRoutes->all());
@@ -100,7 +118,7 @@ class GenerateDocumentation extends Command
             $documentarian->create($outputPath);
         }
 
-        file_put_contents($outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md', $markdown);
+        file_put_contents($targetFile, $markdown);
 
         $this->info('Wrote index.md to: '.$outputPath);
 

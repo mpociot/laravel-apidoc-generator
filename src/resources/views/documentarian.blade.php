@@ -12,13 +12,9 @@ search: true
 toc_footers:
 - <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a>
 ---
-
-# Info
-
-Welcome to the generated API reference.
-@if($showPostmanCollectionButton)
-[Get Postman Collection]({{$outputPath}}/collection.json)
-@endif
+<!-- START_INFO -->
+{!! $infoText !!}
+<!-- END_INFO -->
 
 @foreach($parsedRoutes as $group => $routes)
 @if($group)
