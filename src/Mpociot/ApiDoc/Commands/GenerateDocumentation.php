@@ -94,6 +94,7 @@ class GenerateDocumentation extends Command
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
 
+        $frontmatter = view('apidoc::partials.frontmatter');
         /**
          * In case the target file already exists, we should check if the documentation was modified
          * and skip the modified parts of the routes.
@@ -104,11 +105,16 @@ class GenerateDocumentation extends Command
             if (preg_match("/<!-- START_INFO -->(.*)<!-- END_INFO -->/is", $generatedDocumentation, $generatedInfoText)) {
                 $infoText = trim($generatedInfoText[1],"\n");
             }
+
+            if (preg_match("/---(.*)---\\s<!-- START_INFO -->/is", $generatedDocumentation, $generatedFrontmatter)) {
+                $frontmatter = trim($generatedFrontmatter[1],"\n");
+            }
         }
 
         $documentarian = new Documentarian();
 
         $markdown = view('apidoc::documentarian')
+            ->with('frontmatter', $frontmatter)
             ->with('infoText', $infoText)
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))

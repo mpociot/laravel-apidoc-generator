@@ -27,6 +27,11 @@ class GenerateDocumentationTest extends TestCase
         $this->generator = new LaravelGenerator();
     }
 
+    public function tearDown()
+    {
+        exec('rm -rf ' . __DIR__.'/../public/docs');
+    }
+
     /**
      * @param \Illuminate\Foundation\Application $app
      *
