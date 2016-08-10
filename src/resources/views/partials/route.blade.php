@@ -4,7 +4,7 @@
 @endif
 @if($parsedRoute['description'])
 
-{{$parsedRoute['description']}}
+{!! $parsedRoute['description'] !!}
 @endif
 
 > Example request:
