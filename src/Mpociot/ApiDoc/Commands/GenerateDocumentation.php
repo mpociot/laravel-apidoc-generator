@@ -274,7 +274,8 @@ class GenerateDocumentation extends Command
 
     /**
      * @param $route
-     * @return boolean
+     *
+     * @return bool
      */
     private function isRouteVisibleForDocumentation($route)
     {
@@ -283,12 +284,14 @@ class GenerateDocumentation extends Command
         $comment = $reflection->getMethod($method)->getDocComment();
         if ($comment) {
             $phpdoc = new DocBlock($comment);
+
             return collect($phpdoc->getTags())
-                ->filter(function($tag) use ($route){
+                ->filter(function ($tag) use ($route) {
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
         }
+
         return true;
     }
 
