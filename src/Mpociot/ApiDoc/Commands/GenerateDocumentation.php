@@ -123,8 +123,8 @@ class GenerateDocumentation extends Command
                 $frontmatter = trim($generatedFrontmatter[1], "\n");
             }
 
-            $parsedRouteOutput->transform(function ($routeGroup) use ($generatedDocumentation,$compareDocumentation) {
-                return $routeGroup->transform(function ($route) use ($generatedDocumentation,$compareDocumentation) {
+            $parsedRouteOutput->transform(function ($routeGroup) use ($generatedDocumentation, $compareDocumentation) {
+                return $routeGroup->transform(function ($route) use ($generatedDocumentation, $compareDocumentation) {
                     if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $routeMatch)) {
                         $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $compareMatch) && $compareMatch[1] !== $routeMatch[1]);
                         if ($routeDocumentationChanged === false ||  $this->option('force')) {
