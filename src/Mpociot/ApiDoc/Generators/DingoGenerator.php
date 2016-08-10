@@ -29,6 +29,7 @@ class DingoGenerator extends AbstractGenerator
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
 
         return $this->getParameters([
+            'id' => md5($route->uri().':'.implode($route->getMethods())),
             'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],

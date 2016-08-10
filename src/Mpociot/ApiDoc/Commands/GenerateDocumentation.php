@@ -26,6 +26,7 @@ class GenerateDocumentation extends Command
                             {--noPostmanCollection : Disable Postman collection creation}
                             {--actAsUserId= : The user ID to use for API response calls}
                             {--router=laravel : The router to be used (Laravel or Dingo)}
+                            {--force : Force rewriting of existing routes}
                             {--bindings= : Route Model Bindings}
     ';
 
@@ -94,6 +95,13 @@ class GenerateDocumentation extends Command
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
 
+        $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
+            return $routeGroup->map(function($route){
+                $route['output'] = (string)view('apidoc::partials.route')->with('parsedRoute', $route);
+                return $route;
+            });
+        });
+
         $frontmatter = view('apidoc::partials.frontmatter');
         /**
          * In case the target file already exists, we should check if the documentation was modified
@@ -109,6 +117,15 @@ class GenerateDocumentation extends Command
             if (preg_match("/---(.*)---\\s<!-- START_INFO -->/is", $generatedDocumentation, $generatedFrontmatter)) {
                 $frontmatter = trim($generatedFrontmatter[1],"\n");
             }
+
+            $parsedRouteOutput->transform(function ($routeGroup) use($generatedDocumentation) {
+                return $routeGroup->transform(function($route) use($generatedDocumentation) {
+                    if (preg_match("/<!-- START_".$route['id']." -->(.*)<!-- END_".$route['id']." -->/is", $generatedDocumentation, $routeMatch) && !$this->option('force')) {
+                        $route['output'] = $routeMatch[0];
+                    }
+                    return $route;
+                });
+            });
         }
 
         $documentarian = new Documentarian();
@@ -118,7 +135,7 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
-            ->with('parsedRoutes', $parsedRoutes->all());
+            ->with('parsedRoutes', $parsedRouteOutput);
 
         if (! is_dir($outputPath)) {
             $documentarian->create($outputPath);
