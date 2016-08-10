@@ -252,9 +252,9 @@ class GenerateDocumentation extends Command
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->getUri())) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
                     $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
-                    $this->info('Processed route: '.$route->getUri());
+                    $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->getUri());
                 } else {
-                    $this->warn('Skipping route: '.$route->getUri());
+                    $this->warn('Skipping route: ['.implode(',', $route->getMethods()).'] '.$route->getUri());
                 }
             }
         }
@@ -278,7 +278,7 @@ class GenerateDocumentation extends Command
         foreach ($routes as $route) {
             if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri())) {
                 $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
-                $this->info('Processed route: '.$route->uri());
+                $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
             }
         }
 

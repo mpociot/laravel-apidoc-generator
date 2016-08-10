@@ -58,8 +58,8 @@ class GenerateDocumentationTest extends TestCase
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
         ]);
-        $this->assertContains('Skipping route: api/closure', $output);
-        $this->assertContains('Processed route: api/test', $output);
+        $this->assertContains('Skipping route: [GET,HEAD] api/closure', $output);
+        $this->assertContains('Processed route: [GET,HEAD] api/test', $output);
     }
 
     public function testCanSkipSingleRoutesCommandDoesNotWorkWithClosure()
@@ -70,8 +70,8 @@ class GenerateDocumentationTest extends TestCase
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
         ]);
-        $this->assertContains('Skipping route: api/skip', $output);
-        $this->assertContains('Processed route: api/test', $output);
+        $this->assertContains('Skipping route: [GET,HEAD] api/skip', $output);
+        $this->assertContains('Processed route: [GET,HEAD] api/test', $output);
     }
 
     public function testGeneratedMarkdownFileIsCorrect()
