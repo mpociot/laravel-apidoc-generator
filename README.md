@@ -137,6 +137,10 @@ $ php artisan api:update
 
 As an optional parameter, you can use `--location` to tell the update command where your documentation can be found.
 
+## Skip single routes
+
+If you want to skip a single route from a list of routes that match a given prefix, you can use the `@hideFromAPIDocumentation` tag on the Controller method you do not want to document.
+
 ## Further modification
 
 This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarian guide](http://marcelpociot.com/documentarian/installation).
