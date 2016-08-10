@@ -89,7 +89,7 @@ class GenerateDocumentationTest extends TestCase
         $this->assertSame($generatedMarkdown, $fixtureMarkdown);
         $this->assertSame($compareMarkdown, $fixtureMarkdown);
     }
-    
+
     public function testAddsBindingsToGetRouteRules()
     {
         RouteFacade::get('/api/test/{foo}', TestController::class.'@addRouteBindingsToRequestClass');

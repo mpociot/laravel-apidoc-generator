@@ -99,14 +99,15 @@ class GenerateDocumentation extends Command
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
-            return $routeGroup->map(function($route){
-                $route['output'] = (string)view('apidoc::partials.route')->with('parsedRoute', $route);
+            return $routeGroup->map(function ($route) {
+                $route['output'] = (string) view('apidoc::partials.route')->with('parsedRoute', $route);
+
                 return $route;
             });
         });
 
         $frontmatter = view('apidoc::partials.frontmatter');
-        /**
+        /*
          * In case the target file already exists, we should check if the documentation was modified
          * and skip the modified parts of the routes.
          */
@@ -114,18 +115,18 @@ class GenerateDocumentation extends Command
             $generatedDocumentation = file_get_contents($targetFile);
             $compareDocumentation = file_get_contents($compareFile);
 
-            if (preg_match("/<!-- START_INFO -->(.*)<!-- END_INFO -->/is", $generatedDocumentation, $generatedInfoText)) {
-                $infoText = trim($generatedInfoText[1],"\n");
+            if (preg_match('/<!-- START_INFO -->(.*)<!-- END_INFO -->/is', $generatedDocumentation, $generatedInfoText)) {
+                $infoText = trim($generatedInfoText[1], "\n");
             }
 
-            if (preg_match("/---(.*)---\\s<!-- START_INFO -->/is", $generatedDocumentation, $generatedFrontmatter)) {
-                $frontmatter = trim($generatedFrontmatter[1],"\n");
+            if (preg_match('/---(.*)---\\s<!-- START_INFO -->/is', $generatedDocumentation, $generatedFrontmatter)) {
+                $frontmatter = trim($generatedFrontmatter[1], "\n");
             }
 
-            $parsedRouteOutput->transform(function ($routeGroup) use($generatedDocumentation, $compareDocumentation) {
-                return $routeGroup->transform(function($route) use($generatedDocumentation, $compareDocumentation) {
-                    if (preg_match("/<!-- START_".$route['id']." -->(.*)<!-- END_".$route['id']." -->/is", $generatedDocumentation, $routeMatch)) {
-                        $routeDocumentationChanged = (preg_match("/<!-- START_".$route['id']." -->(.*)<!-- END_".$route['id']." -->/is", $compareDocumentation, $compareMatch) && $compareMatch[1] !== $routeMatch[1]);
+            $parsedRouteOutput->transform(function ($routeGroup) use ($generatedDocumentation,$compareDocumentation) {
+                return $routeGroup->transform(function ($route) use ($generatedDocumentation,$compareDocumentation) {
+                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $routeMatch)) {
+                        $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $compareMatch) && $compareMatch[1] !== $routeMatch[1]);
                         if ($routeDocumentationChanged === false ||  $this->option('force')) {
                             if ($routeDocumentationChanged) {
                                 $this->warn('Discarded manual changes for route ['.implode(',', $route['methods']).'] '.$route['uri']);
@@ -135,6 +136,7 @@ class GenerateDocumentation extends Command
                             $route['modified_output'] = $routeMatch[0];
                         }
                     }
+
                     return $route;
                 });
             });
@@ -295,7 +297,8 @@ class GenerateDocumentation extends Command
 
     /**
      * @param $route
-     * @return boolean
+     *
+     * @return bool
      */
     private function isRouteVisibleForDocumentation($route)
     {
@@ -304,12 +307,14 @@ class GenerateDocumentation extends Command
         $comment = $reflection->getMethod($method)->getDocComment();
         if ($comment) {
             $phpdoc = new DocBlock($comment);
+
             return collect($phpdoc->getTags())
-                ->filter(function($tag) use ($route){
+                ->filter(function ($tag) use ($route) {
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
         }
+
         return true;
     }
 
