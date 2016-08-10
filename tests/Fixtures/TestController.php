@@ -53,4 +53,12 @@ class TestController extends Controller
     {
         return '';
     }
+
+    /**
+     * @hideFromAPIDocumentation
+     */
+    public function skip()
+    {
+        
+    }
 }

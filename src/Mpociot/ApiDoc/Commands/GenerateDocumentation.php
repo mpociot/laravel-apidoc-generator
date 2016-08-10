@@ -10,6 +10,8 @@ use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\Documentarian\Documentarian;
+use Mpociot\Reflection\DocBlock;
+use ReflectionClass;
 
 class GenerateDocumentation extends Command
 {
@@ -223,11 +225,11 @@ class GenerateDocumentation extends Command
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->getUri())) {
-                if ($this->isValidRoute($route)) {
+                if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
                     $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
                     $this->info('Processed route: '.$route->getUri());
                 } else {
-                    $this->warn('Skipping route: '.$route->getUri().' - contains closure.');
+                    $this->warn('Skipping route: '.$route->getUri());
                 }
             }
         }
@@ -266,6 +268,26 @@ class GenerateDocumentation extends Command
     private function isValidRoute($route)
     {
         return ! is_callable($route->getAction()['uses']) && ! is_null($route->getAction()['uses']);
+    }
+
+    /**
+     * @param $route
+     * @return boolean
+     */
+    private function isRouteVisibleForDocumentation($route)
+    {
+        list($class, $method) = explode('@', $route);
+        $reflection = new ReflectionClass($class);
+        $comment = $reflection->getMethod($method)->getDocComment();
+        if ($comment) {
+            $phpdoc = new DocBlock($comment);
+            return collect($phpdoc->getTags())
+                ->filter(function($tag) use ($route){
+                    return $tag->getName() === 'hideFromAPIDocumentation';
+                })
+                ->isEmpty();
+        }
+        return true;
     }
 
     /**
