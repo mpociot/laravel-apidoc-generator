@@ -48,6 +48,7 @@ Option | Description
 `actAsUserId` | The user ID to use for authenticated API response calls
 `router` | The router to use, when processing the route files (can be Laravel or Dingo - defaults to Laravel)
 `bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id`
+`force` | Force the re-generation of existing/modified API routes
 
 ## Publish rule descriptions for customisation or translation.
 
