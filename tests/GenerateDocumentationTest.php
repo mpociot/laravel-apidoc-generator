@@ -84,10 +84,12 @@ class GenerateDocumentationTest extends TestCase
         ]);
 
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $compareMarkdown = file_get_contents(__DIR__.'/../public/docs/source/.compare.md');
         $fixtureMarkdown = file_get_contents(__DIR__.'/Fixtures/index.md');
         $this->assertSame($generatedMarkdown, $fixtureMarkdown);
+        $this->assertSame($compareMarkdown, $fixtureMarkdown);
     }
-
+    
     public function testAddsBindingsToGetRouteRules()
     {
         RouteFacade::get('/api/test/{foo}', TestController::class.'@addRouteBindingsToRequestClass');

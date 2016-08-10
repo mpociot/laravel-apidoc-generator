@@ -47,7 +47,7 @@ abstract class AbstractGenerator
                 'description' => [],
             ];
             foreach ($rules as $rule) {
-                $this->parseRule($rule, $attributeData);
+                $this->parseRule($rule, $attributeData, $routeData['id']);
             }
             $routeData['parameters'][$attribute] = $attributeData;
         }
@@ -185,9 +185,10 @@ abstract class AbstractGenerator
      *
      * @return void
      */
-    protected function parseRule($rule, &$attributeData)
+    protected function parseRule($rule, &$attributeData, $seed)
     {
         $faker = Factory::create();
+        $faker->seed(crc32($seed));
 
         $parsedRule = $this->parseStringRule($rule);
         $parsedRule[0] = $this->normalizeRule($parsedRule[0]);
