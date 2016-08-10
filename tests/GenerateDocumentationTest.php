@@ -29,7 +29,7 @@ class GenerateDocumentationTest extends TestCase
 
     public function tearDown()
     {
-        exec('rm -rf ' . __DIR__.'/../public/docs');
+        exec('rm -rf '.__DIR__.'/../public/docs');
     }
 
     /**

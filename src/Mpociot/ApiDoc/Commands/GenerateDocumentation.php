@@ -98,33 +98,35 @@ class GenerateDocumentation extends Command
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
-            return $routeGroup->map(function($route){
-                $route['output'] = (string)view('apidoc::partials.route')->with('parsedRoute', $route);
+            return $routeGroup->map(function ($route) {
+                $route['output'] = (string) view('apidoc::partials.route')->with('parsedRoute', $route);
+
                 return $route;
             });
         });
 
         $frontmatter = view('apidoc::partials.frontmatter');
-        /**
+        /*
          * In case the target file already exists, we should check if the documentation was modified
          * and skip the modified parts of the routes.
          */
         if (file_exists($targetFile)) {
             $generatedDocumentation = file_get_contents($targetFile);
 
-            if (preg_match("/<!-- START_INFO -->(.*)<!-- END_INFO -->/is", $generatedDocumentation, $generatedInfoText)) {
-                $infoText = trim($generatedInfoText[1],"\n");
+            if (preg_match('/<!-- START_INFO -->(.*)<!-- END_INFO -->/is', $generatedDocumentation, $generatedInfoText)) {
+                $infoText = trim($generatedInfoText[1], "\n");
             }
 
-            if (preg_match("/---(.*)---\\s<!-- START_INFO -->/is", $generatedDocumentation, $generatedFrontmatter)) {
-                $frontmatter = trim($generatedFrontmatter[1],"\n");
+            if (preg_match('/---(.*)---\\s<!-- START_INFO -->/is', $generatedDocumentation, $generatedFrontmatter)) {
+                $frontmatter = trim($generatedFrontmatter[1], "\n");
             }
 
-            $parsedRouteOutput->transform(function ($routeGroup) use($generatedDocumentation) {
-                return $routeGroup->transform(function($route) use($generatedDocumentation) {
-                    if (preg_match("/<!-- START_".$route['id']." -->(.*)<!-- END_".$route['id']." -->/is", $generatedDocumentation, $routeMatch) && !$this->option('force')) {
+            $parsedRouteOutput->transform(function ($routeGroup) use ($generatedDocumentation) {
+                return $routeGroup->transform(function ($route) use ($generatedDocumentation) {
+                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $routeMatch) && ! $this->option('force')) {
                         $route['output'] = $routeMatch[0];
                     }
+
                     return $route;
                 });
             });
