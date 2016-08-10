@@ -20,7 +20,6 @@ Welcome to the generated API reference.
 [Get Postman Collection]({{$outputPath}}/collection.json)
 @endif
 
-# Available routes
 @foreach($parsedRoutes as $group => $routes)
 @if($group)
 #{{$group}}
