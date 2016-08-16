@@ -63,7 +63,7 @@ Option | Description
 
 ### How does it work?
 
-This package uses these resources to generated the API documentation:
+This package uses these resources to generate the API documentation:
 
 #### Controller doc block
 
