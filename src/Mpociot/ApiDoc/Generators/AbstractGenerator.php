@@ -46,8 +46,8 @@ abstract class AbstractGenerator
                 'value' => '',
                 'description' => [],
             ];
-            foreach ($rules as $rule) {
-                $this->parseRule($rule, $attributeData, $routeData['id']);
+            foreach ($rules as $ruleName => $rule) {
+                $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
             }
             $routeData['parameters'][$attribute] = $attributeData;
         }
@@ -181,11 +181,13 @@ abstract class AbstractGenerator
 
     /**
      * @param  string  $rule
+     * @param  string  $ruleName
      * @param  array  $attributeData
+     * @param  int  $seed
      *
      * @return void
      */
-    protected function parseRule($rule, &$attributeData, $seed)
+    protected function parseRule($rule, $ruleName, &$attributeData, $seed)
     {
         $faker = Factory::create();
         $faker->seed(crc32($seed));
@@ -300,7 +302,8 @@ abstract class AbstractGenerator
                 $attributeData['value'] = $faker->timezone;
                 break;
             case 'exists':
-                $attributeData['description'][] = Description::parse($rule)->with([Str::singular($parameters[0]), $parameters[1]])->getDescription();
+                $fieldName = isset($parameters[1]) ? $parameters[1] : $ruleName;
+                $attributeData['description'][] = Description::parse($rule)->with([Str::singular($parameters[0]), $fieldName])->getDescription();
                 break;
             case 'active_url':
                 $attributeData['type'] = 'url';

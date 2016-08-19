@@ -26,6 +26,7 @@ class DingoTestRequest extends FormRequest
             'digits' => 'digits:2',
             'digits_between' => 'digits_between:2,10',
             'exists' => 'exists:users,firstname',
+            'single_exists' => 'exists:users',
             'in' => 'in:jpeg,png,bmp,gif,svg',
             'integer' => 'integer',
             'ip' => 'ip',
