@@ -213,11 +213,11 @@ class GenerateDocumentation extends Command
         if (! empty($actAs)) {
             if (version_compare($this->laravel->version(), '5.2.0', '<')) {
                 $userModel = config('auth.model');
-                $user = $userModel::find($actAs);
+                $user = $userModel::find((int)$actAs);
                 $this->laravel['auth']->setUser($user);
             } else {
                 $userModel = config('auth.providers.users.model');
-                $user = $userModel::find($actAs);
+                $user = $userModel::find((int)$actAs);
                 $this->laravel['auth']->guard()->setUser($user);
             }
         }
