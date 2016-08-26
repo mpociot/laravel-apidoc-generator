@@ -2,5 +2,5 @@
 
 Welcome to the generated API reference.
 @if($showPostmanCollectionButton)
-[Get Postman Collection]({{$outputPath}}/collection.json)
+[Get Postman Collection]({{url($outputPath.'/collection.json')}})
 @endif

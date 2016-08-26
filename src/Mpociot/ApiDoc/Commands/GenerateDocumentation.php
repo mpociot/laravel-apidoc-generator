@@ -95,7 +95,7 @@ class GenerateDocumentation extends Command
         $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
 
         $infoText = view('apidoc::partials.info')
-            ->with('outputPath', $this->option('output'))
+            ->with('outputPath', ltrim($outputPath, 'public/'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
