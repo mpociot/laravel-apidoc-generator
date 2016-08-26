@@ -46,6 +46,7 @@ class DingoGenerator extends AbstractGenerator
     public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
     {
         $dispatcher = app('Dingo\Api\Dispatcher')->raw();
+
         return call_user_func_array([$dispatcher, strtolower($method)], [$uri]);
     }
 
