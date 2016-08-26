@@ -235,7 +235,7 @@ abstract class AbstractGenerator
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 break;
             case 'between':
-                if (!isset($attributeData['type'])) {
+                if (! isset($attributeData['type'])) {
                     $attributeData['type'] = 'numeric';
                 }
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
