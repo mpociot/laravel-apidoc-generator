@@ -19,6 +19,7 @@ class DingoTestRequest extends FormRequest
             'array' => 'array',
             'before' => 'before:2016-04-23 14:31:00',
             'between' => 'between:5,200',
+            'string_between' => 'string|between:5,200',
             'boolean' => 'boolean',
             'date' => 'date',
             'date_format' => 'date_format:j.n.Y H:iP',

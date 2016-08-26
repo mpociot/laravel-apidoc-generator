@@ -41,7 +41,7 @@ abstract class AbstractGenerator
         foreach ($validator->getRules() as $attribute => $rules) {
             $attributeData = [
                 'required' => false,
-                'type' => 'string',
+                'type' => null,
                 'default' => '',
                 'value' => '',
                 'description' => [],
@@ -235,7 +235,9 @@ abstract class AbstractGenerator
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 break;
             case 'between':
-                $attributeData['type'] = 'numeric';
+                if (!isset($attributeData['type'])) {
+                    $attributeData['type'] = 'numeric';
+                }
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 $attributeData['value'] = $faker->numberBetween($parameters[0], $parameters[1]);
                 break;
@@ -353,6 +355,10 @@ abstract class AbstractGenerator
 
         if ($attributeData['value'] === '') {
             $attributeData['value'] = $faker->word;
+        }
+
+        if (is_null($attributeData['type'])) {
+            $attributeData['type'] = 'string';
         }
     }
 

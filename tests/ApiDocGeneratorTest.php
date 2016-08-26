@@ -135,6 +135,12 @@ class ApiDocGeneratorTest extends TestCase
                     $this->assertCount(1, $attribute['description']);
                     $this->assertSame('Between: `5` and `200`', $attribute['description'][0]);
                     break;
+                case 'string_between':
+                    $this->assertFalse($attribute['required']);
+                    $this->assertSame('string', $attribute['type']);
+                    $this->assertCount(1, $attribute['description']);
+                    $this->assertSame('Between: `5` and `200`', $attribute['description'][0]);
+                    break;
                 case 'before':
                     $this->assertFalse($attribute['required']);
                     $this->assertSame('date', $attribute['type']);
