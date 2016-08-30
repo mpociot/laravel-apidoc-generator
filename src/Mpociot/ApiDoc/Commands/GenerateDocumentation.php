@@ -78,7 +78,7 @@ class GenerateDocumentation extends Command
         if ($this->option('router') === 'laravel') {
             $parsedRoutes = $this->processLaravelRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
         } else {
-            $parsedRoutes = $this->processDingoRoutes($generator, $allowedRoutes, $routePrefix);
+            $parsedRoutes = $this->processDingoRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
         }
         $parsedRoutes = collect($parsedRoutes)->groupBy('resource')->sortBy('resource');
 
@@ -271,14 +271,14 @@ class GenerateDocumentation extends Command
      *
      * @return array
      */
-    private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix)
+    private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix, $middleware)
     {
         $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
-            if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri())) {
+            if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri()) || in_array($middleware, $route->middleware())) {
                 $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
                 $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
             }
