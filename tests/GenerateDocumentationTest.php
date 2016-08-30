@@ -45,7 +45,7 @@ class GenerateDocumentationTest extends TestCase
     public function testConsoleCommandNeedsAPrefixOrRoute()
     {
         $output = $this->artisan('api:generate');
-        $this->assertEquals('You must provide either a route prefix or a route to generate the documentation.'.PHP_EOL, $output);
+        $this->assertEquals('You must provide either a route prefix or a route or a middleware to generate the documentation.'.PHP_EOL, $output);
     }
 
     public function testConsoleCommandDoesNotWorkWithClosure()
