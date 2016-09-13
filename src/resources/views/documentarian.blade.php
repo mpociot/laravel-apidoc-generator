@@ -10,6 +10,10 @@
 #{{$group}}
 @endif
 @foreach($routes as $parsedRoute)
-{!! $parsedRoute['output'] !!}
+@if($writeCompareFile === true)
+{!! $parsedRoute['output']!!}
+@else
+{!! isset($parsedRoute['modified_output']) ? $parsedRoute['modified_output'] : $parsedRoute['output']!!}
+@endif
 @endforeach
 @endforeach
