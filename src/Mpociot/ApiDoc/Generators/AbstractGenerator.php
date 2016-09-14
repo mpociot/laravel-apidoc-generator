@@ -189,17 +189,19 @@ abstract class AbstractGenerator
         return implode($first, $arr);
     }
 
-    protected function splitValuePairs($parameters, $first = 'is ', $last = 'or ') {
+    protected function splitValuePairs($parameters, $first = 'is ', $last = 'or ')
+    {
         $attribute = '';
-        collect($parameters)->map(function($item, $key) use (&$attribute, $first, $last) {
+        collect($parameters)->map(function ($item, $key) use (&$attribute, $first, $last) {
             $attribute .= '`'.$item.'` ';
-            if (($key+1) % 2 === 0) {
+            if (($key + 1) % 2 === 0) {
                 $attribute .= $last;
             } else {
                 $attribute .= $first;
             }
         });
         $attribute = rtrim($attribute, $last);
+
         return $attribute;
     }
 
