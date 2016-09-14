@@ -41,6 +41,7 @@ class TestRequest extends FormRequest
             'numeric' => 'numeric',
             'regex' => 'regex:(.*)',
             'required_if' => 'required_if:foo,bar',
+            'multiple_required_if' => 'required_if:foo,bar,baz,qux',
             'required_unless' => 'required_unless:foo,bar',
             'required_with' => 'required_with:foo,bar,baz',
             'required_with_all' => 'required_with_all:foo,bar,baz',

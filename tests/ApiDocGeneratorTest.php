@@ -267,6 +267,12 @@ class ApiDocGeneratorTest extends TestCase
                     $this->assertCount(1, $attribute['description']);
                     $this->assertSame('Must match this regular expression: `(.*)`', $attribute['description'][0]);
                     break;
+                case 'multiple_required_if':
+                    $this->assertFalse($attribute['required']);
+                    $this->assertSame('string', $attribute['type']);
+                    $this->assertCount(1, $attribute['description']);
+                    $this->assertSame('Required if `foo` is `bar` or `baz` is `qux`', $attribute['description'][0]);
+                    break;
                 case 'required_if':
                     $this->assertFalse($attribute['required']);
                     $this->assertSame('string', $attribute['type']);

@@ -188,6 +188,20 @@ abstract class AbstractGenerator
         return implode($first, $arr);
     }
 
+    protected function splitValuePairs($parameters, $first = 'is ', $last = 'or ') {
+        $attribute = '';
+        collect($parameters)->map(function($item, $key) use (&$attribute, $first, $last) {
+            $attribute .= '`'.$item.'` ';
+            if (($key+1) % 2 === 0) {
+                $attribute .= $last;
+            } else {
+                $attribute .= $first;
+            }
+        });
+        $attribute = rtrim($attribute, $last);
+        return $attribute;
+    }
+
     /**
      * @param  string  $rule
      * @param  string  $ruleName
@@ -296,10 +310,10 @@ abstract class AbstractGenerator
                 $attributeData['description'][] = Description::parse($rule)->with($this->fancyImplode($parameters, ', ', ' or '))->getDescription();
                 break;
             case 'required_if':
-                $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
+                $attributeData['description'][] = Description::parse($rule)->with($this->splitValuePairs($parameters))->getDescription();
                 break;
             case 'required_unless':
-                $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
+                $attributeData['description'][] = Description::parse($rule)->with($this->splitValuePairs($parameters))->getDescription();
                 break;
             case 'required_with':
                 $attributeData['description'][] = Description::parse($rule)->with($this->fancyImplode($parameters, ', ', ' or '))->getDescription();
