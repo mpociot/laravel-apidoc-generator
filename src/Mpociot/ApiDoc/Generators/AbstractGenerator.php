@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
@@ -230,9 +231,15 @@ abstract class AbstractGenerator
                 break;
             case 'min':
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
+                if (Arr::get($attributeData, 'type') === 'numeric' || Arr::get($attributeData, 'type') === 'integer') {
+                    $attributeData['value'] = $faker->numberBetween($parameters[0]);
+                }
                 break;
             case 'max':
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
+                if (Arr::get($attributeData, 'type') === 'numeric' || Arr::get($attributeData, 'type') === 'integer') {
+                    $attributeData['value'] = $faker->numberBetween(0, $parameters[0]);
+                }
                 break;
             case 'between':
                 if (! isset($attributeData['type'])) {
