@@ -120,6 +120,27 @@ class GenerateDocumentationTest extends TestCase
         $this->assertEquals($generatedCollection, $fixtureCollection);
     }
 
+    public function testCanAppendCustomHttpHeaders()
+    {
+        RouteFacade::get('/api/headers', TestController::class.'@checkCustomHeaders');
+
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+            '--header' => [
+                'Authorization: customAuthToken',
+                'X-Custom-Header: foobar',
+            ]
+        ]);
+
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $this->assertContains('"authorization": [
+        "customAuthToken"
+    ],
+    "x-custom-header": [
+        "foobar"
+    ]', $generatedMarkdown);
+    }
+
     /**
      * @param string $command
      * @param array $parameters

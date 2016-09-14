@@ -31,6 +31,7 @@ class GenerateDocumentation extends Command
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--force : Force rewriting of existing routes}
                             {--bindings= : Route Model Bindings}
+                            {--header=* : Custom HTTP headers to add to the example requests. Separate the header name and value with ":"}
     ';
 
     /**
@@ -253,7 +254,7 @@ class GenerateDocumentation extends Command
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->getUri()) || in_array($middleware, $route->middleware())) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
                     $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->getUri());
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $route->getMethods()).'] '.$route->getUri());
@@ -279,7 +280,7 @@ class GenerateDocumentation extends Command
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri()) || in_array($middleware, $route->middleware())) {
-                $parsedRoutes[] = $generator->processRoute($route, $bindings, $withResponse);
+                $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
                 $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
             }
         }

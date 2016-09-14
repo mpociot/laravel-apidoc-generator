@@ -21,11 +21,12 @@ class LaravelGenerator extends AbstractGenerator
     /**
      * @param  \Illuminate\Routing\Route $route
      * @param array $bindings
+     * @param array $headers
      * @param bool $withResponse
      *
      * @return array
      */
-    public function processRoute($route, $bindings = [], $withResponse = true)
+    public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
     {
         $content = '';
 
@@ -35,7 +36,7 @@ class LaravelGenerator extends AbstractGenerator
 
 
         if ($withResponse) {
-            $response = $this->getRouteResponse($route, $bindings);
+            $response = $this->getRouteResponse($route, $bindings, $headers);
             if ($response->headers->get('Content-Type') === 'application/json') {
                 $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
             } else {
@@ -73,10 +74,10 @@ class LaravelGenerator extends AbstractGenerator
         $kernel = App::make('Illuminate\Contracts\Http\Kernel');
         App::instance('middleware.disable', true);
 
-        $server = [
+        $server = collect([
             'CONTENT_TYPE' => 'application/json',
             'Accept' => 'application/json',
-        ];
+        ])->merge($server)->toArray();
 
         $request = Request::create(
             $uri, $method, $parameters,

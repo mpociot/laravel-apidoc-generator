@@ -58,16 +58,24 @@ abstract class AbstractGenerator
 
     /**
      * @param  $route
+     * @param  $bindings
+     * @param  $headers
      *
      * @return \Illuminate\Http\Response
      */
-    protected function getRouteResponse($route, $bindings)
+    protected function getRouteResponse($route, $bindings, $headers = [])
     {
         $uri = $this->addRouteModelBindings($route, $bindings);
 
         $methods = $route->getMethods();
 
-        return $this->callRoute(array_shift($methods), $uri);
+        // Split headers into key - value pairs
+        $headers = collect($headers)->map(function($value) {
+            $split = explode(':', $value);
+            return [trim($split[0]) => trim($split[1])];
+        })->collapse()->toArray();
+
+        return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
     }
 
     /**

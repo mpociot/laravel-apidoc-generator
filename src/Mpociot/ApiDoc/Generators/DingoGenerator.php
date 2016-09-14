@@ -9,17 +9,18 @@ class DingoGenerator extends AbstractGenerator
     /**
      * @param \Illuminate\Routing\Route $route
      * @param array $bindings
+     * @param array $headers
      * @param bool $withResponse
      *
      * @return array
      */
-    public function processRoute($route, $bindings = [], $withResponse = true)
+    public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
     {
         $response = '';
 
         if ($withResponse) {
             try {
-                $response = $this->getRouteResponse($route, $bindings);
+                $response = $this->getRouteResponse($route, $bindings, $headers);
             } catch (Exception $e) {
             }
         }
@@ -46,6 +47,10 @@ class DingoGenerator extends AbstractGenerator
     public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
     {
         $dispatcher = app('Dingo\Api\Dispatcher')->raw();
+        
+        collect($server)->map(function($key, $value) use ($dispatcher) {
+            $dispatcher->header($key, $value);
+        });
 
         return call_user_func_array([$dispatcher, strtolower($method)], [$uri]);
     }

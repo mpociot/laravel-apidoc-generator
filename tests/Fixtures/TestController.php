@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests\Fixtures;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class TestController extends Controller
@@ -29,6 +30,11 @@ class TestController extends Controller
     public function addRouteBindingsToRequestClass(DynamicRequest $request)
     {
         return '';
+    }
+
+    public function checkCustomHeaders(Request $request)
+    {
+        return $request->headers->all();
     }
 
     public function fetchRouteResponse()
