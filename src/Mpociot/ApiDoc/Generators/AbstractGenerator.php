@@ -249,6 +249,7 @@ abstract class AbstractGenerator
             case 'date_format':
                 $attributeData['type'] = 'date';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
+                $attributeData['value'] = date($parameters[0]);
                 break;
             case 'different':
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
