@@ -129,7 +129,7 @@ class GenerateDocumentationTest extends TestCase
             '--header' => [
                 'Authorization: customAuthToken',
                 'X-Custom-Header: foobar',
-            ]
+            ],
         ]);
 
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
