@@ -262,6 +262,10 @@ abstract class AbstractGenerator
                 $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 break;
+            case 'file':
+                $attributeData['type'] = 'file';
+                $attributeData['description'][] = Description::parse($rule)->getDescription();
+                break;
             case 'image':
                 $attributeData['type'] = 'image';
                 $attributeData['description'][] = Description::parse($rule)->getDescription();

@@ -198,6 +198,12 @@ class ApiDocGeneratorTest extends TestCase
                     $this->assertCount(1, $attribute['description']);
                     $this->assertSame('Valid user single_exists', $attribute['description'][0]);
                     break;
+                case 'file':
+                    $this->assertFalse($attribute['required']);
+                    $this->assertSame('file', $attribute['type']);
+                    $this->assertCount(1, $attribute['description']);
+                    $this->assertSame('Must be a file upload', $attribute['description'][0]);
+                    break;
                 case 'image':
                     $this->assertFalse($attribute['required']);
                     $this->assertSame('image', $attribute['type']);

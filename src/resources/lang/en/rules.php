@@ -15,6 +15,7 @@ return [
     'different' => 'Must have a different value than parameter: `:attribute`',
     'digits' => 'Must have an exact length of `:attribute`',
     'digits_between' => 'Must have a length between `:attribute` and `:attribute`',
+    'file' => 'Must be a file upload',
     'image' => 'Must be an image (jpeg, png, bmp, gif, or svg)',
     'json' => 'Must be a valid JSON string.',
     'mimetypes' => 'Allowed mime types: :attribute',
