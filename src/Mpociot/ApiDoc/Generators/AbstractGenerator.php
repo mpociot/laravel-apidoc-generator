@@ -70,8 +70,9 @@ abstract class AbstractGenerator
         $methods = $route->getMethods();
 
         // Split headers into key - value pairs
-        $headers = collect($headers)->map(function($value) {
+        $headers = collect($headers)->map(function ($value) {
             $split = explode(':', $value);
+
             return [trim($split[0]) => trim($split[1])];
         })->collapse()->toArray();
 
