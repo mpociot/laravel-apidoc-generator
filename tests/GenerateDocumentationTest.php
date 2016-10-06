@@ -2,10 +2,12 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
+use Dingo\Api\Provider\LaravelServiceProvider;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
+use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Illuminate\Support\Facades\Route as RouteFacade;
@@ -39,7 +41,10 @@ class GenerateDocumentationTest extends TestCase
      */
     protected function getPackageProviders($app)
     {
-        return [ApiDocGeneratorServiceProvider::class];
+        return [
+            LaravelServiceProvider::class,
+            ApiDocGeneratorServiceProvider::class
+        ];
     }
 
     public function testConsoleCommandNeedsAPrefixOrRoute()
@@ -60,6 +65,24 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->assertContains('Skipping route: [GET,HEAD] api/closure', $output);
         $this->assertContains('Processed route: [GET,HEAD] api/test', $output);
+    }
+
+    public function testConsoleCommandDoesNotWorkWithClosureUsingDingo()
+    {
+        $api = app('Dingo\Api\Routing\Router');
+        $api->version('v1', function ($api) {
+            $api->get('/closure', function () {
+                return 'foo';
+            });
+            $api->get('/test', DingoTestController::class.'@parseMethodDescription');
+
+            $output = $this->artisan('api:generate', [
+                '--router' => 'dingo',
+                '--routePrefix' => 'v1',
+            ]);
+            $this->assertContains('Skipping route: [GET,HEAD] closure', $output);
+            $this->assertContains('Processed route: [GET,HEAD] test', $output);
+        });
     }
 
     public function testCanSkipSingleRoutesCommandDoesNotWorkWithClosure()
