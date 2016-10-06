@@ -43,7 +43,7 @@ class GenerateDocumentationTest extends TestCase
     {
         return [
             LaravelServiceProvider::class,
-            ApiDocGeneratorServiceProvider::class
+            ApiDocGeneratorServiceProvider::class,
         ];
     }
 

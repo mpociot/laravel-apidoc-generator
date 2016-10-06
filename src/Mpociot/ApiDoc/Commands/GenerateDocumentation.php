@@ -130,7 +130,7 @@ class GenerateDocumentation extends Command
                 return $routeGroup->transform(function ($route) use ($generatedDocumentation, $compareDocumentation) {
                     if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $routeMatch)) {
                         $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $compareMatch) && $compareMatch[1] !== $routeMatch[1]);
-                        if ($routeDocumentationChanged === false ||  $this->option('force')) {
+                        if ($routeDocumentationChanged === false || $this->option('force')) {
                             if ($routeDocumentationChanged) {
                                 $this->warn('Discarded manual changes for route ['.implode(',', $route['methods']).'] '.$route['uri']);
                             }
@@ -282,7 +282,7 @@ class GenerateDocumentation extends Command
             if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri()) || in_array($middleware, $route->middleware())) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
                     $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
-                    $this->info('Processed route: [' . implode(',', $route->getMethods()) . '] ' . $route->uri());
+                    $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
                 }
