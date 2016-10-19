@@ -28,7 +28,7 @@ class CollectionWriter
             'variables' => [],
             'info' => [
                 'name' => '',
-                '_postman_id' => Uuid::uuid1()->toString(),
+                '_postman_id' => Uuid::uuid4()->toString(),
                 'description' => '',
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
             ],
