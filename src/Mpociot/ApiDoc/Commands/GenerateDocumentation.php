@@ -118,10 +118,6 @@ class GenerateDocumentation extends Command
             $generatedDocumentation = file_get_contents($targetFile);
             $compareDocumentation = file_get_contents($compareFile);
 
-            if (preg_match('/<!-- START_INFO -->(.*)<!-- END_INFO -->/is', $generatedDocumentation, $generatedInfoText)) {
-                $infoText = trim($generatedInfoText[1], "\n");
-            }
-
             if (preg_match('/---(.*)---\\s<!-- START_INFO -->/is', $generatedDocumentation, $generatedFrontmatter)) {
                 $frontmatter = trim($generatedFrontmatter[1], "\n");
             }
