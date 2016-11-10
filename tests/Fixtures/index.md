@@ -40,13 +40,13 @@ var settings = {
     "crossDomain": true,
     "url": "http://localhost/api/test",
     "method": "GET",
-        "headers": {
-    "accept": "application/json"
+    "headers": {
+        "accept": "application/json"
     }
 }
 
 $.ajax(settings).done(function (response) {
-console.log(response);
+    console.log(response);
 });
 ```
 
@@ -79,13 +79,13 @@ var settings = {
     "crossDomain": true,
     "url": "http://localhost/api/fetch",
     "method": "GET",
-        "headers": {
-    "accept": "application/json"
+    "headers": {
+        "accept": "application/json"
     }
 }
 
 $.ajax(settings).done(function (response) {
-console.log(response);
+    console.log(response);
 });
 ```
 

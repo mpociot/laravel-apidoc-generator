@@ -28,13 +28,13 @@ var settings = {
     @if(count($parsedRoute['parameters']))
 "data": {!! str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT)) !!},
     @endif
-    "headers": {
-    "accept": "application/json"
+"headers": {
+        "accept": "application/json"
     }
 }
 
 $.ajax(settings).done(function (response) {
-console.log(response);
+    console.log(response);
 });
 ```
 
