@@ -109,13 +109,13 @@ If your API route accepts a `GET` method, this package tries to call the API rou
 If your API needs an authenticated user, you can use the `actAsUserId` option to specify a user ID that will be used for making these API calls:
 
 ```sh
-$ php artisan api:generate --routePrefix=api/* --actAsUserId=1
+$ php artisan api:generate --routePrefix="api/*" --actAsUserId=1
 ```
 
 If you don't want to automatically perform API response calls, use the `noResponseCalls` option.
 
 ```sh
-$ php artisan api:generate --routePrefix=api/* --noResponseCalls
+$ php artisan api:generate --routePrefix="api/*" --noResponseCalls
 ```
 
 > Note: The example API responses work best with seeded data.
