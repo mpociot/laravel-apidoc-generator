@@ -88,6 +88,9 @@ class LaravelGenerator extends AbstractGenerator
 
         $kernel->terminate($request, $response);
 
+        $app = require App::bootstrapPath().'/app.php';
+        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
+
         return $response;
     }
 }
