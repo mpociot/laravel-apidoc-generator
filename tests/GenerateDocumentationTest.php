@@ -181,7 +181,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/utf8', TestController::class.'@utf8');
 
         $output = $this->artisan('api:generate', [
-            '--routePrefix' => 'api/*'
+            '--routePrefix' => 'api/*',
         ]);
 
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
