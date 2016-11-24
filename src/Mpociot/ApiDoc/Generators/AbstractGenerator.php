@@ -30,9 +30,9 @@ abstract class AbstractGenerator
     abstract public function processRoute($route, $bindings = [], $withResponse = true);
 
     /**
-     * Prepares / Disables route middlewares
-     * 
-     * @param  boolean $disable
+     * Prepares / Disables route middlewares.
+     *
+     * @param  bool $disable
      *
      * @return  void
      */
@@ -87,7 +87,7 @@ abstract class AbstractGenerator
 
         //Changes url with parameters like /users/{user} to /users/1
         $uri = preg_replace('/{(.*)}/', 1, $uri);
-        
+
         return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
     }
 
