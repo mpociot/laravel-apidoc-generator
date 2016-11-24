@@ -42,9 +42,9 @@ class DingoGenerator extends AbstractGenerator
     }
 
     /**
-     * Prepares / Disables route middlewares
-     * 
-     * @param  boolean $disable
+     * Prepares / Disables route middlewares.
+     *
+     * @param  bool $disable
      *
      * @return  void
      */
