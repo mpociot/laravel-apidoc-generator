@@ -10,6 +10,7 @@ use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
 use Illuminate\Support\Facades\Route as RouteFacade;
 
 class GenerateDocumentationTest extends TestCase
@@ -95,6 +96,17 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->assertContains('Skipping route: [GET,HEAD] api/skip', $output);
         $this->assertContains('Processed route: [GET,HEAD] api/test', $output);
+    }
+
+    public function testCanParseResourceRoutes()
+    {
+        RouteFacade::resource('/api/user', TestResourceController::class);
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $fixtureMarkdown = file_get_contents(__DIR__.'/Fixtures/resource_index.md');
+        $this->assertSame($generatedMarkdown, $fixtureMarkdown);
     }
 
     public function testGeneratedMarkdownFileIsCorrect()
