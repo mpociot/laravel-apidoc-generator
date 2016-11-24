@@ -57,6 +57,18 @@ class LaravelGenerator extends AbstractGenerator
     }
 
     /**
+     * Prepares / Disables route middlewares
+     * 
+     * @param  boolean $disable
+     *
+     * @return  void
+     */
+    public function prepareMiddleware($disable = true)
+    {
+        App::instance('middleware.disable', true);
+    }
+
+    /**
      * Call the given URI and return the Response.
      *
      * @param  string  $method
@@ -71,9 +83,6 @@ class LaravelGenerator extends AbstractGenerator
      */
     public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
     {
-        $kernel = App::make('Illuminate\Contracts\Http\Kernel');
-        App::instance('middleware.disable', true);
-
         $server = collect([
             'CONTENT_TYPE' => 'application/json',
             'Accept' => 'application/json',
@@ -84,6 +93,7 @@ class LaravelGenerator extends AbstractGenerator
             $cookies, $files, $this->transformHeadersToServerVars($server), $content
         );
 
+        $kernel = App::make('Illuminate\Contracts\Http\Kernel');
         $response = $kernel->handle($request);
 
         $kernel->terminate($request, $response);

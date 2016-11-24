@@ -27,6 +27,7 @@ class GenerateDocumentation extends Command
                             {--middleware= : The middleware to use for generation}
                             {--noResponseCalls : Disable API response calls}
                             {--noPostmanCollection : Disable Postman collection creation}
+                            {--useMiddlewares : Use all configured route middlewares}
                             {--actAsUserId= : The user ID to use for API response calls}
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--force : Force rewriting of existing routes}
@@ -75,6 +76,8 @@ class GenerateDocumentation extends Command
 
             return false;
         }
+
+        $generator->prepareMiddleware($this->option('useMiddlewares'));
 
         if ($this->option('router') === 'laravel') {
             $parsedRoutes = $this->processLaravelRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
