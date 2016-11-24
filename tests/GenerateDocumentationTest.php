@@ -176,6 +176,18 @@ class GenerateDocumentationTest extends TestCase
     ]', $generatedMarkdown);
     }
 
+    public function testGeneratesUTF8Responses()
+    {
+        RouteFacade::get('/api/utf8', TestController::class.'@utf8');
+
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*'
+        ]);
+
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $this->assertContains('Лорем ипсум долор сит амет', $generatedMarkdown);
+    }
+
     /**
      * @param string $command
      * @param array $parameters

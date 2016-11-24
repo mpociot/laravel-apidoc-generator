@@ -60,6 +60,11 @@ class TestController extends Controller
         return '';
     }
 
+    public function utf8()
+    {
+        return ['result' => 'Лорем ипсум долор сит амет'];
+    }
+
     /**
      * @hideFromAPIDocumentation
      */

@@ -43,9 +43,9 @@ $.ajax(settings).done(function (response) {
 
 ```json
 @if(is_object($parsedRoute['response']) || is_array($parsedRoute['response']))
-{!! json_encode($parsedRoute['response'], JSON_PRETTY_PRINT) !!}
+{!! json_encode($parsedRoute['response'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
 @else
-{!! json_encode(json_decode($parsedRoute['response']), JSON_PRETTY_PRINT) !!}
+{!! json_encode(json_decode($parsedRoute['response']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
 @endif
 ```
 @endif
