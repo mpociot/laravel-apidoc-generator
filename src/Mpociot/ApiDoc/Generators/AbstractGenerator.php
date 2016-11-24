@@ -76,6 +76,9 @@ abstract class AbstractGenerator
             return [trim($split[0]) => trim($split[1])];
         })->collapse()->toArray();
 
+        //Changes url with parameters like /users/{user} to /users/1
+        $uri = preg_replace('/{(.*)}/', 1, $uri);
+
         return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
     }
 
