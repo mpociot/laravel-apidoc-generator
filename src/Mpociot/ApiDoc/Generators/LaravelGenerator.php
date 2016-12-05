@@ -2,9 +2,11 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
+use ReflectionClass;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
 class LaravelGenerator extends AbstractGenerator
 {
@@ -33,7 +35,6 @@ class LaravelGenerator extends AbstractGenerator
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
-
 
         if ($withResponse) {
             $response = $this->getRouteResponse($route, $bindings, $headers);
@@ -104,5 +105,42 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return $response;
+    }
+
+    /**
+     * @param  string $route
+     * @param  array $bindings
+     *
+     * @return array
+     */
+    protected function getRouteRules($route, $bindings)
+    {
+        list($class, $method) = explode('@', $route);
+        $reflection = new ReflectionClass($class);
+        $reflectionMethod = $reflection->getMethod($method);
+
+        foreach ($reflectionMethod->getParameters() as $parameter) {
+            $parameterType = $parameter->getClass();
+            if (! is_null($parameterType) && class_exists($parameterType->name)) {
+                $className = $parameterType->name;
+
+                if (is_subclass_of($className, FormRequest::class)) {
+                    $parameterReflection = new $className;
+                    $parameterReflection->setContainer(app());
+                    // Add route parameter bindings
+                    $parameterReflection->query->add($bindings);
+                    $parameterReflection->request->add($bindings);
+
+                    if (method_exists($parameterReflection, 'validator')) {
+                        return app()->call([$parameterReflection, 'validator'])
+                            ->getRules();
+                    } else {
+                        return app()->call([$parameterReflection, 'rules']);
+                    }
+                }
+            }
+        }
+
+        return [];
     }
 }
