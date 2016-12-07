@@ -2,8 +2,8 @@
 
 namespace Mpociot\ApiDoc\Postman;
 
-use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Collection;
 
 class CollectionWriter
 {

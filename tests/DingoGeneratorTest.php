@@ -2,13 +2,13 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Dingo\Api\Provider\LaravelServiceProvider;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Mpociot\ApiDoc\Generators\DingoGenerator;
-use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
 use Orchestra\Testbench\TestCase;
+use Mpociot\ApiDoc\Generators\DingoGenerator;
+use Dingo\Api\Provider\LaravelServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 
 class DingoGeneratorTest extends TestCase
 {

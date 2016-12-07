@@ -2,12 +2,12 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Illuminate\Translation\LoaderInterface;
-use Illuminate\Translation\Translator;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Mpociot\ApiDoc\Parsers\RuleDescriptionParser;
-use Orchestra\Testbench\TestCase;
 use Mockery as m;
+use Orchestra\Testbench\TestCase;
+use Illuminate\Translation\Translator;
+use Illuminate\Translation\LoaderInterface;
+use Mpociot\ApiDoc\Parsers\RuleDescriptionParser;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 class RuleDescriptionParserTest extends TestCase
 {
