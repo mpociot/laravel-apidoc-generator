@@ -2,16 +2,16 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
+use ReflectionClass;
 use Illuminate\Console\Command;
+use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
-use Mpociot\ApiDoc\Generators\AbstractGenerator;
+use Mpociot\Documentarian\Documentarian;
+use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Postman\CollectionWriter;
-use Mpociot\Documentarian\Documentarian;
-use Mpociot\Reflection\DocBlock;
-use ReflectionClass;
+use Mpociot\ApiDoc\Generators\AbstractGenerator;
 
 class GenerateDocumentation extends Command
 {
@@ -185,7 +185,6 @@ class GenerateDocumentation extends Command
         $documentarian->generate($outputPath);
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/public/index.html');
-
 
         if ($this->option('noPostmanCollection') !== true) {
             $this->info('Generating Postman collection');

@@ -3,13 +3,13 @@
 namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
 use ReflectionClass;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Mpociot\Reflection\DocBlock;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Http\FormRequest;
+use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
 
 abstract class AbstractGenerator
 {
