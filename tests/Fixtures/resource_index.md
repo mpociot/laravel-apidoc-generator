@@ -27,7 +27,7 @@ Welcome to the generated API reference.
 > Example request:
 
 ```bash
-curl "http://localhost/api/user" \
+curl -X GET "http://localhost/api/user" \
 -H "Accept: application/json"
 ```
 
@@ -68,7 +68,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl "http://localhost/api/user/create" \
+curl -X GET "http://localhost/api/user/create" \
 -H "Accept: application/json"
 ```
 
@@ -109,7 +109,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl "http://localhost/api/user" \
+curl -X POST "http://localhost/api/user" \
 -H "Accept: application/json"
 ```
 
@@ -141,7 +141,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl "http://localhost/api/user/{user}" \
+curl -X GET "http://localhost/api/user/{user}" \
 -H "Accept: application/json"
 ```
 
@@ -182,7 +182,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl "http://localhost/api/user/{user}/edit" \
+curl -X GET "http://localhost/api/user/{user}/edit" \
 -H "Accept: application/json"
 ```
 
@@ -223,7 +223,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl "http://localhost/api/user/{user}" \
+curl -X PUT "http://localhost/api/user/{user}" \
 -H "Accept: application/json"
 ```
 
@@ -257,7 +257,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl "http://localhost/api/user/{user}" \
+curl -X DELETE "http://localhost/api/user/{user}" \
 -H "Accept: application/json"
 ```
 
