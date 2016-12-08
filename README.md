@@ -71,15 +71,26 @@ This package uses these resources to generate the API documentation:
 #### Controller doc block
 
 This package uses the HTTP controller doc blocks to create a table of contents and show descriptions for your API methods.
+Using @resource is useful as it creates a new Group in the API documentation, but is not required. The short description
+after the @resource should be unique to allow anchor tags to navigate to this section. A longer description can be included below.
 
 ```php
 /**
- * This is the short description
+ * @resource Account
  *
- * This can be an optional longer description of your API call, used within the documentation.
- *
+ * Longer description
  */
- public function foo()
+class AccountController extends Controller {
+
+	/**
+	 * This is the short description [and should be unique as anchor tags link to this in navigation menu]
+	 *
+	 * This can be an optional longer description of your API call, used within the documentation.
+	 *
+	 */
+	 public function foo(){
+
+	 }
 ```
 
 **Result:** ![Doc block result](http://marcelpociot.com/documentarian/doc_block.png)
