@@ -34,7 +34,17 @@ To generate your API documentation, use the `api:generate` artisan command.
 $ php artisan api:generate --routePrefix="api/v1/*"
 ```
 
-This command will scan your applications routes for the URIs matching `api/v1/*` and will parse these controller methods and form requests.
+This command will scan your applications routes for the URIs matching `api/v1/*` and will parse these controller methods and form requests. For example:
+
+```php
+// API Group Routes
+Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
+	// Custom route added to standard Resource
+	Route::get('example/foo', 'ExampleController@foo');
+	// Standard Resource route
+	Route::resource('example', 'ExampleController'));
+});
+```
 
 ### Available command options:
 
@@ -71,16 +81,18 @@ This package uses these resources to generate the API documentation:
 #### Controller doc block
 
 This package uses the HTTP controller doc blocks to create a table of contents and show descriptions for your API methods.
-Using @resource is useful as it creates a new Group in the API documentation, but is not required. The short description
-after the @resource should be unique to allow anchor tags to navigate to this section. A longer description can be included below.
+
+Using @resource in a doc block prior to each controller is useful as it creates a Group within the API documentation for all methods defined in that controller (rather than listing every method in a single list for all your controllers), but using @resource is not required. The short description after the @resource should be unique to allow anchor tags to navigate to this section. A longer description can be included below.
+
+Above each method within the controller you wish to include in your API documentation you should have a doc block. This should include a unique short description as the first entry. An optional second entry can be added with further information. Both descriptions will appear in the API documentation in a different format as shown below.
 
 ```php
 /**
- * @resource Account
+ * @resource Example
  *
  * Longer description
  */
-class AccountController extends Controller {
+class ExampleController extends Controller {
 
 	/**
 	 * This is the short description [and should be unique as anchor tags link to this in navigation menu]
@@ -93,7 +105,9 @@ class AccountController extends Controller {
 	 }
 ```
 
-**Result:** ![Doc block result](http://marcelpociot.de/documentarian/doc_block.png)
+**Result:** 
+
+![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
 #### Form request validation rules
 
@@ -137,6 +151,14 @@ $ php artisan api:generate --routePrefix="api/*" --noResponseCalls
 The generator automatically creates a Postman collection file, which you can import to use within your [Postman App](https://www.getpostman.com/apps) for even simpler API testing and usage.
 
 If you don't want to create a Postman collection, use the `--noPostmanCollection` option, when generating the API documentation.
+
+As of as of Laravel 5.3, the default base URL added to the Postman collection will be that found in your Laravel _config/app.php_ file. This will likely be _http://localhost_. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
+
+`'url' => env('APP_URL', 'http://yourappdefault.app'),`
+
+And if you are referring to the environment setting as above, then you should of course ensure that you have updated your .env file to set the APP_URL value as appropriate. Otherwise the default value (the second _http://yourappdefault.app_ will be used in your Postman collection). Example environment value:
+
+`APP_URL=http://yourapp.app` 
 
 ## Modify the generated documentation
 
