@@ -1,6 +1,6 @@
 ## Laravel API Documentation Generator
 
-Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.com/whiteboard/).
+Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.de/whiteboard/).
 
 `php artisan api:gen --routePrefix="settings/api/*"`
 
@@ -93,7 +93,7 @@ class AccountController extends Controller {
 	 }
 ```
 
-**Result:** ![Doc block result](http://marcelpociot.com/documentarian/doc_block.png)
+**Result:** ![Doc block result](http://marcelpociot.de/documentarian/doc_block.png)
 
 #### Form request validation rules
 
@@ -112,7 +112,7 @@ public function rules()
 }
 ```
 
-**Result:** ![Form Request](http://marcelpociot.com/documentarian/form_request.png)
+**Result:** ![Form Request](http://marcelpociot.de/documentarian/form_request.png)
 
 #### API responses
 
@@ -157,7 +157,7 @@ If you want to skip a single route from a list of routes that match a given pref
 
 ## Further modification
 
-This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarian guide](http://marcelpociot.com/documentarian/installation).
+This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarian guide](http://marcelpociot.de/documentarian/installation).
 
 ### License
 
