@@ -76,7 +76,7 @@ abstract class AbstractGenerator
     {
         $uri = $this->addRouteModelBindings($route, $bindings);
 
-        $methods = $route->getMethods();
+        $methods = $route->methods();
 
         // Split headers into key - value pairs
         $headers = collect($headers)->map(function ($value) {

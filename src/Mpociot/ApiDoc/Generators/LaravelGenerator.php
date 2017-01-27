@@ -46,11 +46,11 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return $this->getParameters([
-            'id' => md5($route->uri().':'.implode($route->getMethods())),
+            'id' => md5($route->uri().':'.implode($route->methods())),
             'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
-            'methods' => $route->getMethods(),
+            'methods' => $route->methods(),
             'uri' => $route->uri(),
             'parameters' => [],
             'response' => $content,
