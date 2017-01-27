@@ -17,7 +17,7 @@ class LaravelGenerator extends AbstractGenerator
      */
     protected function getUri($route)
     {
-        return $route->getUri();
+        return $route->uri();
     }
 
     /**
@@ -46,12 +46,12 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return $this->getParameters([
-            'id' => md5($route->getUri().':'.implode($route->getMethods())),
+            'id' => md5($route->uri().':'.implode($route->getMethods())),
             'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $route->getMethods(),
-            'uri' => $route->getUri(),
+            'uri' => $route->uri(),
             'parameters' => [],
             'response' => $content,
         ], $routeAction, $bindings);
