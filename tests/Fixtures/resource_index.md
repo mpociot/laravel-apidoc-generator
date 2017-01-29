@@ -62,6 +62,7 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_2ea88ff35aa222f5582e50f39a2b35fd -->
+
 <!-- START_99a7210df460e7fd8ad2508ee28b9763 -->
 ## Show the form for creating a new resource.
 
@@ -103,6 +104,7 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_99a7210df460e7fd8ad2508ee28b9763 -->
+
 <!-- START_f0654d3f2fc63c11f5723f233cc53c83 -->
 ## Store a newly created resource in storage.
 
@@ -135,6 +137,7 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_f0654d3f2fc63c11f5723f233cc53c83 -->
+
 <!-- START_7a5835399fad9a53bc0430d6e3054297 -->
 ## Display the specified resource.
 
@@ -176,6 +179,7 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_7a5835399fad9a53bc0430d6e3054297 -->
+
 <!-- START_5ed9d10b12650f9536edfa994fafae15 -->
 ## Show the form for editing the specified resource.
 
@@ -217,6 +221,7 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_5ed9d10b12650f9536edfa994fafae15 -->
+
 <!-- START_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
 ## Update the specified resource in storage.
 
@@ -251,6 +256,7 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
+
 <!-- START_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->
 ## Remove the specified resource from storage.
 
@@ -283,3 +289,4 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->
+

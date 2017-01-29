@@ -18,7 +18,14 @@ abstract class AbstractGenerator
      *
      * @return mixed
      */
-    abstract protected function getUri($route);
+    abstract public function getUri($route);
+
+    /**
+     * @param $route
+     *
+     * @return mixed
+     */
+    abstract public function getMethods($route);
 
     /**
      * @param  \Illuminate\Routing\Route $route
@@ -76,7 +83,7 @@ abstract class AbstractGenerator
     {
         $uri = $this->addRouteModelBindings($route, $bindings);
 
-        $methods = $route->getMethods();
+        $methods = $this->getMethods($route);
 
         // Split headers into key - value pairs
         $headers = collect($headers)->map(function ($value) {

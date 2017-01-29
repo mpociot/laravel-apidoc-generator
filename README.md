@@ -26,6 +26,8 @@ Go to your `config/app.php` and add the service provider:
 Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 ```
 
+> Using Laravel < 5.4? Use version 1.0! For Laravel 5.4 and up, use 2.0 instead.
+
 ## Usage
 
 To generate your API documentation, use the `api:generate` artisan command.
