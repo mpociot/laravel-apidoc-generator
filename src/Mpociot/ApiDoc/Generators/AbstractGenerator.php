@@ -308,7 +308,7 @@ abstract class AbstractGenerator
             case 'digits':
                 $attributeData['type'] = 'numeric';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
-                $attributeData['value'] = $faker->randomNumber($parameters[0], true);
+                $attributeData['value'] = ($parameters[0] < 9) ? $faker->randomNumber($parameters[0], true) : substr(mt_rand(100000000, mt_getrandmax()), 0, $parameters[0]);
                 break;
             case 'digits_between':
                 $attributeData['type'] = 'numeric';
