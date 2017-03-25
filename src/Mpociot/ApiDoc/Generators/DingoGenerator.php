@@ -62,7 +62,7 @@ class DingoGenerator extends AbstractGenerator
         $dispatcher = app('Dingo\Api\Dispatcher')->raw();
 
         collect($server)->map(function ($key, $value) use ($dispatcher) {
-            $dispatcher->header($key, $value);
+            $dispatcher->header($value, $key);
         });
 
         return call_user_func_array([$dispatcher, strtolower($method)], [$uri]);
