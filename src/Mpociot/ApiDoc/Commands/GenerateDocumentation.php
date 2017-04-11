@@ -213,18 +213,18 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param $actAs
+     * @param string|int $actAs
      */
     private function setUserToBeImpersonated($actAs)
     {
         if (! empty($actAs)) {
             if (version_compare($this->laravel->version(), '5.2.0', '<')) {
                 $userModel = config('auth.model');
-                $user = $userModel::find((int) $actAs);
+                $user = $userModel::find($actAs);
                 $this->laravel['auth']->setUser($user);
             } else {
                 $userModel = config('auth.providers.users.model');
-                $user = $userModel::find((int) $actAs);
+                $user = $userModel::find($actAs);
                 $this->laravel['auth']->guard()->setUser($user);
             }
         }
