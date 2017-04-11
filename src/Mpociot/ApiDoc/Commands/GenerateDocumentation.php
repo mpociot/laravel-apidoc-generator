@@ -69,7 +69,7 @@ class GenerateDocumentation extends Command
         $routePrefix = $this->option('routePrefix');
         $middleware = $this->option('middleware');
 
-        $this->setUserToBeImpersonated($this->option('actAsUserId'));
+        $this->setUserToBeImpersonated((string) $this->option('actAsUserId'));
 
         if ($routePrefix === null && ! count($allowedRoutes) && $middleware === null) {
             $this->error('You must provide either a route prefix or a route or a middleware to generate the documentation.');
