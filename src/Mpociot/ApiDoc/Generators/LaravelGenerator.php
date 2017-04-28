@@ -33,8 +33,7 @@ class LaravelGenerator extends AbstractGenerator
     {
         if (version_compare(app()->version(), '5.4', '<')) {
             $methods = $route->getMethods();
-        }
-        else {
+        } else {
             $methods = $route->methods();
         }
 
