@@ -20,7 +20,7 @@ class GenerateDocumentation extends Command
      *
      * @var string
      */
-    protected $signature = 'api:generate 
+    protected $signature = 'api:generate
                             {--output=public/docs : The output path for the generated documentation}
                             {--routePrefix= : The route prefix to use for generation}
                             {--routes=* : The route names to use for generation}
@@ -32,6 +32,7 @@ class GenerateDocumentation extends Command
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--force : Force rewriting of existing routes}
                             {--bindings= : Route Model Bindings}
+                            {--parameters= : Route Query parameters}
                             {--header=* : Custom HTTP headers to add to the example requests. Separate the header name and value with ":"}
     ';
 
@@ -213,6 +214,25 @@ class GenerateDocumentation extends Command
     }
 
     /**
+     * @return array
+     */
+    private function getParameters()
+    {
+        $parameters = $this->option('parameters');
+        if (empty($parameters)) {
+            return [];
+        }
+        $parameters = explode('|', $parameters);
+        $resultParameters = [];
+        foreach ($parameters as $parameter) {
+            list($name, $id) = explode(',', $parameter);
+            $resultParameters[$name] = $id;
+        }
+
+        return $resultParameters;
+    }
+
+    /**
      * @param $actAs
      */
     private function setUserToBeImpersonated($actAs)
@@ -254,11 +274,12 @@ class GenerateDocumentation extends Command
         $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
+        $parameters = $this->getParameters();
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $generator->getUri($route)) || in_array($middleware, $route->middleware())) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $parameters, $withResponse);
                     $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
@@ -281,11 +302,12 @@ class GenerateDocumentation extends Command
         $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
+        $parameters = $this->getParameters();
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri()) || in_array($middleware, $route->middleware())) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $parameters, $withResponse);
                     $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $route->getMethods()).'] '.$route->uri());

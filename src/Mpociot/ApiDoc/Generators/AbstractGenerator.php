@@ -30,11 +30,12 @@ abstract class AbstractGenerator
     /**
      * @param  \Illuminate\Routing\Route $route
      * @param array $bindings
+     * @param array $parameters
      * @param bool $withResponse
      *
      * @return array
      */
-    abstract public function processRoute($route, $bindings = [], $withResponse = true);
+    abstract public function processRoute($route, $bindings = [], $parameters = [], $withResponse = true);
 
     /**
      * Prepares / Disables route middlewares.
@@ -76,10 +77,11 @@ abstract class AbstractGenerator
      * @param  $route
      * @param  $bindings
      * @param  $headers
+     * @param  $parameters
      *
      * @return \Illuminate\Http\Response
      */
-    protected function getRouteResponse($route, $bindings, $headers = [])
+    protected function getRouteResponse($route, $bindings, $headers = [], $parameters = [])
     {
         $uri = $this->addRouteModelBindings($route, $bindings);
 
@@ -95,7 +97,7 @@ abstract class AbstractGenerator
         //Changes url with parameters like /users/{user} to /users/1
         $uri = preg_replace('/{(.*)}/', 1, $uri);
 
-        return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
+        return $this->callRoute(array_shift($methods), $uri, $parameters, [], [], $headers);
     }
 
     /**
@@ -132,6 +134,28 @@ abstract class AbstractGenerator
             'short' => $phpdoc->getShortDescription(),
             'long' => $phpdoc->getLongDescription()->getContents(),
         ];
+    }
+
+    /**
+     * @param  \Illuminate\Routing\Route  $route
+     *
+     * @return array
+     */
+    protected function getRouteQueryParams($route, $parameters)
+    {
+        list($class, $method) = explode('@', $route);
+        $reflection = new ReflectionClass($class);
+        $reflectionMethod = $reflection->getMethod($method);
+
+        $comment = $reflectionMethod->getDocComment();
+        $phpdoc = new DocBlock($comment);
+
+        $parametersTag = $phpdoc->getTagsByName('queryParameters');
+        if ($parametersTag) {
+            $routeParameters = array_flip(explode(',', trim($parametersTag[0]->getContent(), "[]")));
+            return array_intersect_key($parameters, $routeParameters);
+        }
+        return [];
     }
 
     /**
