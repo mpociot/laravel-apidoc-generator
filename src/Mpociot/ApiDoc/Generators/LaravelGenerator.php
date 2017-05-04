@@ -19,7 +19,7 @@ class LaravelGenerator extends AbstractGenerator
     {
         $queryString = $routeParameters ? '?'.http_build_query($routeParameters) : '';
         if (version_compare(app()->version(), '5.4', '<')) {
-            return $route->getUri() . $queryString;
+            return $route->getUri().$queryString;
         }
 
         return $route->uri().$queryString;
