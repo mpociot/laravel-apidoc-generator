@@ -19,7 +19,7 @@ class DingoGenerator extends AbstractGenerator
     {
         $response = '';
         $routeParameters = $this->getRouteQueryParams($routeAction['uses'], $parameters);
-        $queryString = $routeParameters ? '?' . http_build_query($routeParameters) : '';
+        $queryString = $routeParameters ? '?'.http_build_query($routeParameters) : '';
 
         if ($withResponse) {
             try {
@@ -38,7 +38,7 @@ class DingoGenerator extends AbstractGenerator
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $route->getMethods(),
-            'uri' => $route->uri() . $queryString,
+            'uri' => $route->uri().$queryString,
             'parameters' => $parameters,
             'response' => $response,
         ], $routeAction, $bindings);

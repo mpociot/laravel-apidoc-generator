@@ -152,7 +152,7 @@ abstract class AbstractGenerator
 
         $parametersTag = $phpdoc->getTagsByName('queryParameters');
         if ($parametersTag) {
-            $routeParameters = array_flip(explode(',', trim($parametersTag[0]->getContent(), "[]")));
+            $routeParameters = array_flip(explode(',', trim($parametersTag[0]->getContent(), '[]')));
             return array_intersect_key($parameters, $routeParameters);
         }
         return [];
