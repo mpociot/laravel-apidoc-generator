@@ -67,7 +67,7 @@ class LaravelGenerator extends AbstractGenerator
                 $response = $docblockResponse;
                 $showresponse = true;
             }
-            if (!$response) {
+            if (! $response) {
                 $transformerResponse = $this->getTransformerResponse($routeDescription['tags']);
                 if ($transformerResponse) {
                     // we have a transformer response from the docblock ( @transformer || @transformercollection )
@@ -75,7 +75,7 @@ class LaravelGenerator extends AbstractGenerator
                     $showresponse = true;
                 }
             }
-            if (!$response) {
+            if (! $response) {
                 $response = $this->getRouteResponse($route, $bindings, $headers);
             }
             if ($response->headers->get('Content-Type') === 'application/json') {
@@ -149,7 +149,7 @@ class LaravelGenerator extends AbstractGenerator
     }
 
     /**
-     * Get a response from the transformer tags
+     * Get a response from the transformer tags.
      *
      * @param array $tags
      *
@@ -159,7 +159,7 @@ class LaravelGenerator extends AbstractGenerator
     {
         try {
             $transFormerTags = array_filter($tags, function ($tag) {
-                if (!($tag instanceof Tag)) {
+                if (! ($tag instanceof Tag)) {
                     return false;
                 }
                 return \in_array(\strtolower($tag->getName()), ['transformer', 'transformercollection']);
@@ -170,9 +170,9 @@ class LaravelGenerator extends AbstractGenerator
             }
             $tag = \array_first($transFormerTags);
             $transformer = $tag->getContent();
-            if ( !\class_exists($transformer)) {
+            if (! \class_exists($transformer)) {
                 // if we can't find the transformer we can't generate a response
-                return null;
+                return;
             }
             $demoData = [];
 
@@ -180,10 +180,10 @@ class LaravelGenerator extends AbstractGenerator
             $method = $reflection->getMethod('transform');
             $parameter = \array_first($method->getParameters());
             if ($parameter->hasType() &&
-                !$parameter->getType()->isBuiltin() &&
-                \class_exists((string)$parameter->getType()) ) {
-                    // we have a class so we try to create an instance
-                $type = (string)$parameter->getType();
+                ! $parameter->getType()->isBuiltin() &&
+                \class_exists((string) $parameter->getType()) ) {
+                // we have a class so we try to create an instance
+                $type = (string) $parameter->getType();
                 $demoData = new $type;
                 try {
                     // try a factory
@@ -217,7 +217,7 @@ class LaravelGenerator extends AbstractGenerator
             return \response($fractal->createData($resource)->toJson());
         } catch (\Exception $e) {
             // it isn't possible to parse the transformer
-            return null;
+            return;
         }
     }
 
