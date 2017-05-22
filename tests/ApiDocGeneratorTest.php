@@ -336,4 +336,44 @@ class ApiDocGeneratorTest extends TestCase
             }
         }
     }
+
+    public function testCanParseResponseTag()
+    {
+        RouteFacade::post('/responseTag', TestController::class.'@responseTag');
+        $route = new Route(['GET'], '/responseTag', ['uses' => TestController::class.'@responseTag']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame($parsed['response'], '"{\n data: [],\n}"');
+    }
+
+    public function testCanParseTransformerTag()
+    {
+        RouteFacade::post('/transformerTag', TestController::class.'@transformerTag');
+        $route = new Route(['GET'], '/transformerTag', ['uses' => TestController::class.'@transformerTag']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
+        );
+    }
+
+    public function testCanParseTransformerCollectionTag()
+    {
+        RouteFacade::post('/transformerCollectionTag', TestController::class.'@transformerCollectionTag');
+        $route = new Route(['GET'], '/transformerCollectionTag', ['uses' => TestController::class.'@transformerCollectionTag']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
+        );
+    }
 }

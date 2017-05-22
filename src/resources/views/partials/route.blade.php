@@ -38,7 +38,7 @@ $.ajax(settings).done(function (response) {
 });
 ```
 
-@if(in_array('GET',$parsedRoute['methods']))
+@if(in_array('GET',$parsedRoute['methods']) || isset($parsedRoute['showresponse']) && $parsedRoute['showresponse'])
 > Example response:
 
 ```json

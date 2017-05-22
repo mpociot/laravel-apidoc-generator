@@ -10,6 +10,7 @@ use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
+use Mpociot\Reflection\DocBlock\Tag;
 
 abstract class AbstractGenerator
 {
@@ -44,6 +45,28 @@ abstract class AbstractGenerator
      * @return  void
      */
     abstract public function prepareMiddleware($disable = false);
+
+    /**
+     * Get the response from the docblock if available
+     *
+     * @param array $tags
+     *
+     * @return mixed
+     */
+    protected function getDocblockResponse($tags)
+    {
+        $responseTags = array_filter($tags, function ($tag) {
+            if (!($tag instanceof Tag)) {
+                return false;
+            }
+            return \strtolower($tag->getName()) == 'response';
+        });
+        if (empty($responseTags)) {
+            return null;
+        }
+        $responseTag = \array_first($responseTags);
+        return \response(\json_encode($responseTag->getContent()));
+    }
 
     /**
      * @param array $routeData
@@ -131,6 +154,7 @@ abstract class AbstractGenerator
         return [
             'short' => $phpdoc->getShortDescription(),
             'long' => $phpdoc->getLongDescription()->getContents(),
+            'tags' => $phpdoc->getTags(),
         ];
     }
 

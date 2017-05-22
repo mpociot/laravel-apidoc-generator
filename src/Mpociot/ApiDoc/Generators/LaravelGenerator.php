@@ -7,6 +7,10 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Foundation\Http\FormRequest;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
+use League\Fractal\Resource\Collection;
+use Mpociot\Reflection\DocBlock\Tag;
 
 class LaravelGenerator extends AbstractGenerator
 {
@@ -53,9 +57,27 @@ class LaravelGenerator extends AbstractGenerator
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
+        $showresponse = null;
 
         if ($withResponse) {
-            $response = $this->getRouteResponse($route, $bindings, $headers);
+            $response = null;
+            $docblockResponse = $this->getDocblockResponse($routeDescription['tags']);
+            if ($docblockResponse) {
+                // we have a response from the docblock ( @response )
+                $response = $docblockResponse;
+                $showresponse = true;
+            }
+            if (!$response) {
+                $transformerResponse = $this->getTransformerResponse($routeDescription['tags']);
+                if ($transformerResponse) {
+                    // we have a transformer response from the docblock ( @transformer || @transformercollection )
+                    $response = $transformerResponse;
+                    $showresponse = true;
+                }
+            }
+            if (!$response) {
+                $response = $this->getRouteResponse($route, $bindings, $headers);
+            }
             if ($response->headers->get('Content-Type') === 'application/json') {
                 $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
             } else {
@@ -72,6 +94,7 @@ class LaravelGenerator extends AbstractGenerator
             'uri' => $this->getUri($route),
             'parameters' => [],
             'response' => $content,
+            'showresponse' => $showresponse,
         ], $routeAction, $bindings);
     }
 
@@ -123,6 +146,79 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return $response;
+    }
+
+    /**
+     * Get a response from the transformer tags
+     *
+     * @param array $tags
+     *
+     * @return mixed
+     */
+    protected function getTransformerResponse($tags)
+    {
+        try {
+            $transFormerTags = array_filter($tags, function ($tag) {
+                if (!($tag instanceof Tag)) {
+                    return false;
+                }
+                return \in_array(\strtolower($tag->getName()), ['transformer', 'transformercollection']);
+            });
+            if (empty($transFormerTags)) {
+                // we didn't have any of the tags so goodbye
+                return false;
+            }
+            $tag = \array_first($transFormerTags);
+            $transformer = $tag->getContent();
+            if ( !\class_exists($transformer)) {
+                // if we can't find the transformer we can't generate a response
+                return null;
+            }
+            $demoData = [];
+
+            $reflection = new ReflectionClass($transformer);
+            $method = $reflection->getMethod('transform');
+            $parameter = \array_first($method->getParameters());
+            if ($parameter->hasType() &&
+                !$parameter->getType()->isBuiltin() &&
+                \class_exists((string)$parameter->getType()) ) {
+                    // we have a class so we try to create an instance
+                $type = (string)$parameter->getType();
+                $demoData = new $type;
+                try {
+                    // try a factory
+                    $demoData = \factory($type)->make();
+                } catch (\Exception $e) {
+                    if ($demoData instanceof \Illuminate\Database\Eloquent\Model) {
+                        // we can't use a factory but can try to get one from the database
+                        try {
+                            // check if we can find one
+                            $newDemoData = $type::first();
+                            if ($newDemoData) {
+                                $demoData = $newDemoData;
+                            }
+                        } catch (\Exception $e) {
+                            // do nothing
+                        }
+                    }
+                }
+            }
+
+            $fractal = new Manager();
+            $resource = [];
+            if ($tag->getName() == 'transformer') {
+                // just one
+                $resource = new Item($demoData, new $transformer);
+            }
+            if ($tag->getName() == 'transformercollection') {
+                // a collection
+                $resource = new Collection([$demoData, $demoData], new $transformer);
+            }
+            return \response($fractal->createData($resource)->toJson());
+        } catch (\Exception $e) {
+            // it isn't possible to parse the transformer
+            return null;
+        }
     }
 
     /**

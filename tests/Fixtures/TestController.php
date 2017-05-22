@@ -71,4 +71,30 @@ class TestController extends Controller
     public function skip()
     {
     }
+
+    /**
+     * @response {
+     *  data: [],
+     *}
+     */
+    public function responseTag()
+    {
+        return '';
+    }
+
+    /**
+     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     */
+    public function transformerTag()
+    {
+        return '';
+    }
+
+    /**
+     * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     */
+    public function transformerCollectionTag()
+    {
+        return '';
+    }
 }
