@@ -8,7 +8,6 @@ use League\Fractal\TransformerAbstract;
  * A test transformer to show the functions.
  *
  * @author Tobias van Beek <t.vanbeek@tjvb.nl>
- *
  */
 class TestTransformer extends TransformerAbstract
 {

@@ -6,7 +6,6 @@ namespace Mpociot\ApiDoc\Tests\Fixtures;
  * A demo test model.
  *
  * @author Tobias van Beek <t.vanbeek@tjvb.nl>
- *
  */
 class TestModel
 {

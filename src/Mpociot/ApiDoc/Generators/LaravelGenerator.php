@@ -3,14 +3,14 @@
 namespace Mpociot\ApiDoc\Generators;
 
 use ReflectionClass;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Foundation\Http\FormRequest;
 use League\Fractal\Manager;
+use Illuminate\Routing\Route;
 use League\Fractal\Resource\Item;
-use League\Fractal\Resource\Collection;
+use Illuminate\Support\Facades\App;
 use Mpociot\Reflection\DocBlock\Tag;
+use Illuminate\Support\Facades\Request;
+use League\Fractal\Resource\Collection;
+use Illuminate\Foundation\Http\FormRequest;
 
 class LaravelGenerator extends AbstractGenerator
 {
@@ -162,6 +162,7 @@ class LaravelGenerator extends AbstractGenerator
                 if (! ($tag instanceof Tag)) {
                     return false;
                 }
+
                 return \in_array(\strtolower($tag->getName()), ['transformer', 'transformercollection']);
             });
             if (empty($transFormerTags)) {
@@ -181,7 +182,7 @@ class LaravelGenerator extends AbstractGenerator
             $parameter = \array_first($method->getParameters());
             if ($parameter->hasType() &&
                 ! $parameter->getType()->isBuiltin() &&
-                \class_exists((string) $parameter->getType()) ) {
+                \class_exists((string) $parameter->getType())) {
                 // we have a class so we try to create an instance
                 $type = (string) $parameter->getType();
                 $demoData = new $type;
@@ -214,6 +215,7 @@ class LaravelGenerator extends AbstractGenerator
                 // a collection
                 $resource = new Collection([$demoData, $demoData], new $transformer);
             }
+
             return \response($fractal->createData($resource)->toJson());
         } catch (\Exception $e) {
             // it isn't possible to parse the transformer

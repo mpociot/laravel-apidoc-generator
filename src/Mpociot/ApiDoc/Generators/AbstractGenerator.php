@@ -59,12 +59,14 @@ abstract class AbstractGenerator
             if (! ($tag instanceof Tag)) {
                 return false;
             }
+
             return \strtolower($tag->getName()) == 'response';
         });
         if (empty($responseTags)) {
             return;
         }
         $responseTag = \array_first($responseTags);
+
         return \response(\json_encode($responseTag->getContent()));
     }
 
