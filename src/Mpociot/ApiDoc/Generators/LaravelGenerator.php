@@ -174,6 +174,7 @@ class LaravelGenerator extends AbstractGenerator
                 if (! ($tag instanceof Tag)) {
                     return false;
                 }
+
                 return \in_array(\strtolower($tag->getName()), ['transformermodel']);
             }));
             $tag = \array_first($transFormerTags);
@@ -189,9 +190,9 @@ class LaravelGenerator extends AbstractGenerator
             $parameter = \array_first($method->getParameters());
             $type = null;
             if ($modelTag) {
-                $modelTag->getContent();
+                $type = $modelTag->getContent();
             }
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && \is_null($type)) {
                 // we can only get the type with reflection for PHP 7
                 if ($parameter->hasType() &&
                 ! $parameter->getType()->isBuiltin() &&
