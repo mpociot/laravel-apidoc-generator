@@ -91,9 +91,27 @@ class TestController extends Controller
     }
 
     /**
+     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestModel
+     */
+    public function transformerTagWithModel()
+    {
+        return '';
+    }
+
+    /**
      * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
      */
     public function transformerCollectionTag()
+    {
+        return '';
+    }
+
+    /**
+     * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestModel
+     */
+    public function transformerCollectionTagWithModel()
     {
         return '';
     }

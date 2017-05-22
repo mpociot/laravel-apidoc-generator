@@ -169,6 +169,13 @@ class LaravelGenerator extends AbstractGenerator
                 // we didn't have any of the tags so goodbye
                 return false;
             }
+
+            $modelTag = array_first(array_filter($tags, function ($tag) {
+                if (! ($tag instanceof Tag)) {
+                    return false;
+                }
+                return \in_array(\strtolower($tag->getName()), ['transformermodel']);
+            }));
             $tag = \array_first($transFormerTags);
             $transformer = $tag->getContent();
             if (! \class_exists($transformer)) {
@@ -180,11 +187,18 @@ class LaravelGenerator extends AbstractGenerator
             $reflection = new ReflectionClass($transformer);
             $method = $reflection->getMethod('transform');
             $parameter = \array_first($method->getParameters());
-            if ($parameter->hasType() &&
+            $type = $modelTag->getContent();
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+                // we can only get the type with reflection for PHP 7
+                if ($parameter->hasType() &&
                 ! $parameter->getType()->isBuiltin() &&
-                \class_exists((string) $parameter->getType())) {
+                \class_exists((string) $parameter->getType()) ) {
+                    //we have a type
+                    $type = (string) $parameter->getType();
+                }
+            }
+            if ($type) {
                 // we have a class so we try to create an instance
-                $type = (string) $parameter->getType();
                 $demoData = new $type;
                 try {
                     // try a factory
