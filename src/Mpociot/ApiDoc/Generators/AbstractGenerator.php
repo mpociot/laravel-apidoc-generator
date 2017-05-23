@@ -267,7 +267,8 @@ abstract class AbstractGenerator
                 break;
             case 'in':
                 $attributeData['description'][] = Description::parse($rule)->with($this->fancyImplode($parameters, ', ', ' or '))->getDescription();
-                $attributeData['value'] = $faker->randomElement($parameters);
+//                $attributeData['value'] = $faker->randomElement($parameters);
+                $attributeData['value'] = $parameters[0];
                 break;
             case 'not_in':
                 $attributeData['description'][] = Description::parse($rule)->with($this->fancyImplode($parameters, ', ', ' or '))->getDescription();
