@@ -21,7 +21,7 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
-<!-- START_08307893aff90cc5097c48a1c8fc2f6d -->
+<!-- START_0bef4e738c9d6720ad43b062015d1078 -->
 ## Example title.
 
 This will be the long description.
@@ -60,9 +60,9 @@ null
 `GET api/test`
 
 
-<!-- END_08307893aff90cc5097c48a1c8fc2f6d -->
+<!-- END_0bef4e738c9d6720ad43b062015d1078 -->
 
-<!-- START_8ba174f2507a0967efd46fab3764b80e -->
+<!-- START_960a1b2b0f0f4dde8ce993307397f9c4 -->
 ## api/fetch
 
 > Example request:
@@ -104,5 +104,5 @@ $.ajax(settings).done(function (response) {
 `GET api/fetch`
 
 
-<!-- END_8ba174f2507a0967efd46fab3764b80e -->
+<!-- END_960a1b2b0f0f4dde8ce993307397f9c4 -->
 
