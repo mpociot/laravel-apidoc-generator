@@ -30,8 +30,8 @@ It can also be multiple lines long.
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/test" \
--H "Accept: application/json"
+curl -X GET -G "http://localhost/api/test" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -70,8 +70,8 @@ null
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/fetch" \
--H "Accept: application/json"
+curl -X GET -G "http://localhost/api/fetch" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
