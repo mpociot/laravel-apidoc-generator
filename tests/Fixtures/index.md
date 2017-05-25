@@ -59,8 +59,6 @@ null
 ### HTTP Request
 `GET api/test`
 
-`HEAD api/test`
-
 
 <!-- END_08307893aff90cc5097c48a1c8fc2f6d -->
 
@@ -104,8 +102,6 @@ $.ajax(settings).done(function (response) {
 
 ### HTTP Request
 `GET api/fetch`
-
-`HEAD api/fetch`
 
 
 <!-- END_8ba174f2507a0967efd46fab3764b80e -->

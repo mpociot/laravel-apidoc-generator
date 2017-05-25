@@ -68,7 +68,7 @@ class DingoGeneratorTest extends TestCase
         });
         $route = app('Dingo\Api\Routing\Router')->getRoutes()['v1']->getRoutes()[0];
         $parsed = $this->generator->processRoute($route);
-        $this->assertSame(['GET', 'HEAD'], $parsed['methods']);
+        $this->assertSame(['GET'], $parsed['methods']);
 
         $route = app('Dingo\Api\Routing\Router')->getRoutes()['v1']->getRoutes()[1];
         $parsed = $this->generator->processRoute($route);

@@ -58,8 +58,6 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 `GET api/user`
 
-`HEAD api/user`
-
 
 <!-- END_2ea88ff35aa222f5582e50f39a2b35fd -->
 
@@ -99,8 +97,6 @@ $.ajax(settings).done(function (response) {
 
 ### HTTP Request
 `GET api/user/create`
-
-`HEAD api/user/create`
 
 
 <!-- END_99a7210df460e7fd8ad2508ee28b9763 -->
@@ -175,8 +171,6 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 `GET api/user/{user}`
 
-`HEAD api/user/{user}`
-
 
 <!-- END_7a5835399fad9a53bc0430d6e3054297 -->
 
@@ -216,8 +210,6 @@ $.ajax(settings).done(function (response) {
 
 ### HTTP Request
 `GET api/user/{user}/edit`
-
-`HEAD api/user/{user}/edit`
 
 
 <!-- END_5ed9d10b12650f9536edfa994fafae15 -->

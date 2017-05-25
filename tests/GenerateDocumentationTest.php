@@ -64,8 +64,8 @@ class GenerateDocumentationTest extends TestCase
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
         ]);
-        $this->assertContains('Skipping route: [GET,HEAD] api/closure', $output);
-        $this->assertContains('Processed route: [GET,HEAD] api/test', $output);
+        $this->assertContains('Skipping route: [GET] api/closure', $output);
+        $this->assertContains('Processed route: [GET] api/test', $output);
     }
 
     public function testConsoleCommandDoesNotWorkWithClosureUsingDingo()
@@ -85,8 +85,8 @@ class GenerateDocumentationTest extends TestCase
                 '--router' => 'dingo',
                 '--routePrefix' => 'v1',
             ]);
-            $this->assertContains('Skipping route: [GET,HEAD] closure', $output);
-            $this->assertContains('Processed route: [GET,HEAD] test', $output);
+            $this->assertContains('Skipping route: [GET] closure', $output);
+            $this->assertContains('Processed route: [GET] test', $output);
         });
     }
 
@@ -98,8 +98,8 @@ class GenerateDocumentationTest extends TestCase
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
         ]);
-        $this->assertContains('Skipping route: [GET,HEAD] api/skip', $output);
-        $this->assertContains('Processed route: [GET,HEAD] api/test', $output);
+        $this->assertContains('Skipping route: [GET] api/skip', $output);
+        $this->assertContains('Processed route: [GET] api/test', $output);
     }
 
     public function testCanParseResourceRoutes()
