@@ -29,8 +29,8 @@
         "mockery/mockery": "^0.9.5"
     },
     "autoload": {
-        "psr-0": {
-            "Mpociot\\ApiDoc": "src/"
+        "psr-4": {
+            "Mpociot\\ApiDoc\\": "src/Mpociot/Apidoc"
         }
     },
     "autoload-dev": {
