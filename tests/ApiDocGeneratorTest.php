@@ -336,4 +336,79 @@ class ApiDocGeneratorTest extends TestCase
             }
         }
     }
+
+    public function testCanParseResponseTag()
+    {
+        RouteFacade::post('/responseTag', TestController::class.'@responseTag');
+        $route = new Route(['GET'], '/responseTag', ['uses' => TestController::class.'@responseTag']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame($parsed['response'], '"{\n data: [],\n}"');
+    }
+
+    public function testCanParseTransformerTag()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('The transformer tag without model need PHP 7');
+        }
+        RouteFacade::post('/transformerTag', TestController::class.'@transformerTag');
+        $route = new Route(['GET'], '/transformerTag', ['uses' => TestController::class.'@transformerTag']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
+        );
+    }
+
+    public function testCanParseTransformerTagWithModel()
+    {
+        RouteFacade::post('/transformerTagWithModel', TestController::class.'@transformerTagWithModel');
+        $route = new Route(['GET'], '/transformerTagWithModel', ['uses' => TestController::class.'@transformerTagWithModel']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
+        );
+    }
+
+    public function testCanParseTransformerCollectionTag()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('The transformer tag without model need PHP 7');
+        }
+        RouteFacade::post('/transformerCollectionTag', TestController::class.'@transformerCollectionTag');
+        $route = new Route(['GET'], '/transformerCollectionTag', ['uses' => TestController::class.'@transformerCollectionTag']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
+        );
+    }
+
+    public function testCanParseTransformerCollectionTagWithModel()
+    {
+        RouteFacade::post('/transformerCollectionTagWithModel', TestController::class.'@transformerCollectionTagWithModel');
+        $route = new Route(['GET'], '/transformerCollectionTagWithModel', ['uses' => TestController::class.'@transformerCollectionTagWithModel']);
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
+        );
+    }
 }

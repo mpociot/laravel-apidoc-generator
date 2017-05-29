@@ -130,6 +130,58 @@ public function rules()
 
 **Result:** ![Form Request](http://marcelpociot.de/documentarian/form_request.png)
 
+#### Controller method doc block
+It is possible to override the results for the response. This will also show the responses for other request methods then GET.
+
+#### @transformer
+With the transformer you can define the transformer that is used for the result of the method. It will try the next parts to get a result if it can find the transformer. The first successfull will be used.
+
+1. Check if there is a transformermodel tag to define the model
+2. Get a model from the modelfactory
+2. If the parameter is a Eloquent model it will load the first from the database.
+3. A new instance from the class
+
+```php
+/**
+ * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+ */
+public function transformerTag()
+{
+    return '';
+}
+```
+
+#### @transformercollection
+This is the same idea as the @tranformer tag with one different, instead of the return of an item, it will generate the return of a set with two items
+
+```php
+/**
+ * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+ */
+public function transformerCollectionTag()
+{
+    return '';
+}
+```
+
+#### @transformermodel
+The @transformermodel tag is needed for PHP 5.* to get the model. For PHP 7 is it optional to specify the model that is used for the transformer.
+
+#### @response
+If you expliciet want to specify the result of a function you can set it in the docblock
+
+```php
+/**
+ * @response {
+ *  data: [],
+ *}
+ */
+public function responseTag()
+{
+    return '';
+}
+```
+
 #### API responses
 
 If your API route accepts a `GET` method, this package tries to call the API route with all middleware disabled to fetch an example API response. 
