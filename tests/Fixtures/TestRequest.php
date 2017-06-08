@@ -7,7 +7,6 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 
 class TestRequest extends FormRequest
 {
-
     private $filesystem;
 
     public function __construct(
