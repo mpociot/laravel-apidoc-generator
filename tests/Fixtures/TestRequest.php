@@ -3,9 +3,28 @@
 namespace Mpociot\ApiDoc\Tests\Fixtures;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class TestRequest extends FormRequest
 {
+
+    private $filesystem;
+
+    public function __construct(
+        array $query = [],
+        array $request = [],
+        array $attributes = [],
+        array $cookies = [],
+        array $files = [],
+        array $server = [],
+        $content = null,
+        Filesystem $filesystem
+    ) {
+        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
+
+        $this->filesystem = $filesystem;
+    }
+
     public function rules()
     {
         return [
