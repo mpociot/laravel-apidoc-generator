@@ -297,7 +297,7 @@ class LaravelGenerator extends AbstractGenerator
 
         foreach ($reflectionMethod->getParameters() as $parameter) {
             if (! is_null($parameter->getClass())) {
-                $params[] = app($parameter->getClass()->getName());
+                $params[] = app($parameter->getClass()->name);
             } elseif ($parameter->isDefaultValueAvailable()) {
                 $params[] = $parameter->getDefaultValue();
             } else {
