@@ -16,7 +16,6 @@ class DingoGenerator extends AbstractGenerator
      */
     public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
     {
-
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
