@@ -81,7 +81,7 @@ class GenerateDocumentation extends Command
 
         $routePrefixes = explode(",", $routePrefix);
 
-        $parsedRoutes   =   [];
+        $parsedRoutes =   [];
 
         if ($this->option('router') === 'laravel') {
             foreach ($routePrefixes as $routePrefix) {
