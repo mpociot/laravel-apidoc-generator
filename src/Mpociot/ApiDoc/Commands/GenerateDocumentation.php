@@ -79,7 +79,7 @@ class GenerateDocumentation extends Command
 
         $generator->prepareMiddleware($this->option('useMiddlewares'));
 
-        $routePrefixes = explode(",", $routePrefix);
+        $routePrefixes = explode(',', $routePrefix);
 
         $parsedRoutes = [];
 
