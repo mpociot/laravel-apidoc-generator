@@ -433,6 +433,12 @@ abstract class AbstractGenerator
                 $attributeData['value'] = $faker->ipv4;
                 $attributeData['type'] = $rule;
                 break;
+            default:
+                $unknownRuleDescription = Description::parse($rule)->getDescription();
+                if ($unknownRuleDescription) {
+                    $attributeData['description'][] = $unknownRuleDescription;
+                }
+                break;
         }
 
         if ($attributeData['value'] === '') {
