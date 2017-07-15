@@ -376,7 +376,7 @@ class ApiDocGeneratorTest extends TestCase
         $route = new Route(['GET'], '/transformerCollectionTag', ['uses' => TestController::class.'@transformerCollectionTag']);
         $parsed = $this->generator->processRoute($route);
 
-        $this->assertResponse($parsed,'{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+        $this->assertResponse($parsed, '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}');
     }
 
@@ -417,7 +417,6 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertResponse($parsed, '{"data":{"message":"test","status_code":"200"}}');
     }
 
-
     public function testCanParseTransformerTagWithCustomDynamicResponseDataAndCustomSerializer()
     {
         RouteFacade::post('/transformerTagWithCustomDynamicResponseDataAndCustomSerializer', TestController::class.'@transformerTagWithCustomDynamicResponseDataAndCustomSerializer');
@@ -427,9 +426,8 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertResponse($parsed, '{"message":"test","status_code":"200"}');
     }
 
-
     /**
-     * assert response
+     * assert response.
      *
      * @param $parsed
      * @param string $response json response

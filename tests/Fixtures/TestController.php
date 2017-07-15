@@ -126,7 +126,6 @@ class TestController extends Controller
         return '';
     }
 
-
     /**
      * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestMessageTransformer
      * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestStaticMessageResponse

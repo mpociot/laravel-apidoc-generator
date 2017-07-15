@@ -11,7 +11,7 @@ class ResponseMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'api:make-response';
+    protected $name = 'api:make-doc-response';
 
     /**
      * The console command description.
@@ -31,6 +31,7 @@ class ResponseMakeCommand extends GeneratorCommand
      * Get the default namespace for the class.
      *
      * @param  string $rootNamespace
+     *
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)

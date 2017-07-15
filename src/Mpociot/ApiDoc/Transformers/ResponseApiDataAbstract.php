@@ -2,12 +2,10 @@
 
 namespace Mpociot\ApiDoc\Transformers;
 
-use function collect;
-
 abstract class ResponseApiDataAbstract
 {
     /**
-     * @var \Illuminate\Support\Collection $data
+     * @var \Illuminate\Support\Collection
      */
     protected $data;
 
@@ -22,9 +20,10 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Get value by name from data collection
+     * Get value by name from data collection.
      *
      * @param $name
+     *
      * @return mixed
      */
     public function __get($name)
@@ -33,7 +32,7 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Set new value for data collection
+     * Set new value for data collection.
      *
      * @param $name
      * @param $value
@@ -44,7 +43,7 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Get Custom Data
+     * Get Custom Data.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -54,9 +53,10 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Set Custom Data
+     * Set Custom Data.
      *
      * @param array $data
+     *
      * @return $this
      */
     public function setData($data)
@@ -67,7 +67,7 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Get response as object
+     * Get response as object.
      *
      * @return object
      */
@@ -77,7 +77,7 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Get response data to pass to transformers
+     * Get response data to pass to transformers.
      *
      * @return array
      */

@@ -550,22 +550,24 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Get first tag from DocBlock
+     * Get first tag from DocBlock.
      *
      * @param $tags
      * @param array|string $names
+     *
      * @return array
      */
-    protected function getFirstTagFromDocblock($tags,$names)
+    protected function getFirstTagFromDocblock($tags, $names)
     {
         return \array_first($this->getTagsFromDocblock($tags, $names));
     }
 
     /**
-     * Get all tags from DocBlock
+     * Get all tags from DocBlock.
      *
      * @param $tags
      * @param array|string $names
+     *
      * @return array
      */
     protected function getTagsFromDocblock($tags, $names)

@@ -7,7 +7,6 @@ use League\Fractal\Manager;
 use Illuminate\Routing\Route;
 use League\Fractal\Resource\Item;
 use Illuminate\Support\Facades\App;
-use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Support\Facades\Request;
 use League\Fractal\Resource\Collection;
 use Illuminate\Foundation\Http\FormRequest;
@@ -80,7 +79,7 @@ class LaravelGenerator extends AbstractGenerator
     protected function getTransformerResponse($tags)
     {
         try {
-            $transFormerTag = $this->getFirstTagFromDocblock($tags,['transformer', 'transformercollection']);
+            $transFormerTag = $this->getFirstTagFromDocblock($tags, ['transformer', 'transformercollection']);
 
             if (empty($transFormerTag) || count($transFormerTag) == 0) {
                 // we didn't have any of the tags so goodbye
@@ -128,7 +127,7 @@ class LaravelGenerator extends AbstractGenerator
                         } catch (\Exception $e) {
                             // do nothing
                         }
-                    } elseIf ($demoData instanceof \Mpociot\ApiDoc\Transformers\ResponseApiDataAbstract) {
+                    } elseif ($demoData instanceof \Mpociot\ApiDoc\Transformers\ResponseApiDataAbstract) {
                         $additionData = $this->getFirstTagFromDocblock($tags, 'data');
 
                         // check if @data is available
@@ -149,7 +148,7 @@ class LaravelGenerator extends AbstractGenerator
                 }
             }
 
-            $serializerTags = $this->getFirstTagFromDocblock($tags,'serializer');
+            $serializerTags = $this->getFirstTagFromDocblock($tags, 'serializer');
 
             if (is_object($serializerTags)) {
                 $serializer = $serializerTags->getContent();

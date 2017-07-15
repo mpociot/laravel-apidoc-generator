@@ -7,7 +7,7 @@ use Mpociot\ApiDoc\Transformers\ResponseApiDataAbstract;
 class TestMessageResponse extends ResponseApiDataAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function response()
     {
