@@ -87,7 +87,6 @@ class LaravelGenerator extends AbstractGenerator
             }
 
             $modelTag = $this->getFirstTagFromDocblock($tags, ['transformermodel']);
-            //$tag = \array_first($transFormerTags);
             $transformer = $transFormerTag->getContent();
             if (! \class_exists($transformer)) {
                 // if we can't find the transformer we can't generate a response
