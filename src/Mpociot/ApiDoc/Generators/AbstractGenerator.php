@@ -15,20 +15,6 @@ use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
 abstract class AbstractGenerator
 {
     /**
-     * @param $route
-     *
-     * @return mixed
-     */
-    abstract public function getUri($route);
-
-    /**
-     * @param $route
-     *
-     * @return mixed
-     */
-    abstract public function getMethods($route);
-
-    /**
      * @param  \Illuminate\Routing\Route $route
      * @param array $bindings
      * @param bool $withResponse
@@ -55,19 +41,14 @@ abstract class AbstractGenerator
      */
     protected function getDocblockResponse($tags)
     {
-        $responseTags = array_filter($tags, function ($tag) {
-            if (! ($tag instanceof Tag)) {
-                return false;
-            }
-
-            return \strtolower($tag->getName()) == 'response';
-        });
+        $responseTags = $this->getFirstTagFromDocblock($tags, 'response');
         if (empty($responseTags)) {
             return;
         }
-        $responseTag = \array_first($responseTags);
 
-        return \response(\json_encode($responseTag->getContent()));
+        // TODO :: check & fix json format & remove invalid char (\n\t\r ... ) from content to decode json & display in response section right
+
+        return \response(\json_encode($responseTags->getContent()));
     }
 
     /**
@@ -95,91 +76,6 @@ abstract class AbstractGenerator
         }
 
         return $routeData;
-    }
-
-    /**
-     * @param  $route
-     * @param  $bindings
-     * @param  $headers
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function getRouteResponse($route, $bindings, $headers = [])
-    {
-        $uri = $this->addRouteModelBindings($route, $bindings);
-
-        $methods = $this->getMethods($route);
-
-        // Split headers into key - value pairs
-        $headers = collect($headers)->map(function ($value) {
-            $split = explode(':', $value);
-
-            return [trim($split[0]) => trim($split[1])];
-        })->collapse()->toArray();
-
-        //Changes url with parameters like /users/{user} to /users/1
-        $uri = preg_replace('/{(.*?)}/', 1, $uri);
-
-        return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
-    }
-
-    /**
-     * @param $route
-     * @param array $bindings
-     *
-     * @return mixed
-     */
-    protected function addRouteModelBindings($route, $bindings)
-    {
-        $uri = $this->getUri($route);
-        foreach ($bindings as $model => $id) {
-            $uri = str_replace('{'.$model.'}', $id, $uri);
-        }
-
-        return $uri;
-    }
-
-    /**
-     * @param  \Illuminate\Routing\Route  $route
-     *
-     * @return string
-     */
-    protected function getRouteDescription($route)
-    {
-        list($class, $method) = explode('@', $route);
-        $reflection = new ReflectionClass($class);
-        $reflectionMethod = $reflection->getMethod($method);
-
-        $comment = $reflectionMethod->getDocComment();
-        $phpdoc = new DocBlock($comment);
-
-        return [
-            'short' => $phpdoc->getShortDescription(),
-            'long' => $phpdoc->getLongDescription()->getContents(),
-            'tags' => $phpdoc->getTags(),
-        ];
-    }
-
-    /**
-     * @param  string  $route
-     *
-     * @return string
-     */
-    protected function getRouteGroup($route)
-    {
-        list($class, $method) = explode('@', $route);
-        $reflection = new ReflectionClass($class);
-        $comment = $reflection->getDocComment();
-        if ($comment) {
-            $phpdoc = new DocBlock($comment);
-            foreach ($phpdoc->getTags() as $tag) {
-                if ($tag->getName() === 'resource') {
-                    return $tag->getContent();
-                }
-            }
-        }
-
-        return 'general';
     }
 
     /**
@@ -218,43 +114,10 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  array  $arr
-     * @param  string  $first
-     * @param  string  $last
-     *
-     * @return string
-     */
-    protected function fancyImplode($arr, $first, $last)
-    {
-        $arr = array_map(function ($value) {
-            return '`'.$value.'`';
-        }, $arr);
-        array_push($arr, implode($last, array_splice($arr, -2)));
-
-        return implode($first, $arr);
-    }
-
-    protected function splitValuePairs($parameters, $first = 'is ', $last = 'or ')
-    {
-        $attribute = '';
-        collect($parameters)->map(function ($item, $key) use (&$attribute, $first, $last) {
-            $attribute .= '`'.$item.'` ';
-            if (($key + 1) % 2 === 0) {
-                $attribute .= $last;
-            } else {
-                $attribute .= $first;
-            }
-        });
-        $attribute = rtrim($attribute, $last);
-
-        return $attribute;
-    }
-
-    /**
-     * @param  string  $rule
-     * @param  string  $ruleName
-     * @param  array  $attributeData
-     * @param  int  $seed
+     * @param  string $rule
+     * @param  string $ruleName
+     * @param  array $attributeData
+     * @param  int $seed
      *
      * @return void
      */
@@ -387,7 +250,10 @@ abstract class AbstractGenerator
                 break;
             case 'exists':
                 $fieldName = isset($parameters[1]) ? $parameters[1] : $ruleName;
-                $attributeData['description'][] = Description::parse($rule)->with([Str::singular($parameters[0]), $fieldName])->getDescription();
+                $attributeData['description'][] = Description::parse($rule)->with([
+                    Str::singular($parameters[0]),
+                    $fieldName,
+                ])->getDescription();
                 break;
             case 'active_url':
                 $attributeData['type'] = 'url';
@@ -445,49 +311,9 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Call the given URI and return the Response.
-     *
-     * @param  string  $method
-     * @param  string  $uri
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
-     * @param  string  $content
-     *
-     * @return \Illuminate\Http\Response
-     */
-    abstract public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null);
-
-    /**
-     * Transform headers array to array of $_SERVER vars with HTTP_* format.
-     *
-     * @param  array  $headers
-     *
-     * @return array
-     */
-    protected function transformHeadersToServerVars(array $headers)
-    {
-        $server = [];
-        $prefix = 'HTTP_';
-
-        foreach ($headers as $name => $value) {
-            $name = strtr(strtoupper($name), '-', '_');
-
-            if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
-                $name = $prefix.$name;
-            }
-
-            $server[$name] = $value;
-        }
-
-        return $server;
-    }
-
-    /**
      * Parse a string based rule.
      *
-     * @param  string  $rules
+     * @param  string $rules
      *
      * @return array
      */
@@ -510,8 +336,8 @@ abstract class AbstractGenerator
     /**
      * Parse a parameter list.
      *
-     * @param  string  $rule
-     * @param  string  $parameter
+     * @param  string $rule
+     * @param  string $parameter
      *
      * @return array
      */
@@ -541,5 +367,217 @@ abstract class AbstractGenerator
             default:
                 return $rule;
         }
+    }
+
+    /**
+     * @param  array $arr
+     * @param  string $first
+     * @param  string $last
+     *
+     * @return string
+     */
+    protected function fancyImplode($arr, $first, $last)
+    {
+        $arr = array_map(function ($value) {
+            return '`'.$value.'`';
+        }, $arr);
+        array_push($arr, implode($last, array_splice($arr, -2)));
+
+        return implode($first, $arr);
+    }
+
+    protected function splitValuePairs($parameters, $first = 'is ', $last = 'or ')
+    {
+        $attribute = '';
+        collect($parameters)->map(function ($item, $key) use (&$attribute, $first, $last) {
+            $attribute .= '`'.$item.'` ';
+            if (($key + 1) % 2 === 0) {
+                $attribute .= $last;
+            } else {
+                $attribute .= $first;
+            }
+        });
+        $attribute = rtrim($attribute, $last);
+
+        return $attribute;
+    }
+
+    /**
+     * @param  $route
+     * @param  $bindings
+     * @param  $headers
+     *
+     * @return \Illuminate\Http\Response
+     */
+    protected function getRouteResponse($route, $bindings, $headers = [])
+    {
+        $uri = $this->addRouteModelBindings($route, $bindings);
+
+        $methods = $this->getMethods($route);
+
+        // Split headers into key - value pairs
+        $headers = collect($headers)->map(function ($value) {
+            $split = explode(':', $value);
+
+            return [trim($split[0]) => trim($split[1])];
+        })->collapse()->toArray();
+
+        //Changes url with parameters like /users/{user} to /users/1
+        $uri = preg_replace('/{(.*?)}/', 1, $uri);
+
+        return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
+    }
+
+    /**
+     * @param $route
+     * @param array $bindings
+     *
+     * @return mixed
+     */
+    protected function addRouteModelBindings($route, $bindings)
+    {
+        $uri = $this->getUri($route);
+        foreach ($bindings as $model => $id) {
+            $uri = str_replace('{'.$model.'}', $id, $uri);
+        }
+
+        return $uri;
+    }
+
+    /**
+     * @param $route
+     *
+     * @return mixed
+     */
+    abstract public function getUri($route);
+
+    /**
+     * @param $route
+     *
+     * @return mixed
+     */
+    abstract public function getMethods($route);
+
+    /**
+     * Call the given URI and return the Response.
+     *
+     * @param  string $method
+     * @param  string $uri
+     * @param  array $parameters
+     * @param  array $cookies
+     * @param  array $files
+     * @param  array $server
+     * @param  string $content
+     *
+     * @return \Illuminate\Http\Response
+     */
+    abstract public function callRoute(
+        $method,
+        $uri,
+        $parameters = [],
+        $cookies = [],
+        $files = [],
+        $server = [],
+        $content = null
+    );
+
+    /**
+     * @param  \Illuminate\Routing\Route $route
+     *
+     * @return string
+     */
+    protected function getRouteDescription($route)
+    {
+        list($class, $method) = explode('@', $route);
+        $reflection = new ReflectionClass($class);
+        $reflectionMethod = $reflection->getMethod($method);
+
+        $comment = $reflectionMethod->getDocComment();
+        $phpdoc = new DocBlock($comment);
+
+        return [
+            'short' => $phpdoc->getShortDescription(),
+            'long' => $phpdoc->getLongDescription()->getContents(),
+            'tags' => $phpdoc->getTags(),
+        ];
+    }
+
+    /**
+     * @param  string $route
+     *
+     * @return string
+     */
+    protected function getRouteGroup($route)
+    {
+        list($class, $method) = explode('@', $route);
+        $reflection = new ReflectionClass($class);
+        $comment = $reflection->getDocComment();
+        if ($comment) {
+            $phpdoc = new DocBlock($comment);
+            foreach ($phpdoc->getTags() as $tag) {
+                if ($tag->getName() === 'resource') {
+                    return $tag->getContent();
+                }
+            }
+        }
+
+        return 'general';
+    }
+
+    /**
+     * Transform headers array to array of $_SERVER vars with HTTP_* format.
+     *
+     * @param  array $headers
+     *
+     * @return array
+     */
+    protected function transformHeadersToServerVars(array $headers)
+    {
+        $server = [];
+        $prefix = 'HTTP_';
+
+        foreach ($headers as $name => $value) {
+            $name = strtr(strtoupper($name), '-', '_');
+
+            if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
+                $name = $prefix.$name;
+            }
+
+            $server[$name] = $value;
+        }
+
+        return $server;
+    }
+
+    /**
+     * Get first tag from DocBlock
+     *
+     * @param $tags
+     * @param array|string $names
+     * @return array
+     */
+    protected function getFirstTagFromDocblock($tags,$names)
+    {
+        return \array_first($this->getTagsFromDocblock($tags, $names));
+    }
+
+    /**
+     * Get all tags from DocBlock
+     *
+     * @param $tags
+     * @param array|string $names
+     * @return array
+     */
+    protected function getTagsFromDocblock($tags, $names)
+    {
+        $names = \array_wrap($names);
+
+        return \array_filter($tags, function ($tag) use ($names) {
+            if (! ($tag instanceof Tag)) {
+                return false;
+            }
+
+            return \in_array(\strtolower($tag->getName()), $names);
+        });
     }
 }

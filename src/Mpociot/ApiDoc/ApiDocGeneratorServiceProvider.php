@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc;
 
 use Illuminate\Support\ServiceProvider;
+use Mpociot\ApiDoc\Commands\ResponseMakeCommand;
 use Mpociot\ApiDoc\Commands\UpdateDocumentation;
 use Mpociot\ApiDoc\Commands\GenerateDocumentation;
 
@@ -41,6 +42,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         $this->commands([
             'apidoc.generate',
             'apidoc.update',
+            ResponseMakeCommand::class,
         ]);
     }
 

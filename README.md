@@ -167,6 +167,43 @@ public function transformerCollectionTag()
 #### @transformermodel
 The @transformermodel tag is needed for PHP 5.* to get the model. For PHP 7 is it optional to specify the model that is used for the transformer.
 
+To specify custom response data class, use `api:make-doc-response` command to create response class
+
+```sh
+$ php artisan api:make-doc-response TestMessageResponse
+```
+
+Then use class in `@transformermodel` tag
+
+```php
+/**
+* @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestMessageTransformer
+* @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+*/
+```
+
+If you want pass data from comment of function to response data class you can use `@data` tag 
+
+```php
+/**
+* @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestMessageTransformer
+* @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+* @data message|test,status|200
+*/
+```
+
+Then from `response` function in response data class you can access to data
+
+```php
+public function response()
+{
+    return [
+        'message' => $this->message, // test
+        'status_code' => $this->status, // 200
+    ];
+}
+```
+
 #### @response
 If you expliciet want to specify the result of a function you can set it in the docblock
 
