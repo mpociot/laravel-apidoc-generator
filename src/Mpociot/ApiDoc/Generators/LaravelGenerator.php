@@ -47,6 +47,14 @@ class LaravelGenerator extends AbstractGenerator
                 }
             }
             if (! $response) {
+                $responseClassResponse = $this->getResponseClassResponse($routeDescription['tags']);
+                if ($responseClassResponse) {
+                    // we have a class response from the docblock ( @responseClass )
+                    $response = $responseClassResponse;
+                    $showresponse = true;
+                }
+            }
+            if (! $response) {
                 $response = $this->getRouteResponse($route, $bindings, $headers);
             }
             if ($response->headers->get('Content-Type') === 'application/json') {
@@ -126,23 +134,6 @@ class LaravelGenerator extends AbstractGenerator
                         } catch (\Exception $e) {
                             // do nothing
                         }
-                    } elseif ($demoData instanceof \Mpociot\ApiDoc\Transformers\ResponseApiDataAbstract) {
-                        $additionData = $this->getFirstTagFromDocblock($tags, 'data');
-
-                        // check if @data is available
-                        if (is_object($additionData)) {
-                            $additionData = explode(',', $additionData->getContent());
-
-                            $additionData = array_column(array_map(function ($v) {
-                                return explode('|', $v);
-                            }, $additionData), 1, 0);
-                        }
-
-                        try {
-                            $demoData = $demoData->setData($additionData)->toObject();
-                        } catch (\Exception $e) {
-                            // do nothing
-                        }
                     }
                 }
             }
@@ -171,6 +162,49 @@ class LaravelGenerator extends AbstractGenerator
             return \response($fractal->createData($resource)->toJson());
         } catch (\Exception $e) {
             // it isn't possible to parse the transformer
+            return;
+        }
+    }
+
+    /**
+     * Get response content use responseclass tag
+     *
+     * @param $tags
+     * @return bool|void
+     */
+    protected function getResponseClassResponse($tags)
+    {
+        try {
+            $responseClassTag = $this->getFirstTagFromDocblock($tags, ['responseclass']);
+
+            if (empty($responseClassTag) || count($responseClassTag) == 0) {
+                // we didn't have any of the tags so goodbye
+                return false;
+            }
+
+            $responseClass = $responseClassTag->getContent();
+            if (! \class_exists($responseClass)) {
+                // if we can't find the response class we can't generate a response
+                return;
+            }
+
+            $additionData = $this->getFirstTagFromDocblock($tags, 'data');
+
+            // check if @data is available
+            if (is_object($additionData)) {
+                $additionData = explode(',', $additionData->getContent());
+
+                $additionData = array_column(array_map(function ($v) {
+                    return explode('|', $v);
+                }, $additionData), 1, 0);
+            } else {
+                $additionData = null;
+            }
+
+            $demoData = new $responseClass($additionData);
+
+            return \response($demoData);
+        } catch (\Exception $exception) {
             return;
         }
     }

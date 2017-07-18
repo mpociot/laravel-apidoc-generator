@@ -127,8 +127,7 @@ class TestController extends Controller
     }
 
     /**
-     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestMessageTransformer
-     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestStaticMessageResponse
+     * @responseclass \Mpociot\ApiDoc\Tests\Fixtures\TestStaticMessageResponse
      */
     public function transformerTagWithCustomStaticResponseData()
     {
@@ -136,22 +135,10 @@ class TestController extends Controller
     }
 
     /**
-     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestMessageTransformer
-     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+     * @responseClass \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
      * @data message|test,status|200
      */
     public function transformerTagWithCustomDynamicResponseData()
-    {
-        return '';
-    }
-
-    /**
-     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestMessageTransformer
-     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
-     * @serializer \League\Fractal\Serializer\ArraySerializer
-     * @data message|test,status|200
-     */
-    public function transformerTagWithCustomDynamicResponseDataAndCustomSerializer()
     {
         return '';
     }

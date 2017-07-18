@@ -2,7 +2,12 @@
 
 namespace Mpociot\ApiDoc\Transformers;
 
-abstract class ResponseApiDataAbstract
+use ArrayAccess;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
+use JsonSerializable;
+
+abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 {
     /**
      * @var \Illuminate\Support\Collection
@@ -20,26 +25,14 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Get value by name from data collection.
+     * Determine if an item exists at an offset.
      *
-     * @param $name
-     *
-     * @return mixed
+     * @param  mixed $key
+     * @return bool
      */
-    public function __get($name)
+    public function offsetExists($key)
     {
-        return $this->getData()->get($name);
-    }
-
-    /**
-     * Set new value for data collection.
-     *
-     * @param $name
-     * @param $value
-     */
-    public function __set($name, $value)
-    {
-        $this->getData()[$name] = $value;
+        return $this->getData()->offsetExists($key);
     }
 
     /**
@@ -67,6 +60,70 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
+     * Get an item at a given offset.
+     *
+     * @param  mixed $key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->{$key};
+    }
+
+    /**
+     * Set the item at a given offset.
+     *
+     * @param  mixed $key
+     * @param  mixed $value
+     * @return void
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->getData()->offsetSet($key, $value);
+    }
+
+    /**
+     * Unset the item at a given offset.
+     *
+     * @param  string $key
+     * @return void
+     */
+    public function offsetUnset($key)
+    {
+        $this->getData()->offsetUnset($key);
+    }
+
+    /**
+     * Get value by name from data collection.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->getData()->get($name) ?? data_get($this->response(), $name);
+    }
+
+    /**
+     * Set new value for data collection.
+     *
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        $this->getData()->offsetSet($name, $value);
+    }
+
+    /**
+     * Get response data to pass to transformers.
+     *
+     * @return array
+     */
+    abstract public function response();
+
+    /**
      * Get response as object.
      *
      * @return object
@@ -77,9 +134,71 @@ abstract class ResponseApiDataAbstract
     }
 
     /**
-     * Get response data to pass to transformers.
+     * Get the collection of items as a plain array.
      *
      * @return array
      */
-    abstract public function response();
+    public function toArray()
+    {
+        return array_map(function ($value) {
+            return $value instanceof Arrayable ? $value->toArray() : $value;
+        }, $this->response());
+    }
+
+    /**
+     * Convert the collection to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJson();
+    }
+
+    /**
+     * Get the collection of items as JSON.
+     *
+     * @param  int $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->jsonSerialize(), $options);
+    }
+
+    /**
+     * Convert the object into something JSON serializable.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array_map(function ($value) {
+            if ($value instanceof JsonSerializable) {
+                return $value->jsonSerialize();
+            } elseif ($value instanceof Jsonable) {
+                return json_decode($value->toJson(), true);
+            } elseif ($value instanceof Arrayable) {
+                return $value->toArray();
+            } else {
+                return $value;
+            }
+        }, $this->response());
+    }
+
+    /**
+     * Handle dynamic data collection method
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        if (! method_exists($this, $name)) {
+            return $this->getData()->$name(...$arguments);
+        }
+
+        return $this->$name(...$arguments);
+    }
 }
