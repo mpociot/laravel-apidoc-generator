@@ -167,9 +167,10 @@ class LaravelGenerator extends AbstractGenerator
     }
 
     /**
-     * Get response content use responseclass tag
+     * Get response content use responseclass tag.
      *
      * @param $tags
+     *
      * @return bool|void
      */
     protected function getResponseClassResponse($tags)

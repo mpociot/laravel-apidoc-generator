@@ -3,9 +3,9 @@
 namespace Mpociot\ApiDoc\Transformers;
 
 use ArrayAccess;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
 
 abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonable, JsonSerializable
 {
@@ -28,6 +28,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
      * Determine if an item exists at an offset.
      *
      * @param  mixed $key
+     *
      * @return bool
      */
     public function offsetExists($key)
@@ -63,6 +64,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
      * Get an item at a given offset.
      *
      * @param  mixed $key
+     *
      * @return mixed
      */
     public function offsetGet($key)
@@ -75,6 +77,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
      *
      * @param  mixed $key
      * @param  mixed $value
+     *
      * @return void
      */
     public function offsetSet($key, $value)
@@ -86,6 +89,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
      * Unset the item at a given offset.
      *
      * @param  string $key
+     *
      * @return void
      */
     public function offsetUnset($key)
@@ -159,6 +163,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
      * Get the collection of items as JSON.
      *
      * @param  int $options
+     *
      * @return string
      */
     public function toJson($options = 0)
@@ -187,10 +192,11 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
     }
 
     /**
-     * Handle dynamic data collection method
+     * Handle dynamic data collection method.
      *
      * @param $name
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($name, $arguments)
