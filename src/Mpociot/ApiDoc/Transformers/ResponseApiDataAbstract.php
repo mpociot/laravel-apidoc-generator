@@ -15,7 +15,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
     protected $data;
 
     /**
-     * CustomDataResponseTransformer constructor.
+     * ResponseApiDataAbstract constructor.
      *
      * @param array $data
      */
@@ -189,6 +189,45 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
                 return $value;
             }
         }, $this->response());
+    }
+
+    /**
+     * Return a new JSON response.
+     *
+     * @author Spatie
+     *
+     * @param  callable|int $statusCode
+     * @param  callable|array $headers
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function respond($statusCode = 200, $headers = [])
+    {
+        $response = new JsonResponse();
+
+        $response->setData($this->toArray());
+
+        if (is_int($statusCode)) {
+            $statusCode = function (JsonResponse $response) use ($statusCode) {
+                return $response->setStatusCode($statusCode);
+            };
+        }
+
+        if (is_array($headers)) {
+            $headers = function (JsonResponse $response) use ($headers) {
+                return $response->withHeaders($headers);
+            };
+        }
+
+        if (is_callable($statusCode)) {
+            $statusCode($response);
+        }
+
+        if (is_callable($headers)) {
+            $headers($response);
+        }
+
+        return $response;
     }
 
     /**

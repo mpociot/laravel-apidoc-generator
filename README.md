@@ -169,7 +169,7 @@ public function transformerCollectionTag()
 The @transformermodel tag is needed for PHP 5.* to get the model. For PHP 7 is it optional to specify the model that is used for the transformer.
 
 ### @responseclass
-To specify custom response data class, use `api:make-doc-response` command to create response class
+To specify custom response data class, use `api:make-api-response` command to create response class
 
 ```sh
 $ php artisan api:make-doc-response TestMessageResponse

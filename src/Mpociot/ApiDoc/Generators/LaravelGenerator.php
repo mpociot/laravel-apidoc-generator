@@ -146,7 +146,7 @@ class LaravelGenerator extends AbstractGenerator
                         }
                     }
                 }
-            }else{
+            } else {
                 // or try get data use ( @data ) tag
                 $demoData = $this->getDataTag($tags);
             }
@@ -202,7 +202,7 @@ class LaravelGenerator extends AbstractGenerator
                 return;
             }
 
-            $demoData = new $responseClass($this->getDataTag($tags,null));
+            $demoData = new $responseClass($this->getDataTag($tags, null));
 
             return \response($demoData);
         } catch (\Exception $exception) {
@@ -322,13 +322,13 @@ class LaravelGenerator extends AbstractGenerator
     }
 
     /**
-     * Get Custom Data from data tag
+     * Get Custom Data from data tag.
      *
      * @param $tags
      * @param array $default
      * @return array|null
      */
-    protected function getDataTag($tags,$default = [])
+    protected function getDataTag($tags, $default = [])
     {
         $additionData = $this->getFirstTagFromDocblock($tags, 'data');
 
@@ -346,9 +346,15 @@ class LaravelGenerator extends AbstractGenerator
         return $additionData;
     }
 
+    /**
+     * Get Response use @data tag.
+     *
+     * @param $tags
+     * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     protected function getDataResponse($tags)
     {
-        $data = $this->getDataTag($tags,false);
+        $data = $this->getDataTag($tags, false);
 
         return $data ? \response($data) : false;
     }

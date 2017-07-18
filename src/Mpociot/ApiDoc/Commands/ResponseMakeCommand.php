@@ -11,7 +11,7 @@ class ResponseMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'api:make-doc-response';
+    protected $name = 'api:make-api-response';
 
     /**
      * The console command description.
