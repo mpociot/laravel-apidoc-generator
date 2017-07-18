@@ -115,4 +115,31 @@ class TestController extends Controller
     {
         return '';
     }
+
+    /**
+     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestModel
+     * @serializer \League\Fractal\Serializer\ArraySerializer
+     */
+    public function transformerTagWithCustomSerializer()
+    {
+        return '';
+    }
+
+    /**
+     * @responseclass \Mpociot\ApiDoc\Tests\Fixtures\TestStaticMessageResponse
+     */
+    public function transformerTagWithCustomStaticResponseData()
+    {
+        return '';
+    }
+
+    /**
+     * @responseClass \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+     * @data message|test,status|200
+     */
+    public function transformerTagWithCustomDynamicResponseData()
+    {
+        return '';
+    }
 }

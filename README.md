@@ -167,6 +167,72 @@ public function transformerCollectionTag()
 #### @transformermodel
 The @transformermodel tag is needed for PHP 5.* to get the model. For PHP 7 is it optional to specify the model that is used for the transformer.
 
+### @responseclass
+
+To specify custom response data class, use `api:make-doc-response` command to create response class
+
+```sh
+$ php artisan api:make-doc-response TestMessageResponse
+```
+
+Then use class in `@responseclass` tag
+
+```php
+/**
+* @responseclass \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+*/
+```
+
+If you want pass data from comment of function to response data class you can use `@data` tag 
+
+```php
+/**
+* @responseclass \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+* @data message|test,status|200
+*/
+```
+
+Then from `response` function in response data class you can access to data
+
+```php
+public function response()
+{
+    return [
+        'message' => $this->message, // test
+        'status_code' => $this->status, // 200
+    ];
+}
+```
+
+You can use same response class as json response directly
+
+```php
+public function index()
+{
+   return new TestMessageResponse();
+}
+```
+
+Or you can also use custom transformer with response class
+
+```php
+public function index()
+{
+   return fractal(new TestMessageResponse(), new TestMessageTransformer())->respond();
+}
+```
+
+You can pass custom data to response class same as comment of function 
+
+```php
+public function index()
+{
+   return fractal(new TestMessageResponse(['message' => 'test','status' => 200]), new TestMessageTransformer())->respond();
+}
+```
+
+* Note: all responses classes will generate in this path `\App\Api\Responses\`
+
 #### @response
 If you expliciet want to specify the result of a function you can set it in the docblock
 
