@@ -19,9 +19,9 @@ class TestTransformerUseData extends TransformerAbstract
     public function transform($data)
     {
         return [
-            'id' => $data->id,
-            'description' => $data->description,
-            'name' => $data->name,
+            'id' => (int) $data['id'],
+            'description' => $data['description'],
+            'name' => $data['name'],
         ];
     }
 }

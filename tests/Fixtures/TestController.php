@@ -144,7 +144,7 @@ class TestController extends Controller
     }
 
     /**
-     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformerUseData
      * @data id|1,description|Welcome on this test versions,name|TestName
      */
     public function transformerTagWithData()
@@ -153,10 +153,18 @@ class TestController extends Controller
     }
 
     /**
-     * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformerUseData
      * @data id|1,description|Welcome on this test versions,name|TestName
      */
     public function transformerCollectionTagWithData()
+    {
+        return '';
+    }
+
+    /**
+     * @data id|1,description|Welcome on this test versions,name|TestName
+     */
+    public function dataTag()
     {
         return '';
     }

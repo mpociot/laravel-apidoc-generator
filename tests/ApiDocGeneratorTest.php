@@ -448,7 +448,20 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertResponse($parsed, '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}');
     }
-    
+
+    public function testCanParseDataTagWithOutAnyOthersTag()
+    {
+        RouteFacade::post('/dataTag', TestController::class.'@dataTag');
+        $route = new Route(['GET'], '/dataTag', ['uses' => TestController::class.'@dataTag']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{
+    "id": "1",
+    "description": "Welcome on this test versions",
+    "name": "TestName"
+}');
+    }
+
     /**
      * assert response.
      *

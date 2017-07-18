@@ -55,6 +55,14 @@ class LaravelGenerator extends AbstractGenerator
                 }
             }
             if (! $response) {
+                $dataResponse = $this->getDataResponse($routeDescription['tags']);
+                if ($dataResponse) {
+                    // we have a data response from the docblock ( @data )
+                    $response = $dataResponse;
+                    $showresponse = true;
+                }
+            }
+            if (! $response) {
                 $response = $this->getRouteResponse($route, $bindings, $headers);
             }
             if ($response->headers->get('Content-Type') === 'application/json') {
@@ -336,5 +344,12 @@ class LaravelGenerator extends AbstractGenerator
         }, $additionData), 1, 0);
 
         return $additionData;
+    }
+
+    protected function getDataResponse($tags)
+    {
+        $data = $this->getDataTag($tags,false);
+
+        return $data ? \response($data) : false;
     }
 }
