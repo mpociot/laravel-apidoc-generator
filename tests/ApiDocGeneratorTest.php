@@ -435,7 +435,6 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertResponse($parsed, '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}');
     }
 
-
     public function testCanParseTransformerCollectionTagWithData()
     {
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {

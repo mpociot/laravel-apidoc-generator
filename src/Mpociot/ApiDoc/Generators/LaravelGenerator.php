@@ -326,6 +326,7 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @param $tags
      * @param array $default
+     *
      * @return array|null
      */
     protected function getDataTag($tags, $default = [])
@@ -350,6 +351,7 @@ class LaravelGenerator extends AbstractGenerator
      * Get Response use @data tag.
      *
      * @param $tags
+     *
      * @return bool|\Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
     protected function getDataResponse($tags)
