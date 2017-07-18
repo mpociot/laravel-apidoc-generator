@@ -555,7 +555,7 @@ abstract class AbstractGenerator
      * @param $tags
      * @param array|string $names
      *
-     * @return array
+     * @return \Mpociot\Reflection\DocBlock\Tag
      */
     protected function getFirstTagFromDocblock($tags, $names)
     {

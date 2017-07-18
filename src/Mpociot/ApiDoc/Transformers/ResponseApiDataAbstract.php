@@ -106,7 +106,7 @@ abstract class ResponseApiDataAbstract implements ArrayAccess, Arrayable, Jsonab
      */
     public function __get($name)
     {
-        return $this->getData()->get($name) ?? data_get($this->response(), $name);
+        return ($value = $this->getData()->get($name)) ? $value : data_get($this->response(), $name);
     }
 
     /**
