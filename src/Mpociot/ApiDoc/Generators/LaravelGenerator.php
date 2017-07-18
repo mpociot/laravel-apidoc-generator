@@ -116,6 +116,8 @@ class LaravelGenerator extends AbstractGenerator
                     $type = (string) $parameter->getType();
                 }
             }
+
+            // if we have modelTag
             if ($type) {
                 // we have a class so we try to create an instance
                 $demoData = new $type;
@@ -136,6 +138,9 @@ class LaravelGenerator extends AbstractGenerator
                         }
                     }
                 }
+            }else{
+                // or try get data use ( @data ) tag
+                $demoData = $this->getDataTag($tags);
             }
 
             $serializerTags = $this->getFirstTagFromDocblock($tags, 'serializer');
@@ -189,20 +194,7 @@ class LaravelGenerator extends AbstractGenerator
                 return;
             }
 
-            $additionData = $this->getFirstTagFromDocblock($tags, 'data');
-
-            // check if @data is available
-            if (is_object($additionData)) {
-                $additionData = explode(',', $additionData->getContent());
-
-                $additionData = array_column(array_map(function ($v) {
-                    return explode('|', $v);
-                }, $additionData), 1, 0);
-            } else {
-                $additionData = null;
-            }
-
-            $demoData = new $responseClass($additionData);
+            $demoData = new $responseClass($this->getDataTag($tags,null));
 
             return \response($demoData);
         } catch (\Exception $exception) {
@@ -319,5 +311,30 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return [];
+    }
+
+    /**
+     * Get Custom Data from data tag
+     *
+     * @param $tags
+     * @param array $default
+     * @return array|null
+     */
+    protected function getDataTag($tags,$default = [])
+    {
+        $additionData = $this->getFirstTagFromDocblock($tags, 'data');
+
+        if (empty($additionData) || count($additionData) == 0) {
+            // we didn't have any of the tags so goodbye
+            return $default;
+        }
+
+        $additionData = explode(',', $additionData->getContent());
+
+        $additionData = array_column(array_map(function ($v) {
+            return explode('|', $v);
+        }, $additionData), 1, 0);
+
+        return $additionData;
     }
 }

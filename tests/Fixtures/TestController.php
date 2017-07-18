@@ -142,4 +142,22 @@ class TestController extends Controller
     {
         return '';
     }
+
+    /**
+     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @data id|1,description|Welcome on this test versions,name|TestName
+     */
+    public function transformerTagWithData()
+    {
+        return '';
+    }
+
+    /**
+     * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @data id|1,description|Welcome on this test versions,name|TestName
+     */
+    public function transformerCollectionTagWithData()
+    {
+        return '';
+    }
 }

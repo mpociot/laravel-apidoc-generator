@@ -423,6 +423,32 @@ class ApiDocGeneratorTest extends TestCase
 }');
     }
 
+    public function testCanParseTransformerTagWithData()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('The transformer tag without model need PHP 7');
+        } //
+        RouteFacade::post('/transformerTagWithData', TestController::class.'@transformerTagWithData');
+        $route = new Route(['GET'], '/transformerTagWithData', ['uses' => TestController::class.'@transformerTagWithData']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}');
+    }
+
+
+    public function testCanParseTransformerCollectionTagWithData()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('The transformer tag without model need PHP 7');
+        }
+        RouteFacade::post('/transformerCollectionTagWithData', TestController::class.'@transformerCollectionTagWithData');
+        $route = new Route(['GET'], '/transformerCollectionTagWithData', ['uses' => TestController::class.'@transformerCollectionTagWithData']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}');
+    }
+    
     /**
      * assert response.
      *
