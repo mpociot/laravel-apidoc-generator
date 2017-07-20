@@ -29,6 +29,7 @@ class GenerateDocumentation extends Command
                             {--noPostmanCollection : Disable Postman collection creation}
                             {--useMiddlewares : Use all configured route middlewares}
                             {--authProvider=users : The authentication provider to use for API response calls}
+                            {--authGuard=web : The authentication guard to use for API response calls}
                             {--actAsUserId= : The user ID to use for API response calls}
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--force : Force rewriting of existing routes}
@@ -227,7 +228,7 @@ class GenerateDocumentation extends Command
                 $provider = $this->option('authProvider');
                 $userModel = config("auth.providers.$provider.model");
                 $user = $userModel::find((int) $actAs);
-                $this->laravel['auth']->guard()->setUser($user);
+                $this->laravel['auth']->guard($this->option('authGuard'))->setUser($user);
             }
         }
     }
