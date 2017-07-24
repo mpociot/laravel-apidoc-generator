@@ -140,6 +140,7 @@ With the transformer you can define the transformer that is used for the result 
 2. Get a model from the modelfactory
 2. If the parameter is a Eloquent model it will load the first from the database.
 3. A new instance from the class
+4. Check if there is a `@data` tag and use as data to transformer
 
 ```php
 /**
@@ -167,6 +168,52 @@ public function transformerCollectionTag()
 #### @transformermodel
 The @transformermodel tag is needed for PHP 5.* to get the model. For PHP 7 is it optional to specify the model that is used for the transformer.
 
+### @responseclass
+To specify custom response data class, use `api:make-api-response` command to create response class
+
+```sh
+$ php artisan api:make-doc-response TestMessageResponse
+```
+
+Then use class in `@responseclass` tag
+
+```php
+/**
+* @responseclass \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+*/
+public function index()
+{
+   return new TestMessageResponse();
+}
+```
+
+If you want pass data from comment of function to response data class you can use `@data` tag 
+
+```php
+/**
+* @responseclass \Mpociot\ApiDoc\Tests\Fixtures\TestMessageResponse
+* @data message|test,status|200
+*/
+public function index()
+{
+   return new TestMessageResponse(['message' => 'test','status' => 200]);
+}
+```
+
+Then from `response` function in response data class you can access to data
+
+```php
+public function response()
+{
+    return [
+        'message' => $this->message, // test
+        'status_code' => $this->status, // 200
+    ];
+}
+```
+
+> Note: all responses classes will generate in this path `\App\Api\Responses\`
+
 #### @response
 If you expliciet want to specify the result of a function you can set it in the docblock
 
@@ -181,6 +228,51 @@ public function responseTag()
     return '';
 }
 ```
+
+### @data
+you can set custom data as response directly, the data will pass as an array (key => value), Add between key and value `|` and between items  `,`
+```php
+/**
+ * @data message|thanks you
+ */
+public function doSomeThing($id)
+{
+    return response()->json(['message' => 'thanks you']);
+}
+```
+
+If you want to pass custom data to `@transformer` or `@transformercollection` or `@responseclass`
+
+```php
+/**
+ * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformerUseData
+ * @data id|1,description|Welcome on this test versions,name|TestName
+*/
+public function index()
+{
+   return fractal(['id' => 1,'description' => 'Welcome on this test versions','name' => 'TestName'], new TestTransformerUseData())->respond();
+}
+```
+
+Then from transform method, you can access to data (as array)
+
+```php
+/**
+ * A Fractal transformer.
+ *
+ * @return array
+ */
+public function transform($data)
+{
+    return [
+       'id' => (int) $data['id'],
+        'description' => $data['description'],
+       'name' => $data['name'],
+    ];
+}
+```
+
+> Note: `@data` support only one level of element, if you want complex output data then using `@responseclass`
 
 #### API responses
 

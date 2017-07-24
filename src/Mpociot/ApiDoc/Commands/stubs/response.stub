@@ -1,0 +1,16 @@
+<?php
+
+namespace DummyNamespace;
+
+use Mpociot\ApiDoc\Transformers\ResponseApiDataAbstract;
+
+class DummyClass extends ResponseApiDataAbstract
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function response()
+    {
+        // TODO :: implement response method
+    }
+}

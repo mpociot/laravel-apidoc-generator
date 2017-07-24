@@ -342,10 +342,8 @@ class ApiDocGeneratorTest extends TestCase
         RouteFacade::post('/responseTag', TestController::class.'@responseTag');
         $route = new Route(['GET'], '/responseTag', ['uses' => TestController::class.'@responseTag']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertTrue(is_array($parsed));
-        $this->assertArrayHasKey('showresponse', $parsed);
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertSame($parsed['response'], '"{\n data: [],\n}"');
+
+        $this->assertResponse($parsed, '"{\n data: [],\n}"');
     }
 
     public function testCanParseTransformerTag()
@@ -356,13 +354,8 @@ class ApiDocGeneratorTest extends TestCase
         RouteFacade::post('/transformerTag', TestController::class.'@transformerTag');
         $route = new Route(['GET'], '/transformerTag', ['uses' => TestController::class.'@transformerTag']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertTrue(is_array($parsed));
-        $this->assertArrayHasKey('showresponse', $parsed);
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertSame(
-            $parsed['response'],
-            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
-        );
+
+        $this->assertResponse($parsed, '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}');
     }
 
     public function testCanParseTransformerTagWithModel()
@@ -370,13 +363,8 @@ class ApiDocGeneratorTest extends TestCase
         RouteFacade::post('/transformerTagWithModel', TestController::class.'@transformerTagWithModel');
         $route = new Route(['GET'], '/transformerTagWithModel', ['uses' => TestController::class.'@transformerTagWithModel']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertTrue(is_array($parsed));
-        $this->assertArrayHasKey('showresponse', $parsed);
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertSame(
-            $parsed['response'],
-            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
-        );
+
+        $this->assertResponse($parsed, '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}');
     }
 
     public function testCanParseTransformerCollectionTag()
@@ -387,14 +375,9 @@ class ApiDocGeneratorTest extends TestCase
         RouteFacade::post('/transformerCollectionTag', TestController::class.'@transformerCollectionTag');
         $route = new Route(['GET'], '/transformerCollectionTag', ['uses' => TestController::class.'@transformerCollectionTag']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertTrue(is_array($parsed));
-        $this->assertArrayHasKey('showresponse', $parsed);
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertSame(
-            $parsed['response'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
-            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
-        );
+
+        $this->assertResponse($parsed, '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}');
     }
 
     public function testCanParseTransformerCollectionTagWithModel()
@@ -402,13 +385,93 @@ class ApiDocGeneratorTest extends TestCase
         RouteFacade::post('/transformerCollectionTagWithModel', TestController::class.'@transformerCollectionTagWithModel');
         $route = new Route(['GET'], '/transformerCollectionTagWithModel', ['uses' => TestController::class.'@transformerCollectionTagWithModel']);
         $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}');
+    }
+
+    public function testCanParseTransformerTagWithCustomSerializer()
+    {
+        RouteFacade::post('/transformerTagWithCustomSerializer', TestController::class.'@transformerTagWithCustomSerializer');
+        $route = new Route(['GET'], '/transformerTagWithCustomSerializer', ['uses' => TestController::class.'@transformerTagWithCustomSerializer']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{"id":1,"description":"Welcome on this test versions","name":"TestName"}');
+    }
+
+    public function testCanParseTransformerTagWithCustomStaticResponseData()
+    {
+        RouteFacade::post('/transformerTagWithCustomStaticResponseData', TestController::class.'@transformerTagWithCustomStaticResponseData');
+        $route = new Route(['GET'], '/transformerTagWithCustomStaticResponseData', ['uses' => TestController::class.'@transformerTagWithCustomStaticResponseData']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{
+    "message": "test",
+    "status_code": "200"
+}');
+    }
+
+    public function testCanParseTransformerTagWithCustomDynamicResponseData()
+    {
+        RouteFacade::post('/transformerTagWithCustomDynamicResponseData', TestController::class.'@transformerTagWithCustomDynamicResponseData');
+        $route = new Route(['GET'], '/transformerTagWithCustomDynamicResponseData', ['uses' => TestController::class.'@transformerTagWithCustomDynamicResponseData']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{
+    "message": "test",
+    "status_code": "200"
+}');
+    }
+
+    public function testCanParseTransformerTagWithData()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('The transformer tag without model need PHP 7');
+        } //
+        RouteFacade::post('/transformerTagWithData', TestController::class.'@transformerTagWithData');
+        $route = new Route(['GET'], '/transformerTagWithData', ['uses' => TestController::class.'@transformerTagWithData']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}');
+    }
+
+    public function testCanParseTransformerCollectionTagWithData()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
+            $this->markTestSkipped('The transformer tag without model need PHP 7');
+        }
+        RouteFacade::post('/transformerCollectionTagWithData', TestController::class.'@transformerCollectionTagWithData');
+        $route = new Route(['GET'], '/transformerCollectionTagWithData', ['uses' => TestController::class.'@transformerCollectionTagWithData']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}');
+    }
+
+    public function testCanParseDataTagWithOutAnyOthersTag()
+    {
+        RouteFacade::post('/dataTag', TestController::class.'@dataTag');
+        $route = new Route(['GET'], '/dataTag', ['uses' => TestController::class.'@dataTag']);
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertResponse($parsed, '{
+    "id": "1",
+    "description": "Welcome on this test versions",
+    "name": "TestName"
+}');
+    }
+
+    /**
+     * assert response.
+     *
+     * @param $parsed
+     * @param string $response json response
+     */
+    protected function assertResponse($parsed, $response)
+    {
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $this->assertSame(
-            $parsed['response'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
-            '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
-        );
+        $this->assertSame($parsed['response'], $response);
     }
 }
