@@ -42,7 +42,7 @@
         "laravel": {
             "providers": [
                 "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
-            ],
+            ]
        }
     }
 }
