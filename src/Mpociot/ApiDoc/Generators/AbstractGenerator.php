@@ -86,7 +86,7 @@ abstract class AbstractGenerator
                 'type' => null,
                 'default' => '',
                 'value' => '',
-                'description' => [],
+                'description' => trans()->hasForLocale($key = 'validation.attributes.' . $attribute) ? [trans()->get($key)] : [],
             ];
             foreach ($rules as $ruleName => $rule) {
                 $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
