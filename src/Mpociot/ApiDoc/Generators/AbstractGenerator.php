@@ -100,7 +100,7 @@ abstract class AbstractGenerator
             foreach ($rules as $ruleName => $rule) {
                 $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
             }
-            $routeData['parameters'][$attribute] = $attributeData;
+            $routeData['parameters'][str_replace('.0','.*',$attribute)] = $attributeData;
         }
 
         return $routeData;
