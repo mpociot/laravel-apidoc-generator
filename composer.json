@@ -37,5 +37,12 @@
         "psr-4": {
             "Mpociot\\ApiDoc\\Tests\\": "tests/"
         }
-    }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
+            ]
+        }
+    },
 }
