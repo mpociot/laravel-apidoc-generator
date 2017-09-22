@@ -208,7 +208,7 @@ class GenerateDocumentation extends Command
         $resultBindings = [];
         foreach ($bindings as $binding) {
             list($name, $id) = explode(',', $binding);
-            $resultBindings[$name] = $id;
+            $resultBindings[$name] = ($id == 'null' ? null : $id);
         }
 
         return $resultBindings;
