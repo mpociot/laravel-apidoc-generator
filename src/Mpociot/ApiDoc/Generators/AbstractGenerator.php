@@ -179,7 +179,7 @@ abstract class AbstractGenerator
             }
         }
 
-        return array_get($this->getRouteDescription(), 'short', 'general');
+        return array_get($this->getRouteDescription($route), 'short', 'general');
     }
 
     /**
