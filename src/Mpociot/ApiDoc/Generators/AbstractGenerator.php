@@ -30,8 +30,8 @@ abstract class AbstractGenerator
 
     /**
      * @param  \Illuminate\Routing\Route $route
-     * @param array $bindings
-     * @param bool $withResponse
+     * @param array                      $bindings
+     * @param bool                       $withResponse
      *
      * @return array
      */
@@ -56,7 +56,7 @@ abstract class AbstractGenerator
     protected function getDocblockResponse($tags)
     {
         $responseTags = array_filter($tags, function ($tag) {
-            if (! ($tag instanceof Tag)) {
+            if (!($tag instanceof Tag)) {
                 return false;
             }
 
@@ -82,10 +82,10 @@ abstract class AbstractGenerator
         $validator = Validator::make([], $this->getRouteRules($routeAction['uses'], $bindings));
         foreach ($validator->getRules() as $attribute => $rules) {
             $attributeData = [
-                'required' => false,
-                'type' => null,
-                'default' => '',
-                'value' => '',
+                'required'    => false,
+                'type'        => null,
+                'default'     => '',
+                'value'       => '',
                 'description' => [],
             ];
             foreach ($rules as $ruleName => $rule) {
@@ -124,7 +124,7 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param $route
+     * @param       $route
      * @param array $bindings
      *
      * @return mixed
@@ -133,35 +133,35 @@ abstract class AbstractGenerator
     {
         $uri = $this->getUri($route);
         foreach ($bindings as $model => $id) {
-            $uri = str_replace('{'.$model.'}', $id, $uri);
+            $uri = str_replace('{' . $model . '}', $id, $uri);
         }
 
         return $uri;
     }
 
     /**
-     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Routing\Route $route
      *
      * @return string
      */
     protected function getRouteDescription($route)
     {
         list($class, $method) = explode('@', $route);
-        $reflection = new ReflectionClass($class);
+        $reflection       = new ReflectionClass($class);
         $reflectionMethod = $reflection->getMethod($method);
 
         $comment = $reflectionMethod->getDocComment();
-        $phpdoc = new DocBlock($comment);
+        $phpdoc  = new DocBlock($comment);
 
         return [
             'short' => $phpdoc->getShortDescription(),
-            'long' => $phpdoc->getLongDescription()->getContents(),
-            'tags' => $phpdoc->getTags(),
+            'long'  => $phpdoc->getLongDescription()->getContents(),
+            'tags'  => $phpdoc->getTags(),
         ];
     }
 
     /**
-     * @param  string  $route
+     * @param  string $route
      *
      * @return string
      */
@@ -169,7 +169,7 @@ abstract class AbstractGenerator
     {
         list($class, $method) = explode('@', $route);
         $reflection = new ReflectionClass($class);
-        $comment = $reflection->getDocComment();
+        $comment    = $reflection->getDocComment();
         if ($comment) {
             $phpdoc = new DocBlock($comment);
             foreach ($phpdoc->getTags() as $tag) {
@@ -179,11 +179,22 @@ abstract class AbstractGenerator
             }
         }
 
-        return array_get($this->getRouteDescription($route), 'short', 'general');
+        return $this->getAlternateRouteGroup($route);
+    }
+
+    protected function getAlternateRouteGroup($route, $default = 'general')
+    {
+        $description = $this->getRouteDescription($route);
+
+        if ($short = array_get($description, 'short')) {
+            return strtok($short, ':');
+        }
+
+        return $default;
     }
 
     /**
-     * @param  $route
+     * @param        $route
      * @param  array $bindings
      *
      * @return array
@@ -191,12 +202,12 @@ abstract class AbstractGenerator
     protected function getRouteRules($route, $bindings)
     {
         list($class, $method) = explode('@', $route);
-        $reflection = new ReflectionClass($class);
+        $reflection       = new ReflectionClass($class);
         $reflectionMethod = $reflection->getMethod($method);
 
         foreach ($reflectionMethod->getParameters() as $parameter) {
             $parameterType = $parameter->getClass();
-            if (! is_null($parameterType) && class_exists($parameterType->name)) {
+            if (!is_null($parameterType) && class_exists($parameterType->name)) {
                 $className = $parameterType->name;
 
                 if (is_subclass_of($className, FormRequest::class)) {
@@ -219,15 +230,15 @@ abstract class AbstractGenerator
 
     /**
      * @param  array  $arr
-     * @param  string  $first
-     * @param  string  $last
+     * @param  string $first
+     * @param  string $last
      *
      * @return string
      */
     protected function fancyImplode($arr, $first, $last)
     {
         $arr = array_map(function ($value) {
-            return '`'.$value.'`';
+            return '`' . $value . '`';
         }, $arr);
         array_push($arr, implode($last, array_splice($arr, -2)));
 
@@ -238,7 +249,7 @@ abstract class AbstractGenerator
     {
         $attribute = '';
         collect($parameters)->map(function ($item, $key) use (&$attribute, $first, $last) {
-            $attribute .= '`'.$item.'` ';
+            $attribute .= '`' . $item . '` ';
             if (($key + 1) % 2 === 0) {
                 $attribute .= $last;
             } else {
@@ -251,10 +262,10 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  string  $rule
-     * @param  string  $ruleName
+     * @param  string $rule
+     * @param  string $ruleName
      * @param  array  $attributeData
-     * @param  int  $seed
+     * @param  int    $seed
      *
      * @return void
      */
@@ -263,7 +274,7 @@ abstract class AbstractGenerator
         $faker = Factory::create();
         $faker->seed(crc32($seed));
 
-        $parsedRule = $this->parseStringRule($rule);
+        $parsedRule    = $this->parseStringRule($rule);
         $parsedRule[0] = $this->normalizeRule($parsedRule[0]);
         list($rule, $parameters) = $parsedRule;
 
@@ -273,17 +284,17 @@ abstract class AbstractGenerator
                 break;
             case 'accepted':
                 $attributeData['required'] = true;
-                $attributeData['type'] = 'boolean';
-                $attributeData['value'] = true;
+                $attributeData['type']     = 'boolean';
+                $attributeData['value']    = true;
                 break;
             case 'after':
-                $attributeData['type'] = 'date';
+                $attributeData['type']          = 'date';
                 $attributeData['description'][] = Description::parse($rule)->with(date(DATE_RFC850, strtotime($parameters[0])))->getDescription();
-                $attributeData['value'] = date(DATE_RFC850, strtotime('+1 day', strtotime($parameters[0])));
+                $attributeData['value']         = date(DATE_RFC850, strtotime('+1 day', strtotime($parameters[0])));
                 break;
             case 'alpha':
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
-                $attributeData['value'] = $faker->word;
+                $attributeData['value']         = $faker->word;
                 break;
             case 'alpha_dash':
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
@@ -293,11 +304,11 @@ abstract class AbstractGenerator
                 break;
             case 'in':
                 $attributeData['description'][] = Description::parse($rule)->with($this->fancyImplode($parameters, ', ', ' or '))->getDescription();
-                $attributeData['value'] = $faker->randomElement($parameters);
+                $attributeData['value']         = $faker->randomElement($parameters);
                 break;
             case 'not_in':
                 $attributeData['description'][] = Description::parse($rule)->with($this->fancyImplode($parameters, ', ', ' or '))->getDescription();
-                $attributeData['value'] = $faker->word;
+                $attributeData['value']         = $faker->word;
                 break;
             case 'min':
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
@@ -312,46 +323,47 @@ abstract class AbstractGenerator
                 }
                 break;
             case 'between':
-                if (! isset($attributeData['type'])) {
+                if (!isset($attributeData['type'])) {
                     $attributeData['type'] = 'numeric';
                 }
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
-                $attributeData['value'] = $faker->numberBetween($parameters[0], $parameters[1]);
+                $attributeData['value']         = $faker->numberBetween($parameters[0], $parameters[1]);
                 break;
             case 'before':
-                $attributeData['type'] = 'date';
+                $attributeData['type']          = 'date';
                 $attributeData['description'][] = Description::parse($rule)->with(date(DATE_RFC850, strtotime($parameters[0])))->getDescription();
-                $attributeData['value'] = date(DATE_RFC850, strtotime('-1 day', strtotime($parameters[0])));
+                $attributeData['value']         = date(DATE_RFC850, strtotime('-1 day', strtotime($parameters[0])));
                 break;
             case 'date_format':
-                $attributeData['type'] = 'date';
+                $attributeData['type']          = 'date';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
-                $attributeData['value'] = date($parameters[0]);
+                $attributeData['value']         = date($parameters[0]);
                 break;
             case 'different':
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 break;
             case 'digits':
-                $attributeData['type'] = 'numeric';
+                $attributeData['type']          = 'numeric';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
-                $attributeData['value'] = ($parameters[0] < 9) ? $faker->randomNumber($parameters[0], true) : substr(mt_rand(100000000, mt_getrandmax()), 0, $parameters[0]);
+                $attributeData['value']         = ($parameters[0] < 9) ? $faker->randomNumber($parameters[0], true) : substr(mt_rand(100000000,
+                    mt_getrandmax()), 0, $parameters[0]);
                 break;
             case 'digits_between':
-                $attributeData['type'] = 'numeric';
+                $attributeData['type']          = 'numeric';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 break;
             case 'file':
-                $attributeData['type'] = 'file';
+                $attributeData['type']          = 'file';
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
                 break;
             case 'image':
-                $attributeData['type'] = 'image';
+                $attributeData['type']          = 'image';
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
                 break;
             case 'json':
-                $attributeData['type'] = 'string';
+                $attributeData['type']          = 'string';
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
-                $attributeData['value'] = json_encode(['foo', 'bar', 'baz']);
+                $attributeData['value']         = json_encode(['foo', 'bar', 'baz']);
                 break;
             case 'mimetypes':
             case 'mimes':
@@ -383,55 +395,55 @@ abstract class AbstractGenerator
                 break;
             case 'timezone':
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
-                $attributeData['value'] = $faker->timezone;
+                $attributeData['value']         = $faker->timezone;
                 break;
             case 'exists':
-                $fieldName = isset($parameters[1]) ? $parameters[1] : $ruleName;
+                $fieldName                      = isset($parameters[1]) ? $parameters[1] : $ruleName;
                 $attributeData['description'][] = Description::parse($rule)->with([Str::singular($parameters[0]), $fieldName])->getDescription();
                 break;
             case 'active_url':
-                $attributeData['type'] = 'url';
+                $attributeData['type']  = 'url';
                 $attributeData['value'] = $faker->url;
                 break;
             case 'regex':
-                $attributeData['type'] = 'string';
+                $attributeData['type']          = 'string';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
                 break;
             case 'boolean':
                 $attributeData['value'] = true;
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'array':
                 $attributeData['value'] = $faker->word;
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'date':
                 $attributeData['value'] = $faker->date();
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'email':
                 $attributeData['value'] = $faker->safeEmail;
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'string':
                 $attributeData['value'] = $faker->word;
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'integer':
                 $attributeData['value'] = $faker->randomNumber();
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'numeric':
                 $attributeData['value'] = $faker->randomNumber();
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'url':
                 $attributeData['value'] = $faker->url;
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
             case 'ip':
                 $attributeData['value'] = $faker->ipv4;
-                $attributeData['type'] = $rule;
+                $attributeData['type']  = $rule;
                 break;
         }
 
@@ -447,13 +459,13 @@ abstract class AbstractGenerator
     /**
      * Call the given URI and return the Response.
      *
-     * @param  string  $method
-     * @param  string  $uri
+     * @param  string $method
+     * @param  string $uri
      * @param  array  $parameters
      * @param  array  $cookies
      * @param  array  $files
      * @param  array  $server
-     * @param  string  $content
+     * @param  string $content
      *
      * @return \Illuminate\Http\Response
      */
@@ -462,7 +474,7 @@ abstract class AbstractGenerator
     /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
-     * @param  array  $headers
+     * @param  array $headers
      *
      * @return array
      */
@@ -474,8 +486,8 @@ abstract class AbstractGenerator
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
 
-            if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
-                $name = $prefix.$name;
+            if (!Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
+                $name = $prefix . $name;
             }
 
             $server[$name] = $value;
@@ -487,7 +499,7 @@ abstract class AbstractGenerator
     /**
      * Parse a string based rule.
      *
-     * @param  string  $rules
+     * @param  string $rules
      *
      * @return array
      */
@@ -510,8 +522,8 @@ abstract class AbstractGenerator
     /**
      * Parse a parameter list.
      *
-     * @param  string  $rule
-     * @param  string  $parameter
+     * @param  string $rule
+     * @param  string $parameter
      *
      * @return array
      */
