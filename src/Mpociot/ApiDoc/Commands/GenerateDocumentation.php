@@ -261,7 +261,7 @@ class GenerateDocumentation extends Command
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $generator->getUri($route)) || in_array($middleware, $route->middleware())) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->getHeaders(), $withResponse);
                     $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
@@ -270,6 +270,16 @@ class GenerateDocumentation extends Command
         }
 
         return $parsedRoutes;
+    }
+
+    /**
+     * @return array
+     */
+    private function getHeaders()
+    {
+        return array_merge($this->option('header'), ($this->option('authGuard') == 'api' ? [
+            'Authorization: Bearer ' . $this->laravel['auth']->guard($this->option('authGuard'))->tokenById($this->option('actAsUserId'))
+        ] : []));
     }
 
     /**
