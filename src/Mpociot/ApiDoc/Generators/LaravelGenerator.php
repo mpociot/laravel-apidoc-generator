@@ -268,6 +268,7 @@ class LaravelGenerator extends AbstractGenerator
 
                     if (method_exists($parameterReflection, 'validator')) {
                         $factory = app()->make(ValidationFactory::class);
+
                         return app()->call([$parameterReflection, 'validator'], [$factory])
                             ->getRules();
                     } else {
