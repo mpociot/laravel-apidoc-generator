@@ -20,7 +20,7 @@ Require this package with composer using the following command:
 ```sh
 $ composer require mpociot/laravel-apidoc-generator
 ```
-Go to your `config/app.php` and add the service provider:
+Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
 
 ```php
 Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
