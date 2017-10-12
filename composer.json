@@ -1,5 +1,6 @@
 {
     "name": "mpociot/laravel-apidoc-generator",
+    "version": "2.0.1",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
     "keywords": [
@@ -36,6 +37,13 @@
     "autoload-dev": {
         "psr-4": {
             "Mpociot\\ApiDoc\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
+            ]
         }
     }
 }
