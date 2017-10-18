@@ -112,9 +112,11 @@ abstract class AbstractGenerator
 
         // Split headers into key - value pairs
         $headers = collect($headers)->map(function ($value) {
-            $split = explode(':', $value);
+            $split = explode(':', $value); // explode to get key + values
+            $key   = array_shift($split); // extract the key and keep the values in the array
+            $value = implode(':', $split); // implode values into string again
 
-            return [trim($split[0]) => trim($split[1])];
+            return [trim($key) => trim($value)];
         })->collapse()->toArray();
 
         //Changes url with parameters like /users/{user} to /users/1
