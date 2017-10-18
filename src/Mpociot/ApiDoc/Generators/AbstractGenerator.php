@@ -113,7 +113,7 @@ abstract class AbstractGenerator
         // Split headers into key - value pairs
         $headers = collect($headers)->map(function ($value) {
             $split = explode(':', $value); // explode to get key + values
-            $key   = array_shift($split); // extract the key and keep the values in the array
+            $key = array_shift($split); // extract the key and keep the values in the array
             $value = implode(':', $split); // implode values into string again
 
             return [trim($key) => trim($value)];
