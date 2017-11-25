@@ -1,4 +1,4 @@
-title: API Reference
+title: API Reference, This documentation is still in Beta, please bear with me 
 
 language_tabs:
 - bash
@@ -9,4 +9,4 @@ includes:
 search: true
 
 toc_footers:
-- <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a>
+- <a href='mailto:manash.sonowal@conversionbug.com?Subject=Improvements%20Needed'>Documentation by Manash Sonowal</a>
