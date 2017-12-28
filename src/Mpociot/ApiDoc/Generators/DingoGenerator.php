@@ -71,6 +71,14 @@ class DingoGenerator extends AbstractGenerator
     /**
      * {@inheritdoc}
      */
+    public function getDomain($route)
+    {
+        return $route->uri();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUri($route)
     {
         return $route->uri();

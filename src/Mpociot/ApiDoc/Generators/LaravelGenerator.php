@@ -2,18 +2,31 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
-use ReflectionClass;
-use League\Fractal\Manager;
-use Illuminate\Routing\Route;
-use League\Fractal\Resource\Item;
-use Illuminate\Support\Facades\App;
-use Mpociot\Reflection\DocBlock\Tag;
-use Illuminate\Support\Facades\Request;
-use League\Fractal\Resource\Collection;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route;
+use Illuminate\Routing\RouteUrlGenerator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
+use Mpociot\Reflection\DocBlock\Tag;
+use ReflectionClass;
 
 class LaravelGenerator extends AbstractGenerator
 {
+    /**
+     * @param Route $route
+     *
+     * @return mixed
+     */
+    public function getDomain($route)
+    {
+        return $route->domain();
+    }
+
+
     /**
      * @param Route $route
      *
@@ -54,10 +67,15 @@ class LaravelGenerator extends AbstractGenerator
     {
         $content = '';
 
+        $routeDomain = $route->domain();
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
         $showresponse = null;
+
+        // set correct route domain
+        $headers[] = "HTTP_HOST: {$routeDomain}";
+        $headers[] = "SERVER_NAME: {$routeDomain}";
 
         if ($withResponse) {
             $response = null;

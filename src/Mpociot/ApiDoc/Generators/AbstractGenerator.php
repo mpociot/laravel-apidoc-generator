@@ -19,6 +19,13 @@ abstract class AbstractGenerator
      *
      * @return mixed
      */
+    abstract public function getDomain($route);
+
+    /**
+     * @param $route
+     *
+     * @return mixed
+     */
     abstract public function getUri($route);
 
     /**
