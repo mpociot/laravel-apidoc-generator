@@ -206,7 +206,7 @@ The generator automatically creates a Postman collection file, which you can imp
 
 If you don't want to create a Postman collection, use the `--noPostmanCollection` option, when generating the API documentation.
 
-As of as of Laravel 5.3, the default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
+As of Laravel 5.3, the default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
 
 ```php
 'url' => env('APP_URL', 'http://yourappdefault.app'),
