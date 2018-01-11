@@ -76,6 +76,12 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertTrue(is_array($parsed));
     }
 
+    public function testCanParseDependencyInjectionInFormRequests()
+    {
+        $testRequest = $this->generator->getFormRequest(TestRequest::class);
+        $this->assertTrue($testRequest instanceof TestRequest);
+    }
+
     public function testCanParseFormRequestRules()
     {
         RouteFacade::post('/post', TestController::class.'@parseFormRequestRules');
@@ -83,7 +89,7 @@ class ApiDocGeneratorTest extends TestCase
         $parsed = $this->generator->processRoute($route);
         $parameters = $parsed['parameters'];
 
-        $testRequest = new TestRequest();
+        $testRequest = $this->generator->getFormRequest(TestRequest::class);
         $rules = $testRequest->rules();
 
         foreach ($rules as $name => $rule) {

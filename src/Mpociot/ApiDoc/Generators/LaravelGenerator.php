@@ -259,7 +259,7 @@ class LaravelGenerator extends AbstractGenerator
                 $className = $parameterType->name;
 
                 if (is_subclass_of($className, FormRequest::class)) {
-                    $parameterReflection = new $className;
+                    $parameterReflection = $this->getFormRequest($className);
                     $parameterReflection->setContainer(app());
                     // Add route parameter bindings
                     $parameterReflection->query->add($bindings);
@@ -276,5 +276,35 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return [];
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return mixed
+     */
+    public function getFormRequest($className)
+    {
+        $reflection = new ReflectionClass($className);
+
+        if (! $reflection->hasMethod('__construct')) {
+            return new $className();
+        }
+
+        $reflectionMethod = $reflection->getMethod('__construct');
+
+        $params = [];
+
+        foreach ($reflectionMethod->getParameters() as $parameter) {
+            if (! is_null($parameter->getClass())) {
+                $params[] = app($parameter->getClass()->name);
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                $params[] = $parameter->getDefaultValue();
+            } else {
+                $params[] = null;
+            }
+        }
+
+        return new $className(...$params);
     }
 }
