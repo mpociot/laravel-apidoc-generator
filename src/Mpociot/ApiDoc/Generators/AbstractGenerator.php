@@ -79,19 +79,28 @@ abstract class AbstractGenerator
      */
     protected function getParameters($routeData, $routeAction, $bindings)
     {
-        $validator = Validator::make([], $this->getRouteRules($routeAction['uses'], $bindings));
+        $rules = $this->getRouteRules($routeAction['uses'], $bindings);
+        $mockData = [];
+        foreach ($rules as $key => $rule) {
+            if (Str::contains($key, '*')) {
+                $key = str_replace('*', 0, $key);
+                Arr::set($mockData, $key, 1);
+            }
+        }
+        $validator = Validator::make($mockData, $this->getRouteRules($routeAction['uses'], $bindings));
         foreach ($validator->getRules() as $attribute => $rules) {
             $attributeData = [
                 'required' => false,
                 'type' => null,
                 'default' => '',
                 'value' => '',
-                'description' => [],
             ];
+            $langKey = Str::contains($attribute, '.') ? substr($attribute, strrpos($attribute, '.') + 1) : $attribute;
+            $attributeData['description'] = trans()->hasForLocale($key = 'validation.attributes.' . $langKey) ? [trans()->get($key)] : [];
             foreach ($rules as $ruleName => $rule) {
                 $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
             }
-            $routeData['parameters'][$attribute] = $attributeData;
+            $routeData['parameters'][str_replace('.0','.*',$attribute)] = $attributeData;
         }
 
         return $routeData;
