@@ -7,7 +7,7 @@
 
 @foreach($parsedRoutes as $group => $routes)
 @if($group)
-#{{$group}}
+#{!! $group !!}
 @endif
 @foreach($routes as $parsedRoute)
 @if($writeCompareFile === true)
