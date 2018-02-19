@@ -154,12 +154,12 @@ class GenerateDocumentation extends Command
             });
         }
 
-        $prependFileContents = "";
+        $prependFileContents = '';
         if (file_exists($prependFile)) {
             $prependFileContents = file_get_contents($prependFile);
         }
 
-        $appendFileContents = "";
+        $appendFileContents = '';
         if (file_exists($appendFile)) {
             $appendFileContents = file_get_contents($appendFile);
         }
