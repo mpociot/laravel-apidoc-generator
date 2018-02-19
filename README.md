@@ -231,6 +231,15 @@ $ php artisan api:update
 
 As an optional parameter, you can use `--location` to tell the update command where your documentation can be found.
 
+## automatically add markdown to the beginning or end of the documentation
+
+If you wish to automatically add the same content to the docs every time you generate, you can add a `prepend.md` and/or `append.md` file to the source folder, and they will be included either above, or below the generated routes (or both).
+
+**File locations:**
+`public/docs/source/prepend.md`
+`public/docs/source/append.md`
+
+
 ## Skip single routes
 
 If you want to skip a single route from a list of routes that match a given prefix, you can use the `@hideFromAPIDocumentation` tag on the Controller method you do not want to document.
