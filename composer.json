@@ -2,6 +2,7 @@
     "name": "mpociot/laravel-apidoc-generator",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
+    "type": "laravel-package",
     "keywords": [
         "API",
         "Documentation",
