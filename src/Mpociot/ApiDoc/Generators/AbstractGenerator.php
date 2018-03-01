@@ -203,7 +203,7 @@ abstract class AbstractGenerator
 
                 if (is_subclass_of($className, Request::class)
                     && method_exists($className, 'authorize')
-                    &&  method_exists($className, 'rules')
+                    && method_exists($className, 'rules')
                 ) {
                     $parameterReflection = new $className;
                     // Add route parameter bindings
