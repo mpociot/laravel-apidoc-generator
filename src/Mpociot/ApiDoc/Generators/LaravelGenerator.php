@@ -4,13 +4,13 @@ namespace Mpociot\ApiDoc\Generators;
 
 use ReflectionClass;
 use League\Fractal\Manager;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use League\Fractal\Resource\Item;
 use Illuminate\Support\Facades\App;
 use Mpociot\Reflection\DocBlock\Tag;
-use Illuminate\Support\Facades\Request;
 use League\Fractal\Resource\Collection;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request as RequestFacade;
 
 class LaravelGenerator extends AbstractGenerator
 {
@@ -130,7 +130,7 @@ class LaravelGenerator extends AbstractGenerator
             'Accept' => 'application/json',
         ])->merge($server)->toArray();
 
-        $request = Request::create(
+        $request = RequestFacade::create(
             $uri, $method, $parameters,
             $cookies, $files, $this->transformHeadersToServerVars($server), $content
         );
@@ -258,7 +258,10 @@ class LaravelGenerator extends AbstractGenerator
             if (! is_null($parameterType) && class_exists($parameterType->name)) {
                 $className = $parameterType->name;
 
-                if (is_subclass_of($className, FormRequest::class)) {
+                if (is_subclass_of($className, Request::class)
+                    && method_exists($className, 'authorize')
+                    && method_exists($className, 'rules')
+                ) {
                     $parameterReflection = new $className;
                     $parameterReflection->setContainer(app());
                     // Add route parameter bindings

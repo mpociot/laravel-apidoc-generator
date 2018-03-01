@@ -15,17 +15,17 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=7.0",
         "fzaninotto/faker": "~1.0",
-        "laravel/framework": "~5.4",
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0",
-        "ramsey/uuid": "^3.0"
+        "ramsey/uuid": "^3.0",
+        "illuminate/http": "^5.5"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "~4.0 || ~5.0",
-        "dingo/api": "1.0.*@dev",
+        "dingo/api": "^v2.0.0-alpha1",
         "mockery/mockery": "^0.9.5"
     },
     "autoload": {
