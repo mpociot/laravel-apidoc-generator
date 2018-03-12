@@ -67,7 +67,7 @@ abstract class AbstractGenerator
         }
         $responseTag = \array_first($responseTags);
 
-        return \response(\json_encode($responseTag->getContent()));
+        return \response($responseTag->getContent(), 200, ['content-type' => 'application/json']);
     }
 
     /**
