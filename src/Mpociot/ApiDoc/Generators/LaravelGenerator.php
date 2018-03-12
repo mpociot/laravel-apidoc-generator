@@ -79,7 +79,7 @@ class LaravelGenerator extends AbstractGenerator
                 $response = $this->getRouteResponse($route, $bindings, $headers);
             }
             if ($response->headers->get('Content-Type') === 'application/json') {
-                $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+                $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
             } else {
                 $content = $response->getContent();
             }
