@@ -20,7 +20,7 @@ class GenerateDocumentation extends Command
      *
      * @var string
      */
-    protected $signature = 'api:generate 
+    protected $signature = 'api:generate
                             {--output=public/docs : The output path for the generated documentation}
                             {--routePrefix= : The route prefix to use for generation}
                             {--routes=* : The route names to use for generation}
@@ -28,6 +28,8 @@ class GenerateDocumentation extends Command
                             {--noResponseCalls : Disable API response calls}
                             {--noPostmanCollection : Disable Postman collection creation}
                             {--useMiddlewares : Use all configured route middlewares}
+                            {--authProvider=users : The authentication provider to use for API response calls}
+                            {--authGuard=web : The authentication guard to use for API response calls}
                             {--actAsUserId= : The user ID to use for API response calls}
                             {--router=laravel : The router to be used (Laravel or Dingo)}
                             {--force : Force rewriting of existing routes}
@@ -231,9 +233,10 @@ class GenerateDocumentation extends Command
                 $user = $userModel::find((int) $actAs);
                 $this->laravel['auth']->setUser($user);
             } else {
-                $userModel = config('auth.providers.users.model');
+                $provider = $this->option('authProvider');
+                $userModel = config("auth.providers.$provider.model");
                 $user = $userModel::find((int) $actAs);
-                $this->laravel['auth']->guard()->setUser($user);
+                $this->laravel['auth']->guard($this->option('authGuard'))->setUser($user);
             }
         }
     }
