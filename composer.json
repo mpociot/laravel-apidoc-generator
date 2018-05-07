@@ -1,5 +1,5 @@
 {
-    "name": "mpociot/laravel-apidoc-generator",
+    "name": "t1k3hu/laravel-apidoc-generator",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
     "keywords": [
@@ -7,6 +7,7 @@
         "Documentation",
         "Laravel"
     ],
+    "minimum-stability": "dev",
     "homepage": "http://github.com/mpociot/laravel-apidoc-generator",
     "authors": [
         {

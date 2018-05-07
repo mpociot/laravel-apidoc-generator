@@ -5,6 +5,7 @@ namespace Mpociot\ApiDoc\Commands;
 use ReflectionClass;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Mpociot\Documentarian\Documentarian;
@@ -15,6 +16,8 @@ use Mpociot\ApiDoc\Generators\AbstractGenerator;
 
 class GenerateDocumentation extends Command
 {
+    use DatabaseTransactions;
+    
     /**
      * The name and signature of the console command.
      *
