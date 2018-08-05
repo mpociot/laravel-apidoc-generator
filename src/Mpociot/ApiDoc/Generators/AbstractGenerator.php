@@ -44,7 +44,7 @@ abstract class AbstractGenerator
      *
      * @return  void
      */
-    abstract public function prepareMiddleware($disable = false);
+    abstract public function prepareMiddleware($enable = false);
 
     /**
      * Get the response from the docblock if available.
@@ -120,7 +120,7 @@ abstract class AbstractGenerator
         })->collapse()->toArray();
 
         //Changes url with parameters like /users/{user} to /users/1
-        $uri = preg_replace('/{(.*?)}/', 1, $uri);
+        $uri = preg_replace('/{(.*?)}/', 1, $uri); // 1 is the default value for route parameters
 
         return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
     }
@@ -136,6 +136,7 @@ abstract class AbstractGenerator
         $uri = $this->getUri($route);
         foreach ($bindings as $model => $id) {
             $uri = str_replace('{'.$model.'}', $id, $uri);
+            $uri = str_replace('{'.$model.'?}', $id, $uri);
         }
 
         return $uri;

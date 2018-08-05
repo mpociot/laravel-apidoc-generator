@@ -105,9 +105,9 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return  void
      */
-    public function prepareMiddleware($disable = true)
+    public function prepareMiddleware($enable = true)
     {
-        App::instance('middleware.disable', true);
+        App::instance('middleware.disable', !$enable);
     }
 
     /**
@@ -139,11 +139,6 @@ class LaravelGenerator extends AbstractGenerator
         $response = $kernel->handle($request);
 
         $kernel->terminate($request, $response);
-
-        if (file_exists($file = App::bootstrapPath().'/app.php')) {
-            $app = require $file;
-            $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-        }
 
         return $response;
     }
