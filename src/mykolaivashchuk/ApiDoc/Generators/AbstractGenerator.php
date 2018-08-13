@@ -79,8 +79,8 @@ abstract class AbstractGenerator
      */
     protected function getParameters($routeData, $routeAction, $bindings)
     {
-        $validator = Validator::make([], $this->getRouteRules($routeAction['uses'], $bindings));
-        foreach ($validator->getRules() as $attribute => $rules) {
+        $validatorRules = $this->getRules($this->getRouteRules($routeAction['uses'], $bindings));
+        foreach ($validatorRules as $attribute => $rules) {
             $attributeData = [
                 'required' => false,
                 'type' => null,
@@ -543,5 +543,22 @@ abstract class AbstractGenerator
             default:
                 return $rule;
         }
+    }
+
+    /**
+     * Simulation of laravel validator method getRules
+     * @param array $routeRules
+     * @return array
+     */
+    protected function getRules(array $routeRules)
+    {
+        foreach ($routeRules as $parameter => $rules)
+        {
+            if (gettype($rules) == 'string'){
+                $routeRules[$parameter] = explode('|',$rules);
+            }
+        }
+
+        return $routeRules;
     }
 }
