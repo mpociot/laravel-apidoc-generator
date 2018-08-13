@@ -12,18 +12,42 @@ Automatically generate your API documentation from your existing Laravel routes.
 [![StyleCI](https://styleci.io/repos/57999295/shield?style=flat)](https://styleci.io/repos/57999295)
 [![Dependency Status](https://www.versioneye.com/php/mpociot:laravel-apidoc-generator/dev-master/badge?style=flat)](https://www.versioneye.com/php/mpociot:laravel-apidoc-generator/dev-master)
 
+## Changes in fork
+#### Fixed display parameters for array items in request
+ Now you will see all parameters of request in documentation.
+#### Solved problem with parsing of custom rules
+For correct parsing custom rule you should add `__toString` method.
+
+
+Ex.: 
+``` php
+public function __toString()
+{
+  return 'field_type:field description';
+}
+```
+Field types for custom rules:
+ -  `custom_string`
+ -  `custom_integer`
+ -  `custom_boolean`
+ -  `custom_date`
+ 
+
+
+
+
 
 ## Installation
 
 Require this package with composer using the following command:
 
 ```sh
-$ composer require mpociot/laravel-apidoc-generator
+$ composer require mykolaivashchuk/laravel-apidoc-generator
 ```
 Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
 
 ```php
-Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
+mykolaivashchuk\ApiDoc\ApiDocGeneratorServiceProvider::class,
 ```
 
 > Using Laravel < 5.4? Use version 1.0! For Laravel 5.4 and up, use 2.0 instead.
