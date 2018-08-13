@@ -435,6 +435,22 @@ abstract class AbstractGenerator
                 $attributeData['value'] = $faker->ipv4;
                 $attributeData['type'] = $rule;
                 break;
+            case 'custom_string':
+                $attributeData['description'] = $parameters;
+                $attributeData['type'] = 'string';
+                break;
+            case 'custom_integer':
+                $attributeData['description'] = $parameters;
+                $attributeData['type'] = 'integer';
+                break;
+            case 'custom_date':
+                $attributeData['description'] = $parameters;
+                $attributeData['type'] = 'date';
+                break;
+            case 'custom_bool':
+                $attributeData['description'] = $parameters;
+                $attributeData['type'] = 'boolean';
+                break;
         }
 
         if ($attributeData['value'] === '') {
