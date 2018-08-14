@@ -4,10 +4,10 @@ namespace Mykolaivashchuk\ApiDoc\Commands;
 
 use ReflectionClass;
 use Illuminate\Console\Command;
-use Mykolaivashchuk\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
-use Mykolaivashchuk\Documentarian\Documentarian;
+use Mpociot\Documentarian\Documentarian;
 use Mykolaivashchuk\ApiDoc\Postman\CollectionWriter;
 use Mykolaivashchuk\ApiDoc\Generators\DingoGenerator;
 use Mykolaivashchuk\ApiDoc\Generators\LaravelGenerator;
