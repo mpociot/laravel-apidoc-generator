@@ -1,11 +1,12 @@
 {
     "name": "mykolaivashchuk/laravel-apidoc-generator",
     "license": "MIT",
-    "description": "Generate beautiful API documentation from your Laravel application",
+    "description": "FORKED Generate beautiful API documentation from your Laravel application",
     "keywords": [
         "API",
         "Documentation",
-        "Laravel"
+        "Laravel",
+        "FORKED"
     ],
     "homepage": "http://github.com/mykolaivashchuk/laravel-apidoc-generator",
     "authors": [
