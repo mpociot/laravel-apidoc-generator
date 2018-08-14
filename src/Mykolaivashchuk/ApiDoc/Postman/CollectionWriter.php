@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Postman;
+namespace Mykolaivashchuk\ApiDoc\Postman;
 
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Collection;

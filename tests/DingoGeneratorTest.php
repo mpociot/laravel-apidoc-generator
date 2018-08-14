@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tests;
+namespace Mykolaivashchuk\ApiDoc\Tests;
 
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Generators\DingoGenerator;
+use Mykolaivashchuk\ApiDoc\Generators\DingoGenerator;
 use Dingo\Api\Provider\LaravelServiceProvider;
-use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
+use Mykolaivashchuk\ApiDoc\Tests\Fixtures\TestRequest;
+use Mykolaivashchuk\ApiDoc\Tests\Fixtures\TestController;
+use Mykolaivashchuk\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mykolaivashchuk\ApiDoc\Tests\Fixtures\DingoTestController;
 
 class DingoGeneratorTest extends TestCase
 {

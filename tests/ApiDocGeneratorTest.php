@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tests;
+namespace Mykolaivashchuk\ApiDoc\Tests;
 
 use Illuminate\Routing\Route;
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mykolaivashchuk\ApiDoc\Tests\Fixtures\TestRequest;
+use Mykolaivashchuk\ApiDoc\Generators\LaravelGenerator;
+use Mykolaivashchuk\ApiDoc\Tests\Fixtures\TestController;
+use Mykolaivashchuk\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
 
 class ApiDocGeneratorTest extends TestCase

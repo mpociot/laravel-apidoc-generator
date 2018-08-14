@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Parsers;
+namespace Mykolaivashchuk\ApiDoc\Parsers;
 
 class RuleDescriptionParser
 {

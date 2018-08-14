@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Generators;
+namespace Mykolaivashchuk\ApiDoc\Generators;
 
 use Exception;
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace Mpociot\ApiDoc\Commands;
+namespace Mykolaivashchuk\ApiDoc\Commands;
 
 use ReflectionClass;
 use Illuminate\Console\Command;
-use Mpociot\Reflection\DocBlock;
+use Mykolaivashchuk\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
-use Mpociot\Documentarian\Documentarian;
-use Mpociot\ApiDoc\Postman\CollectionWriter;
-use Mpociot\ApiDoc\Generators\DingoGenerator;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Generators\AbstractGenerator;
+use Mykolaivashchuk\Documentarian\Documentarian;
+use Mykolaivashchuk\ApiDoc\Postman\CollectionWriter;
+use Mykolaivashchuk\ApiDoc\Generators\DingoGenerator;
+use Mykolaivashchuk\ApiDoc\Generators\LaravelGenerator;
+use Mykolaivashchuk\ApiDoc\Generators\AbstractGenerator;
 
 class GenerateDocumentation extends Command
 {
