@@ -34,9 +34,9 @@ To generate your API documentation, use the `api:generate` artisan command.
 
 ```sh
 $ php artisan api:generate --routePrefix="api/v1/*"
-```
 
-After 28ff33be15424ff5a5b819dbe88b34468d1752b2 this commit, it supports passing generation of multiple prefixes by spearating each prefix with comma.
+```
+You can pass in multiple prefixes by spearating each prefix with comma.
 
 ```sh
 $ php artisan api:generate --routePrefix="api/v1/*,api/public/*"
