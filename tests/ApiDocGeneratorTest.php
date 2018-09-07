@@ -53,7 +53,7 @@ class ApiDocGeneratorTest extends TestCase
 
         $route = new Route(['GET'], '/get', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertSame(['GET', 'HEAD'], $parsed['methods']);
+        $this->assertSame(['GET'], $parsed['methods']);
 
         $route = new Route(['POST'], '/post', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
