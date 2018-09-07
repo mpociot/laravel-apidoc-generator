@@ -107,7 +107,7 @@ class LaravelGenerator extends AbstractGenerator
      */
     public function prepareMiddleware($enable = true)
     {
-        App::instance('middleware.disable', !$enable);
+        App::instance('middleware.disable', ! $enable);
     }
 
     /**
