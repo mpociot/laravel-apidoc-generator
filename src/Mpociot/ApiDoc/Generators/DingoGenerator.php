@@ -16,20 +16,11 @@ class DingoGenerator extends AbstractGenerator
      */
     public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
     {
-        $response = '';
-
-        if ($withResponse) {
-            try {
-                $response = $this->getRouteResponse($route, $bindings, $headers);
-            } catch (Exception $e) {
-            }
-        }
-
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
 
-        return $this->getParameters([
+        $parameters = $this->getParameters([
             'id' => md5($route->uri().':'.implode($route->getMethods())),
             'resource' => $routeGroup,
             'title' => $routeDescription['short'],
@@ -37,8 +28,25 @@ class DingoGenerator extends AbstractGenerator
             'methods' => $route->getMethods(),
             'uri' => $route->uri(),
             'parameters' => [],
-            'response' => $response,
+            'response' => '',
         ], $routeAction, $bindings);
+
+        $response = '';
+
+        if ($withResponse) {
+            foreach ($parameters['parameters'] as $paramName => $attr) {
+                if ($attr['required']) {
+                    $params[$paramName] = $attr['value'];
+                }
+            }
+            try {
+                $response = $this->getRouteResponse($route, $bindings, $params, $headers);
+                $parameters['response'] = $response->original;
+            } catch (Exception $e) {
+            }
+        }
+
+        return $parameters;
     }
 
     /**
@@ -65,7 +73,7 @@ class DingoGenerator extends AbstractGenerator
             $dispatcher->header($value, $key);
         });
 
-        return call_user_func_array([$dispatcher, strtolower($method)], [$uri]);
+        return call_user_func_array([$dispatcher->with($parameters), strtolower($method)], [$uri]);
     }
 
     /**
