@@ -34,7 +34,15 @@ To generate your API documentation, use the `api:generate` artisan command.
 
 ```sh
 $ php artisan api:generate --routePrefix="api/v1/*"
+
 ```
+You can pass in multiple prefixes by spearating each prefix with comma.
+
+```sh
+$ php artisan api:generate --routePrefix="api/v1/*,api/public/*"
+```
+It will generate documentation for all of the routes whose prefixes are `api/v1/` and `api/public/`
+
 
 This command will scan your applications routes for the URIs matching `api/v1/*` and will parse these controller methods and form requests. For example:
 
@@ -53,7 +61,7 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
 Option | Description
 --------- | -------
 `output` | The output path used for the generated documentation. Default: `public/docs`
-`routePrefix` | The route prefix to use for generation - `*` can be used as a wildcard
+`routePrefix` | The route prefix to use for generation - `*` can be used as a wildcard 
 `routes` | The route names to use for generation - Required if no routePrefix is provided
 `middleware` | The middlewares to use for generation
 `noResponseCalls` | Disable API response calls

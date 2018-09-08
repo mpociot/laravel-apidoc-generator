@@ -44,7 +44,7 @@ abstract class AbstractGenerator
      *
      * @return  void
      */
-    abstract public function prepareMiddleware($disable = false);
+    abstract public function prepareMiddleware($enable = false);
 
     /**
      * Get the response from the docblock if available.
@@ -67,7 +67,7 @@ abstract class AbstractGenerator
         }
         $responseTag = \array_first($responseTags);
 
-        return \response(\json_encode($responseTag->getContent()));
+        return \response(json_encode($responseTag->getContent()), 200, ['Content-Type' => 'application/json']);
     }
 
     /**
@@ -79,8 +79,9 @@ abstract class AbstractGenerator
      */
     protected function getParameters($routeData, $routeAction, $bindings)
     {
-        $validator = Validator::make([], $this->getRouteRules($routeAction['uses'], $bindings));
-        foreach ($validator->getRules() as $attribute => $rules) {
+        $rules = $this->simplifyRules($this->getRouteRules($routeAction['uses'], $bindings));
+
+        foreach ($rules as $attribute => $rules) {
             $attributeData = [
                 'required' => false,
                 'type' => null,
@@ -88,6 +89,7 @@ abstract class AbstractGenerator
                 'value' => '',
                 'description' => [],
             ];
+
             foreach ($rules as $ruleName => $rule) {
                 $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
             }
@@ -95,6 +97,31 @@ abstract class AbstractGenerator
         }
 
         return $routeData;
+    }
+
+    /**
+     * Format the validation rules as plain array.
+     *
+     * @param array $rules
+     *
+     * @return array
+     */
+    protected function simplifyRules($rules)
+    {
+        $simplifiedRules = Validator::make([], $rules)->getRules();
+
+        if (count($simplifiedRules) === 0) {
+            return $simplifiedRules;
+        }
+
+        $values = collect($simplifiedRules)
+            ->filter(function ($values) {
+                return in_array('array', $values);
+            })->map(function ($val, $key) {
+                return [''];
+            })->all();
+
+        return Validator::make($values, $rules)->getRules();
     }
 
     /**
@@ -120,7 +147,7 @@ abstract class AbstractGenerator
         })->collapse()->toArray();
 
         //Changes url with parameters like /users/{user} to /users/1
-        $uri = preg_replace('/{(.*?)}/', 1, $uri);
+        $uri = preg_replace('/{(.*?)}/', 1, $uri); // 1 is the default value for route parameters
 
         return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
     }
@@ -136,6 +163,7 @@ abstract class AbstractGenerator
         $uri = $this->getUri($route);
         foreach ($bindings as $model => $id) {
             $uri = str_replace('{'.$model.'}', $id, $uri);
+            $uri = str_replace('{'.$model.'?}', $id, $uri);
         }
 
         return $uri;

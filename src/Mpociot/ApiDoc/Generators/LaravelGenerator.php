@@ -36,10 +36,12 @@ class LaravelGenerator extends AbstractGenerator
     public function getMethods($route)
     {
         if (version_compare(app()->version(), '5.4', '<')) {
-            return $route->getMethods();
+            $methods = $route->getMethods();
+        } else {
+            $methods = $route->methods();
         }
 
-        return $route->methods();
+        return array_diff($methods, ['HEAD']);
     }
 
     /**
@@ -79,7 +81,7 @@ class LaravelGenerator extends AbstractGenerator
                 $response = $this->getRouteResponse($route, $bindings, $headers);
             }
             if ($response->headers->get('Content-Type') === 'application/json') {
-                $content = json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+                $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
             } else {
                 $content = $response->getContent();
             }
@@ -105,9 +107,9 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return  void
      */
-    public function prepareMiddleware($disable = true)
+    public function prepareMiddleware($enable = true)
     {
-        App::instance('middleware.disable', true);
+        App::instance('middleware.disable', ! $enable);
     }
 
     /**
@@ -139,11 +141,6 @@ class LaravelGenerator extends AbstractGenerator
         $response = $kernel->handle($request);
 
         $kernel->terminate($request, $response);
-
-        if (file_exists($file = App::bootstrapPath().'/app.php')) {
-            $app = require $file;
-            $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-        }
 
         return $response;
     }

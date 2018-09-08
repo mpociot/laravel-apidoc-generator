@@ -53,7 +53,7 @@ class ApiDocGeneratorTest extends TestCase
 
         $route = new Route(['GET'], '/get', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
-        $this->assertSame(['GET', 'HEAD'], $parsed['methods']);
+        $this->assertSame(['GET'], $parsed['methods']);
 
         $route = new Route(['POST'], '/post', ['uses' => TestController::class.'@parseMethodDescription']);
         $parsed = $this->generator->processRoute($route);
@@ -345,7 +345,7 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $this->assertSame($parsed['response'], '"{\n data: [],\n}"');
+        $this->assertSame($parsed['response'], "{\n data: [],\n}");
     }
 
     public function testCanParseTransformerTag()

@@ -81,10 +81,18 @@ class GenerateDocumentation extends Command
 
         $generator->prepareMiddleware($this->option('useMiddlewares'));
 
+        $routePrefixes = explode(',', $routePrefix);
+
+        $parsedRoutes = [];
+
         if ($this->option('router') === 'laravel') {
-            $parsedRoutes = $this->processLaravelRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
+            foreach ($routePrefixes as $routePrefix) {
+                $parsedRoutes += $this->processLaravelRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
+            }
         } else {
-            $parsedRoutes = $this->processDingoRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
+            foreach ($routePrefixes as $routePrefix) {
+                $parsedRoutes += $this->processDingoRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
+            }
         }
         $parsedRoutes = collect($parsedRoutes)->groupBy('resource')->sort(function ($a, $b) {
             return strcmp($a->first()['resource'], $b->first()['resource']);
@@ -222,12 +230,12 @@ class GenerateDocumentation extends Command
         if (! empty($actAs)) {
             if (version_compare($this->laravel->version(), '5.2.0', '<')) {
                 $userModel = config('auth.model');
-                $user = $userModel::find((int) $actAs);
+                $user = $userModel::find($actAs);
                 $this->laravel['auth']->setUser($user);
             } else {
                 $provider = $this->option('authProvider');
                 $userModel = config("auth.providers.$provider.model");
-                $user = $userModel::find((int) $actAs);
+                $user = $userModel::find($actAs);
                 $this->laravel['auth']->guard($this->option('authGuard'))->setUser($user);
             }
         }
