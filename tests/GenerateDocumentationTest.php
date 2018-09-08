@@ -110,7 +110,7 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
         $fixtureMarkdown = file_get_contents(__DIR__.'/Fixtures/resource_index.md');
-        $this->assertSame($generatedMarkdown, $fixtureMarkdown);
+        $this->assertSame($fixtureMarkdown, $generatedMarkdown);
     }
 
     public function testGeneratedMarkdownFileIsCorrect()
