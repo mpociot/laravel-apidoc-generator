@@ -76,7 +76,7 @@ class GenerateDocumentation extends Command
         $this->setUserToBeImpersonated($this->option('actAsUserId'));
 
         if ($routePrefix === null && $routeDomain === null && ! count($allowedRoutes) && $middleware === null) {
-            $this->error('You must provide either a route prefix or a route domain or a middleware to generate the documentation.');
+            $this->error('You must provide either a route prefix, a route domain, a route or a middleware to generate the documentation.');
 
             return false;
         }
