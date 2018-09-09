@@ -2,17 +2,15 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Routing\Route;
-use Illuminate\Routing\RouteUrlGenerator;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\URL;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
-use League\Fractal\Resource\Item;
-use Mpociot\Reflection\DocBlock\Tag;
 use ReflectionClass;
+use League\Fractal\Manager;
+use Illuminate\Routing\Route;
+use League\Fractal\Resource\Item;
+use Illuminate\Support\Facades\App;
+use Mpociot\Reflection\DocBlock\Tag;
+use Illuminate\Support\Facades\Request;
+use League\Fractal\Resource\Collection;
+use Illuminate\Foundation\Http\FormRequest;
 
 class LaravelGenerator extends AbstractGenerator
 {
@@ -25,7 +23,6 @@ class LaravelGenerator extends AbstractGenerator
     {
         return $route->domain();
     }
-
 
     /**
      * @param Route $route

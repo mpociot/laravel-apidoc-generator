@@ -272,7 +272,7 @@ class GenerateDocumentation extends Command
         $parsedRoutes = [];
         foreach ($routes as $route) {
             if (in_array($route->getName(), $allowedRoutes)
-                || (str_is($routeDomain, $generator->getDomain($route)) 
+                || (str_is($routeDomain, $generator->getDomain($route))
                     && str_is($routePrefix, $generator->getUri($route)))
                 || in_array($middleware, $route->middleware())
                ) {
@@ -303,11 +303,11 @@ class GenerateDocumentation extends Command
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
-            if (empty($allowedRoutes) 
+            if (empty($allowedRoutes)
                 // TODO extract this into a method
                 || in_array($route->getName(), $allowedRoutes)
-                || (str_is($routeDomain, $generator->getDomain($route)) 
-                    && str_is($routePrefix, $generator->getUri($route))) 
+                || (str_is($routeDomain, $generator->getDomain($route))
+                    && str_is($routePrefix, $generator->getUri($route)))
                 || in_array($middleware, $route->middleware())
                ) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
