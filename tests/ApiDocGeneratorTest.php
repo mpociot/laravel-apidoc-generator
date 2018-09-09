@@ -337,6 +337,16 @@ class ApiDocGeneratorTest extends TestCase
         }
     }
 
+    public function testCustomFormRequestValidatorIsSupported()
+    {
+        RouteFacade::post('/post', TestController::class.'@customFormRequestValidator');
+        $route = new Route(['POST'], '/post', ['uses' => TestController::class.'@customFormRequestValidator']);
+        $parsed = $this->generator->processRoute($route);
+        $parameters = $parsed['parameters'];
+
+        $this->assertNotEmpty($parameters);
+    }
+
     public function testCanParseResponseTag()
     {
         RouteFacade::post('/responseTag', TestController::class.'@responseTag');
