@@ -9,7 +9,7 @@ Automatically generate your API documentation from your existing Laravel routes.
 [![codecov.io](https://codecov.io/github/mpociot/laravel-apidoc-generator/coverage.svg?branch=master)](https://codecov.io/github/mpociot/laravel-apidoc-generator?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mpociot/laravel-apidoc-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mpociot/laravel-apidoc-generator/?branch=master)
 [![Build Status](https://travis-ci.org/mpociot/laravel-apidoc-generator.svg?branch=master)](https://travis-ci.org/mpociot/laravel-apidoc-generator)
-[![StyleCI](https://styleci.io/repos/57999295/shield)](https://styleci.io/repos/57999295)
+[![StyleCI](https://styleci.io/repos/57999295/shield?style=flat)](https://styleci.io/repos/57999295)
 [![Dependency Status](https://www.versioneye.com/php/mpociot:laravel-apidoc-generator/dev-master/badge?style=flat)](https://www.versioneye.com/php/mpociot:laravel-apidoc-generator/dev-master)
 
 
@@ -20,7 +20,7 @@ Require this package with composer using the following command:
 ```sh
 $ composer require mpociot/laravel-apidoc-generator
 ```
-Go to your `config/app.php` and add the service provider:
+Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
 
 ```php
 Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
@@ -34,7 +34,15 @@ To generate your API documentation, use the `api:generate` artisan command.
 
 ```sh
 $ php artisan api:generate --routePrefix="api/v1/*"
+
 ```
+You can pass in multiple prefixes by spearating each prefix with comma.
+
+```sh
+$ php artisan api:generate --routePrefix="api/v1/*,api/public/*"
+```
+It will generate documentation for all of the routes whose prefixes are `api/v1/` and `api/public/`
+
 
 This command will scan your applications routes for the URIs matching `api/v1/*` and will parse these controller methods and form requests. For example:
 
@@ -53,7 +61,7 @@ Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
 Option | Description
 --------- | -------
 `output` | The output path used for the generated documentation. Default: `public/docs`
-`routePrefix` | The route prefix to use for generation - `*` can be used as a wildcard
+`routePrefix` | The route prefix to use for generation - `*` can be used as a wildcard 
 `routes` | The route names to use for generation - Required if no routePrefix is provided
 `middleware` | The middlewares to use for generation
 `noResponseCalls` | Disable API response calls
@@ -63,7 +71,7 @@ Option | Description
 `router` | The router to use, when processing the route files (can be Laravel or Dingo - defaults to Laravel)
 `bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id`
 `force` | Force the re-generation of existing/modified API routes
-`header` | Custom HTTP headers to add to the example requests. Separate the header name and value with ":". For example: `--header 'Authorization: CustomToken'`
+`header` | Custom HTTP headers to add to the example requests. Separate the header name and value with ":". For example: `--header="Authorization: CustomToken"`
 
 ## Publish rule descriptions for customisation or translation.
 
@@ -206,7 +214,7 @@ The generator automatically creates a Postman collection file, which you can imp
 
 If you don't want to create a Postman collection, use the `--noPostmanCollection` option, when generating the API documentation.
 
-As of as of Laravel 5.3, the default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
+As of Laravel 5.3, the default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
 
 ```php
 'url' => env('APP_URL', 'http://yourappdefault.app'),

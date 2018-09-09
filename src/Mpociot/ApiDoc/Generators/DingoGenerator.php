@@ -89,6 +89,6 @@ class DingoGenerator extends AbstractGenerator
      */
     public function getMethods($route)
     {
-        return $route->getMethods();
+        return array_diff($route->getMethods(), ['HEAD']);
     }
 }
