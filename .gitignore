@@ -3,3 +3,6 @@ composer.lock
 .php_cs.cache
 /vendor/
 /public
+.idea/
+coverage.xml
+results.xml
