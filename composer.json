@@ -38,6 +38,9 @@
             "Mpociot\\ApiDoc\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test-ci": "phpunit --coverage-clover=coverage.xml"
+    },
     "extra": {
         "laravel": {
             "providers": [
