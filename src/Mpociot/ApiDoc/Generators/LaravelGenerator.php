@@ -11,9 +11,20 @@ use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Support\Facades\Request;
 use League\Fractal\Resource\Collection;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 class LaravelGenerator extends AbstractGenerator
 {
+    /**
+     * @param Route $route
+     *
+     * @return mixed
+     */
+    public function getDomain($route)
+    {
+        return $route->domain();
+    }
+
     /**
      * @param Route $route
      *
@@ -36,10 +47,12 @@ class LaravelGenerator extends AbstractGenerator
     public function getMethods($route)
     {
         if (version_compare(app()->version(), '5.4', '<')) {
-            return $route->getMethods();
+            $methods = $route->getMethods();
+        } else {
+            $methods = $route->methods();
         }
 
-        return $route->methods();
+        return array_diff($methods, ['HEAD']);
     }
 
     /**
@@ -54,10 +67,15 @@ class LaravelGenerator extends AbstractGenerator
     {
         $content = '';
 
+        $routeDomain = $route->domain();
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
         $showresponse = null;
+
+        // set correct route domain
+        $headers[] = "HTTP_HOST: {$routeDomain}";
+        $headers[] = "SERVER_NAME: {$routeDomain}";
 
         if ($withResponse) {
             $response = null;
@@ -105,9 +123,9 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return  void
      */
-    public function prepareMiddleware($disable = true)
+    public function prepareMiddleware($enable = true)
     {
-        App::instance('middleware.disable', true);
+        App::instance('middleware.disable', ! $enable);
     }
 
     /**
@@ -139,11 +157,6 @@ class LaravelGenerator extends AbstractGenerator
         $response = $kernel->handle($request);
 
         $kernel->terminate($request, $response);
-
-        if (file_exists($file = App::bootstrapPath().'/app.php')) {
-            $app = require $file;
-            $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-        }
 
         return $response;
     }
@@ -266,7 +279,9 @@ class LaravelGenerator extends AbstractGenerator
                     $parameterReflection->request->add($bindings);
 
                     if (method_exists($parameterReflection, 'validator')) {
-                        return app()->call([$parameterReflection, 'validator'])
+                        $factory = app()->make(ValidationFactory::class);
+
+                        return app()->call([$parameterReflection, 'validator'], [$factory])
                             ->getRules();
                     } else {
                         return app()->call([$parameterReflection, 'rules']);

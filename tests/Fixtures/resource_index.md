@@ -21,7 +21,7 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
-<!-- START_2ea88ff35aa222f5582e50f39a2b35fd -->
+<!-- START_2b6e5a4b188cb183c7e59558cce36cb6 -->
 ## Display a listing of the resource.
 
 > Example request:
@@ -58,12 +58,10 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 `GET api/user`
 
-`HEAD api/user`
 
+<!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
 
-<!-- END_2ea88ff35aa222f5582e50f39a2b35fd -->
-
-<!-- START_99a7210df460e7fd8ad2508ee28b9763 -->
+<!-- START_7f66c974d24032cb19061d55d801f62b -->
 ## Show the form for creating a new resource.
 
 > Example request:
@@ -100,10 +98,8 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 `GET api/user/create`
 
-`HEAD api/user/create`
 
-
-<!-- END_99a7210df460e7fd8ad2508ee28b9763 -->
+<!-- END_7f66c974d24032cb19061d55d801f62b -->
 
 <!-- START_f0654d3f2fc63c11f5723f233cc53c83 -->
 ## Store a newly created resource in storage.
@@ -138,7 +134,7 @@ $.ajax(settings).done(function (response) {
 
 <!-- END_f0654d3f2fc63c11f5723f233cc53c83 -->
 
-<!-- START_7a5835399fad9a53bc0430d6e3054297 -->
+<!-- START_ceec0e0b1d13d731ad96603d26bccc2f -->
 ## Display the specified resource.
 
 > Example request:
@@ -175,12 +171,10 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 `GET api/user/{user}`
 
-`HEAD api/user/{user}`
 
+<!-- END_ceec0e0b1d13d731ad96603d26bccc2f -->
 
-<!-- END_7a5835399fad9a53bc0430d6e3054297 -->
-
-<!-- START_5ed9d10b12650f9536edfa994fafae15 -->
+<!-- START_f4aa12af19ba08e1448d7eafc9f55e67 -->
 ## Show the form for editing the specified resource.
 
 > Example request:
@@ -217,10 +211,8 @@ $.ajax(settings).done(function (response) {
 ### HTTP Request
 `GET api/user/{user}/edit`
 
-`HEAD api/user/{user}/edit`
 
-
-<!-- END_5ed9d10b12650f9536edfa994fafae15 -->
+<!-- END_f4aa12af19ba08e1448d7eafc9f55e67 -->
 
 <!-- START_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
 ## Update the specified resource in storage.

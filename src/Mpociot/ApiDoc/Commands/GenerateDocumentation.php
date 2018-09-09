@@ -22,7 +22,8 @@ class GenerateDocumentation extends Command
      */
     protected $signature = 'api:generate
                             {--output=public/docs : The output path for the generated documentation}
-                            {--routePrefix= : The route prefix to use for generation}
+                            {--routeDomain= : The route domain (or domains) to use for generation}
+                            {--routePrefix= : The route prefix (or prefixes) to use for generation}
                             {--routes=* : The route names to use for generation}
                             {--middleware= : The middleware to use for generation}
                             {--noResponseCalls : Disable API response calls}
@@ -68,23 +69,37 @@ class GenerateDocumentation extends Command
         }
 
         $allowedRoutes = $this->option('routes');
+        $routeDomain = $this->option('routeDomain');
         $routePrefix = $this->option('routePrefix');
         $middleware = $this->option('middleware');
 
         $this->setUserToBeImpersonated($this->option('actAsUserId'));
 
-        if ($routePrefix === null && ! count($allowedRoutes) && $middleware === null) {
-            $this->error('You must provide either a route prefix or a route or a middleware to generate the documentation.');
+        if ($routePrefix === null && $routeDomain === null && ! count($allowedRoutes) && $middleware === null) {
+            $this->error('You must provide either a route prefix, a route domain, a route or a middleware to generate the documentation.');
 
             return false;
         }
 
         $generator->prepareMiddleware($this->option('useMiddlewares'));
 
+        $routePrefixes = explode(',', $routePrefix ?: '*');
+        $routeDomains = explode(',', $routeDomain ?: '*');
+
+        $parsedRoutes = [];
+
         if ($this->option('router') === 'laravel') {
-            $parsedRoutes = $this->processLaravelRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
+            foreach ($routeDomains as $routeDomain) {
+                foreach ($routePrefixes as $routePrefix) {
+                    $parsedRoutes += $this->processLaravelRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
+                }
+            }
         } else {
-            $parsedRoutes = $this->processDingoRoutes($generator, $allowedRoutes, $routePrefix, $middleware);
+            foreach ($routeDomains as $routeDomain) {
+                foreach ($routePrefixes as $routePrefix) {
+                    $parsedRoutes += $this->processDingoRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
+                }
+            }
         }
         $parsedRoutes = collect($parsedRoutes)->groupBy('resource')->sort(function ($a, $b) {
             return strcmp($a->first()['resource'], $b->first()['resource']);
@@ -124,10 +139,6 @@ class GenerateDocumentation extends Command
         if (file_exists($targetFile) && file_exists($compareFile)) {
             $generatedDocumentation = file_get_contents($targetFile);
             $compareDocumentation = file_get_contents($compareFile);
-
-            if (preg_match('/<!-- START_INFO -->(.*)<!-- END_INFO -->/is', $generatedDocumentation, $generatedInfoText)) {
-                $infoText = trim($generatedInfoText[1], "\n");
-            }
 
             if (preg_match('/---(.*)---\\s<!-- START_INFO -->/is', $generatedDocumentation, $generatedFrontmatter)) {
                 $frontmatter = trim($generatedFrontmatter[1], "\n");
@@ -222,12 +233,12 @@ class GenerateDocumentation extends Command
         if (! empty($actAs)) {
             if (version_compare($this->laravel->version(), '5.2.0', '<')) {
                 $userModel = config('auth.model');
-                $user = $userModel::find((int) $actAs);
+                $user = $userModel::find($actAs);
                 $this->laravel['auth']->setUser($user);
             } else {
                 $provider = $this->option('authProvider');
                 $userModel = config("auth.providers.$provider.model");
-                $user = $userModel::find((int) $actAs);
+                $user = $userModel::find($actAs);
                 $this->laravel['auth']->guard($this->option('authGuard'))->setUser($user);
             }
         }
@@ -248,20 +259,25 @@ class GenerateDocumentation extends Command
     /**
      * @param AbstractGenerator  $generator
      * @param $allowedRoutes
+     * @param $routeDomain
      * @param $routePrefix
      *
      * @return array
      */
-    private function processLaravelRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix, $middleware)
+    private function processLaravelRoutes(AbstractGenerator $generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware)
     {
         $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
-            if (in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $generator->getUri($route)) || in_array($middleware, $route->middleware())) {
+            if (in_array($route->getName(), $allowedRoutes)
+                || (str_is($routeDomain, $generator->getDomain($route))
+                    && str_is($routePrefix, $generator->getUri($route)))
+                || in_array($middleware, $route->middleware())
+               ) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse && in_array('GET', $generator->getMethods($route)));
                     $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
@@ -275,18 +291,25 @@ class GenerateDocumentation extends Command
     /**
      * @param AbstractGenerator $generator
      * @param $allowedRoutes
+     * @param $routeDomain
      * @param $routePrefix
      *
      * @return array
      */
-    private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routePrefix, $middleware)
+    private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware)
     {
         $withResponse = $this->option('noResponseCalls') === false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
-            if (empty($allowedRoutes) || in_array($route->getName(), $allowedRoutes) || str_is($routePrefix, $route->uri()) || in_array($middleware, $route->middleware())) {
+            if (empty($allowedRoutes)
+                // TODO extract this into a method
+                || in_array($route->getName(), $allowedRoutes)
+                || (str_is($routeDomain, $generator->getDomain($route))
+                    && str_is($routePrefix, $generator->getUri($route)))
+                || in_array($middleware, $route->middleware())
+               ) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
                     $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
                     $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
