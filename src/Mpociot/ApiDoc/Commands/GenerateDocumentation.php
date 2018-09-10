@@ -197,7 +197,7 @@ class GenerateDocumentation extends Command
 
         $documentarian->generate($outputPath);
 
-        $this->info('Wrote HTML documentation to: '.$outputPath.'/public/index.html');
+        $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
 
         if ($this->option('noPostmanCollection') !== true) {
             $this->info('Generating Postman collection');
