@@ -13,7 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [2.1.0] - 2018-09-00
+## [2.1.1] - 10th September, 2018
+### Fixed
+- Print the correct file path of generated documentation (https://github.com/mpociot/laravel-apidoc-generator/pull/311)
+- Removed any extra slashes in URLs displayed in code samples (https://github.com/mpociot/laravel-apidoc-generator/pull/310)
+- Response calls are now also made for only GET in DIngo Router (https://github.com/mpociot/laravel-apidoc-generator/pull/309)
+- HEAD routes are no longer automatically generated for GET routes in DIngo Router (https://github.com/mpociot/laravel-apidoc-generator/pull/309)
+
+## [2.1.0] - 9th September, 2018
 ### Added
 - Added support for multiple route domains (https://github.com/mpociot/laravel-apidoc-generator/pull/255) 
 - Added support for descriptions in custom validation rules (https://github.com/mpociot/laravel-apidoc-generator/pull/208)
