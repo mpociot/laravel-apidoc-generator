@@ -242,7 +242,7 @@ abstract class AbstractGenerator
                     // Add route parameter bindings
                     $formRequest->setContainer(app());
                     $formRequest->request->add($bindings);
-                    $formRequest->request->add($bindings);
+                    $formRequest->query->add($bindings);
                     $formRequest->setMethod($routeMethods[0]);
 
                     if (method_exists($formRequest, 'validator')) {
