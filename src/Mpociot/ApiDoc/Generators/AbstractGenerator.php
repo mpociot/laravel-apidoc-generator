@@ -223,6 +223,7 @@ abstract class AbstractGenerator
      * @param  array $routeMethods
      * @param  string $routeAction
      * @param  array $bindings
+     *
      * @return array
      */
     protected function getRouteRules(array $routeMethods, $routeAction, $bindings)
@@ -247,6 +248,7 @@ abstract class AbstractGenerator
 
                     if (method_exists($formRequest, 'validator')) {
                         $factory = app(ValidationFactory::class);
+
                         return call_user_func_array([$formRequest, 'validator'], [$factory])
                             ->getRules();
                     } else {
