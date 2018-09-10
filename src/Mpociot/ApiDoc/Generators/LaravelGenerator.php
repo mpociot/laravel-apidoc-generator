@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\App;
 use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Support\Facades\Request;
 use League\Fractal\Resource\Collection;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 class LaravelGenerator extends AbstractGenerator
 {
@@ -252,44 +250,5 @@ class LaravelGenerator extends AbstractGenerator
             // it isn't possible to parse the transformer
             return;
         }
-    }
-
-    /**
-     * @param  string $route
-     * @param  array $bindings
-     *
-     * @return array
-     */
-    protected function getRouteRules($route, $bindings)
-    {
-        list($class, $method) = explode('@', $route);
-        $reflection = new ReflectionClass($class);
-        $reflectionMethod = $reflection->getMethod($method);
-
-        foreach ($reflectionMethod->getParameters() as $parameter) {
-            $parameterType = $parameter->getClass();
-            if (! is_null($parameterType) && class_exists($parameterType->name)) {
-                $className = $parameterType->name;
-
-                if (is_subclass_of($className, FormRequest::class)) {
-                    $parameterReflection = new $className;
-                    $parameterReflection->setContainer(app());
-                    // Add route parameter bindings
-                    $parameterReflection->query->add($bindings);
-                    $parameterReflection->request->add($bindings);
-
-                    if (method_exists($parameterReflection, 'validator')) {
-                        $factory = app()->make(ValidationFactory::class);
-
-                        return app()->call([$parameterReflection, 'validator'], [$factory])
-                            ->getRules();
-                    } else {
-                        return app()->call([$parameterReflection, 'rules']);
-                    }
-                }
-            }
-        }
-
-        return [];
     }
 }
