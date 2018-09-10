@@ -53,6 +53,6 @@ class UpdateDocumentation extends Command
 
         $documentarian->generate($outputPath);
 
-        $this->info('Wrote HTML documentation to: '.$outputPath.'/public/index.html');
+        $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
     }
 }
