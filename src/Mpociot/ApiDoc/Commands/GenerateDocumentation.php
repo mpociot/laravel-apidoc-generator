@@ -311,10 +311,10 @@ class GenerateDocumentation extends Command
                 || in_array($middleware, $route->middleware())
                ) {
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse);
-                    $this->info('Processed route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
+                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse && in_array('GET', $generator->getMethods($route)));
+                    $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$route->uri());
                 } else {
-                    $this->warn('Skipping route: ['.implode(',', $route->getMethods()).'] '.$route->uri());
+                    $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$route->uri());
                 }
             }
         }
