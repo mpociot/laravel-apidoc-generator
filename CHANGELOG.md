@@ -10,9 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
-- Set correct HTTP method when parsing FormRequest
+- Set correct HTTP method when parsing FormRequest (https://github.com/mpociot/laravel-apidoc-generator/pull/314)
 
 ### Removed
+
+## [2.1.2] - 10th September, 2018
+### Fixed
+- Set correct HTTP method when parsing FormRequest (https://github.com/mpociot/laravel-apidoc-generator/pull/314)
 
 ## [2.1.1] - 10th September, 2018
 ### Fixed
