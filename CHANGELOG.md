@@ -10,9 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
-- Parse `@response` tags regardless of HTTP method
 
 ### Removed
+
+## [2.1.3] - 11th September, 2018
+### Fixed
+- Parse `@response` tags regardless of HTTP method (https://github.com/mpociot/laravel-apidoc-generator/pull/318)
 
 ## [2.1.2] - 10th September, 2018
 ### Fixed
