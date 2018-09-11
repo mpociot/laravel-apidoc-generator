@@ -82,7 +82,7 @@ abstract class AbstractGenerator
                     $content = $response->getContent();
                 }
             } catch (\Exception $e) {
-                dump("Couldn't get response for route: ".implode(',', $this->getMethods($route)).'] '.$route->uri()."", $e);
+                dump("Couldn't get response for route: ".implode(',', $this->getMethods($route)).'] '.$route->uri().'', $e);
             }
         }
 
