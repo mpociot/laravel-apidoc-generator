@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
-
 class DingoGenerator extends AbstractGenerator
 {
     /**
