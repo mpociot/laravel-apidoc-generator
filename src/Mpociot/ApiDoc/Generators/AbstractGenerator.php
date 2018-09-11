@@ -11,6 +11,7 @@ use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 abstract class AbstractGenerator
 {
@@ -86,9 +87,9 @@ abstract class AbstractGenerator
      */
     protected function getParameters($routeData, $routeAction, $bindings)
     {
-        $rules = $this->simplifyRules($this->getRouteRules($routeAction['uses'], $bindings));
+        $rules = $this->simplifyRules($this->getRouteRules($routeData['methods'], $routeAction['uses'], $bindings));
 
-        foreach ($rules as $attribute => $rules) {
+        foreach ($rules as $attribute => $ruleset) {
             $attributeData = [
                 'required' => false,
                 'type' => null,
@@ -96,8 +97,7 @@ abstract class AbstractGenerator
                 'value' => '',
                 'description' => [],
             ];
-
-            foreach ($rules as $ruleName => $rule) {
+            foreach ($ruleset as $rule) {
                 $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
             }
             $routeData['parameters'][$attribute] = $attributeData;
@@ -220,14 +220,15 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  $route
+     * @param  array $routeMethods
+     * @param  string $routeAction
      * @param  array $bindings
      *
      * @return array
      */
-    protected function getRouteRules($route, $bindings)
+    protected function getRouteRules(array $routeMethods, $routeAction, $bindings)
     {
-        list($class, $method) = explode('@', $route);
+        list($class, $method) = explode('@', $routeAction);
         $reflection = new ReflectionClass($class);
         $reflectionMethod = $reflection->getMethod($method);
 
@@ -237,15 +238,21 @@ abstract class AbstractGenerator
                 $className = $parameterType->name;
 
                 if (is_subclass_of($className, FormRequest::class)) {
-                    $parameterReflection = new $className;
+                    /** @var FormRequest $formRequest */
+                    $formRequest = new $className;
                     // Add route parameter bindings
-                    $parameterReflection->query->add($bindings);
-                    $parameterReflection->request->add($bindings);
+                    $formRequest->setContainer(app());
+                    $formRequest->request->add($bindings);
+                    $formRequest->query->add($bindings);
+                    $formRequest->setMethod($routeMethods[0]);
 
-                    if (method_exists($parameterReflection, 'validator')) {
-                        return $parameterReflection->validator()->getRules();
+                    if (method_exists($formRequest, 'validator')) {
+                        $factory = app(ValidationFactory::class);
+
+                        return call_user_func_array([$formRequest, 'validator'], [$factory])
+                            ->getRules();
                     } else {
-                        return $parameterReflection->rules();
+                        return call_user_func_array([$formRequest, 'rules'], []);
                     }
                 }
             }

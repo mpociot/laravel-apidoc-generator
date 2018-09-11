@@ -10,7 +10,7 @@ before_script:
   - travis_retry composer install --prefer-dist --no-interaction
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - composer test-ci
 
 before_install:
   - pip install --user codecov
