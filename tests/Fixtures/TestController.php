@@ -79,7 +79,7 @@ class TestController extends Controller
 
     /**
      * @response {
-     *  data: [],
+     *  "data": []
      *}
      */
     public function responseTag()

@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
+use Exception;
 use ReflectionClass;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
@@ -51,67 +52,6 @@ class LaravelGenerator extends AbstractGenerator
         }
 
         return array_diff($methods, ['HEAD']);
-    }
-
-    /**
-     * @param  \Illuminate\Routing\Route $route
-     * @param array $bindings
-     * @param array $headers
-     * @param bool $withResponse
-     *
-     * @return array
-     */
-    public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
-    {
-        $content = '';
-
-        $routeDomain = $route->domain();
-        $routeAction = $route->getAction();
-        $routeGroup = $this->getRouteGroup($routeAction['uses']);
-        $routeDescription = $this->getRouteDescription($routeAction['uses']);
-        $showresponse = null;
-
-        // set correct route domain
-        $headers[] = "HTTP_HOST: {$routeDomain}";
-        $headers[] = "SERVER_NAME: {$routeDomain}";
-
-        if ($withResponse) {
-            $response = null;
-            $docblockResponse = $this->getDocblockResponse($routeDescription['tags']);
-            if ($docblockResponse) {
-                // we have a response from the docblock ( @response )
-                $response = $docblockResponse;
-                $showresponse = true;
-            }
-            if (! $response) {
-                $transformerResponse = $this->getTransformerResponse($routeDescription['tags']);
-                if ($transformerResponse) {
-                    // we have a transformer response from the docblock ( @transformer || @transformercollection )
-                    $response = $transformerResponse;
-                    $showresponse = true;
-                }
-            }
-            if (! $response) {
-                $response = $this->getRouteResponse($route, $bindings, $headers);
-            }
-            if ($response->headers->get('Content-Type') === 'application/json') {
-                $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
-            } else {
-                $content = $response->getContent();
-            }
-        }
-
-        return $this->getParameters([
-            'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
-            'resource' => $routeGroup,
-            'title' => $routeDescription['short'],
-            'description' => $routeDescription['long'],
-            'methods' => $this->getMethods($route),
-            'uri' => $this->getUri($route),
-            'parameters' => [],
-            'response' => $content,
-            'showresponse' => $showresponse,
-        ], $routeAction, $bindings);
     }
 
     /**
