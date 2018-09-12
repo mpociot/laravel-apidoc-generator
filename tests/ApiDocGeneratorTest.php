@@ -355,7 +355,7 @@ class ApiDocGeneratorTest extends TestCase
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $this->assertJsonStringEqualsJsonString(json_decode($parsed['response'], true), '{ "data": []}');
+        $this->assertJsonStringEqualsJsonString($parsed['response'], '{ "data": []}');
     }
 
     public function testCanParseTransformerTag()
