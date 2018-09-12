@@ -43,7 +43,61 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    abstract public function processRoute($route, $bindings = [], $withResponse = true);
+    public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
+    {
+        $routeDomain = $route->domain();
+        $routeAction = $route->getAction();
+        $routeGroup = $this->getRouteGroup($routeAction['uses']);
+        $routeDescription = $this->getRouteDescription($routeAction['uses']);
+        $showresponse = null;
+
+        // set correct route domain
+        $headers[] = "HTTP_HOST: {$routeDomain}";
+        $headers[] = "SERVER_NAME: {$routeDomain}";
+
+        $content = '';
+        $response = null;
+        $docblockResponse = $this->getDocblockResponse($routeDescription['tags']);
+        if ($docblockResponse) {
+            // we have a response from the docblock ( @response )
+            $response = $docblockResponse;
+            $showresponse = true;
+            $content = $response->getContent();
+        }
+        if (! $response) {
+            $transformerResponse = $this->getTransformerResponse($routeDescription['tags']);
+            if ($transformerResponse) {
+                // we have a transformer response from the docblock ( @transformer || @transformercollection )
+                $response = $transformerResponse;
+                $showresponse = true;
+                $content = $response->getContent();
+            }
+        }
+        if (! $response && $withResponse) {
+            try {
+                $response = $this->getRouteResponse($route, $bindings, $headers);
+                if ($response->headers->get('Content-Type') === 'application/json') {
+                    $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
+                } else {
+                    $content = $response->getContent();
+                }
+            } catch (\Exception $e) {
+                dump("Couldn't get response for route: ".implode(',', $this->getMethods($route)).'] '.$route->uri().'', $e);
+            }
+        }
+
+        return $this->getParameters([
+            'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
+            'resource' => $routeGroup,
+            'title' => $routeDescription['short'],
+            'description' => $routeDescription['long'],
+            'methods' => $this->getMethods($route),
+            'uri' => $this->getUri($route),
+            'parameters' => [],
+            'response' => $content,
+            'showresponse' => $showresponse,
+        ], $routeAction, $bindings);
+    }
 
     /**
      * Prepares / Disables route middlewares.
@@ -179,7 +233,7 @@ abstract class AbstractGenerator
     /**
      * @param  \Illuminate\Routing\Route  $route
      *
-     * @return string
+     * @return array
      */
     protected function getRouteDescription($route)
     {

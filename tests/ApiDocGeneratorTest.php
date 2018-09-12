@@ -350,12 +350,12 @@ class ApiDocGeneratorTest extends TestCase
     public function testCanParseResponseTag()
     {
         RouteFacade::post('/responseTag', TestController::class.'@responseTag');
-        $route = new Route(['GET'], '/responseTag', ['uses' => TestController::class.'@responseTag']);
+        $route = new Route(['POST'], '/responseTag', ['uses' => TestController::class.'@responseTag']);
         $parsed = $this->generator->processRoute($route);
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $this->assertSame($parsed['response'], "{\n data: [],\n}");
+        $this->assertJsonStringEqualsJsonString(json_decode($parsed['response'], true), '{ "data": []}');
     }
 
     public function testCanParseTransformerTag()
