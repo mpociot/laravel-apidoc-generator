@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
-use Exception;
 use ReflectionClass;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
