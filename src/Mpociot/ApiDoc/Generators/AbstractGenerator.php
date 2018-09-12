@@ -79,6 +79,7 @@ abstract class AbstractGenerator
         }
 
         $content = $this->getResponseContent($response);
+
         return $this->getParameters([
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'resource' => $routeGroup,
@@ -661,6 +662,7 @@ abstract class AbstractGenerator
 
     /**
      * @param $response
+     *
      * @return mixed
      */
     private function getResponseContent($response)
@@ -673,6 +675,7 @@ abstract class AbstractGenerator
         } else {
             $content = $response->getContent();
         }
+
         return $content;
     }
 }
