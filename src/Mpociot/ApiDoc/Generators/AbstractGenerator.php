@@ -168,7 +168,7 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Format the validation rules as plain array.
+     * Format the validation rules as a plain array.
      *
      * @param array $rules
      *

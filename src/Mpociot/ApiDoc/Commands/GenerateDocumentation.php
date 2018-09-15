@@ -89,17 +89,9 @@ class GenerateDocumentation extends Command
 
         $parsedRoutes = [];
 
-        if ($this->option('router') === 'laravel') {
-            foreach ($routeDomains as $routeDomain) {
-                foreach ($routePrefixes as $routePrefix) {
-                    $parsedRoutes += $this->processRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
-                }
-            }
-        } else {
-            foreach ($routeDomains as $routeDomain) {
-                foreach ($routePrefixes as $routePrefix) {
-                    $parsedRoutes += $this->processDingoRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
-                }
+        foreach ($routeDomains as $routeDomain) {
+            foreach ($routePrefixes as $routePrefix) {
+                $parsedRoutes += $this->processRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
             }
         }
         $parsedRoutes = collect($parsedRoutes)->groupBy('resource')->sort(function ($a, $b) {
