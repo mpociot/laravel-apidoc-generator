@@ -148,7 +148,8 @@ abstract class AbstractGenerator
      */
     protected function getParameters($routeData, $routeAction, $bindings)
     {
-        $rules = $this->simplifyRules($this->getRouteRules($routeData['methods'], $routeAction['uses'], $bindings));
+        $validationRules = $this->getRouteValidationRules($routeData['methods'], $routeAction['uses'], $bindings);
+        $rules = $this->simplifyRules($validationRules);
 
         foreach ($rules as $attribute => $ruleset) {
             $attributeData = [
@@ -168,7 +169,7 @@ abstract class AbstractGenerator
     }
 
     /**
-     * Format the validation rules as plain array.
+     * Format the validation rules as a plain array.
      *
      * @param array $rules
      *
@@ -176,19 +177,24 @@ abstract class AbstractGenerator
      */
     protected function simplifyRules($rules)
     {
-        $simplifiedRules = Validator::make([], $rules)->getRules();
+        // this will split all string rules into arrays of strings
+        $rules = Validator::make([], $rules)->getRules();
 
-        if (count($simplifiedRules) === 0) {
-            return $simplifiedRules;
+        if (count($rules) === 0) {
+            return $rules;
         }
 
-        $values = collect($simplifiedRules)
+        // Laravel will ignore the nested array rules unless the key referenced exists and is an array
+        // So we'll to create an empty array for each array attribute
+        $values = collect($rules)
             ->filter(function ($values) {
                 return in_array('array', $values);
             })->map(function ($val, $key) {
                 return [''];
             })->all();
 
+        // Now this will return the complete ruleset.
+        // Nested array parameters will be present, with '*' replaced by '0'
         return Validator::make($values, $rules)->getRules();
     }
 
@@ -287,10 +293,10 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    protected function getRouteRules(array $routeMethods, $routeAction, $bindings)
+    protected function getRouteValidationRules(array $routeMethods, $routeAction, $bindings)
     {
-        list($class, $method) = explode('@', $routeAction);
-        $reflection = new ReflectionClass($class);
+        list($controller, $method) = explode('@', $routeAction);
+        $reflection = new ReflectionClass($controller);
         $reflectionMethod = $reflection->getMethod($method);
 
         foreach ($reflectionMethod->getParameters() as $parameter) {
@@ -357,13 +363,13 @@ abstract class AbstractGenerator
 
     /**
      * @param  string  $rule
-     * @param  string  $ruleName
+     * @param  string  $attribute
      * @param  array  $attributeData
      * @param  int  $seed
      *
      * @return void
      */
-    protected function parseRule($rule, $ruleName, &$attributeData, $seed, $routeData)
+    protected function parseRule($rule, $attribute, &$attributeData, $seed, $routeData)
     {
         $faker = Factory::create();
         $faker->seed(crc32($seed));
@@ -510,7 +516,7 @@ abstract class AbstractGenerator
                 $attributeData['value'] = $faker->timezone;
                 break;
             case 'exists':
-                $fieldName = isset($parameters[1]) ? $parameters[1] : $ruleName;
+                $fieldName = isset($parameters[1]) ? $parameters[1] : $attribute;
                 $attributeData['description'][] = Description::parse($rule)->with([Str::singular($parameters[0]), $fieldName])->getDescription();
                 break;
             case 'active_url':
@@ -627,7 +633,7 @@ abstract class AbstractGenerator
 
         // The format for specifying validation rules and parameters follows an
         // easy {rule}:{parameters} formatting convention. For instance the
-        // rule "Max:3" states that the value may only be three letters.
+        // rule "max:3" states that the value may only be three letters.
         if (strpos($rules, ':') !== false) {
             list($rules, $parameter) = explode(':', $rules, 2);
 
