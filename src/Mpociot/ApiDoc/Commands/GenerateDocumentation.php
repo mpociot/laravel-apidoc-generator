@@ -159,7 +159,7 @@ class GenerateDocumentation extends Command
         }
 
         $prependFileContents = file_exists($prependFile)
-            ?file_get_contents($prependFile)."\n" : '';
+            ? file_get_contents($prependFile)."\n" : '';
         $appendFileContents = file_exists($appendFile)
             ? "\n".file_get_contents($appendFile) : '';
 
