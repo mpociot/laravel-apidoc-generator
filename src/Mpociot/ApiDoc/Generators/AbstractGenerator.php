@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
+use Illuminate\Routing\Route;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
@@ -19,25 +20,34 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 abstract class AbstractGenerator
 {
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return mixed
      */
-    abstract public function getDomain($route);
+    public function getDomain(Route $route)
+    {
+        return $route->domain();
+    }
 
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return mixed
      */
-    abstract public function getUri($route);
+    public function getUri(Route $route)
+    {
+        return $route->uri();
+    }
 
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return mixed
      */
-    abstract public function getMethods($route);
+    public function getMethods(Route $route)
+    {
+        return array_diff($route->methods(), ['HEAD']);
+    }
 
     /**
      * @param  \Illuminate\Routing\Route $route
@@ -77,7 +87,7 @@ abstract class AbstractGenerator
             try {
                 $response = $this->getRouteResponse($route, $bindings, $headers);
             } catch (\Exception $e) {
-                dump("Couldn't get response for route: ".implode(',', $this->getMethods($route)).'] '.$route->uri().'', $e->getMessage());
+                echo "Couldn't get response for route: ".implode(',', $this->getMethods($route)).$route->uri().']: '.$e->getMessage()."\n";
             }
         }
 

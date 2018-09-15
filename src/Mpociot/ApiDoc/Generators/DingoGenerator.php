@@ -30,28 +30,4 @@ class DingoGenerator extends AbstractGenerator
 
         return call_user_func_array([$dispatcher, strtolower($method)], [$uri]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDomain($route)
-    {
-        return $route->domain();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUri($route)
-    {
-        return $route->uri();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMethods($route)
-    {
-        return array_diff($route->getMethods(), ['HEAD']);
-    }
 }
