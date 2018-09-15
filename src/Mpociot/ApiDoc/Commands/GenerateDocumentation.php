@@ -3,15 +3,16 @@
 namespace Mpociot\ApiDoc\Commands;
 
 use ReflectionClass;
+use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Mpociot\ApiDoc\Generators\AbstractGenerator;
+use Illuminate\Support\Facades\Route as RouteFacade;
 
 class GenerateDocumentation extends Command
 {
@@ -91,7 +92,7 @@ class GenerateDocumentation extends Command
         if ($this->option('router') === 'laravel') {
             foreach ($routeDomains as $routeDomain) {
                 foreach ($routePrefixes as $routePrefix) {
-                    $parsedRoutes += $this->processLaravelRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
+                    $parsedRoutes += $this->processRoutes($generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware);
                 }
             }
         } else {
@@ -215,6 +216,7 @@ class GenerateDocumentation extends Command
         if (empty($bindings)) {
             return [];
         }
+
         $bindings = explode('|', $bindings);
         $resultBindings = [];
         foreach ($bindings as $binding) {
@@ -250,9 +252,9 @@ class GenerateDocumentation extends Command
     private function getRoutes()
     {
         if ($this->option('router') === 'laravel') {
-            return Route::getRoutes();
+            return RouteFacade::getRoutes();
         } else {
-            return app('Dingo\Api\Routing\Router')->getRoutes()[$this->option('routePrefix')];
+            return app('Dingo\Api\Routing\Router')->getRoutes();
         }
     }
 
@@ -264,13 +266,14 @@ class GenerateDocumentation extends Command
      *
      * @return array
      */
-    private function processLaravelRoutes(AbstractGenerator $generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware)
+    private function processRoutes(AbstractGenerator $generator, array $allowedRoutes, $routeDomain, $routePrefix, $middleware)
     {
-        $withResponse = $this->option('noResponseCalls') === false;
+        $withResponse = $this->option('noResponseCalls') == false;
         $routes = $this->getRoutes();
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {
+            /** @var Route $route */
             if (in_array($route->getName(), $allowedRoutes)
                 || (str_is($routeDomain, $generator->getDomain($route))
                     && str_is($routePrefix, $generator->getUri($route)))
@@ -289,45 +292,11 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param AbstractGenerator $generator
-     * @param $allowedRoutes
-     * @param $routeDomain
-     * @param $routePrefix
-     *
-     * @return array
-     */
-    private function processDingoRoutes(AbstractGenerator $generator, $allowedRoutes, $routeDomain, $routePrefix, $middleware)
-    {
-        $withResponse = $this->option('noResponseCalls') === false;
-        $routes = $this->getRoutes();
-        $bindings = $this->getBindings();
-        $parsedRoutes = [];
-        foreach ($routes as $route) {
-            if (empty($allowedRoutes)
-                // TODO extract this into a method
-                || in_array($route->getName(), $allowedRoutes)
-                || (str_is($routeDomain, $generator->getDomain($route))
-                    && str_is($routePrefix, $generator->getUri($route)))
-                || in_array($middleware, $route->middleware())
-               ) {
-                if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $bindings, $this->option('header'), $withResponse && in_array('GET', $generator->getMethods($route)));
-                    $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$route->uri());
-                } else {
-                    $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$route->uri());
-                }
-            }
-        }
-
-        return $parsedRoutes;
-    }
-
-    /**
      * @param $route
      *
      * @return bool
      */
-    private function isValidRoute($route)
+    private function isValidRoute(Route $route)
     {
         return ! is_callable($route->getAction()['uses']) && ! is_null($route->getAction()['uses']);
     }
