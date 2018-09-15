@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Illuminate\Routing\Route;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Contracts\Console\Kernel;
 use Dingo\Api\Provider\LaravelServiceProvider;
@@ -12,6 +11,8 @@ use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class GenerateDocumentationTest extends TestCase
 {
@@ -32,7 +33,20 @@ class GenerateDocumentationTest extends TestCase
 
     public function tearDown()
     {
-        exec('rm -rf '.__DIR__.'/../public/docs');
+        // delete the generated docs - compatible cross-platform
+        $dir = __DIR__.'/../public/docs';
+        if (is_dir($dir)) {
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($files as $fileinfo) {
+                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                $todo($fileinfo->getRealPath());
+            }
+            rmdir($dir);
+        }
     }
 
     /**
@@ -48,7 +62,7 @@ class GenerateDocumentationTest extends TestCase
         ];
     }
 
-    public function testConsoleCommandNeedsAPrefixOrRoute()
+    public function testConsoleCommandNeedsPrefixesOrDomainsOrRoutes()
     {
         $output = $this->artisan('api:generate');
         $this->assertEquals('You must provide either a route prefix, a route domain, a route or a middleware to generate the documentation.'.PHP_EOL, $output);
@@ -108,9 +122,9 @@ class GenerateDocumentationTest extends TestCase
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
         ]);
-        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
-        $fixtureMarkdown = file_get_contents(__DIR__.'/Fixtures/resource_index.md');
-        $this->assertSame($generatedMarkdown, $fixtureMarkdown);
+        $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
+        $gneratedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $gneratedMarkdown);
     }
 
     public function testGeneratedMarkdownFileIsCorrect()
@@ -122,11 +136,11 @@ class GenerateDocumentationTest extends TestCase
             '--routePrefix' => 'api/*',
         ]);
 
-        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
-        $compareMarkdown = file_get_contents(__DIR__.'/../public/docs/source/.compare.md');
-        $fixtureMarkdown = file_get_contents(__DIR__.'/Fixtures/index.md');
-        $this->assertSame($generatedMarkdown, $fixtureMarkdown);
-        $this->assertSame($compareMarkdown, $fixtureMarkdown);
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $compareMarkdown = __DIR__.'/../public/docs/source/.compare.md';
+        $fixtureMarkdown = __DIR__.'/Fixtures/index.md';
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $compareMarkdown);
     }
 
     public function testAddsBindingsToGetRouteRules()
@@ -171,8 +185,8 @@ class GenerateDocumentationTest extends TestCase
             ],
         ]);
 
-        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
-        $this->assertContains('"authorization": [
+        $generatedMarkdown = $this->getFileContents(__DIR__.'/../public/docs/source/index.md');
+        $this->assertContainsRaw('"authorization": [
         "customAuthToken"
     ],
     "x-custom-header": [
@@ -203,5 +217,36 @@ class GenerateDocumentationTest extends TestCase
         $this->app[Kernel::class]->call($command, $parameters);
 
         return $this->app[Kernel::class]->output();
+    }
+
+    private function assertFilesHaveSameContent($pathToExpected, $pathToActual)
+    {
+        $actual = $this->getFileContents($pathToActual);
+        $expected = $this->getFileContents($pathToExpected);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * get the contents of a file in a cross-platform-compatible way
+     *
+     * @param $path
+     * @return mixed
+     */
+    private function getFileContents($path)
+    {
+        return str_replace("\r\n", "\n", file_get_contents($path));
+    }
+
+    /**
+     * Assert that a string contains another string, ignoring all whitespace
+     *
+     * @param $needle
+     * @param $haystack
+     */
+    private function assertContainsRaw($needle, $haystack)
+    {
+        $haystack = preg_replace('/\s/', '', $haystack);
+        $needle = preg_replace('/\s/', '', $needle);
+        $this->assertContains($needle, $haystack);
     }
 }
