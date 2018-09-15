@@ -3,15 +3,15 @@
 namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
-use Illuminate\Routing\Route;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
-use League\Fractal\Resource\Item;
 use ReflectionClass;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use League\Fractal\Manager;
+use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
+use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
+use League\Fractal\Resource\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
@@ -92,6 +92,7 @@ abstract class AbstractGenerator
         }
 
         $content = $this->getResponseContent($response);
+
         return $this->getParameters([
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'resource' => $routeGroup,
@@ -674,6 +675,7 @@ abstract class AbstractGenerator
 
     /**
      * @param $response
+     *
      * @return mixed
      */
     private function getResponseContent($response)
@@ -686,6 +688,7 @@ abstract class AbstractGenerator
         } else {
             $content = $response->getContent();
         }
+
         return $content;
     }
 

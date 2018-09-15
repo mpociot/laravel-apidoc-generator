@@ -2,6 +2,8 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Contracts\Console\Kernel;
 use Dingo\Api\Provider\LaravelServiceProvider;
@@ -11,8 +13,6 @@ use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 class GenerateDocumentationTest extends TestCase
 {
@@ -227,10 +227,11 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /**
-     * get the contents of a file in a cross-platform-compatible way
+     * Get the contents of a file in a cross-platform-compatible way.
      *
      * @param $path
-     * @return mixed
+     *
+     * @return string
      */
     private function getFileContents($path)
     {
@@ -238,7 +239,7 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /**
-     * Assert that a string contains another string, ignoring all whitespace
+     * Assert that a string contains another string, ignoring all whitespace.
      *
      * @param $needle
      * @param $haystack

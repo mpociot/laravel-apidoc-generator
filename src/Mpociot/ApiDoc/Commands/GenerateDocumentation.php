@@ -2,17 +2,17 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
-use Illuminate\Routing\Route;
 use ReflectionClass;
+use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route as RouteFacade;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Mpociot\ApiDoc\Generators\AbstractGenerator;
+use Illuminate\Support\Facades\Route as RouteFacade;
 
 class GenerateDocumentation extends Command
 {
