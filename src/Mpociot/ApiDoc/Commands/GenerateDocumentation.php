@@ -111,6 +111,8 @@ class GenerateDocumentation extends Command
         $outputPath = $this->option('output');
         $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
         $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
+        $prependFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
+        $appendFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'append.md';
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', ltrim($outputPath, 'public/'))
@@ -156,12 +158,24 @@ class GenerateDocumentation extends Command
             });
         }
 
+        $prependFileContents = '';
+        if (file_exists($prependFile)) {
+            $prependFileContents = file_get_contents($prependFile);
+        }
+
+        $appendFileContents = '';
+        if (file_exists($appendFile)) {
+            $appendFileContents = file_get_contents($appendFile);
+        }
+
         $documentarian = new Documentarian();
 
         $markdown = view('apidoc::documentarian')
             ->with('writeCompareFile', false)
             ->with('frontmatter', $frontmatter)
             ->with('infoText', $infoText)
+            ->with('prependMd', $prependFileContents)
+            ->with('appendMd', $appendFileContents)
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
             ->with('parsedRoutes', $parsedRouteOutput);
@@ -178,6 +192,8 @@ class GenerateDocumentation extends Command
             ->with('writeCompareFile', true)
             ->with('frontmatter', $frontmatter)
             ->with('infoText', $infoText)
+            ->with('prependMd', $prependFileContents)
+            ->with('appendMd', $appendFileContents)
             ->with('outputPath', $this->option('output'))
             ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
             ->with('parsedRoutes', $parsedRouteOutput);
