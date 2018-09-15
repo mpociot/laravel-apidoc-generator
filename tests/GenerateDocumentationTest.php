@@ -123,8 +123,8 @@ class GenerateDocumentationTest extends TestCase
             '--routePrefix' => 'api/*',
         ]);
         $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
-        $gneratedMarkdown = __DIR__.'/../public/docs/source/index.md';
-        $this->assertFilesHaveSameContent($fixtureMarkdown, $gneratedMarkdown);
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
     public function testGeneratedMarkdownFileIsCorrect()
