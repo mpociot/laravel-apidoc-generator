@@ -6,8 +6,12 @@ use Faker\Factory;
 use ReflectionClass;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use League\Fractal\Manager;
+use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
+use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
+use League\Fractal\Resource\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Mpociot\ApiDoc\Parsers\RuleDescriptionParser as Description;
@@ -16,25 +20,34 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 abstract class AbstractGenerator
 {
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return mixed
      */
-    abstract public function getDomain($route);
+    public function getDomain(Route $route)
+    {
+        return $route->domain();
+    }
 
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return mixed
      */
-    abstract public function getUri($route);
+    public function getUri(Route $route)
+    {
+        return $route->uri();
+    }
 
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return mixed
      */
-    abstract public function getMethods($route);
+    public function getMethods(Route $route)
+    {
+        return array_diff($route->methods(), ['HEAD']);
+    }
 
     /**
      * @param  \Illuminate\Routing\Route $route
@@ -55,14 +68,12 @@ abstract class AbstractGenerator
         $headers[] = "HTTP_HOST: {$routeDomain}";
         $headers[] = "SERVER_NAME: {$routeDomain}";
 
-        $content = '';
         $response = null;
         $docblockResponse = $this->getDocblockResponse($routeDescription['tags']);
         if ($docblockResponse) {
             // we have a response from the docblock ( @response )
             $response = $docblockResponse;
             $showresponse = true;
-            $content = $response->getContent();
         }
         if (! $response) {
             $transformerResponse = $this->getTransformerResponse($routeDescription['tags']);
@@ -70,21 +81,17 @@ abstract class AbstractGenerator
                 // we have a transformer response from the docblock ( @transformer || @transformercollection )
                 $response = $transformerResponse;
                 $showresponse = true;
-                $content = $response->getContent();
             }
         }
         if (! $response && $withResponse) {
             try {
                 $response = $this->getRouteResponse($route, $bindings, $headers);
-                if ($response->headers->get('Content-Type') === 'application/json') {
-                    $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
-                } else {
-                    $content = $response->getContent();
-                }
             } catch (\Exception $e) {
-                dump("Couldn't get response for route: ".implode(',', $this->getMethods($route)).'] '.$route->uri().'', $e);
+                echo "Couldn't get response for route: ".implode(',', $this->getMethods($route)).$route->uri().']: '.$e->getMessage()."\n";
             }
         }
+
+        $content = $this->getResponseContent($response);
 
         return $this->getParameters([
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
@@ -152,7 +159,7 @@ abstract class AbstractGenerator
                 'description' => [],
             ];
             foreach ($ruleset as $rule) {
-                $this->parseRule($rule, $attribute, $attributeData, $routeData['id']);
+                $this->parseRule($rule, $attribute, $attributeData, $routeData['id'], $routeData);
             }
             $routeData['parameters'][$attribute] = $attributeData;
         }
@@ -356,7 +363,7 @@ abstract class AbstractGenerator
      *
      * @return void
      */
-    protected function parseRule($rule, $ruleName, &$attributeData, $seed)
+    protected function parseRule($rule, $ruleName, &$attributeData, $seed, $routeData)
     {
         $faker = Factory::create();
         $faker->seed(crc32($seed));
@@ -376,8 +383,17 @@ abstract class AbstractGenerator
                 break;
             case 'after':
                 $attributeData['type'] = 'date';
-                $attributeData['description'][] = Description::parse($rule)->with(date(DATE_RFC850, strtotime($parameters[0])))->getDescription();
-                $attributeData['value'] = date(DATE_RFC850, strtotime('+1 day', strtotime($parameters[0])));
+                $format = isset($attributeData['format']) ? $attributeData['format'] : DATE_RFC850;
+
+                if (strtotime($parameters[0]) === false) {
+                    // the `after` date refers to another parameter in the request
+                    $paramName = $parameters[0];
+                    $attributeData['description'][] = Description::parse($rule)->with($paramName)->getDescription();
+                    $attributeData['value'] = date($format, strtotime('+1 day', strtotime($routeData['parameters'][$paramName]['value'])));
+                } else {
+                    $attributeData['description'][] = Description::parse($rule)->with(date($format, strtotime($parameters[0])))->getDescription();
+                    $attributeData['value'] = date($format, strtotime('+1 day', strtotime($parameters[0])));
+                }
                 break;
             case 'alpha':
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
@@ -418,13 +434,23 @@ abstract class AbstractGenerator
                 break;
             case 'before':
                 $attributeData['type'] = 'date';
-                $attributeData['description'][] = Description::parse($rule)->with(date(DATE_RFC850, strtotime($parameters[0])))->getDescription();
-                $attributeData['value'] = date(DATE_RFC850, strtotime('-1 day', strtotime($parameters[0])));
+                $format = isset($attributeData['format']) ? $attributeData['format'] : DATE_RFC850;
+
+                if (strtotime($parameters[0]) === false) {
+                    // the `before` date refers to another parameter in the request
+                    $paramName = $parameters[0];
+                    $attributeData['description'][] = Description::parse($rule)->with($paramName)->getDescription();
+                    $attributeData['value'] = date($format, strtotime('-1 day', strtotime($routeData['parameters'][$paramName]['value'])));
+                } else {
+                    $attributeData['description'][] = Description::parse($rule)->with(date($format, strtotime($parameters[0])))->getDescription();
+                    $attributeData['value'] = date($format, strtotime('-1 day', strtotime($parameters[0])));
+                }
                 break;
             case 'date_format':
                 $attributeData['type'] = 'date';
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
-                $attributeData['value'] = date($parameters[0]);
+                $attributeData['format'] = $parameters[0];
+                $attributeData['value'] = date($attributeData['format']);
                 break;
             case 'different':
                 $attributeData['description'][] = Description::parse($rule)->with($parameters)->getDescription();
@@ -644,6 +670,118 @@ abstract class AbstractGenerator
                 return 'boolean';
             default:
                 return $rule;
+        }
+    }
+
+    /**
+     * @param $response
+     *
+     * @return mixed
+     */
+    private function getResponseContent($response)
+    {
+        if (empty($response)) {
+            return '';
+        }
+        if ($response->headers->get('Content-Type') === 'application/json') {
+            $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
+        } else {
+            $content = $response->getContent();
+        }
+
+        return $content;
+    }
+
+    /**
+     * Get a response from the transformer tags.
+     *
+     * @param array $tags
+     *
+     * @return mixed
+     */
+    protected function getTransformerResponse($tags)
+    {
+        try {
+            $transFormerTags = array_filter($tags, function ($tag) {
+                if (! ($tag instanceof Tag)) {
+                    return false;
+                }
+
+                return \in_array(\strtolower($tag->getName()), ['transformer', 'transformercollection']);
+            });
+            if (empty($transFormerTags)) {
+                // we didn't have any of the tags so goodbye
+                return false;
+            }
+
+            $modelTag = array_first(array_filter($tags, function ($tag) {
+                if (! ($tag instanceof Tag)) {
+                    return false;
+                }
+
+                return \in_array(\strtolower($tag->getName()), ['transformermodel']);
+            }));
+            $tag = \array_first($transFormerTags);
+            $transformer = $tag->getContent();
+            if (! \class_exists($transformer)) {
+                // if we can't find the transformer we can't generate a response
+                return;
+            }
+            $demoData = [];
+
+            $reflection = new ReflectionClass($transformer);
+            $method = $reflection->getMethod('transform');
+            $parameter = \array_first($method->getParameters());
+            $type = null;
+            if ($modelTag) {
+                $type = $modelTag->getContent();
+            }
+            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && \is_null($type)) {
+                // we can only get the type with reflection for PHP 7
+                if ($parameter->hasType() &&
+                    ! $parameter->getType()->isBuiltin() &&
+                    \class_exists((string) $parameter->getType())) {
+                    //we have a type
+                    $type = (string) $parameter->getType();
+                }
+            }
+            if ($type) {
+                // we have a class so we try to create an instance
+                $demoData = new $type;
+                try {
+                    // try a factory
+                    $demoData = \factory($type)->make();
+                } catch (\Exception $e) {
+                    if ($demoData instanceof \Illuminate\Database\Eloquent\Model) {
+                        // we can't use a factory but can try to get one from the database
+                        try {
+                            // check if we can find one
+                            $newDemoData = $type::first();
+                            if ($newDemoData) {
+                                $demoData = $newDemoData;
+                            }
+                        } catch (\Exception $e) {
+                            // do nothing
+                        }
+                    }
+                }
+            }
+
+            $fractal = new Manager();
+            $resource = [];
+            if ($tag->getName() == 'transformer') {
+                // just one
+                $resource = new Item($demoData, new $transformer);
+            }
+            if ($tag->getName() == 'transformercollection') {
+                // a collection
+                $resource = new Collection([$demoData, $demoData], new $transformer);
+            }
+
+            return \response($fractal->createData($resource)->toJson());
+        } catch (\Exception $e) {
+            // it isn't possible to parse the transformer
+            return;
         }
     }
 }

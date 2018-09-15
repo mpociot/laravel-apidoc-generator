@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). If you make a pull request to this project, please update this changelog.
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 ### Added
@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
+
+
+## [2.1.5] - 123h September, 2018
+### Fixed
+- Parse JSON responses from `@transformer` tag for DIngo router (https://github.com/mpociot/laravel-apidoc-generator/pull/323)
+
+## [2.1.4] - 12th September, 2018
+### Fixed
+- Parse JSON responses from  `@response` and `@transformer` tags correctly (https://github.com/mpociot/laravel-apidoc-generator/pull/321)
 
 ## [2.1.3] - 11th September, 2018
 ### Fixed
