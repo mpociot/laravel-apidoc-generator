@@ -10,10 +10,11 @@
 > Example request:
 
 ```bash
-curl -X {{$parsedRoute['methods'][0]}} "{{ trim(config('app.docs_url') ?: config('app.url'), '/')}}/{{ ltrim($parsedRoute['uri'], '/') }}" \
--H "Accept: application/json"@if(count($parsedRoute['parameters'])) \
+curl -X {{$parsedRoute['methods'][0]}} {{$parsedRoute['methods'][0] == 'GET' ? '-G ' : ''}}"{{ trim(config('app.docs_url') ?: config('app.url'), '/')}}/{{ ltrim($parsedRoute['uri'], '/') }}" \
+    -H "Accept: application/json"@if(count($parsedRoute['parameters'])) \
 @foreach($parsedRoute['parameters'] as $attribute => $parameter)
-    -d "{{$attribute}}"="{{$parameter['value']}}" \
+    -d "{{$attribute}}"="{{$parameter['value']}}" @if(! ($loop->last))\
+    @endif
 @endforeach
 @endif
 
@@ -26,7 +27,7 @@ var settings = {
     "url": "{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($parsedRoute['uri'], '/') }}",
     "method": "{{$parsedRoute['methods'][0]}}",
     @if(count($parsedRoute['parameters']))
-"data": {!! str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT)) !!},
+"data": {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT))) !!},
     @endif
 "headers": {
         "accept": "application/json"
