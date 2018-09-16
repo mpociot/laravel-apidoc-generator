@@ -21,22 +21,24 @@ curl -X {{$parsedRoute['methods'][0]}} {{$parsedRoute['methods'][0] == 'GET' ? '
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($parsedRoute['uri'], '/') }}",
-    "method": "{{$parsedRoute['methods'][0]}}",
+
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "{{$parsedRoute['methods'][0]}}" 
+    credentials: 'include'
+    headers,
     @if(count($parsedRoute['parameters']))
-"data": {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT))) !!},
+    body: {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT))) !!},
     @endif
-"headers": {
-        "accept": "application/json"
-    }
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($parsedRoute['uri'], '/') }}", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 @if(in_array('GET',$parsedRoute['methods']) || (isset($parsedRoute['showresponse']) && $parsedRoute['showresponse']))
