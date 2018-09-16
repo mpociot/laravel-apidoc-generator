@@ -123,8 +123,8 @@ class GenerateDocumentationTest extends TestCase
             '--routePrefix' => 'api/*',
         ]);
         $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
-        $gneratedMarkdown = __DIR__.'/../public/docs/source/index.md';
-        $this->assertFilesHaveSameContent($fixtureMarkdown, $gneratedMarkdown);
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
     public function testGeneratedMarkdownFileIsCorrect()
@@ -141,6 +141,29 @@ class GenerateDocumentationTest extends TestCase
         $fixtureMarkdown = __DIR__.'/Fixtures/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
         $this->assertFilesHaveSameContent($fixtureMarkdown, $compareMarkdown);
+    }
+
+    public function testCanPrependAndAppendDataToGeneratedMarkdown()
+    {
+        RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
+        RouteFacade::get('/api/fetch', TestController::class.'@fetchRouteResponse');
+
+        $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+
+        $prependMarkdown = __DIR__.'/Fixtures/prepend.md';
+        $appendMarkdown = __DIR__.'/Fixtures/append.md';
+        copy($prependMarkdown, __DIR__.'/../public/docs/source/prepend.md');
+        copy($appendMarkdown, __DIR__.'/../public/docs/source/append.md');
+
+        $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertContainsRaw($this->getFileContents($prependMarkdown), $this->getFileContents($generatedMarkdown));
+        $this->assertContainsRaw($this->getFileContents($appendMarkdown), $this->getFileContents($generatedMarkdown));
     }
 
     public function testAddsBindingsToGetRouteRules()

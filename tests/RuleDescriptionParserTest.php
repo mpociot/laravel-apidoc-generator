@@ -112,7 +112,7 @@ class RuleDescriptionParserTest extends TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('app.locale', 'es'); // Just to be different to default language.
-        $app['config']->set('app.fallback_locale', 'ch'); // Just to be different to default language.
+        $app['config']->set('app.locale', 'es'); // Just to be different from default language.
+        $app['config']->set('app.fallback_locale', 'ch'); // Just to be different from default language.
     }
 }

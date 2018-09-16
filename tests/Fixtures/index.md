@@ -30,8 +30,8 @@ It can also be multiple lines long.
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/test" \
--H "Accept: application/json"
+curl -X GET -G "http://localhost/api/test" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -68,8 +68,8 @@ null
 > Example request:
 
 ```bash
-curl -X GET "http://localhost/api/fetch" \
--H "Accept: application/json"
+curl -X GET -G "http://localhost/api/fetch" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -105,4 +105,5 @@ $.ajax(settings).done(function (response) {
 
 
 <!-- END_960a1b2b0f0f4dde8ce993307397f9c4 -->
+
 
