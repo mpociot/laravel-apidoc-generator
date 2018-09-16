@@ -143,6 +143,29 @@ class GenerateDocumentationTest extends TestCase
         $this->assertFilesHaveSameContent($fixtureMarkdown, $compareMarkdown);
     }
 
+    public function testCanPrependAndAppendDataToGeneratedMarkdown()
+    {
+        RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
+        RouteFacade::get('/api/fetch', TestController::class.'@fetchRouteResponse');
+
+        $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+
+        $prependMarkdown = __DIR__.'/Fixtures/prepend.md';
+        $appendMarkdown = __DIR__.'/Fixtures/append.md';
+        copy($prependMarkdown, __DIR__.'/../public/docs/source/prepend.md');
+        copy($appendMarkdown, __DIR__.'/../public/docs/source/append.md');
+
+        $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertContainsRaw($this->getFileContents($prependMarkdown), $this->getFileContents($generatedMarkdown));
+        $this->assertContainsRaw($this->getFileContents($appendMarkdown), $this->getFileContents($generatedMarkdown));
+    }
+
     public function testAddsBindingsToGetRouteRules()
     {
         RouteFacade::get('/api/test/{foo}', TestController::class.'@addRouteBindingsToRequestClass');
