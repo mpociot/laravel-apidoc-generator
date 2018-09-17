@@ -85,7 +85,14 @@ abstract class AbstractGenerator
         }
         if (! $response && $withResponse) {
             try {
-                $response = $this->getRouteResponse($route, $bindings, $headers);
+                // we have a queryParameters array from the docblock
+                $parameters = $this->getQueryParameters($routeDescription['tags']);
+
+                if(!is_array($parameters)) {
+                    $parameters = [];
+                }
+
+                $response = $this->getRouteResponse($route, $bindings, $parameters, $headers);
             } catch (\Exception $e) {
                 echo "Couldn't get response for route: ".implode(',', $this->getMethods($route)).$route->uri().']: '.$e->getMessage()."\n";
             }
@@ -205,7 +212,7 @@ abstract class AbstractGenerator
      *
      * @return \Illuminate\Http\Response
      */
-    protected function getRouteResponse($route, $bindings, $headers = [])
+    protected function getRouteResponse($route, $bindings, $parameters = [], $headers = [])
     {
         $uri = $this->addRouteModelBindings($route, $bindings);
 
@@ -223,7 +230,33 @@ abstract class AbstractGenerator
         //Changes url with parameters like /users/{user} to /users/1
         $uri = preg_replace('/{(.*?)}/', 1, $uri); // 1 is the default value for route parameters
 
-        return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
+        return $this->callRoute(array_shift($methods), $uri, $parameters, [], [], $headers);
+    }
+
+    /**
+     * Get the Query Parameters if available.
+     *
+     * @param array $tags
+     *
+     * @return array
+     */
+    protected function getQueryParameters($tags)
+    {
+        $responseTags = array_filter($tags, function ($tag) {
+            if (! ($tag instanceof Tag)) {
+                return false;
+            }
+
+            return $tag->getName() == 'queryParameters';
+        });
+
+        if (empty($responseTags)) {
+            return [];
+        }
+
+        $responseTag = \array_first($responseTags);
+
+        return \json_decode($responseTag->getContent(), true);
     }
 
     /**
