@@ -2,17 +2,19 @@
 title: API Reference
 
 language_tabs:
-- bash
-- javascript
+    - bash
+    - javascript
 
-includes:
+? includes
 
 search: true
 
 toc_footers:
-- <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a>
+    - <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a>
 ---
+
 <!-- START_INFO -->
+
 # Info
 
 Welcome to the generated API reference.
@@ -21,7 +23,9 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
+
 <!-- START_2b6e5a4b188cb183c7e59558cce36cb6 -->
+
 ## Display a listing of the resource.
 
 > Example request:
@@ -32,19 +36,20 @@ curl -X GET -G "http://localhost/api/user" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "GET"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 > Example response:
@@ -56,12 +61,13 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user`
 
+`GET api/user`
 
 <!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
 
 <!-- START_7f66c974d24032cb19061d55d801f62b -->
+
 ## Show the form for creating a new resource.
 
 > Example request:
@@ -72,19 +78,20 @@ curl -X GET -G "http://localhost/api/user/create" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user/create",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "GET"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user/create", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 > Example response:
@@ -96,12 +103,13 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/create`
 
+`GET api/user/create`
 
 <!-- END_7f66c974d24032cb19061d55d801f62b -->
 
 <!-- START_f0654d3f2fc63c11f5723f233cc53c83 -->
+
 ## Store a newly created resource in storage.
 
 > Example request:
@@ -112,29 +120,30 @@ curl -X POST "http://localhost/api/user" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user",
-    "method": "POST",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "POST"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user/create", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
-
 ### HTTP Request
-`POST api/user`
 
+`POST api/user`
 
 <!-- END_f0654d3f2fc63c11f5723f233cc53c83 -->
 
 <!-- START_ceec0e0b1d13d731ad96603d26bccc2f -->
+
 ## Display the specified resource.
 
 > Example request:
@@ -145,19 +154,20 @@ curl -X GET -G "http://localhost/api/user/{user}" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user/{user}",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "GET"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user/{user}", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 > Example response:
@@ -169,12 +179,13 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/{user}`
 
+`GET api/user/{user}`
 
 <!-- END_ceec0e0b1d13d731ad96603d26bccc2f -->
 
 <!-- START_f4aa12af19ba08e1448d7eafc9f55e67 -->
+
 ## Show the form for editing the specified resource.
 
 > Example request:
@@ -185,19 +196,20 @@ curl -X GET -G "http://localhost/api/user/{user}/edit" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user/{user}/edit",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "GET"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user/{user}/edit", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 > Example response:
@@ -209,12 +221,13 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/{user}/edit`
 
+`GET api/user/{user}/edit`
 
 <!-- END_f4aa12af19ba08e1448d7eafc9f55e67 -->
 
 <!-- START_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
+
 ## Update the specified resource in storage.
 
 > Example request:
@@ -225,31 +238,32 @@ curl -X PUT "http://localhost/api/user/{user}" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user/{user}",
-    "method": "PUT",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "PUT"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user/{user}", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
-
 ### HTTP Request
+
 `PUT api/user/{user}`
 
 `PATCH api/user/{user}`
 
-
 <!-- END_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
 
 <!-- START_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->
+
 ## Remove the specified resource from storage.
 
 > Example request:
@@ -260,26 +274,24 @@ curl -X DELETE "http://localhost/api/user/{user}" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/user/{user}",
-    "method": "DELETE",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "DELETE"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/user/{user}", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
-
 ### HTTP Request
+
 `DELETE api/user/{user}`
 
-
 <!-- END_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->
-
-

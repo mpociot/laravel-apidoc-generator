@@ -2,17 +2,19 @@
 title: API Reference
 
 language_tabs:
-- bash
-- javascript
+    - bash
+    - javascript
 
-includes:
+? includes
 
 search: true
 
 toc_footers:
-- <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a>
+    - <a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a>
 ---
+
 <!-- START_INFO -->
+
 # Info
 
 Welcome to the generated API reference.
@@ -21,7 +23,9 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
+
 <!-- START_0bef4e738c9d6720ad43b062015d1078 -->
+
 ## Example title.
 
 This will be the long description.
@@ -35,19 +39,20 @@ curl -X GET -G "http://localhost/api/test" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/test",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "GET"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/test", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 > Example response:
@@ -57,12 +62,13 @@ null
 ```
 
 ### HTTP Request
-`GET api/test`
 
+`GET api/test`
 
 <!-- END_0bef4e738c9d6720ad43b062015d1078 -->
 
 <!-- START_960a1b2b0f0f4dde8ce993307397f9c4 -->
+
 ## api/fetch
 
 > Example request:
@@ -73,19 +79,20 @@ curl -X GET -G "http://localhost/api/fetch" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/fetch",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json"
-    }
+const headers = new Headers({'Accept': 'application/json'})
+
+const settings = {
+    method: "GET"
+    credentials: 'include'
+    headers,
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+const request = new Request("http://localhost/api/fetch", settings)
+
+fetch(request)
+    .then(response => response.json())
+    .then(json => console.log(json))
+    .catch(error => console.error(error))
 ```
 
 > Example response:
@@ -101,9 +108,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
+
 `GET api/fetch`
 
-
 <!-- END_960a1b2b0f0f4dde8ce993307397f9c4 -->
-
-
