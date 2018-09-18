@@ -36,20 +36,20 @@ curl -X GET -G "http://localhost/api/user" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "GET"
-    credentials: 'include'
-    headers,
-}
+    method: "GET",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user", settings)
+const request = new Request("http://localhost/api/user", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 > Example response:
@@ -78,20 +78,20 @@ curl -X GET -G "http://localhost/api/user/create" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "GET"
-    credentials: 'include'
-    headers,
-}
+    method: "GET",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user/create", settings)
+const request = new Request("http://localhost/api/user/create", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 > Example response:
@@ -120,20 +120,20 @@ curl -X POST "http://localhost/api/user" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "POST"
-    credentials: 'include'
-    headers,
-}
+    method: "POST",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user/create", settings)
+const request = new Request("http://localhost/api/user/create", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 ### HTTP Request
@@ -154,20 +154,20 @@ curl -X GET -G "http://localhost/api/user/{user}" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "GET"
-    credentials: 'include'
-    headers,
-}
+    method: "GET",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user/{user}", settings)
+const request = new Request("http://localhost/api/user/{user}", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 > Example response:
@@ -196,20 +196,20 @@ curl -X GET -G "http://localhost/api/user/{user}/edit" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "GET"
-    credentials: 'include'
-    headers,
-}
+    method: "GET",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user/{user}/edit", settings)
+const request = new Request("http://localhost/api/user/{user}/edit", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 > Example response:
@@ -238,20 +238,20 @@ curl -X PUT "http://localhost/api/user/{user}" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "PUT"
-    credentials: 'include'
-    headers,
-}
+    method: "PUT",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user/{user}", settings)
+const request = new Request("http://localhost/api/user/{user}", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 ### HTTP Request
@@ -274,20 +274,20 @@ curl -X DELETE "http://localhost/api/user/{user}" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "DELETE"
-    credentials: 'include'
-    headers,
-}
+    method: "DELETE",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/user/{user}", settings)
+const request = new Request("http://localhost/api/user/{user}", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 ### HTTP Request

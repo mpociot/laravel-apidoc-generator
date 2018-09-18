@@ -39,20 +39,20 @@ curl -X GET -G "http://localhost/api/test" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "GET"
-    credentials: 'include'
-    headers,
-}
+    method: "GET",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/test", settings)
+const request = new Request("http://localhost/api/test", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 > Example response:
@@ -79,20 +79,20 @@ curl -X GET -G "http://localhost/api/fetch" \
 ```
 
 ```javascript
-const headers = new Headers({'Accept': 'application/json'})
+const headers = new Headers({ Accept: "application/json" });
 
 const settings = {
-    method: "GET"
-    credentials: 'include'
-    headers,
-}
+    method: "GET",
+    credentials: "include",
+    headers
+};
 
-const request = new Request("http://localhost/api/fetch", settings)
+const request = new Request("http://localhost/api/fetch", settings);
 
 fetch(request)
     .then(response => response.json())
     .then(json => console.log(json))
-    .catch(error => console.error(error))
+    .catch(error => console.error(error));
 ```
 
 > Example response:
