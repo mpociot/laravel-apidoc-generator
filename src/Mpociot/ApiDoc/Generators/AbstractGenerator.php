@@ -87,11 +87,6 @@ abstract class AbstractGenerator
             try {
                 // we have a queryParameters array from the docblock
                 $parameters = $this->getQueryParameters($routeDescription['tags']);
-
-                if(!is_array($parameters)) {
-                    $parameters = [];
-                }
-
                 $response = $this->getRouteResponse($route, $bindings, $parameters, $headers);
             } catch (\Exception $e) {
                 echo "Couldn't get response for route: ".implode(',', $this->getMethods($route)).$route->uri().']: '.$e->getMessage()."\n";
@@ -256,7 +251,13 @@ abstract class AbstractGenerator
 
         $responseTag = \array_first($responseTags);
 
-        return \json_decode($responseTag->getContent(), true);
+        $parameters = \json_decode($responseTag->getContent(), true);
+        
+        if(! is_array($parameters)) {
+            $parameters = [];
+        }
+        
+        return $parameters;
     }
 
     /**
