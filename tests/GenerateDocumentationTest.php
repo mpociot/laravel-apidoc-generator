@@ -131,8 +131,8 @@ class GenerateDocumentationTest extends TestCase
     {
         RouteFacade::resource('/api/user', TestResourceController::class, [
             'only' => [
-                'index', 'create'
-            ]
+                'index', 'create',
+            ],
         ]);
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
@@ -143,8 +143,8 @@ class GenerateDocumentationTest extends TestCase
 
         RouteFacade::apiResource('/api/user', TestResourceController::class, [
             'only' => [
-                'index', 'create'
-            ]
+                'index', 'create',
+            ],
         ]);
         $output = $this->artisan('api:generate', [
             '--routePrefix' => 'api/*',
