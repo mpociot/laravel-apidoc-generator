@@ -127,6 +127,33 @@ class GenerateDocumentationTest extends TestCase
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
+    public function testCanParsePartialResourceRoutes()
+    {
+        RouteFacade::resource('/api/user', TestResourceController::class, [
+            'only' => [
+                'index', 'create'
+            ]
+        ]);
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+        $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
+
+        RouteFacade::apiResource('/api/user', TestResourceController::class, [
+            'only' => [
+                'index', 'create'
+            ]
+        ]);
+        $output = $this->artisan('api:generate', [
+            '--routePrefix' => 'api/*',
+        ]);
+        $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
+        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
+    }
+
     public function testGeneratedMarkdownFileIsCorrect()
     {
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
