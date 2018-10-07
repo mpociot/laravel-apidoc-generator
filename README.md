@@ -2,7 +2,7 @@
 
 Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.de/whiteboard/).
 
-`php artisan api:gen --routePrefix="settings/api/*"`
+`php artisan apidoc:gen --routePrefix="settings/api/*"`
 
 [![Latest Stable Version](https://poser.pugx.org/mpociot/laravel-apidoc-generator/v/stable)](https://packagist.org/packages/mpociot/laravel-apidoc-generator)[![Total Downloads](https://poser.pugx.org/mpociot/laravel-apidoc-generator/downloads)](https://packagist.org/packages/mpociot/laravel-apidoc-generator)
 [![License](https://poser.pugx.org/mpociot/laravel-apidoc-generator/license)](https://packagist.org/packages/mpociot/laravel-apidoc-generator)
@@ -29,16 +29,16 @@ Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 
 ## Usage
 
-To generate your API documentation, use the `api:generate` artisan command.
+To generate your API documentation, use the `apidoc:generate` artisan command.
 
 ```sh
-$ php artisan api:generate --routePrefix="api/v1/*"
+$ php artisan apidoc:generate --routePrefix="api/v1/*"
 
 ```
 You can pass in multiple prefixes by spearating each prefix with comma.
 
 ```sh
-$ php artisan api:generate --routePrefix="api/v1/*,api/public/*"
+$ php artisan apidoc:generate --routePrefix="api/v1/*,api/public/*"
 ```
 It will generate documentation for all of the routes whose prefixes are `api/v1/` and `api/public/`
 
@@ -201,13 +201,13 @@ If your API route accepts a `GET` method, this package tries to call the API rou
 If your API needs an authenticated user, you can use the `actAsUserId` option to specify a user ID that will be used for making these API calls:
 
 ```sh
-$ php artisan api:generate --routePrefix="api/*" --actAsUserId=1
+$ php artisan apidoc:generate --routePrefix="api/*" --actAsUserId=1
 ```
 
 If you don't want to automatically perform API response calls, use the `noResponseCalls` option.
 
 ```sh
-$ php artisan api:generate --routePrefix="api/*" --noResponseCalls
+$ php artisan apidoc:generate --routePrefix="api/*" --noResponseCalls
 ```
 
 > Note: The example API responses work best with seeded data.
@@ -235,10 +235,10 @@ APP_URL=http://yourapp.app
 If you want to modify the content of your generated documentation, go ahead and edit the generated `index.md` file.
 The default location of this file is: `public/docs/source/index.md`.
  
-After editing the markdown file, use the `api:update` command to rebuild your documentation as a static HTML file.
+After editing the markdown file, use the `apidoc:update` command to rebuild your documentation as a static HTML file.
 
 ```sh
-$ php artisan api:update
+$ php artisan apidoc:update
 ```
 
 As an optional parameter, you can use `--location` to tell the update command where your documentation can be found.
