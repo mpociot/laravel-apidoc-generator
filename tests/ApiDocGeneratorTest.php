@@ -127,7 +127,7 @@ class ApiDocGeneratorTest extends TestCase
                 case 'array':
                     $this->assertFalse($attribute['required']);
                     $this->assertSame('array', $attribute['type']);
-                    $this->assertCount(0, $attribute['description']);
+                    $this->assertCount(1, $attribute['description']);
                     break;
                 case 'between':
                     $this->assertFalse($attribute['required']);
