@@ -64,7 +64,7 @@ class GenerateDocumentationTest extends TestCase
 
     public function testConsoleCommandNeedsPrefixesOrDomainsOrRoutes()
     {
-        $output = $this->artisan('api:generate');
+        $output = $this->artisan('apidoc:generate');
         $this->assertEquals('You must provide either a route prefix, a route domain, a route or a middleware to generate the documentation.'.PHP_EOL, $output);
     }
 
@@ -75,7 +75,7 @@ class GenerateDocumentationTest extends TestCase
         });
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
 
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
         $this->assertContains('Skipping route: [GET] api/closure', $output);
@@ -95,7 +95,7 @@ class GenerateDocumentationTest extends TestCase
             });
             $api->get('/test', DingoTestController::class.'@parseMethodDescription');
 
-            $output = $this->artisan('api:generate', [
+            $output = $this->artisan('apidoc:generate', [
                 '--router' => 'dingo',
                 '--routePrefix' => 'v1',
             ]);
@@ -109,7 +109,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/skip', TestController::class.'@skip');
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
 
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
         $this->assertContains('Skipping route: [GET] api/skip', $output);
@@ -119,7 +119,7 @@ class GenerateDocumentationTest extends TestCase
     public function testCanParseResourceRoutes()
     {
         RouteFacade::resource('/api/user', TestResourceController::class);
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
         $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
@@ -134,7 +134,7 @@ class GenerateDocumentationTest extends TestCase
                 'index', 'create',
             ],
         ]);
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
         $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
@@ -146,7 +146,7 @@ class GenerateDocumentationTest extends TestCase
                 'index', 'create',
             ],
         ]);
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
         $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
@@ -159,7 +159,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
         RouteFacade::get('/api/fetch', TestController::class.'@fetchRouteResponse');
 
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
 
@@ -175,7 +175,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
         RouteFacade::get('/api/fetch', TestController::class.'@fetchRouteResponse');
 
-        $this->artisan('api:generate', [
+        $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
 
@@ -184,7 +184,7 @@ class GenerateDocumentationTest extends TestCase
         copy($prependMarkdown, __DIR__.'/../public/docs/source/prepend.md');
         copy($appendMarkdown, __DIR__.'/../public/docs/source/append.md');
 
-        $this->artisan('api:generate', [
+        $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
 
@@ -197,7 +197,7 @@ class GenerateDocumentationTest extends TestCase
     {
         RouteFacade::get('/api/test/{foo}', TestController::class.'@addRouteBindingsToRequestClass');
 
-        $this->artisan('api:generate', [
+        $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
             '--bindings' => 'foo,bar',
         ]);
@@ -212,7 +212,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/test', TestController::class.'@parseMethodDescription');
         RouteFacade::post('/api/fetch', TestController::class.'@fetchRouteResponse');
 
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
 
@@ -227,7 +227,7 @@ class GenerateDocumentationTest extends TestCase
     {
         RouteFacade::get('/api/headers', TestController::class.'@checkCustomHeaders');
 
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
             '--header' => [
                 'Authorization: customAuthToken',
@@ -248,7 +248,7 @@ class GenerateDocumentationTest extends TestCase
     {
         RouteFacade::get('/api/utf8', TestController::class.'@utf8');
 
-        $output = $this->artisan('api:generate', [
+        $output = $this->artisan('apidoc:generate', [
             '--routePrefix' => 'api/*',
         ]);
 
