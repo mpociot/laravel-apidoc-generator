@@ -5,6 +5,7 @@ return [
     'alpha' => 'Only alphabetic characters allowed',
     'alpha_dash' => 'Allowed: alpha-numeric characters, as well as dashes and underscores.',
     'alpha_num' => 'Only alpha-numeric characters allowed',
+    'array' => 'Must be an array',
     'in' => ':attribute',
     'not_in' => 'Not in: :attribute',
     'min' => 'Minimum: `:attribute`',

@@ -178,19 +178,15 @@ abstract class AbstractGenerator
     protected function simplifyRules($rules)
     {
         // this will split all string rules into arrays of strings
-        $rules = Validator::make([], $rules)->getRules();
-
-        if (count($rules) === 0) {
-            return $rules;
-        }
+        $newRules = Validator::make([], $rules)->getRules();
 
         // Laravel will ignore the nested array rules unless the key referenced exists and is an array
-        // So we'll to create an empty array for each array attribute
-        $values = collect($rules)
+        // So we'll create an empty array for each array attribute
+        $values = collect($newRules)
             ->filter(function ($values) {
                 return in_array('array', $values);
             })->map(function ($val, $key) {
-                return [''];
+                return [str_random()];
             })->all();
 
         // Now this will return the complete ruleset.
@@ -532,8 +528,9 @@ abstract class AbstractGenerator
                 $attributeData['type'] = $rule;
                 break;
             case 'array':
-                $attributeData['value'] = $faker->word;
+                $attributeData['value'] = [$faker->word];
                 $attributeData['type'] = $rule;
+                $attributeData['description'][] = Description::parse($rule)->getDescription();
                 break;
             case 'date':
                 $attributeData['value'] = $faker->date();

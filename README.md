@@ -121,7 +121,7 @@ class ExampleController extends Controller {
 
 #### Form request validation rules
 
-To display a list of valid parameters, your API methods accepts, this package uses Laravels [Form Requests Validation](https://laravel.com/docs/5.2/validation#form-request-validation).
+To display a list of valid parameters, your API methods accepts, this package uses Laravel's [Form Requests Validation](https://laravel.com/docs/5.2/validation#form-request-validation).
 
 
 ```php
@@ -137,6 +137,9 @@ public function rules()
 ```
 
 **Result:** ![Form Request](http://marcelpociot.de/documentarian/form_request.png)
+
+### A note on custom validation rules
+This package only supports custom rules defined as classes. You'll also need to define a `__toString()` method in the class, which should return the description that would be displayed in the generated doc.
 
 #### Controller method doc block
 It is possible to override the results for the response. This will also show the responses for other request methods then GET.
