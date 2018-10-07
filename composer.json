@@ -15,18 +15,18 @@
         }
     ],
     "require": {
-        "php": ">=7.1.3",
+        "php": ">=7.0.0",
         "fzaninotto/faker": "~1.8",
-        "illuminate/routing": "5.6.* || 5.7.*",
-        "illuminate/support": "5.6.* || 5.7.*",
-        "illuminate/console": "5.6.* || 5.7.*",
+        "illuminate/routing": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/support": "5.5.* 5.6.* || 5.7.*",
+        "illuminate/console": "5.5.* 5.6.* || 5.7.*",
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0",
         "ramsey/uuid": "^3.8"
     },
     "require-dev": {
-        "orchestra/testbench": "3.6.* || 3.7.*",
-        "phpunit/phpunit": "^7.4.0",
+        "orchestra/testbench": "3.5.* || 3.6.* || 3.7.*",
+        "phpunit/phpunit": "^6.0.0 || ^7.4.0",
         "dingo/api": "2.0.0-alpha1",
         "mockery/mockery": "^1.2.0"
     },
