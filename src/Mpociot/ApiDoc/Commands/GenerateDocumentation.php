@@ -21,7 +21,7 @@ class GenerateDocumentation extends Command
      *
      * @var string
      */
-    protected $signature = 'api:generate
+    protected $signature = 'apidoc:generate
                             {--output=public/docs : The output path for the generated documentation}
                             {--routeDomain= : The route domain (or domains) to use for generation}
                             {--routePrefix= : The route prefix (or prefixes) to use for generation}
