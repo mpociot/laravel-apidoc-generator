@@ -367,9 +367,6 @@ abstract class AbstractGenerator
      */
     protected function parseRule($rule, $attribute, &$attributeData, $seed, $routeData)
     {
-        if (starts_with($attribute, 'array.')) {
-            dd(array_keys($routeData));
-        }
         $faker = Factory::create();
         $faker->seed(crc32($seed));
 
