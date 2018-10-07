@@ -20,7 +20,7 @@ abstract class AbstractGenerator
      */
     public function getDomain(Route $route)
     {
-        return $route->domain();
+        return $route->domain() == null ? '*' : $route->domain();
     }
 
     /**

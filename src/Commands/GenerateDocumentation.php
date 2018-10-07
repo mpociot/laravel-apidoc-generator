@@ -252,12 +252,12 @@ class GenerateDocumentation extends Command
     /**
      * @return mixed
      */
-    private function getRoutes()
+    private function getRoutes($routePrefix)
     {
         if ($this->option('router') === 'laravel') {
             return RouteFacade::getRoutes();
         } else {
-            return app('Dingo\Api\Routing\Router')->getRoutes();
+            return app('Dingo\Api\Routing\Router')->getRoutes($routePrefix)->getRoutes();
         }
     }
 
@@ -272,7 +272,7 @@ class GenerateDocumentation extends Command
     private function processRoutes(AbstractGenerator $generator, array $allowedRoutes, $routeDomain, $routePrefix, $middleware)
     {
         $withResponse = $this->option('noResponseCalls') == false;
-        $routes = $this->getRoutes();
+        $routes = $this->getRoutes($routePrefix);
         $bindings = $this->getBindings();
         $parsedRoutes = [];
         foreach ($routes as $route) {

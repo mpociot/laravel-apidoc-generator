@@ -34,7 +34,7 @@ class GenerateDocumentationTest extends TestCase
     public function tearDown()
     {
         // delete the generated docs - compatible cross-platform
-        $dir = __DIR__.'/../public/docs';
+        $dir = __DIR__.'/../public/docs';/*
         if (is_dir($dir)) {
             $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -46,7 +46,7 @@ class GenerateDocumentationTest extends TestCase
                 $todo($fileinfo->getRealPath());
             }
             rmdir($dir);
-        }
+        }*/
     }
 
     /**
@@ -84,20 +84,16 @@ class GenerateDocumentationTest extends TestCase
 
     public function testConsoleCommandDoesNotWorkWithClosureUsingDingo()
     {
-        if (version_compare($this->app->version(), '5.4', '>=')) {
-            $this->markTestSkipped('Dingo does not support Laravel 5.4');
-        }
-
         $api = app('Dingo\Api\Routing\Router');
         $api->version('v1', function ($api) {
-            $api->get('/closure', function () {
+            $api->get('v1/closure', function () {
                 return 'foo';
             });
-            $api->get('/test', DingoTestController::class.'@parseMethodDescription');
+            $api->get('v1/test', DingoTestController::class.'@parseMethodDescription');
 
             $output = $this->artisan('api:generate', [
                 '--router' => 'dingo',
-                '--routePrefix' => 'v1',
+                '--routePrefix' => 'v1/*',
             ]);
             $this->assertContains('Skipping route: [GET] closure', $output);
             $this->assertContains('Processed route: [GET] test', $output);
