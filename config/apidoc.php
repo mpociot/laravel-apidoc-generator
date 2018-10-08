@@ -7,7 +7,6 @@ return [
      */
     'output' => 'public/docs',
 
-
     /*
      * The router to be used (Laravel or Dingo).
      */
@@ -17,7 +16,6 @@ return [
      * Generate a Postman collection in addition to HTML docs.
      */
     'postman' => true,
-
 
     /*
      * The routes for which documentation should be generated.

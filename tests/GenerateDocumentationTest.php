@@ -34,7 +34,7 @@ class GenerateDocumentationTest extends TestCase
     public function tearDown()
     {
         // delete the generated docs - compatible cross-platform
-        $dir = __DIR__.'/../public/docs';/*
+        $dir = __DIR__.'/../public/docs'; /*
         if (is_dir($dir)) {
             $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),

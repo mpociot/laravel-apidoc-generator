@@ -10,7 +10,7 @@ class RouteMatcher
 {
     public function getDingoRoutesToBeDocumented(array $routeRules)
     {
-        return $this->getRoutesToBeDocumented($routeRules,true);
+        return $this->getRoutesToBeDocumented($routeRules, true);
     }
 
     public function getLaravelRoutesToBeDocumented(array $routeRules)
@@ -48,11 +48,12 @@ class RouteMatcher
 
     private function getAllRoutes(bool $usingDingoRouter, array $versions = [])
     {
-        if (!$usingDingoRouter) {
+        if (! $usingDingoRouter) {
             return RouteFacade::getRoutes();
         }
 
         $allRouteCollections = app(\Dingo\Api\Routing\Router::class)->getRoutes();
+
         return collect($allRouteCollections)
             ->flatMap(function (RouteCollection $collection) {
                 return $collection->getRoutes();
@@ -62,7 +63,7 @@ class RouteMatcher
     private function shouldIncludeRoute(Route $route, array $routeRule, array $mustIncludes, bool $usingDingoRouter)
     {
         $matchesVersion = $usingDingoRouter
-            ? !empty(array_intersect($route->versions(), $routeRule['match']['versions'] ?? []))
+            ? ! empty(array_intersect($route->versions(), $routeRule['match']['versions'] ?? []))
             : true;
 
         return in_array($route->getName(), $mustIncludes)
@@ -70,5 +71,4 @@ class RouteMatcher
             && str_is($routeRule['match']['prefixes'] ?? [], $route->uri())
             && $matchesVersion);
     }
-
 }

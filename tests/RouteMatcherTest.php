@@ -43,14 +43,14 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['domains'] = ['domain1.*'];
         $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
         $this->assertCount(6, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertContains('domain1', $route['route']->getDomain());
         }
 
         $routeRules[0]['match']['domains'] = ['domain2.*'];
         $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
         $this->assertCount(6, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertContains('domain2', $route['route']->getDomain());
         }
     }
@@ -72,14 +72,14 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['domains'] = ['domain1.*'];
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(6, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertContains('domain1', $route['route']->getDomain());
         }
 
         $routeRules[0]['match']['domains'] = ['domain2.*'];
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(6, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertContains('domain2', $route['route']->getDomain());
         }
     }
@@ -100,14 +100,14 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
         $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertTrue(str_is('prefix1/*', $route['route']->uri()));
         }
 
         $routeRules[0]['match']['prefixes'] = ['prefix2/*'];
         $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertTrue(str_is('prefix2/*', $route['route']->uri()));
         }
     }
@@ -129,14 +129,14 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertTrue(str_is('prefix1/*', $route['route']->uri()));
         }
 
         $routeRules[0]['match']['prefixes'] = ['prefix2/*'];
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertTrue(str_is('prefix2/*', $route['route']->uri()));
         }
     }
@@ -150,7 +150,7 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['prefixes'] = ['*'];
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(6, $routes);
-        foreach ($routes as $route){
+        foreach ($routes as $route) {
             $this->assertNotEmpty(array_intersect($route['route']->versions(), ['v2']));
         }
 
@@ -186,7 +186,7 @@ class RouteMatcherTest extends TestCase
                 'match' => [
                     'domains' => ['domain1.*'],
                     'prefixes' => ['prefix1/*'],
-                    'versions' => ['v1']
+                    'versions' => ['v1'],
                 ],
                 'include' => [$mustInclude],
             ],
@@ -223,7 +223,7 @@ class RouteMatcherTest extends TestCase
                 'match' => [
                     'domains' => ['domain2.*'],
                     'prefixes' => ['*'],
-                    'versions' => ['v2']
+                    'versions' => ['v2'],
                 ],
                 'exclude' => [$mustNotInclude],
             ],
@@ -296,12 +296,12 @@ class RouteMatcherTest extends TestCase
 
         $routes = collect($routes);
         $firstRuleGroup = $routes->filter(function ($route) {
-            return !empty(array_intersect($route['route']->versions(), ['v1']));
+            return ! empty(array_intersect($route['route']->versions(), ['v1']));
         });
         $this->assertCount(12, $firstRuleGroup);
 
         $secondRuleGroup = $routes->filter(function ($route) {
-            return !empty(array_intersect($route['route']->versions(), ['v2']));
+            return ! empty(array_intersect($route['route']->versions(), ['v2']));
         });
         $this->assertCount(6, $secondRuleGroup);
     }
@@ -309,55 +309,114 @@ class RouteMatcherTest extends TestCase
     private function registerLaravelRoutes()
     {
         RouteFacade::group(['domain' => 'domain1.app.test'], function () {
-            RouteFacade::post('/domain1-1', function () { return 'hi'; })->name('domain1-1');
-            RouteFacade::get('domain1-2', function () { return 'hi'; })->name('domain1-2');
-            RouteFacade::get('/prefix1/domain1-1', function () { return 'hi'; })->name('prefix1.domain1-1');
-            RouteFacade::get('prefix1/domain1-2', function () { return 'hi'; })->name('prefix1.domain1-2');
-            RouteFacade::get('/prefix2/domain1-1', function () { return 'hi'; })->name('prefix2.domain1-1');
-            RouteFacade::get('prefix2/domain1-2', function () { return 'hi'; })->name('prefix2.domain1-2');
+            RouteFacade::post('/domain1-1', function () {
+                return 'hi';
+            })->name('domain1-1');
+            RouteFacade::get('domain1-2', function () {
+                return 'hi';
+            })->name('domain1-2');
+            RouteFacade::get('/prefix1/domain1-1', function () {
+                return 'hi';
+            })->name('prefix1.domain1-1');
+            RouteFacade::get('prefix1/domain1-2', function () {
+                return 'hi';
+            })->name('prefix1.domain1-2');
+            RouteFacade::get('/prefix2/domain1-1', function () {
+                return 'hi';
+            })->name('prefix2.domain1-1');
+            RouteFacade::get('prefix2/domain1-2', function () {
+                return 'hi';
+            })->name('prefix2.domain1-2');
         });
         RouteFacade::group(['domain' => 'domain2.app.test'], function () {
-            RouteFacade::post('/domain2-1', function () { return 'hi'; })->name('domain2-1');
-            RouteFacade::get('domain2-2', function () { return 'hi'; })->name('domain2-2');
-            RouteFacade::get('/prefix1/domain2-1', function () { return 'hi'; })->name('prefix1.domain2-1');
-            RouteFacade::get('prefix1/domain2-2', function () { return 'hi'; })->name('prefix1.domain2-2');
-            RouteFacade::get('/prefix2/domain2-1', function () { return 'hi'; })->name('prefix2.domain2-1');
-            RouteFacade::get('prefix2/domain2-2', function () { return 'hi'; })->name('prefix2.domain2-2');
+            RouteFacade::post('/domain2-1', function () {
+                return 'hi';
+            })->name('domain2-1');
+            RouteFacade::get('domain2-2', function () {
+                return 'hi';
+            })->name('domain2-2');
+            RouteFacade::get('/prefix1/domain2-1', function () {
+                return 'hi';
+            })->name('prefix1.domain2-1');
+            RouteFacade::get('prefix1/domain2-2', function () {
+                return 'hi';
+            })->name('prefix1.domain2-2');
+            RouteFacade::get('/prefix2/domain2-1', function () {
+                return 'hi';
+            })->name('prefix2.domain2-1');
+            RouteFacade::get('prefix2/domain2-2', function () {
+                return 'hi';
+            })->name('prefix2.domain2-2');
         });
     }
 
     private function registerDingoRoutes()
     {
-
         $api = app('api.router');
         $api->version('v1', function (Router $api) {
             $api->group(['domain' => 'domain1.app.test'], function (Router $api) {
-                $api->post('/domain1-1', function () { return 'hi'; })->name('v1.domain1-1');
-                $api->get('domain1-2', function () { return 'hi'; })->name('v1.domain1-2');
-                $api->get('/prefix1/domain1-1', function () { return 'hi'; })->name('v1.prefix1.domain1-1');
-                $api->get('prefix1/domain1-2', function () { return 'hi'; })->name('v1.prefix1.domain1-2');
-                $api->get('/prefix2/domain1-1', function () { return 'hi'; })->name('v1.prefix2.domain1-1');
-                $api->get('prefix2/domain1-2', function () { return 'hi'; })->name('v1.prefix2.domain1-2');
+                $api->post('/domain1-1', function () {
+                    return 'hi';
+                })->name('v1.domain1-1');
+                $api->get('domain1-2', function () {
+                    return 'hi';
+                })->name('v1.domain1-2');
+                $api->get('/prefix1/domain1-1', function () {
+                    return 'hi';
+                })->name('v1.prefix1.domain1-1');
+                $api->get('prefix1/domain1-2', function () {
+                    return 'hi';
+                })->name('v1.prefix1.domain1-2');
+                $api->get('/prefix2/domain1-1', function () {
+                    return 'hi';
+                })->name('v1.prefix2.domain1-1');
+                $api->get('prefix2/domain1-2', function () {
+                    return 'hi';
+                })->name('v1.prefix2.domain1-2');
             });
             $api->group(['domain' => 'domain2.app.test'], function (Router $api) {
-                $api->post('/domain2-1', function () { return 'hi'; })->name('v1.domain2-1');
-                $api->get('domain2-2', function () { return 'hi'; })->name('v1.domain2-2');
-                $api->get('/prefix1/domain2-1', function () { return 'hi'; })->name('v1.prefix1.domain2-1');
-                $api->get('prefix1/domain2-2', function () { return 'hi'; })->name('v1.prefix1.domain2-2');
-                $api->get('/prefix2/domain2-1', function () { return 'hi'; })->name('v1.prefix2.domain2-1');
-                $api->get('prefix2/domain2-2', function () { return 'hi'; })->name('v1.prefix2.domain2-2');
+                $api->post('/domain2-1', function () {
+                    return 'hi';
+                })->name('v1.domain2-1');
+                $api->get('domain2-2', function () {
+                    return 'hi';
+                })->name('v1.domain2-2');
+                $api->get('/prefix1/domain2-1', function () {
+                    return 'hi';
+                })->name('v1.prefix1.domain2-1');
+                $api->get('prefix1/domain2-2', function () {
+                    return 'hi';
+                })->name('v1.prefix1.domain2-2');
+                $api->get('/prefix2/domain2-1', function () {
+                    return 'hi';
+                })->name('v1.prefix2.domain2-1');
+                $api->get('prefix2/domain2-2', function () {
+                    return 'hi';
+                })->name('v1.prefix2.domain2-2');
             });
         });
         $api->version('v2', function (Router $api) {
             $api->group(['domain' => 'domain1.app.test'], function (Router $api) {
-                $api->post('/domain1', function () { return 'hi'; })->name('v2.domain1');
-                $api->get('/prefix1/domain1', function () { return 'hi'; })->name('v2.prefix1.domain1');
-                $api->get('/prefix2/domain1', function () { return 'hi'; })->name('v2.prefix2.domain1');
+                $api->post('/domain1', function () {
+                    return 'hi';
+                })->name('v2.domain1');
+                $api->get('/prefix1/domain1', function () {
+                    return 'hi';
+                })->name('v2.prefix1.domain1');
+                $api->get('/prefix2/domain1', function () {
+                    return 'hi';
+                })->name('v2.prefix2.domain1');
             });
             $api->group(['domain' => 'domain2.app.test'], function (Router $api) {
-                $api->post('/domain2', function () { return 'hi'; })->name('v2.domain2');
-                $api->get('/prefix1/domain2', function () { return 'hi'; })->name('v2.prefix1.domain2');
-                $api->get('/prefix2/domain2', function () { return 'hi'; })->name('v2.prefix2.domain2');
+                $api->post('/domain2', function () {
+                    return 'hi';
+                })->name('v2.domain2');
+                $api->get('/prefix1/domain2', function () {
+                    return 'hi';
+                })->name('v2.prefix1.domain2');
+                $api->get('/prefix2/domain2', function () {
+                    return 'hi';
+                })->name('v2.prefix2.domain2');
             });
         });
     }
