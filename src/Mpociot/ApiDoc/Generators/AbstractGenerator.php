@@ -528,7 +528,7 @@ abstract class AbstractGenerator
                 $attributeData['type'] = $rule;
                 break;
             case 'array':
-                $attributeData['value'] = [$faker->word];
+                $attributeData['value'] = $faker->word;
                 $attributeData['type'] = $rule;
                 $attributeData['description'][] = Description::parse($rule)->getDescription();
                 break;
