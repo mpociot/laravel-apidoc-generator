@@ -259,6 +259,7 @@ class GenerateDocumentation extends Command
             return RouteFacade::getRoutes();
         } else {
             $allRouteCollections = app(\Dingo\Api\Routing\Router::class)->getRoutes();
+
             return collect($allRouteCollections)
                 ->flatMap(function (RouteCollection $collection) {
                     return $collection->getRoutes();
