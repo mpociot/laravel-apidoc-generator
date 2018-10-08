@@ -15,10 +15,10 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Mpociot/</directory>
+            <directory suffix=".php">src/</directory>
             <exclude>
-                <file>src/Mpociot/ApiDoc/ApiDocGeneratorServiceProvider.php</file>
-                <file>src/resources/views/documentarian.blade.php</file>
+                <file>src/ApiDocGeneratorServiceProvider.php</file>
+                <file>resources/views/documentarian.blade.php</file>
             </exclude>
         </whitelist>
     </filter>
