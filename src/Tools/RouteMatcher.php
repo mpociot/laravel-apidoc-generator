@@ -18,9 +18,6 @@ class RouteMatcher
         return $this->getRoutesToBeDocumented($routeRules);
     }
 
-    /**
-     * @return mixed
-     */
     public function getRoutesToBeDocumented(array $routeRules, bool $usingDingoRouter = false)
     {
         $matchedRoutes = [];
@@ -56,17 +53,13 @@ class RouteMatcher
         }
 
         $allRouteCollections = app(\Dingo\Api\Routing\Router::class)->getRoutes();
-        if (empty($versions)) {
-            return $allRoutes;
-        }
-
         return collect($allRouteCollections)
             ->flatMap(function (RouteCollection $collection) {
                 return $collection->getRoutes();
             })->toArray();
     }
 
-    private function shouldIncludeRoute(Route $route, $routeRule, array $mustIncludes, bool $usingDingoRouter)
+    private function shouldIncludeRoute(Route $route, array $routeRule, array $mustIncludes, bool $usingDingoRouter)
     {
         $matchesVersion = $usingDingoRouter
             ? !empty(array_intersect($route->versions(), $routeRule['match']['versions'] ?? []))

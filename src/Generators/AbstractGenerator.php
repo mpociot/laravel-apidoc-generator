@@ -45,22 +45,16 @@ abstract class AbstractGenerator
 
     /**
      * @param  \Illuminate\Routing\Route $route
-     * @param array $bindings
-     * @param bool $withResponse
+     * @param array $apply Rules to apply when generating documentation for this route
      *
      * @return array
      */
-    public function processRoute($route, $bindings = [], $headers = [], $withResponse = true)
+    public function processRoute($route, $apply = [])
     {
-        $routeDomain = $route->domain();
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
         $routeDescription = $this->getRouteDescription($routeAction['uses']);
         $showresponse = null;
-
-        // set correct route domain
-        $headers[] = "HTTP_HOST: {$routeDomain}";
-        $headers[] = "SERVER_NAME: {$routeDomain}";
 
         $response = null;
         $docblockResponse = $this->getDocblockResponse($routeDescription['tags']);
@@ -77,27 +71,20 @@ abstract class AbstractGenerator
                 $showresponse = true;
             }
         }
-        if (! $response && $withResponse) {
-            try {
-                $response = $this->getRouteResponse($route, $bindings, $headers);
-            } catch (\Exception $e) {
-                echo "Couldn't get response for route: ".implode(',', $this->getMethods($route)).$route->uri().']: '.$e->getMessage()."\n";
-            }
-        }
 
         $content = $this->getResponseContent($response);
 
-        return $this->getParameters([
+        return [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'resource' => $routeGroup,
             'title' => $routeDescription['short'],
             'description' => $routeDescription['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'parameters' => [],
+            'parameters' => $this->getParametersFromDocBlock($routeAction['uses']),
             'response' => $content,
             'showresponse' => $showresponse,
-        ], $routeAction, $bindings);
+        ];
     }
 
     /**
@@ -134,15 +121,12 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param array $routeData
      * @param array $routeAction
-     * @param array $bindings
-     *
-     * @return mixed
+     * @return array
      */
-    protected function getParameters($routeData, $routeAction, $bindings)
+    protected function getParametersFromDocBlock($routeAction)
     {
-        return $routeData;
+        return [];
     }
 
     /**
