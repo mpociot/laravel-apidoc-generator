@@ -24,7 +24,7 @@ abstract class AbstractGenerator
      *
      * @return mixed
      */
-    public function getDomain(Route $route)
+    public function getDomain($route)
     {
         return $route->domain();
     }
@@ -34,7 +34,7 @@ abstract class AbstractGenerator
      *
      * @return mixed
      */
-    public function getUri(Route $route)
+    public function getUri($route)
     {
         return $route->uri();
     }
@@ -44,7 +44,7 @@ abstract class AbstractGenerator
      *
      * @return mixed
      */
-    public function getMethods(Route $route)
+    public function getMethods($route)
     {
         return array_diff($route->methods(), ['HEAD']);
     }
