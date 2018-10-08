@@ -7,6 +7,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
+use Dingo\Api\Routing\RouteCollection;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
@@ -257,7 +258,11 @@ class GenerateDocumentation extends Command
         if ($this->option('router') === 'laravel') {
             return RouteFacade::getRoutes();
         } else {
-            return app('Dingo\Api\Routing\Router')->getRoutes();
+            $allRouteCollections = app(\Dingo\Api\Routing\Router::class)->getRoutes();
+            return collect($allRouteCollections)
+                ->flatMap(function (RouteCollection $collection) {
+                    return $collection->getRoutes();
+                })->toArray();
         }
     }
 
