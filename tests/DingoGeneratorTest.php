@@ -5,10 +5,8 @@ namespace Mpociot\ApiDoc\Tests;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Dingo\Api\Provider\LaravelServiceProvider;
-use Mpociot\ApiDoc\Tests\Fixtures\TestRequest;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Mpociot\ApiDoc\Tests\Fixtures\DingoTestController;
 
 class DingoGeneratorTest extends TestCase
 {
@@ -74,5 +72,4 @@ class DingoGeneratorTest extends TestCase
         $parsed = $this->generator->processRoute($route);
         $this->assertSame(['DELETE'], $parsed['methods']);
     }
-
 }

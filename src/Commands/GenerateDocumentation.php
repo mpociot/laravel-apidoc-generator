@@ -2,12 +2,12 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
-use Mpociot\ApiDoc\Tools\RouteMatcher;
 use ReflectionClass;
 use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
+use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 use Mpociot\ApiDoc\Generators\DingoGenerator;
@@ -31,7 +31,6 @@ class GenerateDocumentation extends Command
      * @var string
      */
     protected $description = 'Generate your API documentation from existing Laravel routes.';
-
 
     private $routeMatcher;
 
@@ -58,12 +57,11 @@ class GenerateDocumentation extends Command
             $generator = new DingoGenerator();
         }
 
-
         $parsedRoutes = $this->processRoutes($generator, $routes);
         $parsedRoutes = collect($parsedRoutes)->groupBy('resource')
             ->sort(function ($a, $b) {
                 return strcmp($a->first()['resource'], $b->first()['resource']);
-        });
+            });
 
         $this->writeMarkdown($parsedRoutes);
     }
@@ -177,24 +175,23 @@ class GenerateDocumentation extends Command
         }
     }
 
-
     /**
      * @param AbstractGenerator $generator
      * @param array $routes
-     * @return array
      *
+     * @return array
      */
     private function processRoutes(AbstractGenerator $generator, array $routes)
     {
         $parsedRoutes = [];
         foreach ($routes as ['route' => $route, 'apply' => $apply]) {
             /** @var Route $route */
-                if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $apply);
-                    $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
-                } else {
-                    $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
-                }
+            if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
+                $parsedRoutes[] = $generator->processRoute($route, $apply);
+                $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
+            } else {
+                $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
+            }
         }
 
         return $parsedRoutes;

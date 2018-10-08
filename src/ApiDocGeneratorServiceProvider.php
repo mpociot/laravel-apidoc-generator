@@ -15,10 +15,10 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/', 'apidoc');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/', 'apidoc');
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => app()->basePath().'/resources/views/vendor/apidoc',
+            __DIR__.'/../resources/views' => app()->basePath().'/resources/views/vendor/apidoc',
         ], 'views');
 
         $this->publishes([

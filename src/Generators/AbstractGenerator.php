@@ -122,6 +122,7 @@ abstract class AbstractGenerator
 
     /**
      * @param array $routeAction
+     *
      * @return array
      */
     protected function getParametersFromDocBlock($routeAction)
