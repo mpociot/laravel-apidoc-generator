@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mpociot\\ApiDoc": "src/"
+            "Mpociot\\ApiDoc\\": "src/"
         }
     },
     "autoload-dev": {

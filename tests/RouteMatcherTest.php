@@ -2,14 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Dingo\Api\Routing\Route as DingoRoute;
 use Dingo\Api\Routing\Router;
-use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Illuminate\Support\Facades\Route as RouteFacade;
 
 class RouteMatcherTest extends TestCase
