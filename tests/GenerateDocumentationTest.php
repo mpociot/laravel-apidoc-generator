@@ -84,8 +84,8 @@ class GenerateDocumentationTest extends TestCase
 
     public function testConsoleCommandDoesNotWorkWithClosureUsingDingo()
     {
-        if (version_compare($this->app->version(), '5.4', '>=')) {
-            $this->markTestSkipped('Dingo does not support Laravel 5.4');
+        if (version_compare($this->app->version(), '5.4', '<=')) {
+            $this->markTestSkipped('Dingo does not support Laravel 5.4 or below');
         }
 
         $api = app('Dingo\Api\Routing\Router');
