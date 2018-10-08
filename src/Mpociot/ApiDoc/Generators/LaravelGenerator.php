@@ -13,7 +13,7 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return mixed
      */
-    public function getUri(Route $route)
+    public function getUri($route)
     {
         if (version_compare(app()->version(), '5.4', '<')) {
             return $route->getUri();
@@ -27,7 +27,7 @@ class LaravelGenerator extends AbstractGenerator
      *
      * @return mixed
      */
-    public function getMethods(Route $route)
+    public function getMethods($route)
     {
         if (version_compare(app()->version(), '5.4', '<')) {
             $methods = $route->getMethods();
