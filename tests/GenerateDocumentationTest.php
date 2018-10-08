@@ -97,7 +97,7 @@ class GenerateDocumentationTest extends TestCase
 
             $output = $this->artisan('api:generate', [
                 '--router' => 'dingo',
-                '--routePrefix' => 'v1',
+                '--routePrefix' => '*',
             ]);
             $this->assertContains('Skipping route: [GET] closure', $output);
             $this->assertContains('Processed route: [GET] test', $output);

@@ -305,7 +305,7 @@ class GenerateDocumentation extends Command
      *
      * @return bool
      */
-    private function isValidRoute(Route $route)
+    private function isValidRoute($route)
     {
         return ! is_callable($route->getAction()['uses']) && ! is_null($route->getAction()['uses']);
     }
