@@ -48,6 +48,6 @@
             "providers": [
                 "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
             ]
-       }
+        }
     }
 }
