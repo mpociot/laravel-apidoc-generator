@@ -1,5 +1,5 @@
 {
-    "name": "vitta/laravel-apidoc-generator",
+    "name": "mpociot/laravel-apidoc-generator",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
     "keywords": [
@@ -7,7 +7,7 @@
         "Documentation",
         "Laravel"
     ],
-    "homepage": "https://github.com/Joker-1991/laravel-apidoc-generator.git",
+    "homepage": "http://github.com/mpociot/laravel-apidoc-generator",
     "authors": [
         {
             "name": "Marcel Pociot",
