@@ -1,5 +1,5 @@
 {
-    "name": "mpociot/laravel-apidoc-generator",
+    "name": "vitta/laravel-apidoc-generator",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
     "keywords": [
@@ -48,6 +48,6 @@
             "providers": [
                 "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
             ]
-       }
+        }
     }
 }
