@@ -114,7 +114,7 @@ abstract class AbstractGenerator
                 $required = trim($required) == 'required' ? true : false;
                 $type = $this->normalizeParameterType($type);
                 return [$name => compact('type', 'description', 'required')];
-            });
+            })->toArray();
         return $parameters;
     }
 
