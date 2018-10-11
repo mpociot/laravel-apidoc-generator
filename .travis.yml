@@ -1,12 +1,18 @@
 language: php
 
 php:
+  - 7.0.0
   - 7.1.3
   - 7.2
 
+env:
+  matrix:
+    - PREFER_LOWEST="--prefer-lowest"
+    - PREFER_LOWEST=""
+
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --prefer-dist --no-interaction
+  - travis_retry composer update --no-interaction --prefer-dist $PREFER_LOWEST
 
 script:
   - composer test-ci

@@ -41,7 +41,7 @@ var settings = {
     "url": "http://localhost/api/test",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -62,13 +62,13 @@ null
 
 <!-- END_0bef4e738c9d6720ad43b062015d1078 -->
 
-<!-- START_960a1b2b0f0f4dde8ce993307397f9c4 -->
-## api/fetch
+<!-- START_39a6bfda1d6a0c4a5447f51b62557456 -->
+## api/responseTag
 
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/fetch" \
+curl -X GET -G "http://localhost/api/responseTag" \
     -H "Accept: application/json"
 ```
 
@@ -76,10 +76,10 @@ curl -X GET -G "http://localhost/api/fetch" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/fetch",
+    "url": "http://localhost/api/responseTag",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -92,18 +92,18 @@ $.ajax(settings).done(function (response) {
 
 ```json
 {
-    "id": 1,
-    "name": "Banana",
-    "color": "Red",
-    "weight": "300 grams",
+    "id": 4,
+    "name": "banana",
+    "color": "red",
+    "weight": "1 kg",
     "delicious": true
 }
 ```
 
 ### HTTP Request
-`GET api/fetch`
+`GET api/responseTag`
 
 
-<!-- END_960a1b2b0f0f4dde8ce993307397f9c4 -->
+<!-- END_39a6bfda1d6a0c4a5447f51b62557456 -->
 
 

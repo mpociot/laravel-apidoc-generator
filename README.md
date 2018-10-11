@@ -2,7 +2,7 @@
 
 Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.de/whiteboard/).
 
-`php artisan apidoc:gen --routePrefix="settings/api/*"`
+`php artisan apidoc:generate`
 
 [![Latest Stable Version](https://poser.pugx.org/mpociot/laravel-apidoc-generator/v/stable)](https://packagist.org/packages/mpociot/laravel-apidoc-generator)[![Total Downloads](https://poser.pugx.org/mpociot/laravel-apidoc-generator/downloads)](https://packagist.org/packages/mpociot/laravel-apidoc-generator)
 [![License](https://poser.pugx.org/mpociot/laravel-apidoc-generator/license)](https://packagist.org/packages/mpociot/laravel-apidoc-generator)
@@ -13,8 +13,7 @@ Automatically generate your API documentation from your existing Laravel routes.
 
 
 ## Installation
-
-Require this package with composer using the following command:
+> Note: version 3.x requires PHP 7 and Laravel 5.5 or higher. Version 2.x requires Laravel 5.4.
 
 ```sh
 $ composer require mpociot/laravel-apidoc-generator
@@ -25,70 +24,112 @@ Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
 Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
 ```
 
-> Using Laravel < 5.4? Use version 1.0! For Laravel 5.4 and up, use 2.0 instead.
+Then publish the config file by running:
+
+```bash
+php artisan vendor:publish --provider=Mpociot\ApiDoc\ApiDocGeneratorServiceProvider --tag=config
+```
+This will create an `apidoc.php` file in your `config` folder.
 
 ## Usage
+Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`.
+### output
+This is the file path where the generated documentation will be written to. Default: `**public/docs**
+
+### postman
+Set this option to true if you want a Postman collection to be generated along with the documentation. Default: `**true**
+
+### router
+The router to use when processing the route (can be Laravel or Dingo. Defaults to **Laravel**)
+
+### routes
+This is where you specify what rules documentation should be generated for. You specify routes to be parsed by defining conditions that the routes should meet and rules that should be applied when generating documentation. These conditions and rules are specified in groups, allowing you to apply different rules to different routes.
+
+For instance, suppose your configuration looks like this:
+
+```php
+<?php
+return [
+     //...,
+  
+     'routes' => [
+          [
+              'match' => [
+                  'domains' => ['*'],
+                  'prefixes' => ['api/*', 'v2-api/*'],
+                  'versions' => ['v1'],
+              ],
+              'include' => ['users.index'],
+              'exclude' => ['users.create'],
+              'apply' => [
+                  'headers' => [
+                      'Authorization' => 'Bearer: {token}',
+                  ],
+              ],
+          ],
+];
+```
+
+This means documentation will be generated for routes in all domains ('*' is a wildcard meaning 'any character') which match any of the patterns 'api/*' or 'v2-api/*', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
+Also, in the generated documentation, these routes will have the header 'Authorization: Bearer: {token}' added to the example requests.
+
+You can also separate routes into groups to apply different rules to them:
+
+```php
+<?php
+return [
+     //...,
+  
+     'routes' => [
+          [
+              'match' => [
+                  'domains' => ['v1.*'],
+                  'prefixes' => ['*'],
+              ],
+              'include' => [],
+              'exclude' => [],
+              'apply' => [
+                  'headers' => [
+                      'Token' => '{token}',
+                      'Version' => 'v1',
+                  ],
+              ],
+          ],
+          [
+              'match' => [
+                  'domains' => ['v2.*'],
+                  'prefixes' => ['*'],
+              ],
+              'include' => [],
+              'exclude' => [],
+              'apply' => [
+                  'headers' => [
+                      'Authorization' => 'Bearer: {token}',
+                      'Api-Version' => 'v2',
+                  ],
+              ],
+          ],
+];
+```
+
+With the configuration above, routes on the `v1.*` domain will have the `Token` and `Version` headers applied, while routes on the `v2.*` domain will have the `Authorization` and `Api-Version` headers applied.
+
+> Note: If you're using DIngo router, the `versions` parameter is required in each route group. This parameter does not support wildcards. Each version must be listed explicitly,
 
 To generate your API documentation, use the `apidoc:generate` artisan command.
 
 ```sh
-$ php artisan apidoc:generate --routePrefix="api/v1/*"
+$ php artisan apidoc:generate
 
 ```
-You can pass in multiple prefixes by spearating each prefix with comma.
 
-```sh
-$ php artisan apidoc:generate --routePrefix="api/v1/*,api/public/*"
-```
-It will generate documentation for all of the routes whose prefixes are `api/v1/` and `api/public/`
+It will generate documentation using your specified configuration.
 
-
-This command will scan your applications routes for the URIs matching `api/v1/*` and will parse these controller methods and form requests. For example:
-
-```php
-// API Group Routes
-Route::group(array('prefix' => 'api/v1', 'middleware' => []), function () {
-	// Custom route added to standard Resource
-	Route::get('example/foo', 'ExampleController@foo');
-	// Standard Resource route
-	Route::resource('example', 'ExampleController');
-});
-```
-
-### Available command options:
-
-Option | Description
---------- | -------
-`output` | The output path used for the generated documentation. Default: `public/docs`
-`routePrefix` | The route prefix(es) to use for generation. `*` can be used as a wildcard. Multiple route prefixes can be specified by separating them with a comma (for instance `/v1,/v2`)
-`routeDomain` | The route domain(s) to use for generation. `*` can be used as a wildcard. Multiple route domains can be specified by separating them with a comma 
-`routes` | The route names to use for generation - Required if no routePrefix or routeDomain is provided
-`middleware` | The middlewares to use for generation
-`noResponseCalls` | Disable API response calls
-`noPostmanCollection` | Disable Postman collection creation
-`useMiddlewares` | Use all configured route middlewares (Needed for Laravel 5.3 `SubstituteBindings` middleware)
-`actAsUserId` | The user ID to use for authenticated API response calls
-`router` | The router to use, when processing the route files (can be Laravel or Dingo - defaults to Laravel)
-`bindings` | List of route bindings that should be replaced when trying to retrieve route results. Syntax format: `binding_one,id|binding_two,id`
-`force` | Force the re-generation of existing/modified API routes
-`header` | Custom HTTP headers to add to the example requests. Separate the header name and value with ":". For example: `--header="Authorization: CustomToken"`
-
-## Publish rule descriptions for customisation or translation.
-
- By default, this package returns the descriptions in english. You can publish the packages language files, to customise and translate the documentation output.
-
- ```sh
- $ php artisan vendor:publish
- ```
-
- After the files are published you can customise or translate the descriptions in the language you want by renaming the `en` folder and editing the files in `public/vendor/apidoc/resources/lang`.
-
-
-### How does it work?
+## Documenting your API
 
 This package uses these resources to generate the API documentation:
 
-#### Controller doc block
+### Grouping endpoints
 
 This package uses the HTTP controller doc blocks to create a table of contents and show descriptions for your API methods.
 
@@ -119,106 +160,97 @@ class ExampleController extends Controller {
 
 ![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
-#### Form request validation rules
+### Specifying request body parameters
 
-To display a list of valid parameters, your API methods accepts, this package uses Laravel's [Form Requests Validation](https://laravel.com/docs/5.2/validation#form-request-validation).
+To specify a list of valid parameters your API route accepts, use the `@bodyParam` annotation. It takes the name of the parameter, its type, an optional "required" label, and then its description
 
 
 ```php
-public function rules()
+/**
+ * @bodyParam title string required The title of the post.
+ * @bodyParam body string required The title of the post.
+ * @bodyParam type The type of post to create. Defaults to 'textophonious'.
+ * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
+ */
+public function createPost()
 {
-    return [
-        'title' => 'required|max:255',
-        'body' => 'required',
-        'type' => 'in:foo,bar',
-        'thumbnail' => 'required_if:type,foo|image',
-    ];
+    // ...
 }
 ```
+
+They will be included in the generated documentation text and example requests.
 
 **Result:** ![Form Request](http://marcelpociot.de/documentarian/form_request.png)
 
-### A note on custom validation rules
-This package only supports custom rules defined as classes. You'll also need to define a `__toString()` method in the class, which should return the description that would be displayed in the generated doc.
+### Providing an example response
+You can provide an example response for a route. This will be disaplyed in the examples section. There are several ways of doing this.
 
-#### Controller method doc block
-It is possible to override the results for the response. This will also show the responses for other request methods then GET.
-
-#### @transformer
-With the transformer you can define the transformer that is used for the result of the method. It will try the next parts to get a result if it can find the transformer. The first successfull will be used.
-
-1. Check if there is a transformermodel tag to define the model
-2. Get a model from the modelfactory
-2. If the parameter is a Eloquent model it will load the first from the database.
-3. A new instance from the class
-
-```php
-/**
- * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
- */
-public function transformerTag()
-{
-    return '';
-}
-```
-
-#### @transformercollection
-This is the same idea as the @tranformer tag with one different, instead of the return of an item, it will generate the return of a set with two items
-
-```php
-/**
- * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
- */
-public function transformerCollectionTag()
-{
-    return '';
-}
-```
-
-#### @transformermodel
-The @transformermodel tag is needed for PHP 5.* to get the model. For PHP 7 is it optional to specify the model that is used for the transformer.
 
 #### @response
-If you explicitly want to specify the result of a function you can set it in the docblock as JSON, using the `@response` annotation:
+You can provide an example response for a route by using the `@response` annotation with valid JSON:
 
 ```php
 /**
  * @response {
- *  "token": "eyJ0eXAi…",
+ *  "id": 4,
+ *  "name": "Jessica Jones",
  *  "roles": ["admin"]
  * }
  */
-public function responseTag()
+public function show($id)
 {
-    return '';
+    return User::find($id);
 }
 ```
 
-#### API responses
+#### @transformer, @transformerCollection, and @transformerModel
+You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
-If your API route accepts a `GET` method, this package tries to call the API route with all middleware disabled to fetch an example API response. 
+1. Check if there is a `@transformerModel` tag to define the model being transformed. If there is none, use the class of the first parameter to the method.
+2. Get an instance of the model from the Eloquent model factory
+2. If the parameter is an Eloquent model, load the first from the database.
+3. Create an instance using `new`.
 
-If your API needs an authenticated user, you can use the `actAsUserId` option to specify a user ID that will be used for making these API calls:
+Finally, it will pass in the model to the transformer and display the result of that as the example response.
 
-```sh
-$ php artisan apidoc:generate --routePrefix="api/*" --actAsUserId=1
+For example:
+
+```php
+/**
+ * @transformer \App\Transformers\UserTransformer
+ * @transformerModel \App\User
+ */
+public function listUsers()
+{
+    //...
+}
+
+/**
+ * @transformer \App\Transformers\UserTransformer
+ */
+public function showUser(User $user)
+{
+    //...
+}
+
+/**
+ * @transformer \App\Transformers\UserTransformer
+ * @transformerModel \App\User
+ */
+public function showUser(int $id)
+{
+    // ...
+}
 ```
-
-If you don't want to automatically perform API response calls, use the `noResponseCalls` option.
-
-```sh
-$ php artisan apidoc:generate --routePrefix="api/*" --noResponseCalls
-```
-
-> Note: The example API responses work best with seeded data.
+For the first route above, this package will generate a set of two users then pass it through the transformer. For the last two, it will generate a single user and then pass it through the transformer.
 
 #### Postman collections
 
-The generator automatically creates a Postman collection file, which you can import to use within your [Postman App](https://www.getpostman.com/apps) for even simpler API testing and usage.
+The generator automatically creates a Postman collection file, which you can import to use within your [Postman app](https://www.getpostman.com/apps) for even simpler API testing and usage.
 
-If you don't want to create a Postman collection, use the `--noPostmanCollection` option, when generating the API documentation.
+If you don't want to create a Postman collection, set the `--postman` config option to false.
 
-As of Laravel 5.3, the default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
+The default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
 
 ```php
 'url' => env('APP_URL', 'http://yourappdefault.app'),
@@ -243,16 +275,14 @@ $ php artisan apidoc:update
 
 As an optional parameter, you can use `--location` to tell the update command where your documentation can be found.
 
+If you wish to regenerate your documentation, you can run the `generate` command, you can use the `force` option to force the re-generation of existing/modified API routes.
+
 ## Automatically add markdown to the beginning or end of the documentation
  If you wish to automatically add the same content to the docs every time you generate, you can add a `prepend.md` and/or `append.md` file to the source folder, and they will be included above and below the generated documentation.
  
  **File locations:**
 - `public/docs/source/prepend.md` - Will be added after the front matter and info text
-- `public/docs/source/append.md` - Will be added at the end of the document
-
-## Skip single routes
-
-If you want to skip a single route from a list of routes that match a given prefix, you can use the `@hideFromAPIDocumentation` tag on the Controller method you do not want to document.
+- `public/docs/source/append.md` - Will be added at the end of the document.
 
 ## Further modification
 

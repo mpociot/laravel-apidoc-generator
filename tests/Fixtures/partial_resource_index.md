@@ -21,13 +21,13 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
-<!-- START_2b6e5a4b188cb183c7e59558cce36cb6 -->
+<!-- START_fc1e4f6a697e3c48257de845299b71d5 -->
 ## Display a listing of the resource.
 
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user" \
+curl -X GET -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
@@ -35,10 +35,10 @@ curl -X GET -G "http://localhost/api/user" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user",
+    "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -56,18 +56,18 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user`
+`GET api/users`
 
 
-<!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
+<!-- END_fc1e4f6a697e3c48257de845299b71d5 -->
 
-<!-- START_7f66c974d24032cb19061d55d801f62b -->
+<!-- START_5dac10bb34c7618b018b0230d4a51648 -->
 ## Show the form for creating a new resource.
 
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user/create" \
+curl -X GET -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
 
@@ -75,10 +75,10 @@ curl -X GET -G "http://localhost/api/user/create" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/create",
+    "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -96,9 +96,9 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/create`
+`GET api/users/create`
 
 
-<!-- END_7f66c974d24032cb19061d55d801f62b -->
+<!-- END_5dac10bb34c7618b018b0230d4a51648 -->
 
 

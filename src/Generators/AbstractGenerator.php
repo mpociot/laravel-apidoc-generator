@@ -49,41 +49,23 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    public function processRoute($route, $apply = [])
+    public function processRoute($route)
     {
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);
-        $routeDescription = $this->getRouteDescription($routeAction['uses']);
-        $showresponse = null;
-
-        $response = null;
-        $docblockResponse = $this->getDocblockResponse($routeDescription['tags']);
-        if ($docblockResponse) {
-            // we have a response from the docblock ( @response )
-            $response = $docblockResponse;
-            $showresponse = true;
-        }
-        if (! $response) {
-            $transformerResponse = $this->getTransformerResponse($routeDescription['tags']);
-            if ($transformerResponse) {
-                // we have a transformer response from the docblock ( @transformer || @transformercollection )
-                $response = $transformerResponse;
-                $showresponse = true;
-            }
-        }
-
-        $content = $this->getResponseContent($response);
+        $docBlock = $this->parseDocBlock($routeAction['uses']);
+        $content = $this->getResponse($docBlock['tags']);
 
         return [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'resource' => $routeGroup,
-            'title' => $routeDescription['short'],
-            'description' => $routeDescription['long'],
+            'title' => $docBlock['short'],
+            'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'parameters' => $this->getParametersFromDocBlock($routeAction['uses']),
+            'parameters' => $this->getParametersFromDocBlock($docBlock['tags']),
             'response' => $content,
-            'showresponse' => $showresponse,
+            'showresponse' => ! empty($content),
         ];
     }
 
@@ -106,11 +88,7 @@ abstract class AbstractGenerator
     protected function getDocblockResponse($tags)
     {
         $responseTags = array_filter($tags, function ($tag) {
-            if (! ($tag instanceof Tag)) {
-                return false;
-            }
-
-            return \strtolower($tag->getName()) == 'response';
+            return $tag instanceof Tag && \strtolower($tag->getName()) == 'response';
         });
         if (empty($responseTags)) {
             return;
@@ -121,13 +99,26 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param array $routeAction
+     * @param array $tags
      *
      * @return array
      */
-    protected function getParametersFromDocBlock($routeAction)
+    protected function getParametersFromDocBlock($tags)
     {
-        return [];
+        $parameters = collect($tags)
+            ->filter(function ($tag) {
+                return $tag instanceof Tag && $tag->getName() === 'bodyParam';
+            })
+            ->mapWithKeys(function ($tag) {
+                preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.+)/', $tag->getContent(), $content);
+                list($_, $name, $type, $required, $description) = $content;
+                $required = trim($required) == 'required' ? true : false;
+                $type = $this->normalizeParameterType($type);
+
+                return [$name => compact('type', 'description', 'required')];
+            })->toArray();
+
+        return $parameters;
     }
 
     /**
@@ -180,7 +171,7 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    protected function getRouteDescription($route)
+    protected function parseDocBlock($route)
     {
         list($class, $method) = explode('@', $route);
         $reflection = new ReflectionClass($class);
@@ -321,8 +312,7 @@ abstract class AbstractGenerator
             if ($modelTag) {
                 $type = $modelTag->getContent();
             }
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && \is_null($type)) {
-                // we can only get the type with reflection for PHP 7
+            if (\is_null($type)) {
                 if ($parameter->hasType() &&
                     ! $parameter->getType()->isBuiltin() &&
                     \class_exists((string) $parameter->getType())) {
@@ -368,5 +358,32 @@ abstract class AbstractGenerator
             // it isn't possible to parse the transformer
             return;
         }
+    }
+
+    private function getResponse(array $annotationTags)
+    {
+        $response = null;
+        if ($docblockResponse = $this->getDocblockResponse($annotationTags)) {
+            // we have a response from the docblock ( @response )
+            $response = $docblockResponse;
+        }
+        if (! $response && ($transformerResponse = $this->getTransformerResponse($annotationTags))) {
+            // we have a transformer response from the docblock ( @transformer || @transformercollection )
+            $response = $transformerResponse;
+        }
+
+        $content = $response ? $this->getResponseContent($response) : null;
+
+        return $content;
+    }
+
+    private function normalizeParameterType($type)
+    {
+        $typeMap = [
+            'int' => 'integer',
+            'bool' => 'boolean',
+        ];
+
+        return $type ? ($typeMap[$type] ?? $type) : 'string';
     }
 }

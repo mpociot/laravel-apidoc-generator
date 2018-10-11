@@ -17,22 +17,16 @@ class TestController extends Controller
      * This will be the long description.
      * It can also be multiple lines long.
      */
-    public function parseMethodDescription()
+    public function withEndpointDescription()
     {
         return '';
     }
 
-    public function parseFormRequestRules(TestRequest $request)
-    {
-        return '';
-    }
-
-    public function customFormRequestValidator(CustomValidatorRequest $request)
-    {
-        return '';
-    }
-
-    public function addRouteBindingsToRequestClass(DynamicRequest $request)
+    /**
+     * @bodyParam user_id int required The id of the user.
+     * @bodyParam room_id string The id of the room.
+     */
+    public function withBodyParameters()
     {
         return '';
     }
@@ -42,7 +36,7 @@ class TestController extends Controller
         return $request->headers->all();
     }
 
-    public function fetchRouteResponse()
+    public function shouldFetchRouteResponse()
     {
         $fixture = new \stdClass();
         $fixture->id = 1;
@@ -60,12 +54,12 @@ class TestController extends Controller
         ];
     }
 
-    public function dependencyInjection(DependencyInjection $dependency, TestRequest $request)
-    {
-        return '';
-    }
-
-    public function utf8()
+    /**
+     * @response {
+     *   "result": "Лорем ипсум долор сит амет"
+     * }
+     */
+    public function withUtf8ResponseTag()
     {
         return ['result' => 'Лорем ипсум долор сит амет'];
     }
@@ -79,10 +73,14 @@ class TestController extends Controller
 
     /**
      * @response {
-     *  "data": []
-     *}
+     *   "id": 4,
+     *   "name": "banana",
+     *   "color": "red",
+     *   "weight": "1 kg",
+     *   "delicious": true
+     * }
      */
-    public function responseTag()
+    public function withResponseTag()
     {
         return '';
     }

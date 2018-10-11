@@ -47,14 +47,13 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $routes = config('apidoc.router') == 'dingo'
-            ? $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'))
-            : $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
-
-        if ($this->option('router') === 'laravel') {
-            $generator = new LaravelGenerator();
-        } else {
+        $usingDIngoRouter = config('apidoc.router') == 'dingo';
+        if ($usingDIngoRouter) {
+            $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
             $generator = new DingoGenerator();
+        } else {
+            $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
+            $generator = new LaravelGenerator();
         }
 
         $parsedRoutes = $this->processRoutes($generator, $routes);
@@ -73,7 +72,7 @@ class GenerateDocumentation extends Command
      */
     private function writeMarkdown($parsedRoutes)
     {
-        $outputPath = $this->option('output');
+        $outputPath = config('apidoc.output');
         $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
         $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
         $prependFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
@@ -81,7 +80,7 @@ class GenerateDocumentation extends Command
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', ltrim($outputPath, 'public/'))
-            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
+            ->with('showPostmanCollectionButton', config('apidoc.postman'));
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
             return $routeGroup->map(function ($route) {
@@ -106,15 +105,15 @@ class GenerateDocumentation extends Command
 
             $parsedRouteOutput->transform(function ($routeGroup) use ($generatedDocumentation, $compareDocumentation) {
                 return $routeGroup->transform(function ($route) use ($generatedDocumentation, $compareDocumentation) {
-                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $routeMatch)) {
-                        $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $compareMatch) && $compareMatch[1] !== $routeMatch[1]);
+                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $existingRouteDoc)) {
+                        $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $lastDocWeGeneratedForThisRoute) && $lastDocWeGeneratedForThisRoute[1] !== $existingRouteDoc[1]);
                         if ($routeDocumentationChanged === false || $this->option('force')) {
                             if ($routeDocumentationChanged) {
                                 $this->warn('Discarded manual changes for route ['.implode(',', $route['methods']).'] '.$route['uri']);
                             }
                         } else {
                             $this->warn('Skipping modified route ['.implode(',', $route['methods']).'] '.$route['uri']);
-                            $route['modified_output'] = $routeMatch[0];
+                            $route['modified_output'] = $existingRouteDoc[0];
                         }
                     }
 
@@ -136,8 +135,8 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', $this->option('output'))
-            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
+            ->with('outputPath', config('apidoc.output'))
+            ->with('showPostmanCollectionButton', config('apidoc.postman'))
             ->with('parsedRoutes', $parsedRouteOutput);
 
         if (! is_dir($outputPath)) {
@@ -154,8 +153,8 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', $this->option('output'))
-            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
+            ->with('outputPath', config('apidoc.output'))
+            ->with('showPostmanCollectionButton', config('apidoc.postman'))
             ->with('parsedRoutes', $parsedRouteOutput);
 
         file_put_contents($compareFile, $compareMarkdown);
@@ -168,7 +167,7 @@ class GenerateDocumentation extends Command
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
 
-        if ($this->option('noPostmanCollection') !== true) {
+        if (config('apidoc.postman')) {
             $this->info('Generating Postman collection');
 
             file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
@@ -184,10 +183,11 @@ class GenerateDocumentation extends Command
     private function processRoutes(AbstractGenerator $generator, array $routes)
     {
         $parsedRoutes = [];
-        foreach ($routes as ['route' => $route, 'apply' => $apply]) {
+        foreach ($routes as $routeItem) {
+            $route = $routeItem['route'];
             /** @var Route $route */
             if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                $parsedRoutes[] = $generator->processRoute($route, $apply);
+                $parsedRoutes[] = $generator->processRoute($route) + $routeItem['apply'];
                 $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
                 $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
