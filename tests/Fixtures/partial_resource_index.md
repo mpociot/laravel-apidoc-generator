@@ -27,7 +27,7 @@ Welcome to the generated API reference.
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user" \
+curl -X GET -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
@@ -35,7 +35,7 @@ curl -X GET -G "http://localhost/api/user" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user",
+    "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -56,7 +56,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user`
+`GET api/users`
 
 
 <!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
@@ -67,7 +67,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user/create" \
+curl -X GET -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
 
@@ -75,7 +75,7 @@ curl -X GET -G "http://localhost/api/user/create" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/create",
+    "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -96,7 +96,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/create`
+`GET api/users/create`
 
 
 <!-- END_7f66c974d24032cb19061d55d801f62b -->

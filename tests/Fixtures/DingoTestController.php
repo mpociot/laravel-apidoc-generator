@@ -21,8 +21,4 @@ class DingoTestController extends Controller
         return '';
     }
 
-    public function parseFormRequestRules(DingoTestRequest $request)
-    {
-        return '';
-    }
 }

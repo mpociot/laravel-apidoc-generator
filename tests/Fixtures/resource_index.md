@@ -27,7 +27,7 @@ Welcome to the generated API reference.
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user" \
+curl -X GET -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
@@ -35,7 +35,7 @@ curl -X GET -G "http://localhost/api/user" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user",
+    "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -56,7 +56,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user`
+`GET api/users`
 
 
 <!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
@@ -67,7 +67,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user/create" \
+curl -X GET -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
 
@@ -75,7 +75,7 @@ curl -X GET -G "http://localhost/api/user/create" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/create",
+    "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -96,7 +96,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/create`
+`GET api/users/create`
 
 
 <!-- END_7f66c974d24032cb19061d55d801f62b -->
@@ -107,7 +107,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X POST "http://localhost/api/user" \
+curl -X POST "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
@@ -115,7 +115,7 @@ curl -X POST "http://localhost/api/user" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user",
+    "url": "http://localhost/api/users",
     "method": "POST",
     "headers": {
         "accept": "application/json"
@@ -129,7 +129,7 @@ $.ajax(settings).done(function (response) {
 
 
 ### HTTP Request
-`POST api/user`
+`POST api/users`
 
 
 <!-- END_f0654d3f2fc63c11f5723f233cc53c83 -->
@@ -140,7 +140,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user/{user}" \
+curl -X GET -G "http://localhost/api/users/{user}" \
     -H "Accept: application/json"
 ```
 
@@ -148,7 +148,7 @@ curl -X GET -G "http://localhost/api/user/{user}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/{user}",
+    "url": "http://localhost/api/users/{user}",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -169,7 +169,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/{user}`
+`GET api/users/{user}`
 
 
 <!-- END_ceec0e0b1d13d731ad96603d26bccc2f -->
@@ -180,7 +180,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/user/{user}/edit" \
+curl -X GET -G "http://localhost/api/users/{user}/edit" \
     -H "Accept: application/json"
 ```
 
@@ -188,7 +188,7 @@ curl -X GET -G "http://localhost/api/user/{user}/edit" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/{user}/edit",
+    "url": "http://localhost/api/users/{user}/edit",
     "method": "GET",
     "headers": {
         "accept": "application/json"
@@ -209,7 +209,7 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/user/{user}/edit`
+`GET api/users/{user}/edit`
 
 
 <!-- END_f4aa12af19ba08e1448d7eafc9f55e67 -->
@@ -220,7 +220,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X PUT "http://localhost/api/user/{user}" \
+curl -X PUT "http://localhost/api/users/{user}" \
     -H "Accept: application/json"
 ```
 
@@ -228,7 +228,7 @@ curl -X PUT "http://localhost/api/user/{user}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/{user}",
+    "url": "http://localhost/api/users/{user}",
     "method": "PUT",
     "headers": {
         "accept": "application/json"
@@ -242,9 +242,9 @@ $.ajax(settings).done(function (response) {
 
 
 ### HTTP Request
-`PUT api/user/{user}`
+`PUT api/users/{user}`
 
-`PATCH api/user/{user}`
+`PATCH api/users/{user}`
 
 
 <!-- END_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
@@ -255,7 +255,7 @@ $.ajax(settings).done(function (response) {
 > Example request:
 
 ```bash
-curl -X DELETE "http://localhost/api/user/{user}" \
+curl -X DELETE "http://localhost/api/users/{user}" \
     -H "Accept: application/json"
 ```
 
@@ -263,7 +263,7 @@ curl -X DELETE "http://localhost/api/user/{user}" \
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/user/{user}",
+    "url": "http://localhost/api/users/{user}",
     "method": "DELETE",
     "headers": {
         "accept": "application/json"
@@ -277,7 +277,7 @@ $.ajax(settings).done(function (response) {
 
 
 ### HTTP Request
-`DELETE api/user/{user}`
+`DELETE api/users/{user}`
 
 
 <!-- END_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->

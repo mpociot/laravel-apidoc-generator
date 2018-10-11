@@ -48,14 +48,13 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $routes = config('apidoc.router') == 'dingo'
-            ? $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'))
-            : $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
-
-        if ($this->option('router') === 'laravel') {
-            $generator = new LaravelGenerator();
-        } else {
+        $usingDIngoRouter = config('apidoc.router') == 'dingo';
+        if ($usingDIngoRouter) {
+            $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
             $generator = new DingoGenerator();
+        } else {
+            $routes =  $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
+            $generator = new LaravelGenerator();
         }
 
 
@@ -75,7 +74,7 @@ class GenerateDocumentation extends Command
      */
     private function writeMarkdown($parsedRoutes)
     {
-        $outputPath = $this->option('output');
+        $outputPath = config('apidoc.output');
         $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
         $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
         $prependFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
@@ -83,7 +82,7 @@ class GenerateDocumentation extends Command
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', ltrim($outputPath, 'public/'))
-            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'));
+            ->with('showPostmanCollectionButton', config('apidoc.postman'));
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
             return $routeGroup->map(function ($route) {
@@ -138,8 +137,8 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', $this->option('output'))
-            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
+            ->with('outputPath', config('apidoc.output'))
+            ->with('showPostmanCollectionButton', config('apidoc.postman'))
             ->with('parsedRoutes', $parsedRouteOutput);
 
         if (! is_dir($outputPath)) {
@@ -156,8 +155,8 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', $this->option('output'))
-            ->with('showPostmanCollectionButton', ! $this->option('noPostmanCollection'))
+            ->with('outputPath', config('apidoc.output'))
+            ->with('showPostmanCollectionButton', config('apidoc.postman'))
             ->with('parsedRoutes', $parsedRouteOutput);
 
         file_put_contents($compareFile, $compareMarkdown);
@@ -170,7 +169,7 @@ class GenerateDocumentation extends Command
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
 
-        if ($this->option('noPostmanCollection') !== true) {
+        if (config('apidoc.postman')) {
             $this->info('Generating Postman collection');
 
             file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
@@ -187,7 +186,9 @@ class GenerateDocumentation extends Command
     private function processRoutes(AbstractGenerator $generator, array $routes)
     {
         $parsedRoutes = [];
-        foreach ($routes as ['route' => $route, 'apply' => $apply]) {
+        foreach ($routes as $routeItem) {
+            $route = $routeItem['route'];
+            $apply = $routeItem['apply'];
             /** @var Route $route */
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
                     $parsedRoutes[] = $generator->processRoute($route, $apply);

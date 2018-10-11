@@ -17,22 +17,16 @@ class TestController extends Controller
      * This will be the long description.
      * It can also be multiple lines long.
      */
-    public function parseMethodDescription()
+    public function withEndpointDescription()
     {
         return '';
     }
 
-    public function parseFormRequestRules(TestRequest $request)
-    {
-        return '';
-    }
-
-    public function customFormRequestValidator(CustomValidatorRequest $request)
-    {
-        return '';
-    }
-
-    public function addRouteBindingsToRequestClass(DynamicRequest $request)
+    /**
+     * @bodyParam user_id int required The id of the user.
+     * @bodyParam room_id string The id of the room.
+     */
+    public function withBodyParameters(TestRequest $request)
     {
         return '';
     }
@@ -60,11 +54,6 @@ class TestController extends Controller
         ];
     }
 
-    public function dependencyInjection(DependencyInjection $dependency, TestRequest $request)
-    {
-        return '';
-    }
-
     public function utf8()
     {
         return ['result' => 'Лорем ипсум долор сит амет'];
@@ -82,7 +71,7 @@ class TestController extends Controller
      *  "data": []
      *}
      */
-    public function responseTag()
+    public function withResponseTag()
     {
         return '';
     }

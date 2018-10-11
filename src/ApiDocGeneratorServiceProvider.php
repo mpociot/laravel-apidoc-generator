@@ -25,6 +25,8 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
             __DIR__.'/../config/apidoc.php' => config_path('apidoc.php'),
         ], 'config');
 
+        $this->mergeConfigFrom(__DIR__.'/../config/apidoc.php' , 'apidoc');
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 GenerateDocumentation::class,

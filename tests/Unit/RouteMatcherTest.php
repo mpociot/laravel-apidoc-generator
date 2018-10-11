@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tests;
+namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Dingo\Api\Routing\Router;
 use Orchestra\Testbench\TestCase;
