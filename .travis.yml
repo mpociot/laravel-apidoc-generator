@@ -12,7 +12,7 @@ env:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-dist --prefer-stable $PREFER_LOWEST
+  - travis_retry composer install --no-interaction --prefer-dist $PREFER_LOWEST
 
 script:
   - composer test-ci
