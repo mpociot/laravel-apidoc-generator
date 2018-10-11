@@ -1,6 +1,6 @@
 ## Laravel API Documentation Generator
 
-Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.de/whiteboard/).
+Automatically generate your API documentation from your existing Laravel/[Dingo](https://github.com/dingo/api) routes. [Here's what the output looks like](http://marcelpociot.de/whiteboard/).
 
 `php artisan apidoc:generate`
 
@@ -14,7 +14,7 @@ Automatically generate your API documentation from your existing Laravel routes.
 > Note: this is the documentation for version 3, which changes significantly from version 2. if you're on v2, you can check out its documentation [here](https://github.com/mpociot/laravel-apidoc-generator/blob/2.x/README.md). We strongly recommend you upgrade, though, as v3 is more robust and fixes a lot of the problems with v2.
 
 ## Installation
-> Note: version 3.x requires PHP 7 and Laravel 5.5 or higher. Version 2.x requires Laravel 5.4.
+> Note: version 3.x requires PHP 7 and Laravel 5.5 or higher.
 
 ```sh
 $ composer require mpociot/laravel-apidoc-generator
@@ -34,22 +34,21 @@ This will create an `apidoc.php` file in your `config` folder.
 
 ## Usage
 Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`.
-### output
-This is the file path where the generated documentation will be written to. Default: `**public/docs**
+- `output`
+This is the file path where the generated documentation will be written to. Default: **public/docs**
 
-### postman
-Set this option to true if you want a Postman collection to be generated along with the documentation. Default: `**true**
+- `postman`
+Set this option to true if you want a Postman collection to be generated along with the documentation. Default: **true**
 
-### router
+- `router`
 The router to use when processing the route (can be Laravel or Dingo. Defaults to **Laravel**)
 
-### routes
+- `routes`
 This is where you specify what rules documentation should be generated for. You specify routes to be parsed by defining conditions that the routes should meet and rules that should be applied when generating documentation. These conditions and rules are specified in groups, allowing you to apply different rules to different routes.
 
 For instance, suppose your configuration looks like this:
 
 ```php
-<?php
 return [
      //...,
   
@@ -263,7 +262,7 @@ If you are referring to the environment setting as shown above, then you should 
 APP_URL=http://yourapp.app
 ```
 
-## Modify the generated documentation
+## Modifying the generated documentation
 
 If you want to modify the content of your generated documentation, go ahead and edit the generated `index.md` file.
 The default location of this file is: `public/docs/source/index.md`.
