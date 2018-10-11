@@ -309,8 +309,7 @@ abstract class AbstractGenerator
             if ($modelTag) {
                 $type = $modelTag->getContent();
             }
-            if (version_compare(PHP_VERSION, '7.0.0') >= 0 && \is_null($type)) {
-                // we can only get the type with reflection for PHP 7
+            if (\is_null($type)) {
                 if ($parameter->hasType() &&
                     ! $parameter->getType()->isBuiltin() &&
                     \class_exists((string) $parameter->getType())) {
@@ -380,6 +379,6 @@ abstract class AbstractGenerator
             'int' => 'integer',
             'bool' => 'boolean',
         ];
-        return $typeMap[$type] ?? $type;
+        return $type ? ($typeMap[$type] ?? $type) : 'string';
     }
 }

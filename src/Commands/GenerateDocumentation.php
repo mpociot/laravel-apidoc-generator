@@ -107,15 +107,15 @@ class GenerateDocumentation extends Command
 
             $parsedRouteOutput->transform(function ($routeGroup) use ($generatedDocumentation, $compareDocumentation) {
                 return $routeGroup->transform(function ($route) use ($generatedDocumentation, $compareDocumentation) {
-                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $routeMatch)) {
-                        $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $compareMatch) && $compareMatch[1] !== $routeMatch[1]);
+                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $existingRouteDoc)) {
+                        $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $lastDocWeGeneratedForThisRoute) && $lastDocWeGeneratedForThisRoute[1] !== $existingRouteDoc[1]);
                         if ($routeDocumentationChanged === false || $this->option('force')) {
                             if ($routeDocumentationChanged) {
                                 $this->warn('Discarded manual changes for route ['.implode(',', $route['methods']).'] '.$route['uri']);
                             }
                         } else {
                             $this->warn('Skipping modified route ['.implode(',', $route['methods']).'] '.$route['uri']);
-                            $route['modified_output'] = $routeMatch[0];
+                            $route['modified_output'] = $existingRouteDoc[0];
                         }
                     }
 
