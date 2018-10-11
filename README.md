@@ -70,7 +70,7 @@ return [
 ];
 ```
 
-This means documentation will be generated for routes in all domains ('*' is a wildcard meaning 'any character') which match any of the patterns 'api/*' or 'v2-api/*', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
+This means documentation will be generated for routes in all domains ('***' is a wildcard meaning 'any character') which match any of the patterns 'api/*' or 'v2-api/*', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
 Also, in the generated documentation, these routes will have the header 'Authorization: Bearer: {token}' added to the example requests.
 
 You can also separate routes into groups to apply different rules to them:
