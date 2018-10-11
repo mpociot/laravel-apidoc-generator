@@ -11,7 +11,13 @@
 
 ```bash
 curl -X {{$parsedRoute['methods'][0]}} {{$parsedRoute['methods'][0] == 'GET' ? '-G ' : ''}}"{{ trim(config('app.docs_url') ?: config('app.url'), '/')}}/{{ ltrim($parsedRoute['uri'], '/') }}" \
-    -H "Accept: application/json"@if(count($parsedRoute['parameters'])) \
+    -H "Accept: application/json"@if(count($parsedRoute['headers'])) \
+@foreach($parsedRoute['headers'] as $header => $value)
+    -H "{{$header}}"="{{$value}}" @if(! ($loop->last))\
+    @endif
+@endforeach
+@endif
+@if(count($parsedRoute['parameters'])) \
 @foreach($parsedRoute['parameters'] as $attribute => $parameter)
     -d "{{$attribute}}"="{{$parameter['value']}}" @if(! ($loop->last))\
     @endif
@@ -30,7 +36,10 @@ var settings = {
 "data": {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT))) !!},
     @endif
 "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
+@foreach($parsedRoute['headers'] as $header => $value)
+        "{{$header}}": "{{$value}}",
+@endforeach
     }
 }
 
