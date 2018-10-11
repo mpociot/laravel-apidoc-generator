@@ -2,12 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
-use Illuminate\Routing\Route;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Illuminate\Support\Facades\Route as RouteFacade;
 
 abstract class GeneratorTestCase extends TestCase
 {

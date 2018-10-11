@@ -35,5 +35,4 @@ class DingoGeneratorTest extends GeneratorTestCase
 
         return $route;
     }
-
 }

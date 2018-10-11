@@ -32,7 +32,6 @@ class GenerateDocumentation extends Command
      */
     protected $description = 'Generate your API documentation from existing Laravel routes.';
 
-
     private $routeMatcher;
 
     public function __construct(RouteMatcher $routeMatcher)
@@ -56,7 +55,6 @@ class GenerateDocumentation extends Command
             $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
             $generator = new LaravelGenerator();
         }
-
 
         $parsedRoutes = $this->processRoutes($generator, $routes);
         $parsedRoutes = collect($parsedRoutes)->groupBy('resource')
@@ -176,12 +174,11 @@ class GenerateDocumentation extends Command
         }
     }
 
-
     /**
      * @param AbstractGenerator $generator
      * @param array $routes
-     * @return array
      *
+     * @return array
      */
     private function processRoutes(AbstractGenerator $generator, array $routes)
     {
@@ -191,9 +188,9 @@ class GenerateDocumentation extends Command
             /** @var Route $route */
             if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
                 $parsedRoutes[] = $generator->processRoute($route) + $routeItem['apply'];
-                $this->info('Processed route: [' . implode(',', $generator->getMethods($route)) . '] ' . $generator->getUri($route));
+                $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
-                $this->warn('Skipping route: [' . implode(',', $generator->getMethods($route)) . '] ' . $generator->getUri($route));
+                $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             }
         }
 
