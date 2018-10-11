@@ -21,7 +21,7 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
-<!-- START_2b6e5a4b188cb183c7e59558cce36cb6 -->
+<!-- START_fc1e4f6a697e3c48257de845299b71d5 -->
 ## Display a listing of the resource.
 
 > Example request:
@@ -38,7 +38,7 @@ var settings = {
     "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -59,9 +59,9 @@ $.ajax(settings).done(function (response) {
 `GET api/users`
 
 
-<!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
+<!-- END_fc1e4f6a697e3c48257de845299b71d5 -->
 
-<!-- START_7f66c974d24032cb19061d55d801f62b -->
+<!-- START_5dac10bb34c7618b018b0230d4a51648 -->
 ## Show the form for creating a new resource.
 
 > Example request:
@@ -78,7 +78,7 @@ var settings = {
     "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -99,6 +99,6 @@ $.ajax(settings).done(function (response) {
 `GET api/users/create`
 
 
-<!-- END_7f66c974d24032cb19061d55d801f62b -->
+<!-- END_5dac10bb34c7618b018b0230d4a51648 -->
 
 

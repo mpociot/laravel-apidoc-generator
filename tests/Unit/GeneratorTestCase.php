@@ -93,7 +93,13 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $this->assertJsonStringEqualsJsonString($parsed['response'], '{ "data": []}');
+        $this->assertJsonStringEqualsJsonString(json_encode([
+            'id' => 4,
+            'name' => 'banana',
+            'color' => 'red',
+            'weight' => '1 kg',
+            'delicious' => true,
+        ]), $parsed['response']);
     }
 
     /** @test */

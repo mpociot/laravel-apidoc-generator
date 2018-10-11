@@ -27,7 +27,7 @@ class GenerateDocumentationTest extends TestCase
     public function tearDown()
     {
         // delete the generated docs - compatible cross-platform
-        $dir = __DIR__ . '/../public/docs';/*
+        $dir = __DIR__ . '/../public/docs';
         if (is_dir($dir)) {
             $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -39,7 +39,7 @@ class GenerateDocumentationTest extends TestCase
                 $todo($fileinfo->getRealPath());
             }
             rmdir($dir);
-        }*/
+        }
     }
 
     /**
@@ -61,7 +61,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/closure', function () {
             return 'hi';
         });
-        RouteFacade::get('/api/test', TestController::class . '@parseMethodDescription');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
@@ -78,7 +78,7 @@ class GenerateDocumentationTest extends TestCase
             $api->get('/closure', function () {
                 return 'foo';
             });
-            $api->get('/test', DingoTestController::class . '@parseMethodDescription');
+            $api->get('/test', TestController::class . '@withEndpointDescription');
         });
 
         config(['apidoc.router' => 'dingo']);
@@ -94,7 +94,7 @@ class GenerateDocumentationTest extends TestCase
     public function can_skip_single_routes()
     {
         RouteFacade::get('/api/skip', TestController::class . '@skip');
-        RouteFacade::get('/api/test', TestController::class . '@parseMethodDescription');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
@@ -157,8 +157,8 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function generated_markdown_file_is_correct()
     {
-        RouteFacade::get('/api/test', TestController::class . '@parseMethodDescription');
-        RouteFacade::get('/api/fetch', TestController::class . '@fetchRouteResponse');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
+        RouteFacade::get('/api/responseTag', TestController::class . '@withResponseTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
@@ -173,8 +173,8 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function can_prepend_and_append_data_to_generated_markdown()
     {
-        RouteFacade::get('/api/test', TestController::class . '@parseMethodDescription');
-        RouteFacade::get('/api/fetch', TestController::class . '@fetchRouteResponse');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
+        RouteFacade::get('/api/responseTag', TestController::class . '@withResponseTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
@@ -187,15 +187,15 @@ class GenerateDocumentationTest extends TestCase
         $this->artisan('apidoc:generate');
 
         $generatedMarkdown = __DIR__ . '/../public/docs/source/index.md';
-        $this->assertContainsRaw($this->getFileContents($prependMarkdown), $this->getFileContents($generatedMarkdown));
-        $this->assertContainsRaw($this->getFileContents($appendMarkdown), $this->getFileContents($generatedMarkdown));
+        $this->assertContainsIgnoringWhitespace($this->getFileContents($prependMarkdown), $this->getFileContents($generatedMarkdown));
+        $this->assertContainsIgnoringWhitespace($this->getFileContents($appendMarkdown), $this->getFileContents($generatedMarkdown));
     }
 
     /** @test */
     public function generated_postman_collection_file_is_correct()
     {
-        RouteFacade::get('/api/test', TestController::class . '@parseMethodDescription');
-        RouteFacade::post('/api/fetch', TestController::class . '@fetchRouteResponse');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
+        RouteFacade::post('/api/responseTag', TestController::class . '@withResponseTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
@@ -212,26 +212,22 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/headers', TestController::class . '@checkCustomHeaders');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
-        config(['apidoc.routes.0.apply.requests.headers' => [
-            'Authorization' => 'customAuthToken',
-            'Custom-Header' => 'NotSoCustom',
-            ]
+        config([
+            'apidoc.routes.0.apply.headers' => [
+                'Authorization' => 'customAuthToken',
+                'Custom-Header' => 'NotSoCustom',
+            ],
         ]);
         $this->artisan('apidoc:generate');
 
         $generatedMarkdown = $this->getFileContents(__DIR__ . '/../public/docs/source/index.md');
-        $this->assertContainsRaw('"authorization": [
-        "customAuthToken"
-    ],
-    "custom-header": [
-        "NotSoCustom"
-    ]', $generatedMarkdown);
+        $this->assertContainsIgnoringWhitespace('"Authorization": "customAuthToken","Custom-Header":"NotSoCustom"', $generatedMarkdown);
     }
 
     /** @test */
-    public function generates_utf8_responses()
+    public function can_parse_utf8_response()
     {
-        RouteFacade::get('/api/utf8', TestController::class . '@utf8');
+        RouteFacade::get('/api/utf8', TestController::class . '@withUtf8ResponseTag');
 
         config(['apidoc.routes.0.prefixes' => ['api/*'],]);
         $this->artisan('apidoc:generate');
@@ -278,7 +274,7 @@ class GenerateDocumentationTest extends TestCase
      * @param $needle
      * @param $haystack
      */
-    private function assertContainsRaw($needle, $haystack)
+    private function assertContainsIgnoringWhitespace($needle, $haystack)
     {
         $haystack = preg_replace('/\s/', '', $haystack);
         $needle = preg_replace('/\s/', '', $needle);

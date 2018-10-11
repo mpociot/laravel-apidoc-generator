@@ -21,7 +21,7 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
-<!-- START_2b6e5a4b188cb183c7e59558cce36cb6 -->
+<!-- START_fc1e4f6a697e3c48257de845299b71d5 -->
 ## Display a listing of the resource.
 
 > Example request:
@@ -38,7 +38,7 @@ var settings = {
     "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -59,9 +59,9 @@ $.ajax(settings).done(function (response) {
 `GET api/users`
 
 
-<!-- END_2b6e5a4b188cb183c7e59558cce36cb6 -->
+<!-- END_fc1e4f6a697e3c48257de845299b71d5 -->
 
-<!-- START_7f66c974d24032cb19061d55d801f62b -->
+<!-- START_5dac10bb34c7618b018b0230d4a51648 -->
 ## Show the form for creating a new resource.
 
 > Example request:
@@ -78,7 +78,7 @@ var settings = {
     "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -99,9 +99,9 @@ $.ajax(settings).done(function (response) {
 `GET api/users/create`
 
 
-<!-- END_7f66c974d24032cb19061d55d801f62b -->
+<!-- END_5dac10bb34c7618b018b0230d4a51648 -->
 
-<!-- START_f0654d3f2fc63c11f5723f233cc53c83 -->
+<!-- START_12e37982cc5398c7100e59625ebb5514 -->
 ## Store a newly created resource in storage.
 
 > Example request:
@@ -118,7 +118,7 @@ var settings = {
     "url": "http://localhost/api/users",
     "method": "POST",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -132,9 +132,9 @@ $.ajax(settings).done(function (response) {
 `POST api/users`
 
 
-<!-- END_f0654d3f2fc63c11f5723f233cc53c83 -->
+<!-- END_12e37982cc5398c7100e59625ebb5514 -->
 
-<!-- START_ceec0e0b1d13d731ad96603d26bccc2f -->
+<!-- START_8653614346cb0e3d444d164579a0a0a2 -->
 ## Display the specified resource.
 
 > Example request:
@@ -151,7 +151,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -164,7 +164,7 @@ $.ajax(settings).done(function (response) {
 
 ```json
 {
-    "show_resource": "1"
+    "show_resource": true
 }
 ```
 
@@ -172,9 +172,9 @@ $.ajax(settings).done(function (response) {
 `GET api/users/{user}`
 
 
-<!-- END_ceec0e0b1d13d731ad96603d26bccc2f -->
+<!-- END_8653614346cb0e3d444d164579a0a0a2 -->
 
-<!-- START_f4aa12af19ba08e1448d7eafc9f55e67 -->
+<!-- START_11ae28146a4d70ba9a0af9b65d290ad5 -->
 ## Show the form for editing the specified resource.
 
 > Example request:
@@ -191,7 +191,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}/edit",
     "method": "GET",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -204,7 +204,7 @@ $.ajax(settings).done(function (response) {
 
 ```json
 {
-    "edit_resource": "1"
+    "edit_resource": true
 }
 ```
 
@@ -212,9 +212,9 @@ $.ajax(settings).done(function (response) {
 `GET api/users/{user}/edit`
 
 
-<!-- END_f4aa12af19ba08e1448d7eafc9f55e67 -->
+<!-- END_11ae28146a4d70ba9a0af9b65d290ad5 -->
 
-<!-- START_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
+<!-- START_48a3115be98493a3c866eb0e23347262 -->
 ## Update the specified resource in storage.
 
 > Example request:
@@ -231,7 +231,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}",
     "method": "PUT",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -247,9 +247,9 @@ $.ajax(settings).done(function (response) {
 `PATCH api/users/{user}`
 
 
-<!-- END_a4a2abed1e8e8cad5e6a3282812fe3f3 -->
+<!-- END_48a3115be98493a3c866eb0e23347262 -->
 
-<!-- START_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->
+<!-- START_d2db7a9fe3abd141d5adbc367a88e969 -->
 ## Remove the specified resource from storage.
 
 > Example request:
@@ -266,7 +266,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}",
     "method": "DELETE",
     "headers": {
-        "accept": "application/json"
+        "accept": "application/json",
     }
 }
 
@@ -280,6 +280,6 @@ $.ajax(settings).done(function (response) {
 `DELETE api/users/{user}`
 
 
-<!-- END_4bb7fb4a7501d3cb1ed21acfc3b205a9 -->
+<!-- END_d2db7a9fe3abd141d5adbc367a88e969 -->
 
 
