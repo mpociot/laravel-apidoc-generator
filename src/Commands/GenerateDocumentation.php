@@ -188,10 +188,9 @@ class GenerateDocumentation extends Command
         $parsedRoutes = [];
         foreach ($routes as $routeItem) {
             $route = $routeItem['route'];
-            $apply = $routeItem['apply'];
             /** @var Route $route */
                 if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                    $parsedRoutes[] = $generator->processRoute($route, $apply);
+                    $parsedRoutes[] = $generator->processRoute($route) + $routeItem['apply'];
                     $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
                 } else {
                     $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));

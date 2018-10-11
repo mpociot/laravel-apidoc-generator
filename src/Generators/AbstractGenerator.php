@@ -49,7 +49,7 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    public function processRoute($route, $apply = [])
+    public function processRoute($route)
     {
         $routeAction = $route->getAction();
         $routeGroup = $this->getRouteGroup($routeAction['uses']);

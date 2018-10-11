@@ -79,15 +79,12 @@ return [
              * Specify rules to be applied to all the routes in this group when generating documentation
              */
             'apply' => [
-                'requests' => [
-
-                    /*
-                     * Specify headers to be added to the example requests
-                     */
-                    'headers' => [
-                        // 'Authorization' => 'Bearer: {token}',
-                        // 'Api-Version' => 'v2',
-                    ],
+                /*
+                 * Specify headers to be added to the example requests
+                 */
+                'headers' => [
+                    // 'Authorization' => 'Bearer: {token}',
+                    // 'Api-Version' => 'v2',
                 ],
             ],
         ],
