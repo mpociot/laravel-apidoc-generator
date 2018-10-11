@@ -58,8 +58,8 @@ abstract class GeneratorTestCase extends TestCase
             'room_id' => [
                 'type' => 'string',
                 'required' => false,
-                'description' => 'The id of the room.'
-            ]
+                'description' => 'The id of the room.',
+            ],
         ], $parameters);
     }
 
@@ -105,7 +105,7 @@ abstract class GeneratorTestCase extends TestCase
     /** @test */
     public function test_can_parse_transformer_tag()
     {
-         $route = $this->createRoute('GET', '/transformerTag', 'transformerTag');
+        $route = $this->createRoute('GET', '/transformerTag', 'transformerTag');
         $parsed = $this->generator->processRoute($route);
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
@@ -140,7 +140,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue($parsed['showresponse']);
         $this->assertSame(
             $parsed['response'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -155,7 +155,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue($parsed['showresponse']);
         $this->assertSame(
             $parsed['response'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }

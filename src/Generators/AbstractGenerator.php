@@ -65,7 +65,7 @@ abstract class AbstractGenerator
             'uri' => $this->getUri($route),
             'parameters' => $this->getParametersFromDocBlock($docBlock['tags']),
             'response' => $content,
-            'showresponse' => !empty($content),
+            'showresponse' => ! empty($content),
         ];
     }
 
@@ -91,7 +91,7 @@ abstract class AbstractGenerator
             return $tag instanceof Tag && \strtolower($tag->getName()) == 'response';
         });
         if (empty($responseTags)) {
-            return null;
+            return;
         }
         $responseTag = \array_first($responseTags);
 
@@ -99,7 +99,8 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param array $routeAction
+     * @param array $tags
+     *
      * @return array
      */
     protected function getParametersFromDocBlock($tags)
@@ -113,8 +114,10 @@ abstract class AbstractGenerator
                 list($_, $name, $type, $required, $description) = $content;
                 $required = trim($required) == 'required' ? true : false;
                 $type = $this->normalizeParameterType($type);
+
                 return [$name => compact('type', 'description', 'required')];
             })->toArray();
+
         return $parameters;
     }
 
@@ -364,12 +367,13 @@ abstract class AbstractGenerator
             // we have a response from the docblock ( @response )
             $response = $docblockResponse;
         }
-        if (!$response && ($transformerResponse = $this->getTransformerResponse($annotationTags))) {
+        if (! $response && ($transformerResponse = $this->getTransformerResponse($annotationTags))) {
             // we have a transformer response from the docblock ( @transformer || @transformercollection )
             $response = $transformerResponse;
         }
 
         $content = $response ? $this->getResponseContent($response) : null;
+
         return $content;
     }
 
@@ -379,6 +383,7 @@ abstract class AbstractGenerator
             'int' => 'integer',
             'bool' => 'boolean',
         ];
+
         return $type ? ($typeMap[$type] ?? $type) : 'string';
     }
 }
