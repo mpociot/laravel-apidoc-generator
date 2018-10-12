@@ -423,10 +423,10 @@ abstract class AbstractGenerator
                 return str_random();
             },
             'array' => function () {
-                return "[]";
+                return '[]';
             },
             'object' => function () {
-                return "{}";
+                return '{}';
             },
         ];
 
