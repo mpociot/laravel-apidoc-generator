@@ -98,5 +98,5 @@ return [
      * Change false to an absolute path. For example:
      * 'logo' => resource_path('views') . '/api/logo.png'
      */
-    'logo' => false
+    'logo' => false,
 ];
