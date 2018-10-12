@@ -21,7 +21,7 @@ Welcome to the generated API reference.
 <!-- END_INFO -->
 
 #general
-<!-- START_0bef4e738c9d6720ad43b062015d1078 -->
+<!-- START_264ee15c728df32e7ca6eedce5e42dcb -->
 ## Example title.
 
 This will be the long description.
@@ -30,18 +30,22 @@ It can also be multiple lines long.
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/test" \
-    -H "Accept: application/json"
+curl -X GET -G "http://localhost/api/withDescription" \
+    -H "Accept: application/json" \
+    -H "Authorization: customAuthToken" \
+        -H "Custom-Header: NotSoCustom" 
 ```
 
 ```javascript
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/test",
+    "url": "http://localhost/api/withDescription",
     "method": "GET",
     "headers": {
         "accept": "application/json",
+        "Authorization": "customAuthToken",
+        "Custom-Header": "NotSoCustom",
     }
 }
 
@@ -57,29 +61,33 @@ null
 ```
 
 ### HTTP Request
-`GET api/test`
+`GET api/withDescription`
 
 
-<!-- END_0bef4e738c9d6720ad43b062015d1078 -->
+<!-- END_264ee15c728df32e7ca6eedce5e42dcb -->
 
-<!-- START_39a6bfda1d6a0c4a5447f51b62557456 -->
-## api/responseTag
+<!-- START_9cedd363be06f5512f9e844b100fcc9d -->
+## api/withResponseTag
 
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/responseTag" \
-    -H "Accept: application/json"
+curl -X GET -G "http://localhost/api/withResponseTag" \
+    -H "Accept: application/json" \
+    -H "Authorization: customAuthToken" \
+        -H "Custom-Header: NotSoCustom" 
 ```
 
 ```javascript
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://localhost/api/responseTag",
+    "url": "http://localhost/api/withResponseTag",
     "method": "GET",
     "headers": {
         "accept": "application/json",
+        "Authorization": "customAuthToken",
+        "Custom-Header": "NotSoCustom",
     }
 }
 
@@ -101,9 +109,75 @@ $.ajax(settings).done(function (response) {
 ```
 
 ### HTTP Request
-`GET api/responseTag`
+`GET api/withResponseTag`
 
 
-<!-- END_39a6bfda1d6a0c4a5447f51b62557456 -->
+<!-- END_9cedd363be06f5512f9e844b100fcc9d -->
+
+<!-- START_a25cb3b490fa579d7d77b386bbb7ec03 -->
+## api/withBodyParameters
+
+> Example request:
+
+```bash
+curl -X GET -G "http://localhost/api/withBodyParameters" \
+    -H "Accept: application/json" \
+    -H "Authorization: customAuthToken" \
+        -H "Custom-Header: NotSoCustom"  \
+    -d "user_id"=14 \
+        -d "room_id"=KHEnlMeSksAYgNtw \
+        -d "forever"=1 \
+        -d "another_one"=4919.5 \
+        -d "yet_another_param"={} \
+        -d "even_more_param"=[] 
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost/api/withBodyParameters",
+    "method": "GET",
+    "data": {
+        "user_id": 14,
+        "room_id": "KHEnlMeSksAYgNtw",
+        "forever": true,
+        "another_one": 4919.5,
+        "yet_another_param": "{}",
+        "even_more_param": "[]"
+    },
+    "headers": {
+        "accept": "application/json",
+        "Authorization": "customAuthToken",
+        "Custom-Header": "NotSoCustom",
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+null
+```
+
+### HTTP Request
+`GET api/withBodyParameters`
+
+#### Parameters
+
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    user_id | integer |  required  | The id of the user.
+    room_id | string |  optional  | The id of the room.
+    forever | boolean |  optional  | Whether to ban the user forever.
+    another_one | number |  optional  | Just need something here.
+    yet_another_param | object |  required  | 
+    even_more_param | array |  optional  | 
+
+<!-- END_a25cb3b490fa579d7d77b386bbb7ec03 -->
 
 

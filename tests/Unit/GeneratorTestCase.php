@@ -57,6 +57,26 @@ abstract class GeneratorTestCase extends TestCase
                 'required' => false,
                 'description' => 'The id of the room.',
             ],
+            'forever' => [
+                'type' => 'boolean',
+                'required' => false,
+                'description' => 'Whether to ban the user forever.',
+            ],
+            'another_one' => [
+                'type' => 'number',
+                'required' => false,
+                'description' => 'Just need something here.',
+            ],
+            'yet_another_param' => [
+                'type' => 'object',
+                'required' => true,
+                'description' => '',
+            ],
+            'even_more_param' => [
+                'type' => 'array',
+                'required' => false,
+                'description' => '',
+            ],
         ], $parameters);
     }
 

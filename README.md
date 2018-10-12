@@ -180,7 +180,7 @@ public function createPost()
 
 They will be included in the generated documentation text and example requests.
 
-**Result:** ![Form Request](http://marcelpociot.de/documentarian/form_request.png)
+**Result:** ![](body-params.png)
 
 ### Providing an example response
 You can provide an example response for a route. This will be disaplyed in the examples section. There are several ways of doing this.

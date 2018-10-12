@@ -13,13 +13,13 @@
 curl -X {{$parsedRoute['methods'][0]}} {{$parsedRoute['methods'][0] == 'GET' ? '-G ' : ''}}"{{ trim(config('app.docs_url') ?: config('app.url'), '/')}}/{{ ltrim($parsedRoute['uri'], '/') }}" \
     -H "Accept: application/json"@if(count($parsedRoute['headers'])) \
 @foreach($parsedRoute['headers'] as $header => $value)
-    -H "{{$header}}"="{{$value}}" @if(! ($loop->last))\
+    -H "{{$header}}: {{$value}}" @if(! ($loop->last))\
     @endif
 @endforeach
 @endif
 @if(count($parsedRoute['parameters'])) \
 @foreach($parsedRoute['parameters'] as $attribute => $parameter)
-    -d "{{$attribute}}"="{{$parameter['value']}}" @if(! ($loop->last))\
+    -d "{{$attribute}}"={{$parameter['value']}} @if(! ($loop->last))\
     @endif
 @endforeach
 @endif
@@ -71,7 +71,7 @@ $.ajax(settings).done(function (response) {
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
 @foreach($parsedRoute['parameters'] as $attribute => $parameter)
-    {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! implode(' ',$parameter['description']) !!}
+    {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
 @endforeach
 @endif
 
