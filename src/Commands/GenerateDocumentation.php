@@ -7,6 +7,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
@@ -171,6 +172,13 @@ class GenerateDocumentation extends Command
             $this->info('Generating Postman collection');
 
             file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
+        }
+
+        if ($logo = config('apidoc.logo')) {
+            Storage::copy(
+                $logo,
+                $outputPath.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png'
+            );
         }
     }
 
