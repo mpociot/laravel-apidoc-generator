@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Generators;
 
+use Faker\Factory;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use League\Fractal\Manager;
@@ -114,8 +115,9 @@ abstract class AbstractGenerator
                 list($_, $name, $type, $required, $description) = $content;
                 $required = trim($required) == 'required' ? true : false;
                 $type = $this->normalizeParameterType($type);
+                $value = $this->getDummyValue($type);
 
-                return [$name => compact('type', 'description', 'required')];
+                return [$name => compact('type', 'description', 'required', 'value')];
             })->toArray();
 
         return $parameters;
@@ -382,8 +384,39 @@ abstract class AbstractGenerator
         $typeMap = [
             'int' => 'integer',
             'bool' => 'boolean',
+            'double' => 'float',
         ];
 
         return $type ? ($typeMap[$type] ?? $type) : 'string';
+    }
+
+    private function getDummyValue(string $type)
+    {
+        $faker = Factory::create();
+        $fakes = [
+            'integer' => function () {
+                return rand(1, 20);
+            },
+            'number' => function () use ($faker) {
+                return $faker->randomFloat();
+            },
+            'float' => function () use ($faker) {
+                return $faker->randomFloat();
+            },
+            'boolean' => function () use ($faker) {
+                return $faker->boolean();
+            },
+            'string' => function () use ($faker) {
+                return str_random();
+            },
+            'array' => function () {
+                return "[]";
+            },
+            'object' => function () {
+                return "{}";
+            },
+        ];
+
+        return $fakes[$type]() ?? $fakes['string']();
     }
 }
