@@ -111,11 +111,24 @@ abstract class AbstractGenerator
                 return $tag instanceof Tag && $tag->getName() === 'bodyParam';
             })
             ->mapWithKeys(function ($tag) {
-                preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.+)/', $tag->getContent(), $content);
-                list($_, $name, $type, $required, $description) = $content;
-                $required = trim($required) == 'required' ? true : false;
+                preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
+                if (empty($content)) {
+                    // this means only name and type were supplied
+                    list($name, $type) = preg_split('/\s+/', $tag->getContent());
+                    $required = false;
+                    $description = '';
+                } else {
+                    list($_, $name, $type, $required, $description) = $content;
+                    $description = trim($description);
+                    if ($description == 'required' && empty(trim($required))) {
+                        $required = $description;
+                        $description = '';
+                    }
+                    $required = trim($required) == 'required' ? true : false;
+                }
+
                 $type = $this->normalizeParameterType($type);
-                $value = $this->getDummyValue($type);
+                $value = $this->generateDummyValue($type);
 
                 return [$name => compact('type', 'description', 'required', 'value')];
             })->toArray();
@@ -390,7 +403,7 @@ abstract class AbstractGenerator
         return $type ? ($typeMap[$type] ?? $type) : 'string';
     }
 
-    private function getDummyValue(string $type)
+    private function generateDummyValue(string $type)
     {
         $faker = Factory::create();
         $fakes = [

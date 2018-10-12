@@ -7,3 +7,4 @@
 /.travis.yml export-ignore
 /phpunit.xml export-ignore
 /README.md export-ignore
+/body-params.png export-ignore
