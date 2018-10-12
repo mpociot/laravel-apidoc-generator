@@ -21,7 +21,7 @@ class GenerateDocumentationTest extends TestCase
     {
         parent::setUp();
     }
-/*
+
     public function tearDown()
     {
         // delete the generated docs - compatible cross-platform
@@ -38,7 +38,7 @@ class GenerateDocumentationTest extends TestCase
             }
             rmdir($dir);
         }
-    }*/
+    }
 
     /**
      * @param \Illuminate\Foundation\Application $app
