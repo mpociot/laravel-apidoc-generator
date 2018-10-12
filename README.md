@@ -19,11 +19,6 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 ```sh
 $ composer require mpociot/laravel-apidoc-generator:dev-master
 ```
-Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
-
-```php
-Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
-```
 
 Then publish the config file by running:
 
