@@ -88,7 +88,7 @@ return [
         ],
     ],
 
-    /**
+    /*
      * Custom logo path. Will be copied during generate command.
      *
      * If you want to use this, please be aware of the following rules:
