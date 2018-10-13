@@ -65,6 +65,7 @@ abstract class AbstractGenerator
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
             'parameters' => $this->getParametersFromDocBlock($docBlock['tags']),
+            'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
         ];
@@ -104,7 +105,7 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    protected function getParametersFromDocBlock($tags)
+    protected function getParametersFromDocBlock(array $tags)
     {
         $parameters = collect($tags)
             ->filter(function ($tag) {
@@ -134,6 +135,21 @@ abstract class AbstractGenerator
             })->toArray();
 
         return $parameters;
+    }
+
+    /**
+     * @param array $tags
+     *
+     * @return bool
+     */
+    protected function getAuthStatusFromDocBlock(array $tags)
+    {
+        $authTag = collect($tags)
+            ->first(function ($tag) {
+                return $tag instanceof Tag && strtolower($tag->getName()) === 'authenticated';
+            });
+
+        return (bool) $authTag;
     }
 
     /**
@@ -430,6 +446,8 @@ abstract class AbstractGenerator
             },
         ];
 
-        return $fakes[$type]() ?? $fakes['string']();
+        $fake = $fakes[$type] ?? $fakes['string'];
+
+        return $fake();
     }
 }

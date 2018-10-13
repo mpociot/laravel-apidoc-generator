@@ -35,6 +35,14 @@ class TestController extends Controller
         return '';
     }
 
+    /**
+     * @authenticated
+     */
+    public function withAuthenticatedTag()
+    {
+        return '';
+    }
+
     public function checkCustomHeaders(Request $request)
     {
         return $request->headers->all();

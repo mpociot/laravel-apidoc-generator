@@ -81,6 +81,18 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function test_can_parse_auth_tags()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withAuthenticatedTag');
+        $authenticated = $this->generator->processRoute($route)['authenticated'];
+        $this->assertTrue($authenticated);
+
+        $route = $this->createRoute('GET', '/api/test', 'dummy');
+        $authenticated = $this->generator->processRoute($route)['authenticated'];
+        $this->assertFalse($authenticated);
+    }
+
+    /** @test */
     public function test_can_parse_route_methods()
     {
         $route = $this->createRoute('GET', '/get', 'withEndpointDescription');

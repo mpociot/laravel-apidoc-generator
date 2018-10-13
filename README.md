@@ -155,16 +155,19 @@ class ExampleController extends Controller {
 
 ![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
-### Specifying request body parameters
+### Specifying request parameters
 
-To specify a list of valid parameters your API route accepts, use the `@bodyParam` annotation. It takes the name of the parameter, its type, an optional "required" label, and then its description
+To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
+- The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description.
+- The `@queryParam` annotation (coming soon!) takes the name of the parameter, an optional "required" label, and then its description
 
 
 ```php
 /**
  * @bodyParam title string required The title of the post.
  * @bodyParam body string required The title of the post.
- * @bodyParam type The type of post to create. Defaults to 'textophonious'.
+ * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
+ @bodyParam author_id int the ID of the author
  * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
  */
 public function createPost()
@@ -175,7 +178,11 @@ public function createPost()
 
 They will be included in the generated documentation text and example requests.
 
-**Result:** ![](body-params.png)
+**Result:**
+![](body_params.png)
+
+### Indicating auth status
+You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
 
 ### Providing an example response
 You can provide an example response for a route. This will be disaplyed in the examples section. There are several ways of doing this.
