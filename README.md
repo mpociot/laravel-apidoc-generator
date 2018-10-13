@@ -269,10 +269,10 @@ APP_URL=http://yourapp.app
 If you want to modify the content of your generated documentation, go ahead and edit the generated `index.md` file.
 The default location of this file is: `public/docs/source/index.md`.
  
-After editing the markdown file, use the `apidoc:update` command to rebuild your documentation as a static HTML file.
+After editing the markdown file, use the `apidoc:rebuild` command to rebuild your documentation as a static HTML file.
 
 ```sh
-$ php artisan apidoc:update
+$ php artisan apidoc:rebuild
 ```
 
 As an optional parameter, you can use `--location` to tell the update command where your documentation can be found.
