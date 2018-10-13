@@ -84,7 +84,7 @@ class GenerateDocumentation extends Command
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
             return $routeGroup->map(function ($route) {
-                $route['output'] = (string) view('apidoc::partials.route')->with('parsedRoute', $route)->render();
+                $route['output'] = (string) view('apidoc::partials.route')->with('route', $route)->render();
 
                 return $route;
             });
