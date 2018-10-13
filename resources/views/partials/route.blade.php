@@ -1,7 +1,7 @@
 <!-- START_{{$route['id']}} -->
 @if($route['title'] != '')## {{ $route['title']}}
-@else## {{$route['uri']}}
-@endif @if($route['authenticated'])<small style="
+@else## {{$route['uri']}}@endif
+@if($route['authenticated'])<small style="
   padding: 1px 9px 2px;
   font-weight: bold;
   white-space: nowrap;
@@ -9,8 +9,7 @@
   -webkit-border-radius: 9px;
   -moz-border-radius: 9px;
   border-radius: 9px;
-  background-color: #3a87ad;">Requires authentication</small>
-@endif
+  background-color: #3a87ad;">Requires authentication</small>@endif
 @if($route['description'])
 
 {!! $route['description'] !!}
