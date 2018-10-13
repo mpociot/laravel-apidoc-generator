@@ -14,7 +14,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
-## [2.1.5] - 123h September, 2018
+## [2.1.8] - 8th October, 2018
+### Added
+- Description for array parameters (https://github.com/mpociot/laravel-apidoc-generator/pull/329, https://github.com/mpociot/laravel-apidoc-generator/pull/348)
+
+### Fixed
+- Proper parsing of Dingo routes
+
+### Changed
+- The `--routePrefix` option now acts as the route prefix for all routers. Previously, it served as route version for Dingo router.
+
+## [2.1.6] - 7th October, 2018
+### Added
+- Ability to append/prepend markdown content (https://github.com/mpociot/laravel-apidoc-generator/pull/329, https://github.com/mpociot/laravel-apidoc-generator/pull/331)
+
+## [2.1.5] - 13th September, 2018
 ### Fixed
 - Parse JSON responses from `@transformer` tag for DIngo router (https://github.com/mpociot/laravel-apidoc-generator/pull/323)
 
