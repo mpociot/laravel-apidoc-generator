@@ -148,6 +148,7 @@ abstract class AbstractGenerator
             ->first(function ($tag) {
                 return $tag instanceof Tag && strtolower($tag->getName()) === 'authenticated';
             });
+
         return (bool) $authTag;
     }
 
@@ -446,6 +447,7 @@ abstract class AbstractGenerator
         ];
 
         $fake = $fakes[$type] ?? $fakes['string'];
+
         return $fake();
     }
 }

@@ -23,11 +23,12 @@ class TestController extends Controller
     }
 
     /**
-     * @bodyParam title string required The title of the post.
-     * @bodyParam body string required The title of the post.
-     * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
-    @bodyParam author_id int the ID of the author
-     * @bodyParam thumbnail image This is required if the post type is 'imagelicious
+     * @bodyParam user_id int required The id of the user.
+     * @bodyParam room_id string The id of the room.
+     * @bodyParam forever boolean Whether to ban the user forever.
+     * @bodyParam another_one number Just need something here.
+     * @bodyParam yet_another_param object required
+     * @bodyParam even_more_param array
      */
     public function withBodyParameters()
     {
