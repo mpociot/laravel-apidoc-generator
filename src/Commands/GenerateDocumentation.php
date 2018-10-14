@@ -57,9 +57,9 @@ class GenerateDocumentation extends Command
         }
 
         $parsedRoutes = $this->processRoutes($generator, $routes);
-        $parsedRoutes = collect($parsedRoutes)->groupBy('resource')
+        $parsedRoutes = collect($parsedRoutes)->groupBy('group')
             ->sort(function ($a, $b) {
-                return strcmp($a->first()['resource'], $b->first()['resource']);
+                return strcmp($a->first()['group'], $b->first()['group']);
             });
 
         $this->writeMarkdown($parsedRoutes);
