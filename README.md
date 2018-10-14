@@ -1,6 +1,6 @@
 ## Laravel API Documentation Generator
 
-Automatically generate your API documentation from your existing Laravel routes. Take a look at the [example documentation](http://marcelpociot.de/whiteboard/).
+Automatically generate your API documentation from your existing Laravel/Lumen/[Dingo](https://github.com/dingo/api) routes. [Here's what the output looks like](http://marcelpociot.de/whiteboard/).
 
 `php artisan apidoc:generate`
 
@@ -11,17 +11,13 @@ Automatically generate your API documentation from your existing Laravel routes.
 [![Build Status](https://travis-ci.org/mpociot/laravel-apidoc-generator.svg?branch=master)](https://travis-ci.org/mpociot/laravel-apidoc-generator)
 [![StyleCI](https://styleci.io/repos/57999295/shield?style=flat)](https://styleci.io/repos/57999295)
 
+> Note: this is the documentation for version 3, which changes significantly from version 2. if you're on v2, you can check out its documentation [here](https://github.com/mpociot/laravel-apidoc-generator/blob/2.x/README.md). We strongly recommend you upgrade, though, as v3 is more robust and fixes a lot of the problems with v2.
 
 ## Installation
-> Note: version 3.x requires PHP 7 and Laravel 5.5 or higher. Version 2.x requires Laravel 5.4.
+> Note: version 3.x requires PHP 7 and Laravel 5.5 or higher.
 
 ```sh
-$ composer require mpociot/laravel-apidoc-generator
-```
-Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
-
-```php
-Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
+$ composer require mpociot/laravel-apidoc-generator:dev-master
 ```
 
 Then publish the config file by running:
@@ -33,22 +29,21 @@ This will create an `apidoc.php` file in your `config` folder.
 
 ## Usage
 Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`.
-### output
-This is the file path where the generated documentation will be written to. Default: `**public/docs**
+- `output`
+This is the file path where the generated documentation will be written to. Default: **public/docs**
 
-### postman
-Set this option to true if you want a Postman collection to be generated along with the documentation. Default: `**true**
+- `postman`
+Set this option to true if you want a Postman collection to be generated along with the documentation. Default: **true**
 
-### router
+- `router`
 The router to use when processing the route (can be Laravel or Dingo. Defaults to **Laravel**)
 
-### routes
+- `routes`
 This is where you specify what rules documentation should be generated for. You specify routes to be parsed by defining conditions that the routes should meet and rules that should be applied when generating documentation. These conditions and rules are specified in groups, allowing you to apply different rules to different routes.
 
 For instance, suppose your configuration looks like this:
 
 ```php
-<?php
 return [
      //...,
   
@@ -70,7 +65,7 @@ return [
 ];
 ```
 
-This means documentation will be generated for routes in all domains ('*' is a wildcard meaning 'any character') which match any of the patterns 'api/*' or 'v2-api/*', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
+This means documentation will be generated for routes in all domains ('&ast;' is a wildcard meaning 'any character') which match any of the patterns 'api/&ast;' or 'v2-api/&ast;', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
 Also, in the generated documentation, these routes will have the header 'Authorization: Bearer: {token}' added to the example requests.
 
 You can also separate routes into groups to apply different rules to them:
@@ -135,7 +130,7 @@ This package uses the HTTP controller doc blocks to create a table of contents a
 
 Using `@group` in a controller doc block creates a Group within the API documentation. All routes handled by that controller will be grouped under this group in the sidebar. The short description after the `@group` should be unique to allow anchor tags to navigate to this section. A longer description can be included below. Custom formatting and `<aside>` tags are also supported. (see the [Documentarian docs](http://marcelpociot.de/documentarian/installation/markdown_syntax))
 
-> Note: using `@group` is optional. Ungrouped routes will be placed in a "general" group.
+ > Note: using `@group` is optional. Ungrouped routes will be placed in a "general" group.
 
 Above each method within the controller you wish to include in your API documentation you should have a doc block. This should include a unique short description as the first entry. An optional second entry can be added with further information. Both descriptions will appear in the API documentation in a different format as shown below.
 You can also specify an `@group` on a single method to override the group defined at the controller level.
@@ -168,6 +163,7 @@ class UserController extends Controller
 	 {
 
 	 }
+}
 ```
 
 **Result:** 
@@ -283,7 +279,7 @@ If you are referring to the environment setting as shown above, then you should 
 APP_URL=http://yourapp.app
 ```
 
-## Modify the generated documentation
+## Modifying the generated documentation
 
 If you want to modify the content of your generated documentation, go ahead and edit the generated `index.md` file.
 The default location of this file is: `public/docs/source/index.md`.
