@@ -5,6 +5,9 @@ namespace Mpociot\ApiDoc\Tests\Fixtures;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Group A
+ */
 class TestController extends Controller
 {
     public function dummy()
@@ -18,6 +21,14 @@ class TestController extends Controller
      * It can also be multiple lines long.
      */
     public function withEndpointDescription()
+    {
+        return '';
+    }
+
+    /**
+     * @group Group B
+     */
+    public function withGroupOverride()
     {
         return '';
     }

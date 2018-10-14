@@ -198,13 +198,13 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Routing\Route  $routeAction
      *
      * @return array
      */
-    protected function parseDocBlock($route)
+    protected function parseDocBlock(string $routeAction)
     {
-        list($class, $method) = explode('@', $route);
+        list($class, $method) = explode('@', $routeAction);
         $reflection = new ReflectionClass($class);
         $reflectionMethod = $reflection->getMethod($method);
 
@@ -219,17 +219,30 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  string  $route
+     * @param  string  $routeAction
      *
      * @return string
      */
-    protected function getRouteGroup($route)
+    protected function getRouteGroup(string $routeAction)
     {
-        list($class, $method) = explode('@', $route);
-        $reflection = new ReflectionClass($class);
-        $comment = $reflection->getDocComment();
-        if ($comment) {
-            $phpdoc = new DocBlock($comment);
+        list($class, $method) = explode('@', $routeAction);
+        $controller = new ReflectionClass($class);
+
+        // @group tag on the method overrides that on the controller
+        $method = $controller->getMethod($method);
+        $docBlockComment = $method->getDocComment();
+        if ($docBlockComment) {
+            $phpdoc = new DocBlock($docBlockComment);
+            foreach ($phpdoc->getTags() as $tag) {
+                if ($tag->getName() === 'group') {
+                    return $tag->getContent();
+                }
+            }
+        }
+
+        $docBlockComment = $controller->getDocComment();
+        if ($docBlockComment) {
+            $phpdoc = new DocBlock($docBlockComment);
             foreach ($phpdoc->getTags() as $tag) {
                 if ($tag->getName() === 'group') {
                     return $tag->getContent();

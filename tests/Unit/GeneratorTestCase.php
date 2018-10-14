@@ -31,7 +31,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_endpoint_description()
+    public function can_parse_endpoint_description()
     {
         $route = $this->createRoute('GET', '/api/test', 'withEndpointDescription');
         $parsed = $this->generator->processRoute($route);
@@ -41,7 +41,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_body_parameters()
+    public function can_parse_body_parameters()
     {
         $route = $this->createRoute('GET', '/api/test', 'withBodyParameters');
         $parameters = $this->generator->processRoute($route)['parameters'];
@@ -79,9 +79,27 @@ abstract class GeneratorTestCase extends TestCase
             ],
         ], $parameters);
     }
+    
+    /** @test */
+    public function can_parse_route_group()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'dummy');
+        $routeGroup = $this->generator->processRoute($route)['group'];
+
+        $this->assertSame('Group A', $routeGroup);
+    }
+    
+    /** @test */
+    public function method_can_override_controller_group()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withGroupOverride');
+        $routeGroup = $this->generator->processRoute($route)['group'];
+
+        $this->assertSame('Group B', $routeGroup);
+    }
 
     /** @test */
-    public function test_can_parse_auth_tags()
+    public function can_parse_auth_tags()
     {
         $route = $this->createRoute('GET', '/api/test', 'withAuthenticatedTag');
         $authenticated = $this->generator->processRoute($route)['authenticated'];
@@ -93,7 +111,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_route_methods()
+    public function can_parse_route_methods()
     {
         $route = $this->createRoute('GET', '/get', 'withEndpointDescription');
         $parsed = $this->generator->processRoute($route);
@@ -113,7 +131,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_response_tag()
+    public function can_parse_response_tag()
     {
         $route = $this->createRoute('POST', '/responseTag', 'withResponseTag');
 
@@ -132,7 +150,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_transformer_tag()
+    public function can_parse_transformer_tag()
     {
         $route = $this->createRoute('GET', '/transformerTag', 'transformerTag');
         $parsed = $this->generator->processRoute($route);
@@ -146,7 +164,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_transformer_tag_with_model()
+    public function can_parse_transformer_tag_with_model()
     {
         $route = $this->createRoute('GET', '/transformerTagWithModel', 'transformerTagWithModel');
         $parsed = $this->generator->processRoute($route);
@@ -160,7 +178,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_transformer_collection_tag()
+    public function can_parse_transformer_collection_tag()
     {
         $route = $this->createRoute('GET', '/transformerCollectionTag', 'transformerCollectionTag');
         $parsed = $this->generator->processRoute($route);
@@ -175,7 +193,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function test_can_parse_transformer_collection_tag_with_model()
+    public function can_parse_transformer_collection_tag_with_model()
     {
         $route = $this->createRoute('GET', '/transformerCollectionTagWithModel', 'transformerCollectionTagWithModel');
         $parsed = $this->generator->processRoute($route);
