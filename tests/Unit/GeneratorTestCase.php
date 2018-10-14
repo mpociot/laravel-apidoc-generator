@@ -79,7 +79,7 @@ abstract class GeneratorTestCase extends TestCase
             ],
         ], $parameters);
     }
-    
+
     /** @test */
     public function can_parse_route_group()
     {
@@ -88,7 +88,7 @@ abstract class GeneratorTestCase extends TestCase
 
         $this->assertSame('Group A', $routeGroup);
     }
-    
+
     /** @test */
     public function method_can_override_controller_group()
     {
