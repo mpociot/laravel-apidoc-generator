@@ -59,7 +59,7 @@ abstract class AbstractGenerator
 
         return [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
-            'resource' => $routeGroup,
+            'group' => $routeGroup,
             'title' => $docBlock['short'],
             'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
@@ -231,7 +231,7 @@ abstract class AbstractGenerator
         if ($comment) {
             $phpdoc = new DocBlock($comment);
             foreach ($phpdoc->getTags() as $tag) {
-                if ($tag->getName() === 'resource') {
+                if ($tag->getName() === 'group') {
                     return $tag->getContent();
                 }
             }
