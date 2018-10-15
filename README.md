@@ -223,7 +223,7 @@ public function show($id)
 #### @transformer, @transformerCollection, and @transformerModel
 You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
-1. Check if there is a `@transformerModel` tag to define the model being transformed. If there is none, use the class of the first parameter to the method.
+1. Check if there is a `@transformerModel` tag to define the model being transformed. If there is none, use the class of the first parameter to the transformer's `transform()` method.
 2. Get an instance of the model from the Eloquent model factory
 2. If the parameter is an Eloquent model, load the first from the database.
 3. Create an instance using `new`.

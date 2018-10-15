@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
+use Mpociot\ApiDoc\Tools\ResponseResolver;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use League\Fractal\Manager;
@@ -11,6 +12,7 @@ use Mpociot\Reflection\DocBlock;
 use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
 use League\Fractal\Resource\Collection;
+use ReflectionMethod;
 
 abstract class AbstractGenerator
 {
@@ -50,14 +52,18 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    public function processRoute($route)
+    public function processRoute(Route $route, array $rulesToApply = [])
     {
         $routeAction = $route->getAction();
-        $routeGroup = $this->getRouteGroup($routeAction['uses']);
-        $docBlock = $this->parseDocBlock($routeAction['uses']);
-        $content = $this->getResponse($docBlock['tags']);
+        list($class, $method) = explode('@', $routeAction['uses']);
+        $controller = new ReflectionClass($class);
+        $method = $controller->getMethod($method);
 
-        return [
+        $routeGroup = $this->getRouteGroup($controller, $method);
+        $docBlock = $this->parseDocBlock($method);
+        $content = ResponseResolver::getResponse($route, $docBlock['tags'], $rulesToApply);
+
+        $parsedRoute = [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'group' => $routeGroup,
             'title' => $docBlock['short'],
@@ -69,6 +75,9 @@ abstract class AbstractGenerator
             'response' => $content,
             'showresponse' => ! empty($content),
         ];
+        $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
+
+        return $parsedRoute;
     }
 
     /**
@@ -79,26 +88,6 @@ abstract class AbstractGenerator
      * @return  void
      */
     abstract public function prepareMiddleware($enable = false);
-
-    /**
-     * Get the response from the docblock if available.
-     *
-     * @param array $tags
-     *
-     * @return mixed
-     */
-    protected function getDocblockResponse($tags)
-    {
-        $responseTags = array_filter($tags, function ($tag) {
-            return $tag instanceof Tag && \strtolower($tag->getName()) == 'response';
-        });
-        if (empty($responseTags)) {
-            return;
-        }
-        $responseTag = \array_first($responseTags);
-
-        return \response(json_encode($responseTag->getContent()), 200, ['Content-Type' => 'application/json']);
-    }
 
     /**
      * @param array $tags
@@ -198,17 +187,13 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  \Illuminate\Routing\Route  $routeAction
+     * @param ReflectionMethod $method
      *
      * @return array
      */
-    protected function parseDocBlock(string $routeAction)
+    protected function parseDocBlock(ReflectionMethod $method)
     {
-        list($class, $method) = explode('@', $routeAction);
-        $reflection = new ReflectionClass($class);
-        $reflectionMethod = $reflection->getMethod($method);
-
-        $comment = $reflectionMethod->getDocComment();
+        $comment = $method->getDocComment();
         $phpdoc = new DocBlock($comment);
 
         return [
@@ -219,17 +204,15 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  string  $routeAction
+     * @param ReflectionClass $controller
+     * @param ReflectionMethod $method
      *
      * @return string
+     *
      */
-    protected function getRouteGroup(string $routeAction)
+    protected function getRouteGroup(ReflectionClass $controller, ReflectionMethod $method)
     {
-        list($class, $method) = explode('@', $routeAction);
-        $controller = new ReflectionClass($class);
-
         // @group tag on the method overrides that on the controller
-        $method = $controller->getMethod($method);
         $docBlockComment = $method->getDocComment();
         if ($docBlockComment) {
             $phpdoc = new DocBlock($docBlockComment);
@@ -291,134 +274,6 @@ abstract class AbstractGenerator
         }
 
         return $server;
-    }
-
-    /**
-     * @param $response
-     *
-     * @return mixed
-     */
-    private function getResponseContent($response)
-    {
-        if (empty($response)) {
-            return '';
-        }
-        if ($response->headers->get('Content-Type') === 'application/json') {
-            $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
-        } else {
-            $content = $response->getContent();
-        }
-
-        return $content;
-    }
-
-    /**
-     * Get a response from the transformer tags.
-     *
-     * @param array $tags
-     *
-     * @return mixed
-     */
-    protected function getTransformerResponse($tags)
-    {
-        try {
-            $transFormerTags = array_filter($tags, function ($tag) {
-                if (! ($tag instanceof Tag)) {
-                    return false;
-                }
-
-                return \in_array(\strtolower($tag->getName()), ['transformer', 'transformercollection']);
-            });
-            if (empty($transFormerTags)) {
-                // we didn't have any of the tags so goodbye
-                return false;
-            }
-
-            $modelTag = array_first(array_filter($tags, function ($tag) {
-                if (! ($tag instanceof Tag)) {
-                    return false;
-                }
-
-                return \in_array(\strtolower($tag->getName()), ['transformermodel']);
-            }));
-            $tag = \array_first($transFormerTags);
-            $transformer = $tag->getContent();
-            if (! \class_exists($transformer)) {
-                // if we can't find the transformer we can't generate a response
-                return;
-            }
-            $demoData = [];
-
-            $reflection = new ReflectionClass($transformer);
-            $method = $reflection->getMethod('transform');
-            $parameter = \array_first($method->getParameters());
-            $type = null;
-            if ($modelTag) {
-                $type = $modelTag->getContent();
-            }
-            if (\is_null($type)) {
-                if ($parameter->hasType() &&
-                    ! $parameter->getType()->isBuiltin() &&
-                    \class_exists((string) $parameter->getType())) {
-                    //we have a type
-                    $type = (string) $parameter->getType();
-                }
-            }
-            if ($type) {
-                // we have a class so we try to create an instance
-                $demoData = new $type;
-                try {
-                    // try a factory
-                    $demoData = \factory($type)->make();
-                } catch (\Exception $e) {
-                    if ($demoData instanceof \Illuminate\Database\Eloquent\Model) {
-                        // we can't use a factory but can try to get one from the database
-                        try {
-                            // check if we can find one
-                            $newDemoData = $type::first();
-                            if ($newDemoData) {
-                                $demoData = $newDemoData;
-                            }
-                        } catch (\Exception $e) {
-                            // do nothing
-                        }
-                    }
-                }
-            }
-
-            $fractal = new Manager();
-            $resource = [];
-            if ($tag->getName() == 'transformer') {
-                // just one
-                $resource = new Item($demoData, new $transformer);
-            }
-            if ($tag->getName() == 'transformercollection') {
-                // a collection
-                $resource = new Collection([$demoData, $demoData], new $transformer);
-            }
-
-            return \response($fractal->createData($resource)->toJson());
-        } catch (\Exception $e) {
-            // it isn't possible to parse the transformer
-            return;
-        }
-    }
-
-    private function getResponse(array $annotationTags)
-    {
-        $response = null;
-        if ($docblockResponse = $this->getDocblockResponse($annotationTags)) {
-            // we have a response from the docblock ( @response )
-            $response = $docblockResponse;
-        }
-        if (! $response && ($transformerResponse = $this->getTransformerResponse($annotationTags))) {
-            // we have a transformer response from the docblock ( @transformer || @transformercollection )
-            $response = $transformerResponse;
-        }
-
-        $content = $response ? $this->getResponseContent($response) : null;
-
-        return $content;
     }
 
     private function normalizeParameterType($type)

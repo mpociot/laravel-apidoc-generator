@@ -187,7 +187,7 @@ class GenerateDocumentation extends Command
             $route = $routeItem['route'];
             /** @var Route $route */
             if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                $parsedRoutes[] = $generator->processRoute($route) + $routeItem['apply'];
+                $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply']);
                 $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
                 $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
