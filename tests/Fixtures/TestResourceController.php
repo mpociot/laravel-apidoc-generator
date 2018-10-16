@@ -48,9 +48,7 @@ class TestResourceController extends Controller
      */
     public function store(Request $request)
     {
-        return [
-            'store_resource' => true,
-        ];
+        return;
     }
 
     /**
@@ -99,9 +97,6 @@ class TestResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return [
-            'update_resource' => $id,
-        ];
     }
 
     /**
@@ -113,8 +108,5 @@ class TestResourceController extends Controller
      */
     public function destroy($id)
     {
-        return [
-            'destroy_resource' => $id,
-        ];
     }
 }

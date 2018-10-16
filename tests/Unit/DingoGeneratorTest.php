@@ -12,8 +12,8 @@ class DingoGeneratorTest extends GeneratorTestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Dingo\Api\Provider\LaravelServiceProvider::class,
             ApiDocGeneratorServiceProvider::class,
+            \Dingo\Api\Provider\LaravelServiceProvider::class,
         ];
     }
 
@@ -22,9 +22,11 @@ class DingoGeneratorTest extends GeneratorTestCase
         parent::setUp();
 
         $this->generator = new DingoGenerator();
+        config(['apidoc.router' => 'dingo']);
+
     }
 
-    public function createRoute(string $httpMethod, string $path, string $controllerMethod)
+    public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false)
     {
         $route = null;
         /** @var Router $api */

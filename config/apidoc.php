@@ -84,6 +84,62 @@ return [
                     // 'Authorization' => 'Bearer: {token}',
                     // 'Api-Version' => 'v2',
                 ],
+
+                /*
+                 * If no @response or @transformer declaratons are found for the route,
+                 * we'll try to get a sample response by attempting an API call.
+                 * Configure the settings for the API call here,
+                 */
+                'response_calls' => [
+                    /*
+                     * What HTTP methods (GET, POST, etc) should API calls be made for. List the methods here
+                     * or use '*' to mean all methods. Set to false to disable API calls.
+                     */
+                    'methods' => ['*'],
+
+                    /*
+                     * For URLs which have parameters (/users/{user}, /orders/{id?}),
+                     * specify what values the parameters should be replaced with.
+                     * Note that you must specify the full parameter, including curly brackets and question marks if any.
+                     */
+                    'bindings' => [
+                        // '{user}' => 1
+                    ],
+
+                    /*
+                     * Environment variables which should be set for the API call.
+                     */
+                    'env' => [
+                        'APP_ENV' => 'documentation',
+                        'APP_DEBUG' => false,
+                        // 'env_var' => 'value',
+                    ],
+
+                    /*
+                     * Headers which should be sent with the API call.
+                     */
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                        // 'key' => 'value',
+                    ],
+
+
+                    /*
+                     * Query parameters which should be sent with the API call.
+                     */
+                    'query' => [
+                        // 'key' => 'value',
+                    ],
+
+
+                    /*
+                     * Body parameters which should be sent with the API call.
+                     */
+                    'body' => [
+                        // 'key' => 'value',
+                    ],
+                ],
             ],
         ],
     ],
