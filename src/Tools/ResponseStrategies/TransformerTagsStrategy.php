@@ -30,7 +30,7 @@ class TransformerTagsStrategy
     protected function getTransformerResponse(array $tags)
     {
         try {
-            if(empty($transformerTag = $this->getTransformerTag($tags))) {
+            if (empty($transformerTag = $this->getTransformerTag($tags))) {
                 return;
             }
 
@@ -83,7 +83,6 @@ class TransformerTagsStrategy
         }
 
         return $type;
-
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Dingo\Api\Routing\Router;
-use Mpociot\ApiDoc\Generators\DingoGenerator;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
@@ -21,9 +20,7 @@ class DingoGeneratorTest extends GeneratorTestCase
     {
         parent::setUp();
 
-        $this->generator = new DingoGenerator();
         config(['apidoc.router' => 'dingo']);
-
     }
 
     public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false)

@@ -34,5 +34,4 @@ class ResponseTagStrategy
 
         return response()->json(json_decode($responseTag->getContent(), true));
     }
-
 }

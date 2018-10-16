@@ -8,11 +8,9 @@ use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
+use Mpociot\ApiDoc\Generators\Generator;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
-use Mpociot\ApiDoc\Generators\DingoGenerator;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Generators\AbstractGenerator;
 
 class GenerateDocumentation extends Command
 {
@@ -47,15 +45,14 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $usingDIngoRouter = config('apidoc.router') == 'dingo';
-        if ($usingDIngoRouter) {
+        $usingDingoRouter = config('apidoc.router') == 'dingo';
+        if ($usingDingoRouter) {
             $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
-            $generator = new DingoGenerator();
         } else {
             $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
-            $generator = new LaravelGenerator();
         }
 
+        $generator = new Generator();
         $parsedRoutes = $this->processRoutes($generator, $routes);
         $parsedRoutes = collect($parsedRoutes)->groupBy('group')
             ->sort(function ($a, $b) {
@@ -175,12 +172,12 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param AbstractGenerator $generator
+     * @param Generator $generator
      * @param array $routes
      *
      * @return array
      */
-    private function processRoutes(AbstractGenerator $generator, array $routes)
+    private function processRoutes(Generator $generator, array $routes)
     {
         $parsedRoutes = [];
         foreach ($routes as $routeItem) {

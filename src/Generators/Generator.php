@@ -10,18 +10,8 @@ use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Tools\ResponseResolver;
 
-abstract class AbstractGenerator
+class Generator
 {
-    /**
-     * @param Route $route
-     *
-     * @return mixed
-     */
-    public function getDomain(Route $route)
-    {
-        return $route->domain() == null ? '*' : $route->domain();
-    }
-
     /**
      * @param Route $route
      *
@@ -75,15 +65,6 @@ abstract class AbstractGenerator
 
         return $parsedRoute;
     }
-
-    /**
-     * Prepares / Disables route middlewares.
-     *
-     * @param  bool $disable
-     *
-     * @return  void
-     */
-    abstract public function prepareMiddleware($enable = false);
 
     /**
      * @param array $tags
@@ -159,7 +140,6 @@ abstract class AbstractGenerator
      * @param ReflectionMethod $method
      *
      * @return string
-     *
      */
     protected function getRouteGroup(ReflectionClass $controller, ReflectionMethod $method)
     {

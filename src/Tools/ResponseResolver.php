@@ -31,7 +31,7 @@ class ResponseResolver
         foreach (static::$strategies as $strategy) {
             $strategy = new $strategy();
             $response = $strategy($this->route, $tags, $rulesToApply);
-            if (!is_null($response)) {
+            if (! is_null($response)) {
                 return $this->getResponseContent($response);
             }
         }

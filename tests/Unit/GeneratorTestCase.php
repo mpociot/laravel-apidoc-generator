@@ -3,13 +3,13 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
+use Mpociot\ApiDoc\Generators\Generator;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 abstract class GeneratorTestCase extends TestCase
 {
     /**
-     * @var \Mpociot\ApiDoc\Generators\AbstractGenerator
+     * @var \Mpociot\ApiDoc\Generators\Generator
      */
     protected $generator;
 
@@ -26,6 +26,8 @@ abstract class GeneratorTestCase extends TestCase
     public function setUp()
     {
         parent::setUp();
+
+        $this->generator = new Generator();
     }
 
     /** @test */
@@ -257,7 +259,7 @@ abstract class GeneratorTestCase extends TestCase
                 ],
                 'body' => [
                     'bodyParam' => 'bodyValue',
-                ]
+                ],
             ],
         ];
         $parsed = $this->generator->processRoute($route, $rules);

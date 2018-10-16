@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 
 /**
- * Make a call to the route and retrieve its response
+ * Make a call to the route and retrieve its response.
  */
 class ResponseCallStrategy
 {
@@ -34,7 +34,7 @@ class ResponseCallStrategy
 
     private function configureEnvironment(array $rulesToApply)
     {
-        $this->enableDbTransactions();
+        $this->startDbTransaction();
         $this->setEnvironmentVariables($rulesToApply['env'] ?? []);
     }
 
@@ -53,7 +53,7 @@ class ResponseCallStrategy
 
     /**
      * Transform parameters in URLs into real values (/users/{user} -> /users/2).
-     * Uses bindings specified by caller, otherwise just uses '1'
+     * Uses bindings specified by caller, otherwise just uses '1'.
      *
      * @param Route $route
      * @param array $bindings
@@ -82,32 +82,27 @@ class ResponseCallStrategy
         }
     }
 
-    private function enableDbTransactions()
+    private function startDbTransaction()
     {
         try {
             app('db')->beginTransaction();
         } catch (\Exception $e) {
-
         }
     }
 
-    private function disableDbTransactions()
+    private function endDbTransaction()
     {
         try {
             app('db')->rollBack();
         } catch (\Exception $e) {
-
         }
     }
 
     private function finish()
     {
-        $this->disableDbTransactions();
+        $this->endDbTransaction();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function callDingoRoute(Request $request)
     {
         /** @var Dispatcher $dispatcher */
@@ -124,7 +119,7 @@ class ResponseCallStrategy
         // set URL and query parameters
         $uri = $request->getRequestUri();
         $query = $request->getQueryString();
-        if (!empty($query)) {
+        if (! empty($query)) {
             $uri .= "?$query";
         }
         $response = call_user_func_array([$dispatcher, strtolower($request->method())], [$uri]);
@@ -207,6 +202,10 @@ class ResponseCallStrategy
         $allowedMethods = $rulesToApply['methods'] ?? [];
         if (empty($allowedMethods)) {
             return false;
+        }
+
+        if (is_string($allowedMethods) && $allowedMethods == '*') {
+            return true;
         }
 
         if (array_search('*', $allowedMethods) !== false) {

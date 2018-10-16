@@ -92,10 +92,10 @@ return [
                  */
                 'response_calls' => [
                     /*
-                     * What HTTP methods (GET, POST, etc) should API calls be made for. List the methods here
-                     * or use '*' to mean all methods. Set to false to disable API calls.
+                     * API calls will be made only for routes in this group matching these HTTP methods (GET, POST, etc).
+                     * List the methods here or use '*' to mean all methods. Leave empty to disable API calls.
                      */
-                    'methods' => ['*'],
+                    'methods' => ['GET'],
 
                     /*
                      * For URLs which have parameters (/users/{user}, /orders/{id?}),
@@ -108,6 +108,8 @@ return [
 
                     /*
                      * Environment variables which should be set for the API call.
+                     * This is a good place to ensure that notifications, emails
+                     * and other external services arenot triggered during the documentation API calls
                      */
                     'env' => [
                         'APP_ENV' => 'documentation',
@@ -124,14 +126,12 @@ return [
                         // 'key' => 'value',
                     ],
 
-
                     /*
                      * Query parameters which should be sent with the API call.
                      */
                     'query' => [
                         // 'key' => 'value',
                     ],
-
 
                     /*
                      * Body parameters which should be sent with the API call.

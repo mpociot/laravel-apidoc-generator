@@ -48,7 +48,6 @@ class TestResourceController extends Controller
      */
     public function store(Request $request)
     {
-        return;
     }
 
     /**
