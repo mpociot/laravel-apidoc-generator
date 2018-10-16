@@ -182,7 +182,7 @@ To specify a list of valid parameters your API route accepts, use the `@bodyPara
  * @bodyParam title string required The title of the post.
  * @bodyParam body string required The title of the post.
  * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
- @bodyParam author_id int the ID of the author
+ * @bodyParam author_id int the ID of the author
  * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
  */
 public function createPost()
@@ -281,7 +281,7 @@ If you don't specify an example response using any of the above means, this pack
 
 The generator automatically creates a Postman collection file, which you can import to use within your [Postman app](https://www.getpostman.com/apps) for even simpler API testing and usage.
 
-If you don't want to create a Postman collection, set the `--postman` config option to false.
+If you don't want to create a Postman collection, set the `postman` config option to false.
 
 The default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
 
