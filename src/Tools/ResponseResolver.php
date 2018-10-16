@@ -3,13 +3,16 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
+use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseCallStrategy;
+use Mpociot\ApiDoc\Tools\ResponseStrategies\TransformerTagsStrategy;
 
 class ResponseResolver
 {
     public static $strategies = [
         ResponseTagStrategy::class,
         TransformerTagsStrategy::class,
-   //     ResponseCallStrategy::class,
+        ResponseCallStrategy::class,
     ];
 
     /**
@@ -46,15 +49,6 @@ class ResponseResolver
      */
     private function getResponseContent($response)
     {
-        if (empty($response)) {
-            return '';
-        }
-        if ($response->headers->get('Content-Type') === 'application/json') {
-            $content = json_decode($response->getContent(), JSON_PRETTY_PRINT);
-        } else {
-            $content = $response->getContent();
-        }
-
-        return $content;
+        return $response ? $response->getContent() : '';
     }
 }

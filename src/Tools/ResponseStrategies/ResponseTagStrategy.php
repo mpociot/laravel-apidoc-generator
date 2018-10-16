@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by shalvah
- * Date: 15-Oct-18
- * Time: 15:07
- */
 
-namespace Mpociot\ApiDoc\Tools;
-
+namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock\Tag;
@@ -31,14 +25,14 @@ class ResponseTagStrategy
     protected function getDocBlockResponse(array $tags)
     {
         $responseTags = array_filter($tags, function ($tag) {
-            return $tag instanceof Tag && \strtolower($tag->getName()) == 'response';
+            return $tag instanceof Tag && strtolower($tag->getName()) == 'response';
         });
         if (empty($responseTags)) {
             return;
         }
-        $responseTag = \array_first($responseTags);
+        $responseTag = array_first($responseTags);
 
-        return \response()->json($responseTag->getContent());
+        return response()->json(json_decode($responseTag->getContent(), true));
     }
 
 }

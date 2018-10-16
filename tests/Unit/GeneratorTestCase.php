@@ -26,8 +26,6 @@ abstract class GeneratorTestCase extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        $this->generator = new LaravelGenerator();
     }
 
     /** @test */
@@ -140,13 +138,13 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $this->assertJsonStringEqualsJsonString(json_encode([
+        $this->assertArraySubset([
             'id' => 4,
             'name' => 'banana',
             'color' => 'red',
             'weight' => '1 kg',
             'delicious' => true,
-        ]), $parsed['response']);
+        ], json_decode($parsed['response'], true));
     }
 
     /** @test */
@@ -207,5 +205,73 @@ abstract class GeneratorTestCase extends TestCase
         );
     }
 
-    abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod);
+    /** @test */
+    public function can_call_route_and_generate_response()
+    {
+        $route = $this->createRoute('PUT', '/shouldFetchRouteResponse', 'shouldFetchRouteResponse', true);
+
+        $rules = [
+            'response_calls' => [
+                'methods' => ['*'],
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+            ],
+        ];
+        $parsed = $this->generator->processRoute($route, $rules);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertArraySubset([
+            'id' => 4,
+            'name' => 'banana',
+            'color' => 'red',
+            'weight' => '1 kg',
+            'delicious' => true,
+        ], json_decode($parsed['response'], true));
+    }
+
+    /** @test */
+    public function uses_configured_settings_when_calling_route()
+    {
+        $route = $this->createRoute('PUT', '/echo/{id}', 'shouldFetchRouteResponseWithEchoedSettings', true);
+
+        $rules = [
+            'response_calls' => [
+                'methods' => ['*'],
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'header' => 'value',
+                ],
+                'bindings' => [
+                    '{id}' => 3,
+                ],
+                'env' => [
+                    'APP_ENV' => 'documentation',
+                ],
+                'query' => [
+                    'queryParam' => 'queryValue',
+                ],
+                'body' => [
+                    'bodyParam' => 'bodyValue',
+                ]
+            ],
+        ];
+        $parsed = $this->generator->processRoute($route, $rules);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $response = json_decode($parsed['response'], true);
+        $this->assertEquals(3, $response['{id}']);
+        $this->assertEquals('documentation', $response['APP_ENV']);
+        $this->assertEquals('queryValue', $response['queryParam']);
+        $this->assertEquals('bodyValue', $response['bodyParam']);
+        $this->assertEquals('value', $response['header']);
+    }
+
+    abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false);
 }

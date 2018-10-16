@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by shalvah
- * Date: 15-Oct-18
- * Time: 15:07
- */
 
-namespace Mpociot\ApiDoc\Tools;
-
+namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -51,7 +45,6 @@ class TransformerTagsStrategy
 
             return response($fractal->createData($resource)->toJson());
         } catch (\Exception $e) {
-
             return;
         }
     }
@@ -88,6 +81,7 @@ class TransformerTagsStrategy
                 $type = (string) $parameter->getType();
             }
         }
+
         return $type;
 
     }
@@ -99,26 +93,25 @@ class TransformerTagsStrategy
      */
     protected function instantiateTransformerModel(string $type)
     {
-        // our fallback
-        $modelInstance = new $type;
-
         try {
             // try Eloquent model factory
-            $modelInstance = factory($type)->make();
+            return factory($type)->make();
         } catch (\Exception $e) {
-            if ($modelInstance instanceof \Illuminate\Database\Eloquent\Model) {
+            $instance = new $type;
+            if ($instance instanceof \Illuminate\Database\Eloquent\Model) {
                 try {
                     // we can't use a factory but can try to get one from the database
-                    $newDemoData = $type::first();
-                    if ($newDemoData) {
-                        $modelInstance = $newDemoData;
+                    $firstInstance = $type::first();
+                    if ($firstInstance) {
+                        return $firstInstance;
                     }
                 } catch (\Exception $e) {
                     // okay, we'll stick with `new`
                 }
             }
         }
-        return $modelInstance;
+
+        return $instance;
     }
 
     /**
@@ -131,6 +124,7 @@ class TransformerTagsStrategy
         $transFormerTags = array_filter($tags, function ($tag) {
             return ($tag instanceof Tag) && in_array(strtolower($tag->getName()), ['transformer', 'transformercollection']);
         });
+
         return array_first($transFormerTags);
     }
 }

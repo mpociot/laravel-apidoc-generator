@@ -3,16 +3,12 @@
 namespace Mpociot\ApiDoc\Generators;
 
 use Faker\Factory;
-use Mpociot\ApiDoc\Tools\ResponseResolver;
 use ReflectionClass;
-use Illuminate\Support\Str;
-use League\Fractal\Manager;
+use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
-use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
-use League\Fractal\Resource\Collection;
-use ReflectionMethod;
+use Mpociot\ApiDoc\Tools\ResponseResolver;
 
 abstract class AbstractGenerator
 {
@@ -142,51 +138,6 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @param  $route
-     * @param  $bindings
-     * @param  $headers
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function getRouteResponse($route, $bindings, $headers = [])
-    {
-        $uri = $this->addRouteModelBindings($route, $bindings);
-
-        $methods = $this->getMethods($route);
-
-        // Split headers into key - value pairs
-        $headers = collect($headers)->map(function ($value) {
-            $split = explode(':', $value); // explode to get key + values
-            $key = array_shift($split); // extract the key and keep the values in the array
-            $value = implode(':', $split); // implode values into string again
-
-            return [trim($key) => trim($value)];
-        })->collapse()->toArray();
-
-        //Changes url with parameters like /users/{user} to /users/1
-        $uri = preg_replace('/{(.*?)}/', 1, $uri); // 1 is the default value for route parameters
-
-        return $this->callRoute(array_shift($methods), $uri, [], [], [], $headers);
-    }
-
-    /**
-     * @param $route
-     * @param array $bindings
-     *
-     * @return mixed
-     */
-    protected function addRouteModelBindings($route, $bindings)
-    {
-        $uri = $this->getUri($route);
-        foreach ($bindings as $model => $id) {
-            $uri = str_replace('{'.$model.'}', $id, $uri);
-            $uri = str_replace('{'.$model.'?}', $id, $uri);
-        }
-
-        return $uri;
-    }
-
-    /**
      * @param ReflectionMethod $method
      *
      * @return array
@@ -234,46 +185,6 @@ abstract class AbstractGenerator
         }
 
         return 'general';
-    }
-
-    /**
-     * Call the given URI and return the Response.
-     *
-     * @param  string  $method
-     * @param  string  $uri
-     * @param  array  $parameters
-     * @param  array  $cookies
-     * @param  array  $files
-     * @param  array  $server
-     * @param  string  $content
-     *
-     * @return \Illuminate\Http\Response
-     */
-    abstract public function callRoute($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null);
-
-    /**
-     * Transform headers array to array of $_SERVER vars with HTTP_* format.
-     *
-     * @param  array  $headers
-     *
-     * @return array
-     */
-    protected function transformHeadersToServerVars(array $headers)
-    {
-        $server = [];
-        $prefix = 'HTTP_';
-
-        foreach ($headers as $name => $value) {
-            $name = strtr(strtoupper($name), '-', '_');
-
-            if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
-                $name = $prefix.$name;
-            }
-
-            $server[$name] = $value;
-        }
-
-        return $server;
     }
 
     private function normalizeParameterType($type)
