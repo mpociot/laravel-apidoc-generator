@@ -33,7 +33,7 @@
     },
     "suggest": {
         "league/fractal": "Required for transformers support"
-    }
+    },
     "autoload": {
         "psr-4": {
             "Mpociot\\ApiDoc\\": "src/"
