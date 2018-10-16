@@ -182,7 +182,7 @@ To specify a list of valid parameters your API route accepts, use the `@bodyPara
  * @bodyParam title string required The title of the post.
  * @bodyParam body string required The title of the post.
  * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
- @bodyParam author_id int the ID of the author
+ * @bodyParam author_id int the ID of the author
  * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
  */
 public function createPost()
