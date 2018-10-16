@@ -194,6 +194,7 @@ public function createPost()
 They will be included in the generated documentation text and example requests.
 
 **Result:**
+
 ![](body_params.png)
 
 ### Indicating auth status
@@ -259,6 +260,12 @@ public function showUser(int $id)
 }
 ```
 For the first route above, this package will generate a set of two users then pass it through the transformer. For the last two, it will generate a single user and then pass it through the transformer.
+
+> Note: for transformer support, you need to install the league/fractal package
+
+```bash
+composer require league/fractal
+```
 
 #### Gnerating responses automatically
 If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
