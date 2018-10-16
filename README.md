@@ -200,8 +200,7 @@ They will be included in the generated documentation text and example requests.
 You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
 
 ### Providing an example response
-You can provide an example response for a route. This will be disaplyed in the examples section. There are several ways of doing this.
-
+You can provide an example response for a route. This will be displayed in the examples section. There are several ways of doing this.
 
 #### @response
 You can provide an example response for a route by using the `@response` annotation with valid JSON:
@@ -261,7 +260,17 @@ public function showUser(int $id)
 ```
 For the first route above, this package will generate a set of two users then pass it through the transformer. For the last two, it will generate a single user and then pass it through the transformer.
 
-#### Postman collections
+#### Gnerating responses automatically
+If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
+- They are done within a database transaction and changes are rolled back afterwards.
+- The configuration for response calls is located in the `config/apidoc.php`. They are configured within the `['apply']['response_calls']` section for each route group, allowing you to apply different settings for different sets of routes.
+- By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
+- Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however.Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key.
+- You can configure environment variables (this is useful so you can prevent external services like notifications from being triggered). By default the APP_ENV is set to 'documentation'. You can add more variables in the `env` key.
+- You can also configure what headers, query parameters and body parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
+
+
+### Postman collections
 
 The generator automatically creates a Postman collection file, which you can import to use within your [Postman app](https://www.getpostman.com/apps) for even simpler API testing and usage.
 
