@@ -109,7 +109,7 @@ return [
                     /*
                      * Environment variables which should be set for the API call.
                      * This is a good place to ensure that notifications, emails
-                     * and other external services arenot triggered during the documentation API calls
+                     * and other external services are not triggered during the documentation API calls
                      */
                     'env' => [
                         'APP_ENV' => 'documentation',
