@@ -61,19 +61,30 @@ class TestController extends Controller
 
     public function shouldFetchRouteResponse()
     {
-        $fixture = new \stdClass();
-        $fixture->id = 1;
-        $fixture->name = 'banana';
-        $fixture->color = 'red';
-        $fixture->weight = 300;
-        $fixture->delicious = 1;
+        $fruit = new \stdClass();
+        $fruit->id = 4;
+        $fruit->name = ' banana  ';
+        $fruit->color = 'RED';
+        $fruit->weight = 1;
+        $fruit->delicious = true;
 
         return [
-            'id' => (int) $fixture->id,
-            'name' => ucfirst($fixture->name),
-            'color' => ucfirst($fixture->color),
-            'weight' => $fixture->weight.' grams',
-            'delicious' => (bool) $fixture->delicious,
+            'id' => (int) $fruit->id,
+            'name' => trim($fruit->name),
+            'color' => strtolower($fruit->color),
+            'weight' => $fruit->weight.' kg',
+            'delicious' => $fruit->delicious,
+        ];
+    }
+
+    public function shouldFetchRouteResponseWithEchoedSettings($id)
+    {
+        return [
+            '{id}' => $id,
+            'APP_ENV' => getenv('APP_ENV'),
+            'header' => request()->header('header'),
+            'queryParam' => request()->query('queryParam'),
+            'bodyParam' => request()->get('bodyParam'),
         ];
     }
 

@@ -3,9 +3,9 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Illuminate\Support\Facades\Route as RouteFacade;
 
 class LaravelGeneratorTest extends GeneratorTestCase
 {
@@ -16,15 +16,12 @@ class LaravelGeneratorTest extends GeneratorTestCase
         ];
     }
 
-    public function setUp()
+    public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false)
     {
-        parent::setUp();
-
-        $this->generator = new LaravelGenerator();
-    }
-
-    public function createRoute(string $httpMethod, string $path, string $controllerMethod)
-    {
-        return new Route([$httpMethod], $path, ['uses' => TestController::class."@$controllerMethod"]);
+        if ($register) {
+            return RouteFacade::{$httpMethod}($path, TestController::class."@$controllerMethod");
+        } else {
+            return new Route([$httpMethod], $path, ['uses' => TestController::class."@$controllerMethod"]);
+        }
     }
 }
