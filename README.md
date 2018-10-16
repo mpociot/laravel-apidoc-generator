@@ -274,7 +274,7 @@ If you don't specify an example response using any of the above means, this pack
 
 The generator automatically creates a Postman collection file, which you can import to use within your [Postman app](https://www.getpostman.com/apps) for even simpler API testing and usage.
 
-If you don't want to create a Postman collection, set the `--postman` config option to false.
+If you don't want to create a Postman collection, set the `postman` config option to false.
 
 The default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
 
