@@ -1,6 +1,6 @@
 ## Laravel API Documentation Generator
 
-Automatically generate your API documentation from your existing Laravel/[Dingo](https://github.com/dingo/api) routes. [Here's what the output looks like](http://marcelpociot.de/whiteboard/).
+Automatically generate your API documentation from your existing Laravel/Lumen/[Dingo](https://github.com/dingo/api) routes. [Here's what the output looks like](http://marcelpociot.de/whiteboard/).
 
 `php artisan apidoc:generate`
 
@@ -17,12 +17,7 @@ Automatically generate your API documentation from your existing Laravel/[Dingo]
 > Note: version 3.x requires PHP 7 and Laravel 5.5 or higher.
 
 ```sh
-$ composer require mpociot/laravel-apidoc-generator
-```
-Using Laravel < 5.5? Go to your `config/app.php` and add the service provider:
-
-```php
-Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class,
+$ composer require mpociot/laravel-apidoc-generator:dev-master
 ```
 
 Then publish the config file by running:
@@ -70,7 +65,7 @@ return [
 ];
 ```
 
-This means documentation will be generated for routes in all domains ('***' is a wildcard meaning 'any character') which match any of the patterns 'api/*' or 'v2-api/*', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
+This means documentation will be generated for routes in all domains ('&ast;' is a wildcard meaning 'any character') which match any of the patterns 'api/&ast;' or 'v2-api/&ast;', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
 Also, in the generated documentation, these routes will have the header 'Authorization: Bearer: {token}' added to the example requests.
 
 You can also separate routes into groups to apply different rules to them:
@@ -133,43 +128,61 @@ This package uses these resources to generate the API documentation:
 
 This package uses the HTTP controller doc blocks to create a table of contents and show descriptions for your API methods.
 
-Using `@group` in a doc block prior to each controller is useful as it creates a Group within the API documentation for all methods defined in that controller (rather than listing every method in a single list for all your controllers), but using `@resource` is not required. The short description after the `@resource` should be unique to allow anchor tags to navigate to this section. A longer description can be included below. Custom formatting and `<aside>` tags are also supported. (see the [Documentarian docs](http://marcelpociot.de/documentarian/installation/markdown_syntax))
+Using `@group` in a controller doc block creates a Group within the API documentation. All routes handled by that controller will be grouped under this group in the sidebar. The short description after the `@group` should be unique to allow anchor tags to navigate to this section. A longer description can be included below. Custom formatting and `<aside>` tags are also supported. (see the [Documentarian docs](http://marcelpociot.de/documentarian/installation/markdown_syntax))
+
+ > Note: using `@group` is optional. Ungrouped routes will be placed in a "general" group.
 
 Above each method within the controller you wish to include in your API documentation you should have a doc block. This should include a unique short description as the first entry. An optional second entry can be added with further information. Both descriptions will appear in the API documentation in a different format as shown below.
+You can also specify an `@group` on a single method to override the group defined at the controller level.
 
 ```php
 /**
- * @resource Example
+ * @group User management
  *
- * Longer description
+ * APIs for managing users
  */
-class ExampleController extends Controller {
+class UserController extends Controller
+{
 
 	/**
-	 * This is the short description [and should be unique as anchor tags link to this in navigation menu]
+	 * Create a user
 	 *
-	 * This can be an optional longer description of your API call, used within the documentation.
+	 * [Insert optional longer description of the API endpoint here.]
 	 *
 	 */
-	 public function foo(){
+	 public function createUser()
+	 {
 
 	 }
+	 
+	/**
+	 * @group Account management
+	 *
+	 */
+	 public function changePassword()
+	 {
+
+	 }
+}
 ```
 
 **Result:** 
 
 ![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
-### Specifying request body parameters
+### Specifying request parameters
 
-To specify a list of valid parameters your API route accepts, use the `@bodyParam` annotation. It takes the name of the parameter, its type, an optional "required" label, and then its description
+To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
+- The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description.
+- The `@queryParam` annotation (coming soon!) takes the name of the parameter, an optional "required" label, and then its description
 
 
 ```php
 /**
  * @bodyParam title string required The title of the post.
  * @bodyParam body string required The title of the post.
- * @bodyParam type The type of post to create. Defaults to 'textophonious'.
+ * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
+ * @bodyParam author_id int the ID of the author
  * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
  */
 public function createPost()
@@ -180,11 +193,15 @@ public function createPost()
 
 They will be included in the generated documentation text and example requests.
 
-**Result:** ![Form Request](http://marcelpociot.de/documentarian/form_request.png)
+**Result:**
+
+![](body_params.png)
+
+### Indicating auth status
+You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
 
 ### Providing an example response
-You can provide an example response for a route. This will be disaplyed in the examples section. There are several ways of doing this.
-
+You can provide an example response for a route. This will be displayed in the examples section. There are several ways of doing this.
 
 #### @response
 You can provide an example response for a route by using the `@response` annotation with valid JSON:
@@ -206,7 +223,7 @@ public function show($id)
 #### @transformer, @transformerCollection, and @transformerModel
 You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
-1. Check if there is a `@transformerModel` tag to define the model being transformed. If there is none, use the class of the first parameter to the method.
+1. Check if there is a `@transformerModel` tag to define the model being transformed. If there is none, use the class of the first parameter to the transformer's `transform()` method.
 2. Get an instance of the model from the Eloquent model factory
 2. If the parameter is an Eloquent model, load the first from the database.
 3. Create an instance using `new`.
@@ -244,11 +261,27 @@ public function showUser(int $id)
 ```
 For the first route above, this package will generate a set of two users then pass it through the transformer. For the last two, it will generate a single user and then pass it through the transformer.
 
-#### Postman collections
+> Note: for transformer support, you need to install the league/fractal package
+
+```bash
+composer require league/fractal
+```
+
+#### Gnerating responses automatically
+If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
+- They are done within a database transaction and changes are rolled back afterwards.
+- The configuration for response calls is located in the `config/apidoc.php`. They are configured within the `['apply']['response_calls']` section for each route group, allowing you to apply different settings for different sets of routes.
+- By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
+- Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however.Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key.
+- You can configure environment variables (this is useful so you can prevent external services like notifications from being triggered). By default the APP_ENV is set to 'documentation'. You can add more variables in the `env` key.
+- You can also configure what headers, query parameters and body parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
+
+
+### Postman collections
 
 The generator automatically creates a Postman collection file, which you can import to use within your [Postman app](https://www.getpostman.com/apps) for even simpler API testing and usage.
 
-If you don't want to create a Postman collection, set the `--postman` config option to false.
+If you don't want to create a Postman collection, set the `postman` config option to false.
 
 The default base URL added to the Postman collection will be that found in your Laravel `config/app.php` file. This will likely be `http://localhost`. If you wish to change this setting you can directly update the url or link this config value to your environment file to make it more flexible (as shown below):
 
@@ -267,10 +300,10 @@ APP_URL=http://yourapp.app
 If you want to modify the content of your generated documentation, go ahead and edit the generated `index.md` file.
 The default location of this file is: `public/docs/source/index.md`.
  
-After editing the markdown file, use the `apidoc:update` command to rebuild your documentation as a static HTML file.
+After editing the markdown file, use the `apidoc:rebuild` command to rebuild your documentation as a static HTML file.
 
 ```sh
-$ php artisan apidoc:update
+$ php artisan apidoc:rebuild
 ```
 
 As an optional parameter, you can use `--location` to tell the update command where your documentation can be found.

@@ -5,6 +5,9 @@ namespace Mpociot\ApiDoc\Tests\Fixtures;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+/**
+ * @group Group A
+ */
 class TestController extends Controller
 {
     public function dummy()
@@ -23,8 +26,20 @@ class TestController extends Controller
     }
 
     /**
+     * @group Group B
+     */
+    public function withGroupOverride()
+    {
+        return '';
+    }
+
+    /**
      * @bodyParam user_id int required The id of the user.
      * @bodyParam room_id string The id of the room.
+     * @bodyParam forever boolean Whether to ban the user forever.
+     * @bodyParam another_one number Just need something here.
+     * @bodyParam yet_another_param object required
+     * @bodyParam even_more_param array
      */
     public function withBodyParameters()
     {
@@ -40,6 +55,14 @@ class TestController extends Controller
         return '';
     }
 
+    /**
+     * @authenticated
+     */
+    public function withAuthenticatedTag()
+    {
+        return '';
+    }
+
     public function checkCustomHeaders(Request $request)
     {
         return $request->headers->all();
@@ -47,19 +70,30 @@ class TestController extends Controller
 
     public function shouldFetchRouteResponse()
     {
-        $fixture = new \stdClass();
-        $fixture->id = 1;
-        $fixture->name = 'banana';
-        $fixture->color = 'red';
-        $fixture->weight = 300;
-        $fixture->delicious = 1;
+        $fruit = new \stdClass();
+        $fruit->id = 4;
+        $fruit->name = ' banana  ';
+        $fruit->color = 'RED';
+        $fruit->weight = 1;
+        $fruit->delicious = true;
 
         return [
-            'id' => (int) $fixture->id,
-            'name' => ucfirst($fixture->name),
-            'color' => ucfirst($fixture->color),
-            'weight' => $fixture->weight.' grams',
-            'delicious' => (bool) $fixture->delicious,
+            'id' => (int) $fruit->id,
+            'name' => trim($fruit->name),
+            'color' => strtolower($fruit->color),
+            'weight' => $fruit->weight.' kg',
+            'delicious' => $fruit->delicious,
+        ];
+    }
+
+    public function shouldFetchRouteResponseWithEchoedSettings($id)
+    {
+        return [
+            '{id}' => $id,
+            'APP_ENV' => getenv('APP_ENV'),
+            'header' => request()->header('header'),
+            'queryParam' => request()->query('queryParam'),
+            'bodyParam' => request()->get('bodyParam'),
         ];
     }
 

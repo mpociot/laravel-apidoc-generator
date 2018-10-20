@@ -84,6 +84,62 @@ return [
                     // 'Authorization' => 'Bearer: {token}',
                     // 'Api-Version' => 'v2',
                 ],
+
+                /*
+                 * If no @response or @transformer declaratons are found for the route,
+                 * we'll try to get a sample response by attempting an API call.
+                 * Configure the settings for the API call here,
+                 */
+                'response_calls' => [
+                    /*
+                     * API calls will be made only for routes in this group matching these HTTP methods (GET, POST, etc).
+                     * List the methods here or use '*' to mean all methods. Leave empty to disable API calls.
+                     */
+                    'methods' => ['GET'],
+
+                    /*
+                     * For URLs which have parameters (/users/{user}, /orders/{id?}),
+                     * specify what values the parameters should be replaced with.
+                     * Note that you must specify the full parameter, including curly brackets and question marks if any.
+                     */
+                    'bindings' => [
+                        // '{user}' => 1
+                    ],
+
+                    /*
+                     * Environment variables which should be set for the API call.
+                     * This is a good place to ensure that notifications, emails
+                     * and other external services are not triggered during the documentation API calls
+                     */
+                    'env' => [
+                        'APP_ENV' => 'documentation',
+                        'APP_DEBUG' => false,
+                        // 'env_var' => 'value',
+                    ],
+
+                    /*
+                     * Headers which should be sent with the API call.
+                     */
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                        // 'key' => 'value',
+                    ],
+
+                    /*
+                     * Query parameters which should be sent with the API call.
+                     */
+                    'query' => [
+                        // 'key' => 'value',
+                    ],
+
+                    /*
+                     * Body parameters which should be sent with the API call.
+                     */
+                    'body' => [
+                        // 'key' => 'value',
+                    ],
+                ],
             ],
         ],
     ],

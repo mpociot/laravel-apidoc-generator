@@ -28,7 +28,11 @@
         "orchestra/testbench": "3.5.* || 3.6.* || 3.7.*",
         "phpunit/phpunit": "^6.0.0 || ^7.4.0",
         "dingo/api": "2.0.0-alpha1",
-        "mockery/mockery": "^1.2.0"
+        "mockery/mockery": "^1.2.0",
+        "league/fractal": "^0.17.0"
+    },
+    "suggest": {
+        "league/fractal": "Required for transformers support"
     },
     "autoload": {
         "psr-4": {
