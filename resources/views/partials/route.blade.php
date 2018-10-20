@@ -17,8 +17,8 @@ curl -X {{$parsedRoute['methods'][0]}} {{$parsedRoute['methods'][0] == 'GET' ? '
     @endif
 @endforeach
 @endif
-@if(count($parsedRoute['parameters'])) \
-@foreach($parsedRoute['parameters'] as $attribute => $parameter)
+@if(count($parsedRoute['bodyParameters'])) \
+@foreach($parsedRoute['bodyParameters'] as $attribute => $parameter)
     -d "{{$attribute}}"="{{$parameter['value']}}" @if(! ($loop->last))\
     @endif
 @endforeach
@@ -32,8 +32,8 @@ var settings = {
     "crossDomain": true,
     "url": "{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($parsedRoute['uri'], '/') }}",
     "method": "{{$parsedRoute['methods'][0]}}",
-    @if(count($parsedRoute['parameters']))
-"data": {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['parameters']), array_map(function($param){ return $param['value']; },$parsedRoute['parameters'])), JSON_PRETTY_PRINT))) !!},
+    @if(count($parsedRoute['bodyParameters']))
+"data": {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($parsedRoute['bodyParameters']), array_map(function($param){ return $param['value']; },$parsedRoute['bodyParameters'])), JSON_PRETTY_PRINT))) !!},
     @endif
 "headers": {
         "accept": "application/json",
@@ -65,13 +65,22 @@ $.ajax(settings).done(function (response) {
 `{{$method}} {{$parsedRoute['uri']}}`
 
 @endforeach
-@if(count($parsedRoute['parameters']))
-#### Parameters
+@if(count($parsedRoute['bodyParameters']))
+#### Body Parameters
 
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-@foreach($parsedRoute['parameters'] as $attribute => $parameter)
+@foreach($parsedRoute['bodyParameters'] as $attribute => $parameter)
     {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! implode(' ',$parameter['description']) !!}
+@endforeach
+@endif
+@if(count($parsedRoute['queryParameters']))
+#### Query Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -----------
+@foreach($parsedRoute['queryParameters'] as $attribute => $parameter)
+    {{$attribute}} | @if($parameter['required']) required @else optional @endif | {!! implode(' ',$parameter['description']) !!}
 @endforeach
 @endif
 

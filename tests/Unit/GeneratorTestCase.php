@@ -44,7 +44,7 @@ abstract class GeneratorTestCase extends TestCase
     public function test_can_parse_body_parameters()
     {
         $route = $this->createRoute('GET', '/api/test', 'withBodyParameters');
-        $parameters = $this->generator->processRoute($route)['parameters'];
+        $bodyParameters = $this->generator->processRoute($route)['bodyParameters'];
 
         $this->assertArraySubset([
             'user_id' => [
@@ -57,7 +57,25 @@ abstract class GeneratorTestCase extends TestCase
                 'required' => false,
                 'description' => 'The id of the room.',
             ],
-        ], $parameters);
+        ], $bodyParameters);
+    }
+
+    /** @test */
+    public function test_can_parse_query_parameters()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withQueryParameters');
+        $queryParameters = $this->generator->processRoute($route)['queryParameters'];
+
+        $this->assertArraySubset([
+            'location_id' => [
+                'required' => true,
+                'description' => 'The id of the location.',
+            ],
+            'filters' => [
+                'required' => false,
+                'description' => 'The filters.',
+            ],
+        ], $queryParameters);
     }
 
     /** @test */

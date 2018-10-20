@@ -63,7 +63,8 @@ abstract class AbstractGenerator
             'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'parameters' => $this->getParametersFromDocBlock($docBlock['tags']),
+            'bodyParameters' => $this->getBodyParametersFromDocBlock($docBlock['tags']),
+            'queryParameters' => $this->getQueryParametersFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
         ];
@@ -103,7 +104,7 @@ abstract class AbstractGenerator
      *
      * @return array
      */
-    protected function getParametersFromDocBlock($tags)
+    protected function getBodyParametersFromDocBlock($tags)
     {
         $parameters = collect($tags)
             ->filter(function ($tag) {
@@ -116,6 +117,28 @@ abstract class AbstractGenerator
                 $type = $this->normalizeParameterType($type);
 
                 return [$name => compact('type', 'description', 'required')];
+            })->toArray();
+
+        return $parameters;
+    }
+
+    /**
+     * @param array $tags
+     *
+     * @return array
+     */
+    protected function getQueryParametersFromDocBlock($tags)
+    {
+        $parameters = collect($tags)
+            ->filter(function ($tag) {
+                return $tag instanceof Tag && $tag->getName() === 'queryParam';
+            })
+            ->mapWithKeys(function ($tag) {
+                preg_match('/(.+?)\s+(required\s+)?(.+)/', $tag->getContent(), $content);
+                list($_, $name, $required, $description) = $content;
+                $required = trim($required) == 'required' ? true : false;
+
+                return [$name => compact('description', 'required')];
             })->toArray();
 
         return $parameters;

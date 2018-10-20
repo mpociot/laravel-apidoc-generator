@@ -31,6 +31,15 @@ class TestController extends Controller
         return '';
     }
 
+    /**
+     * @queryParam location_id required The id of the location.
+     * @queryParam filters  The filters.
+     */
+    public function withQueryParameters()
+    {
+        return '';
+    }
+
     public function checkCustomHeaders(Request $request)
     {
         return $request->headers->all();
