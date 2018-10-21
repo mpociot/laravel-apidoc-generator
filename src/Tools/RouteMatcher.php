@@ -28,6 +28,10 @@ class RouteMatcher
             $allRoutes = $this->getAllRoutes($usingDingoRouter, $routeRule['match']['versions'] ?? []);
 
             foreach ($allRoutes as $route) {
+                if (is_array($route)) {
+                    $route = new LumenRouteAdapter($route);
+                }
+
                 /** @var Route $route */
                 if (in_array($route->getName(), $excludes)) {
                     continue;
