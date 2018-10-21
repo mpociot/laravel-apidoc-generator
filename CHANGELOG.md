@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.0] - unreleased
 ### Added
+- Official Lumen support (https://github.com/mpociot/laravel-apidoc-generator/pull/382)
+- `@queryParam` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/383)
 - `@bodyParam` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/362, https://github.com/mpociot/laravel-apidoc-generator/pull/366)
 - `@authenticated` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/369)
 - Ability to override the controller `@group` from the method. (https://github.com/mpociot/laravel-apidoc-generator/pull/372)
