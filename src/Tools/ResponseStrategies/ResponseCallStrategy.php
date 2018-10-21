@@ -12,15 +12,15 @@ use Illuminate\Routing\Route;
  */
 class ResponseCallStrategy
 {
-    public function __invoke(Route $route, array $tags, array $rulesToApply)
+    public function __invoke(Route $route, array $tags, array $routeProps)
     {
-        $rulesToApply = $rulesToApply['response_calls'] ?? [];
+        $rulesToApply = $routeProps['rules']['response_calls'] ?? [];
         if (! $this->shouldMakeApiCall($route, $rulesToApply)) {
             return;
         }
 
         $this->configureEnvironment($rulesToApply);
-        $request = $this->prepareRequest($route, $rulesToApply);
+        $request = $this->prepareRequest($route, $rulesToApply, $routeProps['body'], $routeProps['query']);
         try {
             $response = $this->makeApiCall($request);
         } catch (\Exception $e) {
@@ -38,15 +38,20 @@ class ResponseCallStrategy
         $this->setEnvironmentVariables($rulesToApply['env'] ?? []);
     }
 
-    private function prepareRequest(Route $route, array $rulesToApply)
+    private function prepareRequest(Route $route, array $rulesToApply, array $bodyParams, array $queryParams)
     {
         $uri = $this->replaceUrlParameterBindings($route, $rulesToApply['bindings'] ?? []);
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
         $request = Request::create($uri, $method, [], [], [], $this->transformHeadersToServerVars($rulesToApply['headers'] ?? []));
         $request = $this->addHeaders($request, $route, $rulesToApply['headers'] ?? []);
-        $request = $this->addQueryParameters($request, $rulesToApply['query'] ?? []);
-        $request = $this->addBodyParameters($request, $rulesToApply['body'] ?? []);
+
+        // Mix in parsed parameters with manually specified parameters.
+        $queryParams = collect($queryParams)->map->value->merge($rulesToApply['query'] ?? [])->toArray();
+        $bodyParams = collect($bodyParams)->map->value->merge($rulesToApply['body'] ?? [])->toArray();
+
+        $request = $this->addQueryParameters($request, $queryParams);
+        $request = $this->addBodyParameters($request, $bodyParams);
 
         return $request;
     }
@@ -188,7 +193,7 @@ class ResponseCallStrategy
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function callLaravelRoute($request): \Symfony\Component\HttpFoundation\Response
+    private function callLaravelRoute(Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $kernel = app(\Illuminate\Contracts\Http\Kernel::class);
         $response = $kernel->handle($request);

@@ -25,21 +25,21 @@ class ResponseResolver
         $this->route = $route;
     }
 
-    private function resolve(array $tags, array $rulesToApply)
+    private function resolve(array $tags, array $routeProps)
     {
         $response = null;
         foreach (static::$strategies as $strategy) {
             $strategy = new $strategy();
-            $response = $strategy($this->route, $tags, $rulesToApply);
+            $response = $strategy($this->route, $tags, $routeProps);
             if (! is_null($response)) {
                 return $this->getResponseContent($response);
             }
         }
     }
 
-    public static function getResponse($route, $tags, $rulesToApply)
+    public static function getResponse($route, $tags, $routeProps)
     {
-        return (new static($route))->resolve($tags, $rulesToApply);
+        return (new static($route))->resolve($tags, $routeProps);
     }
 
     /**

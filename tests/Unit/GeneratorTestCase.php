@@ -3,13 +3,13 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Generators\Generator;
+use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 abstract class GeneratorTestCase extends TestCase
 {
     /**
-     * @var \Mpociot\ApiDoc\Generators\Generator
+     * @var \Mpociot\ApiDoc\Tools\Generator
      */
     protected $generator;
 
@@ -228,7 +228,7 @@ abstract class GeneratorTestCase extends TestCase
     /** @test */
     public function can_call_route_and_generate_response()
     {
-        $route = $this->createRoute('PUT', '/shouldFetchRouteResponse', 'shouldFetchRouteResponse', true);
+        $route = $this->createRoute('POST', '/shouldFetchRouteResponse', 'shouldFetchRouteResponse', true);
 
         $rules = [
             'response_calls' => [

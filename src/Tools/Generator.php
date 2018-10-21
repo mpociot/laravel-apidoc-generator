@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Generators;
+namespace Mpociot\ApiDoc\Tools;
 
 use Faker\Factory;
 use ReflectionClass;
@@ -8,7 +8,6 @@ use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Tools\ResponseResolver;
 
 class Generator
 {
@@ -47,7 +46,13 @@ class Generator
 
         $routeGroup = $this->getRouteGroup($controller, $method);
         $docBlock = $this->parseDocBlock($method);
-        $content = ResponseResolver::getResponse($route, $docBlock['tags'], $rulesToApply);
+        $bodyParameters = $this->getBodyParametersFromDocBlock($docBlock['tags']);
+        $queryParameters = $this->getQueryParametersFromDocBlock($docBlock['tags']);
+        $content = ResponseResolver::getResponse($route, $docBlock['tags'], [
+            'rules' => $rulesToApply,
+            'body' => $bodyParameters,
+            'query' => $queryParameters,
+        ]);
 
         $parsedRoute = [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
@@ -56,8 +61,8 @@ class Generator
             'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'bodyParameters' => $this->getBodyParametersFromDocBlock($docBlock['tags']),
-            'queryParameters' => $this->getQueryParametersFromDocBlock($docBlock['tags']),
+            'bodyParameters' => $bodyParameters,
+            'queryParameters' => $queryParameters,
             'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
@@ -132,7 +137,13 @@ class Generator
                     $required = trim($required) == 'required' ? true : false;
                 }
 
-                return [$name => compact('description', 'required')];
+                if (str_contains($description, ['number', 'count', 'page'])) {
+                    $value = $this->generateDummyValue('integer');
+                } else {
+                    $value = $this->generateDummyValue('string');
+                }
+
+                return [$name => compact('description', 'required', 'value')];
             })->toArray();
 
         return $parameters;

@@ -14,18 +14,30 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 > Note: this is the documentation for version 3, which changes significantly from version 2. if you're on v2, you can check out its documentation [here](https://github.com/mpociot/laravel-apidoc-generator/blob/2.x/README.md). We strongly recommend you upgrade, though, as v3 is more robust and fixes a lot of the problems with v2.
 
 ## Installation
-> Note: version 3.x requires PHP 7 and Laravel 5.5 or higher.
+> Note: PHP 7 and Laravel 5.5 or higher are required.
 
 ```sh
 $ composer require mpociot/laravel-apidoc-generator:dev-master
 ```
 
-Then publish the config file by running:
+### Laravel
+Publish the config file by running:
 
 ```bash
 php artisan vendor:publish --provider=Mpociot\ApiDoc\ApiDocGeneratorServiceProvider --tag=config
 ```
 This will create an `apidoc.php` file in your `config` folder.
+
+### Lumen
+- Register the service provider in your `bootstrap/app.php`:
+```php
+$app->register(\Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class);
+```
+- Copy the config file from `vendor/mpociot/laravel-apidoc-generator/config/apidoc.php` to your project as `config/apidoc.php`. Then add to your `bootstrap/app.php`:
+```php
+$app->configure('apidoc');
+```
+
 
 ## Usage
 Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`.
@@ -37,6 +49,9 @@ Set this option to true if you want a Postman collection to be generated along w
 
 - `router`
 The router to use when processing the route (can be Laravel or Dingo. Defaults to **Laravel**)
+
+- `logo`
+You can specify your custom logo to be used on the generated documentation. Set the `logo` option to an absolute path pointing to your logo file.
 
 - `routes`
 This is where you specify what rules documentation should be generated for. You specify routes to be parsed by defining conditions that the routes should meet and rules that should be applied when generating documentation. These conditions and rules are specified in groups, allowing you to apply different rules to different routes.
@@ -174,7 +189,7 @@ class UserController extends Controller
 
 To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
 - The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description.
-- The `@queryParam` annotation (coming soon!) takes the name of the parameter, an optional "required" label, and then its description
+- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description
 
 
 ```php
@@ -186,6 +201,16 @@ To specify a list of valid parameters your API route accepts, use the `@bodyPara
  * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
  */
 public function createPost()
+{
+    // ...
+}
+
+/**
+ * @queryParam sort Field to sort by
+ * @queryParam page The page number to return
+ * @queryParam fields required The fields to include
+ */
+public function listPosts()
 {
     // ...
 }
@@ -274,7 +299,7 @@ If you don't specify an example response using any of the above means, this pack
 - By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
 - Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however.Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key.
 - You can configure environment variables (this is useful so you can prevent external services like notifications from being triggered). By default the APP_ENV is set to 'documentation'. You can add more variables in the `env` key.
-- You can also configure what headers, query parameters and body parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
+- By default, the package will generate dummy values for your documented body and query parameters and send in the request. You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
 
 
 ### Postman collections
