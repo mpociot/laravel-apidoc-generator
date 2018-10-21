@@ -155,11 +155,10 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function generated_markdown_file_is_correct()
     {
-        $this->markTestSkipped('Test is non-deterministic since example values for body parameters are random.');
-
         RouteFacade::get('/api/withDescription', TestController::class.'@withEndpointDescription');
         RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         config([
@@ -173,6 +172,8 @@ class GenerateDocumentationTest extends TestCase
         $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
         $compareMarkdown = __DIR__.'/../public/docs/source/.compare.md';
         $fixtureMarkdown = __DIR__.'/Fixtures/index.md';
+
+        $this->markTestSkipped('Test is non-deterministic since example values for body parameters are random.');
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
         $this->assertFilesHaveSameContent($fixtureMarkdown, $compareMarkdown);
     }

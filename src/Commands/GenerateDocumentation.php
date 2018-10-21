@@ -9,11 +9,9 @@ use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Illuminate\Support\Facades\Storage;
+use Mpociot\ApiDoc\Generators\Generator;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
-use Mpociot\ApiDoc\Generators\DingoGenerator;
-use Mpociot\ApiDoc\Generators\LaravelGenerator;
-use Mpociot\ApiDoc\Generators\AbstractGenerator;
 
 class GenerateDocumentation extends Command
 {
@@ -48,19 +46,18 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $usingDIngoRouter = config('apidoc.router') == 'dingo';
-        if ($usingDIngoRouter) {
+        $usingDingoRouter = config('apidoc.router') == 'dingo';
+        if ($usingDingoRouter) {
             $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
-            $generator = new DingoGenerator();
         } else {
             $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
-            $generator = new LaravelGenerator();
         }
 
+        $generator = new Generator();
         $parsedRoutes = $this->processRoutes($generator, $routes);
-        $parsedRoutes = collect($parsedRoutes)->groupBy('resource')
+        $parsedRoutes = collect($parsedRoutes)->groupBy('group')
             ->sort(function ($a, $b) {
-                return strcmp($a->first()['resource'], $b->first()['resource']);
+                return strcmp($a->first()['group'], $b->first()['group']);
             });
 
         $this->writeMarkdown($parsedRoutes);
@@ -85,7 +82,7 @@ class GenerateDocumentation extends Command
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
             return $routeGroup->map(function ($route) {
-                $route['output'] = (string) view('apidoc::partials.route')->with('parsedRoute', $route)->render();
+                $route['output'] = (string) view('apidoc::partials.route')->with('route', $route)->render();
 
                 return $route;
             });
@@ -183,19 +180,19 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param AbstractGenerator $generator
+     * @param Generator $generator
      * @param array $routes
      *
      * @return array
      */
-    private function processRoutes(AbstractGenerator $generator, array $routes)
+    private function processRoutes(Generator $generator, array $routes)
     {
         $parsedRoutes = [];
         foreach ($routes as $routeItem) {
             $route = $routeItem['route'];
             /** @var Route $route */
             if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
-                $parsedRoutes[] = $generator->processRoute($route) + $routeItem['apply'];
+                $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply']);
                 $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
                 $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));

@@ -23,7 +23,7 @@ Welcome to the generated API reference.
 #general
 <!-- START_264ee15c728df32e7ca6eedce5e42dcb -->
 ## Example title.
-
+ 
 This will be the long description.
 It can also be multiple lines long.
 
@@ -68,7 +68,7 @@ null
 
 <!-- START_9cedd363be06f5512f9e844b100fcc9d -->
 ## api/withResponseTag
-
+ 
 > Example request:
 
 ```bash
@@ -116,7 +116,7 @@ $.ajax(settings).done(function (response) {
 
 <!-- START_a25cb3b490fa579d7d77b386bbb7ec03 -->
 ## api/withBodyParameters
-
+ 
 > Example request:
 
 ```bash
@@ -124,10 +124,10 @@ curl -X GET -G "http://localhost/api/withBodyParameters" \
     -H "Accept: application/json" \
     -H "Authorization: customAuthToken" \
         -H "Custom-Header: NotSoCustom"  \
-    -d "user_id"=14 \
-        -d "room_id"=KHEnlMeSksAYgNtw \
-        -d "forever"=1 \
-        -d "another_one"=4919.5 \
+    -d "user_id"=20 \
+        -d "room_id"=6DZyNcBgezdjdAIs \
+        -d "forever"= \
+        -d "another_one"=2153.4 \
         -d "yet_another_param"={} \
         -d "even_more_param"=[] 
 ```
@@ -139,10 +139,10 @@ var settings = {
     "url": "http://localhost/api/withBodyParameters",
     "method": "GET",
     "data": {
-        "user_id": 14,
-        "room_id": "KHEnlMeSksAYgNtw",
-        "forever": true,
-        "another_one": 4919.5,
+        "user_id": 20,
+        "room_id": "6DZyNcBgezdjdAIs",
+        "forever": false,
+        "another_one": 2153.4,
         "yet_another_param": "{}",
         "even_more_param": "[]"
     },
@@ -179,5 +179,56 @@ Parameter | Type | Status | Description
     even_more_param | array |  optional  | 
 
 <!-- END_a25cb3b490fa579d7d77b386bbb7ec03 -->
+
+<!-- START_5c08cc4d72b6e5830f6814c64086e197 -->
+## api/withAuthTag
+ <small style="
+  padding: 1px 9px 2px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  background-color: #3a87ad;">Requires authentication</small>
+
+> Example request:
+
+```bash
+curl -X GET -G "http://localhost/api/withAuthTag" \
+    -H "Accept: application/json" \
+    -H "Authorization: customAuthToken" \
+        -H "Custom-Header: NotSoCustom" 
+```
+
+```javascript
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "http://localhost/api/withAuthTag",
+    "method": "GET",
+    "headers": {
+        "accept": "application/json",
+        "Authorization": "customAuthToken",
+        "Custom-Header": "NotSoCustom",
+    }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+```
+
+> Example response:
+
+```json
+null
+```
+
+### HTTP Request
+`GET api/withAuthTag`
+
+
+<!-- END_5c08cc4d72b6e5830f6814c64086e197 -->
 
 
