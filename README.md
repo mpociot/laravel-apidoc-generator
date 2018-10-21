@@ -299,7 +299,7 @@ If you don't specify an example response using any of the above means, this pack
 - By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
 - Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however.Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key.
 - You can configure environment variables (this is useful so you can prevent external services like notifications from being triggered). By default the APP_ENV is set to 'documentation'. You can add more variables in the `env` key.
-- You can also configure what headers, query parameters and body parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
+- By default, the package will generate dummy values for your documented body and query parameters and send in the request. You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
 
 
 ### Postman collections
