@@ -10,7 +10,7 @@ use Mpociot\Reflection\DocBlock\Tag;
  */
 class ResponseTagStrategy
 {
-    public function __invoke(Route $route, array $tags, array $rulesToApply)
+    public function __invoke(Route $route, array $tags, array $routeProps)
     {
         return $this->getDocBlockResponse($tags);
     }

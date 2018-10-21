@@ -228,7 +228,7 @@ abstract class GeneratorTestCase extends TestCase
     /** @test */
     public function can_call_route_and_generate_response()
     {
-        $route = $this->createRoute('PUT', '/shouldFetchRouteResponse', 'shouldFetchRouteResponse', true);
+        $route = $this->createRoute('POST', '/shouldFetchRouteResponse', 'shouldFetchRouteResponse', true);
 
         $rules = [
             'response_calls' => [

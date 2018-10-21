@@ -15,7 +15,7 @@ use League\Fractal\Resource\Collection;
  */
 class TransformerTagsStrategy
 {
-    public function __invoke(Route $route, array $tags, array $rulesToApply)
+    public function __invoke(Route $route, array $tags, array $routeProps)
     {
         return $this->getTransformerResponse($tags);
     }
