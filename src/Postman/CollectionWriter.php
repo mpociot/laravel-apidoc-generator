@@ -44,7 +44,7 @@ class CollectionWriter
                                 'method' => $route['methods'][0],
                                 'body' => [
                                     'mode' => 'formdata',
-                                    'formdata' => collect($route['parameters'])->map(function ($parameter, $key) {
+                                    'formdata' => collect($route['bodyParameters'])->map(function ($parameter, $key) {
                                         return [
                                             'key' => $key,
                                             'value' => isset($parameter['value']) ? $parameter['value'] : '',

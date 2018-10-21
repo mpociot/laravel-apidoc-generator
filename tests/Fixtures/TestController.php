@@ -47,6 +47,15 @@ class TestController extends Controller
     }
 
     /**
+     * @queryParam location_id required The id of the location.
+     * @queryParam filters  The filters.
+     */
+    public function withQueryParameters()
+    {
+        return '';
+    }
+
+    /**
      * @authenticated
      */
     public function withAuthenticatedTag()

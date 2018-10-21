@@ -56,7 +56,8 @@ class Generator
             'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'parameters' => $this->getParametersFromDocBlock($docBlock['tags']),
+            'bodyParameters' => $this->getBodyParametersFromDocBlock($docBlock['tags']),
+            'queryParameters' => $this->getQueryParametersFromDocBlock($docBlock['tags']),
             'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
@@ -71,7 +72,7 @@ class Generator
      *
      * @return array
      */
-    protected function getParametersFromDocBlock(array $tags)
+    protected function getBodyParametersFromDocBlock(array $tags)
     {
         $parameters = collect($tags)
             ->filter(function ($tag) {
@@ -98,6 +99,40 @@ class Generator
                 $value = $this->generateDummyValue($type);
 
                 return [$name => compact('type', 'description', 'required', 'value')];
+            })->toArray();
+
+        return $parameters;
+    }
+
+    /**
+     * @param array $tags
+     *
+     * @return array
+     */
+    protected function getQueryParametersFromDocBlock(array $tags)
+    {
+        $parameters = collect($tags)
+            ->filter(function ($tag) {
+                return $tag instanceof Tag && $tag->getName() === 'queryParam';
+            })
+            ->mapWithKeys(function ($tag) {
+                preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
+                if (empty($content)) {
+                    // this means only name was supplied
+                    list($name) = preg_split('/\s+/', $tag->getContent());
+                    $required = false;
+                    $description = '';
+                } else {
+                    list($_, $name, $required, $description) = $content;
+                    $description = trim($description);
+                    if ($description == 'required' && empty(trim($required))) {
+                        $required = $description;
+                        $description = '';
+                    }
+                    $required = trim($required) == 'required' ? true : false;
+                }
+
+                return [$name => compact('description', 'required')];
             })->toArray();
 
         return $parameters;
