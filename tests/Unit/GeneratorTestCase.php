@@ -3,13 +3,13 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Generators\Generator;
+use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 abstract class GeneratorTestCase extends TestCase
 {
     /**
-     * @var \Mpociot\ApiDoc\Generators\Generator
+     * @var \Mpociot\ApiDoc\Tools\Generator
      */
     protected $generator;
 

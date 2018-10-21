@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Generators;
+namespace Mpociot\ApiDoc\Tools;
 
 use Faker\Factory;
 use ReflectionClass;
@@ -8,7 +8,6 @@ use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Tools\ResponseResolver;
 
 class Generator
 {

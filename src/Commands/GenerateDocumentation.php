@@ -7,9 +7,9 @@ use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
+use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Illuminate\Support\Facades\Storage;
-use Mpociot\ApiDoc\Generators\Generator;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 
