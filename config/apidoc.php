@@ -143,4 +143,15 @@ return [
             ],
         ],
     ],
+
+    /*
+     * Custom logo path. Will be copied during generate command. Set this to false to use the default logo.
+     *
+     * Change to an absolute path to use your custom logo. For example:
+     * 'logo' => resource_path('views') . '/api/logo.png'
+     *
+     * If you want to use this, please be aware of the following rules:
+     * - size: 230 x 52
+     */
+    'logo' => false,
 ];
