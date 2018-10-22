@@ -88,7 +88,7 @@ Parameter | Type | Status | Description
 Parameter | Status | Description
 --------- | ------- | ------- | -----------
 @foreach($route['queryParameters'] as $attribute => $parameter)
-    {{$attribute}} | @if($parameter['required']) required @else optional @endif | {!! implode(' ',$parameter['description']) !!}
+    {{$attribute}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
 @endforeach
 @endif
 
