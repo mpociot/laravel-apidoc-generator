@@ -51,6 +51,7 @@ abstract class GeneratorTestCase extends TestCase
                 'type' => 'integer',
                 'required' => true,
                 'description' => 'The id of the user.',
+                'value' => 9,
             ],
             'room_id' => [
                 'type' => 'string',
@@ -61,6 +62,7 @@ abstract class GeneratorTestCase extends TestCase
                 'type' => 'boolean',
                 'required' => false,
                 'description' => 'Whether to ban the user forever.',
+                'value' => false,
             ],
             'another_one' => [
                 'type' => 'number',
@@ -90,6 +92,16 @@ abstract class GeneratorTestCase extends TestCase
             'location_id' => [
                 'required' => true,
                 'description' => 'The id of the location.',
+            ],
+            'user_id' => [
+                'required' => true,
+                'description' => 'The id of the user.',
+                'value' => 'me',
+            ],
+            'page' => [
+                'required' => true,
+                'description' => 'The page number.',
+                'value' => '4',
             ],
             'filters' => [
                 'required' => false,

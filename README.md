@@ -188,7 +188,7 @@ class UserController extends Controller
 ### Specifying request parameters
 
 To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
-- The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description.
+- The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description. 
 - The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description
 
 
@@ -221,6 +221,19 @@ They will be included in the generated documentation text and example requests.
 **Result:**
 
 ![](body_params.png)
+
+Note: a random value will be used as the value of each parameter in the example requests. If you'd like to specify an example value, you can do so by adding `Example: your-example` to the end of your description. For instance:
+
+```php
+    /**
+     * @queryParam location_id required The id of the location.
+     * @queryParam user_id required The id of the user. Example: me
+     * @queryParam page required The page number. Example: 4
+     * @bodyParam user_id int required The id of the user. Example: 9
+     * @bodyParam room_id string The id of the room.
+     * @bodyParam forever boolean Whether to ban the user forever. Example: false
+     */
+```
 
 ### Indicating auth status
 You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
@@ -299,7 +312,7 @@ If you don't specify an example response using any of the above means, this pack
 - By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
 - Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however.Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key.
 - You can configure environment variables (this is useful so you can prevent external services like notifications from being triggered). By default the APP_ENV is set to 'documentation'. You can add more variables in the `env` key.
-- By default, the package will generate dummy values for your documented body and query parameters and send in the request. You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
+- By default, the package will generate dummy values for your documented body and query parameters and send in the request. (If you specified example values using `@bodyParam` or `@queryParam`, those will be used instead.) You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
 
 
 ### Postman collections

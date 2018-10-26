@@ -19,7 +19,7 @@ curl -X {{$route['methods'][0]}} {{$route['methods'][0] == 'GET' ? '-G ' : ''}}"
 @endforeach
 @endif
 @foreach($route['bodyParameters'] as $attribute => $parameter)
-    -d "{{$attribute}}"="{{$parameter['value']}}" @if(! ($loop->last))\
+    -d "{{$attribute}}"="{{$parameter['value'] === false ? "false" : $parameter['value']}}" @if(! ($loop->last))\
 @endif
 @endforeach
 
