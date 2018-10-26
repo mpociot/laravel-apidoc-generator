@@ -17,7 +17,7 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 > Note: PHP 7 and Laravel 5.5 or higher are required.
 
 ```sh
-$ composer require mpociot/laravel-apidoc-generator:dev-master
+$ composer require mpociot/laravel-apidoc-generator
 ```
 
 ### Laravel
