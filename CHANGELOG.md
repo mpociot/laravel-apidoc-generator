@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
+## [3.0.2] - Friday, 26 October 2018
+### Added
+- Ability to specify examples for body and query parameters (https://github.com/mpociot/laravel-apidoc-generator/pull/394)
+### Fixed
+- Rendering of example requests' descriptions (https://github.com/mpociot/laravel-apidoc-generator/pull/393)
+
+## [3.0.1] - Monday, 22 October 2018
+### Fixed
+- Rendering of query parameters' descriptions (https://github.com/mpociot/laravel-apidoc-generator/pull/387)
+
 ## [3.0] - Sunday, 21 October 2018
 ### Added
 - Official Lumen support (https://github.com/mpociot/laravel-apidoc-generator/pull/382)
