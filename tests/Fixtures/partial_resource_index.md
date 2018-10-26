@@ -38,7 +38,7 @@ var settings = {
     "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -78,7 +78,7 @@ var settings = {
     "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 

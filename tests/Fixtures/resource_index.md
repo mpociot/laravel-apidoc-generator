@@ -38,7 +38,7 @@ var settings = {
     "url": "http://localhost/api/users",
     "method": "GET",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -78,7 +78,7 @@ var settings = {
     "url": "http://localhost/api/users/create",
     "method": "GET",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -118,7 +118,7 @@ var settings = {
     "url": "http://localhost/api/users",
     "method": "POST",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -151,7 +151,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}",
     "method": "GET",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -191,7 +191,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}/edit",
     "method": "GET",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -231,7 +231,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}",
     "method": "PUT",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 
@@ -266,7 +266,7 @@ var settings = {
     "url": "http://localhost/api/users/{user}",
     "method": "DELETE",
     "headers": {
-        "accept": "application/json",
+        "Accept": "application/json",
     }
 }
 

@@ -107,6 +107,12 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::resource('/api/users', TestResourceController::class);
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        config([
+            'apidoc.routes.0.apply.headers' => [
+                'Accept' => 'application/json',
+            ],
+        ]);
+
         $this->artisan('apidoc:generate');
 
         $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
@@ -129,6 +135,12 @@ class GenerateDocumentationTest extends TestCase
         }
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        config([
+            'apidoc.routes.0.apply.headers' => [
+                'Accept' => 'application/json',
+            ],
+        ]);
+
         $this->artisan('apidoc:generate');
 
         $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
