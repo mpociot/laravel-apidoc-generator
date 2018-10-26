@@ -34,9 +34,9 @@ class TestController extends Controller
     }
 
     /**
-     * @bodyParam user_id int required The id of the user.
+     * @bodyParam user_id int required The id of the user. Example: 9
      * @bodyParam room_id string The id of the room.
-     * @bodyParam forever boolean Whether to ban the user forever.
+     * @bodyParam forever boolean Whether to ban the user forever. Example: false
      * @bodyParam another_one number Just need something here.
      * @bodyParam yet_another_param object required
      * @bodyParam even_more_param array
@@ -48,6 +48,8 @@ class TestController extends Controller
 
     /**
      * @queryParam location_id required The id of the location.
+     * @queryParam user_id required The id of the user. Example: me
+     * @queryParam page required The page number. Example: 4
      * @queryParam filters  The filters.
      */
     public function withQueryParameters()
