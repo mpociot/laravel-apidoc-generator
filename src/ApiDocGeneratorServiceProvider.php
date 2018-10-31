@@ -22,7 +22,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/../config/apidoc.php' => config_path('apidoc.php'),
+            __DIR__.'/../config/apidoc.php' => app()->basePath().'/config/apidoc.php',
         ], 'config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/apidoc.php', 'apidoc');
