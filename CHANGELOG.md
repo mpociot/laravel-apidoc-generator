@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
+## [3.0.3] - Friday, 2 November 2018
+### Fixed
+- Replaced use of `config_path` with more generic option for better Lumen compatibility (https://github.com/mpociot/laravel-apidoc-generator/pull/398)
+
 ## [3.0.2] - Friday, 26 October 2018
 ### Added
 - Ability to specify examples for body and query parameters (https://github.com/mpociot/laravel-apidoc-generator/pull/394)
