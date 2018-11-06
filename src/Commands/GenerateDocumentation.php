@@ -172,7 +172,7 @@ class GenerateDocumentation extends Command
         }
 
         if ($logo = config('apidoc.logo')) {
-            Storage::copy(
+            copy(
                 $logo,
                 $outputPath.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png'
             );
