@@ -9,7 +9,6 @@ use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
-use Illuminate\Support\Facades\Storage;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
 
@@ -172,7 +171,7 @@ class GenerateDocumentation extends Command
         }
 
         if ($logo = config('apidoc.logo')) {
-            Storage::copy(
+            copy(
                 $logo,
                 $outputPath.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png'
             );
