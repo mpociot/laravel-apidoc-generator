@@ -45,7 +45,7 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $usingDingoRouter = config('apidoc.router') == 'dingo';
+        $usingDingoRouter = strtolower(config('apidoc.router')) == 'dingo';
         if ($usingDingoRouter) {
             $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
         } else {
