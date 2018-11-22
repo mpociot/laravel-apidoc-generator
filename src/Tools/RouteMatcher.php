@@ -23,7 +23,6 @@ class RouteMatcher
         $matchedRoutes = [];
 
         foreach ($routeRules as $routeRule) {
-            $excludes = $routeRule['exclude'] ?? [];
             $includes = $routeRule['include'] ?? [];
             $allRoutes = $this->getAllRoutes($usingDingoRouter, $routeRule['match']['versions'] ?? []);
 
@@ -32,8 +31,7 @@ class RouteMatcher
                     $route = new LumenRouteAdapter($route);
                 }
 
-                /** @var Route $route */
-                if (in_array($route->getName(), $excludes)) {
+                if ($this->shouldExcludeRoute($route, $routeRule)) {
                     continue;
                 }
 
@@ -74,5 +72,12 @@ class RouteMatcher
             || (str_is($routeRule['match']['domains'] ?? [], $route->getDomain())
             && str_is($routeRule['match']['prefixes'] ?? [], $route->uri())
             && $matchesVersion);
+    }
+
+    private function shouldExcludeRoute(Route $route, array $routeRule)
+    {
+        $excludes = $routeRule['exclude'] ?? [];
+
+        return str_is($excludes, $route->getName());
     }
 }
