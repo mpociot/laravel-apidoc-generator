@@ -69,8 +69,8 @@ return [
                   'prefixes' => ['api/*', 'v2-api/*'],
                   'versions' => ['v1'],
               ],
-              'include' => ['users.index'],
-              'exclude' => ['users.create'],
+              'include' => ['users.index', 'healthcheck*'],
+              'exclude' => ['users.create', 'admin.*'],
               'apply' => [
                   'headers' => [
                       'Authorization' => 'Bearer: {token}',

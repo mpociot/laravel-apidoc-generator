@@ -58,19 +58,19 @@ return [
             /*
              * Include these routes when generating documentation,
              * even if they did not match the rules above.
-             * Note that the route must be referenced by name here.
+             * Note that the route must be referenced by name here (wildcards are supported).
              */
             'include' => [
-                // 'users.index',
+                // 'users.index', 'healthcheck*'
             ],
 
             /*
              * Exclude these routes when generating documentation,
              * even if they matched the rules above.
-             * Note that the route must be referenced by name here.
+             * Note that the route must be referenced by name here (wildcards are supported).
              */
             'exclude' => [
-                // 'users.create',
+                // 'users.create', 'admin.*'
             ],
 
             /*

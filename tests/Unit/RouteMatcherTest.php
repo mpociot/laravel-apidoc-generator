@@ -198,6 +198,45 @@ class RouteMatcherTest extends TestCase
         $this->assertCount(1, $oddRuleOut);
     }
 
+    public function testWillIncludeRouteIfMatchForAnIncludePatternForLaravelRouter()
+    {
+        $this->registerLaravelRoutes();
+        $mustInclude = ['domain1-1', 'domain1-2'];
+        $includePattern = 'domain1-*';
+        $routeRules[0]['include'] = [$includePattern];
+
+        $routeRules[0]['match']['domains'] = ['domain1.*'];
+        $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
+        $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
+        $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
+            return in_array($route['route']->getName(), $mustInclude);
+        });
+        $this->assertCount(count($mustInclude), $oddRuleOut);
+    }
+
+    public function testWillIncludeRouteIfMatchForAnIncludePatternForDingoRouter()
+    {
+        $this->registerDingoRoutes();
+
+        $mustInclude = ['v2.domain1', 'v2.domain2'];
+        $includePattern = 'v2.domain*';
+        $routeRules = [
+            [
+                'match' => [
+                    'domains' => ['domain1.*'],
+                    'prefixes' => ['prefix1/*'],
+                    'versions' => ['v1'],
+                ],
+                'include' => [$includePattern],
+            ],
+        ];
+        $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
+        $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
+            return in_array($route['route']->getName(), $mustInclude);
+        });
+        $this->assertCount(count($mustInclude), $oddRuleOut);
+    }
+
     public function testWillExcludeRouteIfListedExplicitlyForLaravelRouter()
     {
         $this->registerLaravelRoutes();
@@ -231,6 +270,45 @@ class RouteMatcherTest extends TestCase
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
             return $route['route']->getName() === $mustNotInclude;
+        });
+        $this->assertCount(0, $oddRuleOut);
+    }
+
+    public function testWillExcludeRouteIfMatchForAnExcludePatternForLaravelRouter()
+    {
+        $this->registerLaravelRoutes();
+        $mustNotInclude = ['prefix1.domain1-1', 'prefix1.domain1-2'];
+        $excludePattern = 'prefix1.domain1-*';
+        $routeRules[0]['exclude'] = [$excludePattern];
+
+        $routeRules[0]['match']['domains'] = ['domain1.*'];
+        $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
+        $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
+        $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
+            return in_array($route['route']->getName(), $mustNotInclude);
+        });
+        $this->assertCount(0, $oddRuleOut);
+    }
+
+    public function testWillExcludeRouteIfMatchForAnExcludePatterForDingoRouter()
+    {
+        $this->registerDingoRoutes();
+
+        $mustNotInclude = ['v2.prefix1.domain2', 'v2.prefix2.domain2'];
+        $excludePattern = 'v2.*.domain2';
+        $routeRules = [
+            [
+                'match' => [
+                    'domains' => ['domain2.*'],
+                    'prefixes' => ['*'],
+                    'versions' => ['v2'],
+                ],
+                'exclude' => [$excludePattern],
+            ],
+        ];
+        $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
+        $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
+            return in_array($route['route']->getName(), $mustNotInclude);
         });
         $this->assertCount(0, $oddRuleOut);
     }
