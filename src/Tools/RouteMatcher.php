@@ -68,7 +68,7 @@ class RouteMatcher
             ? ! empty(array_intersect($route->versions(), $routeRule['match']['versions'] ?? []))
             : true;
 
-        return in_array($route->getName(), $mustIncludes)
+        return str_is($mustIncludes, $route->getName())
             || (str_is($routeRule['match']['domains'] ?? [], $route->getDomain())
             && str_is($routeRule['match']['prefixes'] ?? [], $route->uri())
             && $matchesVersion);
