@@ -13,6 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.0.6] - Saturday, 24 November 2018
+### Added
+- `include` and `exclude` route options now support wildcards (https://github.com/mpociot/laravel-apidoc-generator/pull/409)
+
+## [3.0.5] - Thursday, 15 November 2018
+### Fixed
+- Make `router` option case-insensitive (https://github.com/mpociot/laravel-apidoc-generator/pull/407)
+
+## [3.0.4] - Wednesday, 7 November 2018
+### Fixed
+- Replaced use of `Storage::copy` with PHP's `copy` to work with absolute paths (https://github.com/mpociot/laravel-apidoc-generator/pull/404)
 
 ## [3.0.3] - Friday, 2 November 2018
 ### Fixed
