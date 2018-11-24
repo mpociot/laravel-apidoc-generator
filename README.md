@@ -80,7 +80,7 @@ return [
 ];
 ```
 
-This means documentation will be generated for routes in all domains ('&ast;' is a wildcard meaning 'any character') which match any of the patterns 'api/&ast;' or 'v2-api/&ast;', excluding the 'users.create' route, and including the 'users.index' route. (The `versions` key is ignored unless you are using Dingo router).
+This means documentation will be generated for routes in all domains ('&ast;' is a wildcard meaning 'any character') which match any of the patterns 'api/&ast;' or 'v2-api/&ast;', excluding the 'users.create' route and any routes whose names begin with `admin.`, and including the 'users.index' route and any routes whose names begin with `healthcheck.`. (The `versions` key is ignored unless you are using Dingo router).
 Also, in the generated documentation, these routes will have the header 'Authorization: Bearer: {token}' added to the example requests.
 
 You can also separate routes into groups to apply different rules to them:
@@ -124,6 +124,7 @@ return [
 
 With the configuration above, routes on the `v1.*` domain will have the `Token` and `Version` headers applied, while routes on the `v2.*` domain will have the `Authorization` and `Api-Version` headers applied.
 
+> Note: the `include` and `exclude` items are arrays of route names. THe &ast; wildcard is supported.
 > Note: If you're using DIngo router, the `versions` parameter is required in each route group. This parameter does not support wildcards. Each version must be listed explicitly,
 
 To generate your API documentation, use the `apidoc:generate` artisan command.
