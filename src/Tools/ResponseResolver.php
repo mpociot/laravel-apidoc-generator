@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseFileStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseCallStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\TransformerTagsStrategy;
@@ -12,6 +13,7 @@ class ResponseResolver
     public static $strategies = [
         ResponseTagStrategy::class,
         TransformerTagsStrategy::class,
+        ResponseFileStrategy::class,
         ResponseCallStrategy::class,
     ];
 
