@@ -266,6 +266,32 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function can_parse_response_file_tag()
+    {
+        // Create a file
+        $fp = fopen(storage_path('test.json'), 'w');
+        fwrite($fp, json_encode([
+            'id' => 5,
+            'name' => 'Jessica Jones',
+            'gender' => 'female'
+        ]));
+        fclose($fp);
+
+        $route = $this->createRoute('GET', '/responseFileTag', 'responseFileTag');
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            '{"id":5,"name":"Jessica Jones","gender":"female"}'
+        );
+
+        unlink(storage_path('test.json'));
+    }
+
+
+    /** @test */
     public function uses_configured_settings_when_calling_route()
     {
         $route = $this->createRoute('PUT', '/echo/{id}', 'shouldFetchRouteResponseWithEchoedSettings', true);

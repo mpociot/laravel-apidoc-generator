@@ -220,7 +220,7 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../../public/docs/collection.json'));
         $generatedCollection->info->_postman_id = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection.json'));
         $this->assertEquals($generatedCollection, $fixtureCollection);
