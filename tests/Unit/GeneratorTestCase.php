@@ -4,10 +4,8 @@ namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 abstract class GeneratorTestCase extends TestCase
 {
