@@ -24,15 +24,15 @@ class ResponseFileStrategy
      */
     protected function getFileResponse(array $tags)
     {
-        $responseTags = array_filter($tags, function ($tag) {
+        $responseFileTags = array_filter($tags, function ($tag) {
             return $tag instanceof Tag && strtolower($tag->getName()) == 'responsefile';
         });
-        if (empty($responseTags)) {
+        if (empty($responseFileTags)) {
             return;
         }
-        $responseTag = array_first($responseTags);
+        $responseFileTag = array_first($responseFileTags);
 
-        $json = json_decode(file_get_contents(storage_path($responseTag->getContent()), true), true);
+        $json = json_decode(file_get_contents(storage_path($responseFileTag->getContent()), true), true);
 
         return response()->json($json);
     }
