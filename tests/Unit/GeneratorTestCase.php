@@ -270,8 +270,9 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_response_file_tag()
     {
         // copy file to storage
-        $fixtureFileJson = file_get_contents(__DIR__.'/../Fixtures/response_test.json');
-        Storage::put('response_test.json', $fixtureFileJson);
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
+        $fixtureFileJson = file_get_contents($filePath);
+        copy ($filePath, storage_path('response_test.json'));
 
         $route = $this->createRoute('GET', '/responseFileTag', 'responseFileTag');
         $parsed = $this->generator->processRoute($route);
@@ -283,7 +284,7 @@ abstract class GeneratorTestCase extends TestCase
             $fixtureFileJson
         );
 
-        Storage::delete('response_test.json');
+        unlink(storage_path('response_test.json'));
     }
 
     /** @test */

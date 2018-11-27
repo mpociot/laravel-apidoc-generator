@@ -165,7 +165,7 @@ class TestController extends Controller
     }
 
     /**
-     * @responseFile app/response_test.json
+     * @responseFile response_test.json
      */
     public function responseFileTag()
     {
