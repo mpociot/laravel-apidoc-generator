@@ -290,7 +290,6 @@ abstract class GeneratorTestCase extends TestCase
         unlink(storage_path('test.json'));
     }
 
-
     /** @test */
     public function uses_configured_settings_when_calling_route()
     {
