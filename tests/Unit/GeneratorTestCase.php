@@ -273,7 +273,7 @@ abstract class GeneratorTestCase extends TestCase
         fwrite($fp, json_encode([
             'id' => 5,
             'name' => 'Jessica Jones',
-            'gender' => 'female'
+            'gender' => 'female',
         ]));
         fclose($fp);
 
