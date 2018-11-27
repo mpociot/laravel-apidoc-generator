@@ -3,8 +3,8 @@
 namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
 use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\Storage;
 use Mpociot\Reflection\DocBlock\Tag;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Get a response from from a file in the docblock ( @responseFile ).
