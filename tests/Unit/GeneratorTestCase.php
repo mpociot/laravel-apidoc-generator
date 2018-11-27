@@ -272,7 +272,7 @@ abstract class GeneratorTestCase extends TestCase
         // copy file to storage
         $filePath = __DIR__.'/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
-        copy ($filePath, storage_path('response_test.json'));
+        copy($filePath, storage_path('response_test.json'));
 
         $route = $this->createRoute('GET', '/responseFileTag', 'responseFileTag');
         $parsed = $this->generator->processRoute($route);
