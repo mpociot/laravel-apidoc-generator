@@ -4,7 +4,6 @@ namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock\Tag;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Get a response from from a file in the docblock ( @responseFile ).
@@ -33,7 +32,7 @@ class ResponseFileStrategy
         }
         $responseFileTag = array_first($responseFileTags);
 
-        $json = json_decode(Storage::get($responseFileTag->getContent()), true);
+        $json = json_decode(file_get_contents(storage_path($responseFileTag->getContent()), true), true);
 
         return response()->json($json);
     }

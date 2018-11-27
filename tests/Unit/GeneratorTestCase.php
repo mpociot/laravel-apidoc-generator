@@ -289,36 +289,6 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function can_parse_response_file_tag_using_another_filesystem_driver()
-    {
-        // Mocking
-        Storage::fake('s3');
-
-        // copy file to storage
-        $fixtureFileJson = file_get_contents(__DIR__.'/../Fixtures/response_test.json');
-        Storage::disk('s3')->put('response_test.json', $fixtureFileJson);
-
-        $route = $this->createRoute('GET', '/responseFileTag', 'responseFileTag');
-
-        // Exception, because the file is not on Local storage
-        $this->expectException(FileNotFoundException::class);
-        $this->generator->processRoute($route);
-
-        // Now, set the default config to s3
-        Config::set('filesystems.default', 's3');
-        $parsed = $this->generator->processRoute($route);
-        $this->assertTrue(is_array($parsed));
-        $this->assertArrayHasKey('showresponse', $parsed);
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertSame(
-            $parsed['response'],
-            $fixtureFileJson
-        );
-
-        Storage::disk('s3')->delete('response_test.json');
-    }
-
-    /** @test */
     public function uses_configured_settings_when_calling_route()
     {
         $route = $this->createRoute('PUT', '/echo/{id}', 'shouldFetchRouteResponseWithEchoedSettings', true);
