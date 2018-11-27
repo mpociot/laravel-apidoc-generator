@@ -32,19 +32,19 @@ curl -X GET -G "http://localhost/api/users" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/users",
-    "method": "GET",
-    "headers": {
-        "Accept": "application/json",
-    }
+const url = new URL("http://localhost/api/users");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
 > Example response:
@@ -72,19 +72,19 @@ curl -X GET -G "http://localhost/api/users/create" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/users/create",
-    "method": "GET",
-    "headers": {
-        "Accept": "application/json",
-    }
+const url = new URL("http://localhost/api/users/create");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
 > Example response:

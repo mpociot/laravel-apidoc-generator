@@ -37,21 +37,19 @@ curl -X GET -G "http://localhost/api/withDescription" \
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/withDescription",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json",
-        "Authorization": "customAuthToken",
-        "Custom-Header": "NotSoCustom",
-    }
+const url = new URL("http://localhost/api/users");
+
+let headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
 > Example response:
