@@ -163,4 +163,12 @@ class TestController extends Controller
     {
         return '';
     }
+
+    /**
+     * @responseFile response_test.json
+     */
+    public function responseFileTag()
+    {
+        return '';
+    }
 }

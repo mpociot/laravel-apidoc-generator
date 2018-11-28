@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
+use Illuminate\Support\Facades\Storage;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 abstract class GeneratorTestCase extends TestCase
@@ -263,6 +264,27 @@ abstract class GeneratorTestCase extends TestCase
             'weight' => '1 kg',
             'delicious' => true,
         ], json_decode($parsed['response'], true));
+    }
+
+    /** @test */
+    public function can_parse_response_file_tag()
+    {
+        // copy file to storage
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
+        $fixtureFileJson = file_get_contents($filePath);
+        copy($filePath, storage_path('response_test.json'));
+
+        $route = $this->createRoute('GET', '/responseFileTag', 'responseFileTag');
+        $parsed = $this->generator->processRoute($route);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(
+            $parsed['response'],
+            $fixtureFileJson
+        );
+
+        unlink(storage_path('response_test.json'));
     }
 
     /** @test */
