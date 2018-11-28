@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.1.0] - Wednesday, 28 November 2018
+### Added
+- Add `ResponseFileStrategy` to retrieve responses from files. (https://github.com/mpociot/laravel-apidoc-generator/pull/410)
+
+### Modified
+- Switch from `jQuery` to `fetch` in JavaScript examples. (https://github.com/mpociot/laravel-apidoc-generator/pull/411)
+
 ## [3.0.6] - Saturday, 24 November 2018
 ### Added
 - `include` and `exclude` route options now support wildcards (https://github.com/mpociot/laravel-apidoc-generator/pull/409)
