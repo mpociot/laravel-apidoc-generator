@@ -306,6 +306,27 @@ For the first route above, this package will generate a set of two users then pa
 composer require league/fractal
 ```
 
+#### @responseFile
+
+For large reponse bodies, you may want to use a dump of an actual response. You can put this response in a file (as a JSON string) within your Laravel storage directory and link to it. For instance, we can put this response in a file named `users.get.json` in `storage/responses`:
+
+```
+{"id":5,"name":"Jessica Jones","gender":"female"}
+```
+
+Then in your controller, link to it by:
+
+```php
+/**
+ * @responseFile responses/users.get.json
+ */
+public function getUser(int $id)
+{
+  // ...
+}
+```
+The package will parse this response and display in the examples for this route.
+
 #### Generating responses automatically
 If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
 - They are done within a database transaction and changes are rolled back afterwards.
