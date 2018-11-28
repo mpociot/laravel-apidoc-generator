@@ -26,24 +26,46 @@ curl -X {{$route['methods'][0]}} {{$route['methods'][0] == 'GET' ? '-G ' : ''}}"
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($route['uri'], '/') }}",
-    "method": "{{$route['methods'][0]}}",
-    @if(count($route['bodyParameters']))
-"data": {!! str_replace("\n}","\n    }", str_replace('    ','        ',json_encode(array_combine(array_keys($route['bodyParameters']), array_map(function($param){ return $param['value']; },$route['bodyParameters'])), JSON_PRETTY_PRINT))) !!},
-    @endif
-"headers": {
-@foreach($route['headers'] as $header => $value)
-        "{{$header}}": "{{$value}}",
-@endforeach
-    }
-}
+const url = new URL("{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($route['uri'], '/') }}");
+@if(count($route['queryParameters']))
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+    let params = {
+    @foreach($route['queryParameters'] as $attribute => $parameter)
+        "{{ $attribute }}": "{{ $parameter['value'] }}",
+    @endforeach
+    };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+@endif
+
+let headers = {
+@foreach($route['headers'] as $header => $value)
+    "{{$header}}": "{{$value}}",
+@endforeach
+@if(!array_key_exists('Accept', $route['headers']))
+    "Accept": "application/json",
+@endif
+@if(!array_key_exists('Content-Type', $route['headers']))
+    "Content-Type": "application/json",
+@endif
+}
+@if(count($route['bodyParameters']))
+
+let body = JSON.stringify({
+@foreach($route['bodyParameters'] as $attribute => $parameter)
+    "{{ $attribute }}": "{{ $parameter['value'] }}",
+@endforeach
+})
+@endif
+
+fetch(url, {
+    method: "{{$route['methods'][0]}}",
+    headers: headers,
+@if(count($route['bodyParameters']))
+    body: body
+@endif
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))
