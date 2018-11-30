@@ -165,19 +165,63 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_response_tag()
     {
         $route = $this->createRoute('POST', '/responseTag', 'withResponseTag');
-
         $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
 
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertArraySubset([
             'id' => 4,
             'name' => 'banana',
             'color' => 'red',
             'weight' => '1 kg',
             'delicious' => true,
-        ], json_decode($parsed['response'], true));
+        ], json_decode($response['content'], true));
+    }
+
+    /** @test */
+    public function can_parse_response_tag_with_status_code()
+    {
+        $route = $this->createRoute('POST', '/responseTag', 'withResponseTagAndStatusCode');
+        $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(422, $response['status']);
+        $this->assertArraySubset([
+            'message' => 'Validation error'
+        ], json_decode($response['content'], true));
+    }
+
+    /** @test */
+    public function can_parse_multiple_response_tags()
+    {
+        $route = $this->createRoute('POST', '/responseTag', 'withMultipleResponseTagsAndStatusCode');
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($parsed['response'][0]));
+        $this->assertEquals(200, $parsed['response'][0]['status']);
+        $this->assertArraySubset([
+            'id' => 4,
+            'name' => 'banana',
+            'color' => 'red',
+            'weight' => '1 kg',
+            'delicious' => true,
+        ], json_decode($parsed['response'][0]['content'], true));
+        $this->assertTrue(is_array($parsed['response'][1]));
+        $this->assertEquals(401, $parsed['response'][1]['status']);
+        $this->assertArraySubset([
+            'message' => 'Unauthorized'
+        ], json_decode($parsed['response'][1]['content'], true));
     }
 
     /** @test */
@@ -185,11 +229,15 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/transformerTag', 'transformerTag');
         $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $parsed['response'],
+            $response['content'],
             '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
         );
     }
@@ -199,11 +247,15 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/transformerTagWithModel', 'transformerTagWithModel');
         $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $parsed['response'],
+            $response['content'],
             '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
         );
     }
@@ -213,11 +265,15 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/transformerCollectionTag', 'transformerCollectionTag');
         $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $parsed['response'],
+            $response['content'],
             '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
@@ -228,11 +284,15 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/transformerCollectionTagWithModel', 'transformerCollectionTagWithModel');
         $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $parsed['response'],
+            $response['content'],
             '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
@@ -253,17 +313,20 @@ abstract class GeneratorTestCase extends TestCase
             ],
         ];
         $parsed = $this->generator->processRoute($route, $rules);
+        $response = array_first($parsed['response']);
 
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertArraySubset([
             'id' => 4,
             'name' => 'banana',
             'color' => 'red',
             'weight' => '1 kg',
             'delicious' => true,
-        ], json_decode($parsed['response'], true));
+        ], json_decode($response['content'], true));
     }
 
     /** @test */
@@ -276,15 +339,53 @@ abstract class GeneratorTestCase extends TestCase
 
         $route = $this->createRoute('GET', '/responseFileTag', 'responseFileTag');
         $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $parsed['response'],
+            $response['content'],
             $fixtureFileJson
         );
 
         unlink(storage_path('response_test.json'));
+    }
+
+    /** @test */
+    public function can_parse_multiple_response_file_tags_with_status_codes()
+    {
+        // copy file to storage
+        $successFilePath = __DIR__.'/../Fixtures/response_test.json';
+        $successFixtureFileJson = file_get_contents($successFilePath);
+        copy($successFilePath, storage_path('response_test.json'));
+        $errorFilePath = __DIR__.'/../Fixtures/response_error_test.json';
+        $errorFixtureFileJson = file_get_contents($errorFilePath);
+        copy($errorFilePath, storage_path('response_error_test.json'));
+
+        $route = $this->createRoute('GET', '/responseFileTag', 'withResponseFileTagAndStatusCode');
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($parsed['response'][0]));
+        $this->assertEquals(200, $parsed['response'][0]['status']);
+        $this->assertSame(
+            $parsed['response'][0]['content'],
+            $successFixtureFileJson
+        );
+        $this->assertTrue(is_array($parsed['response'][1]));
+        $this->assertEquals(401, $parsed['response'][1]['status']);
+        $this->assertSame(
+            $parsed['response'][1]['content'],
+            $errorFixtureFileJson
+        );
+
+        unlink(storage_path('response_test.json'));
+        unlink(storage_path('response_error_test.json'));
     }
 
     /** @test */
@@ -315,16 +416,19 @@ abstract class GeneratorTestCase extends TestCase
             ],
         ];
         $parsed = $this->generator->processRoute($route, $rules);
+        $response = array_first($parsed['response']);
 
         $this->assertTrue(is_array($parsed));
         $this->assertArrayHasKey('showresponse', $parsed);
         $this->assertTrue($parsed['showresponse']);
-        $response = json_decode($parsed['response'], true);
-        $this->assertEquals(3, $response['{id}']);
-        $this->assertEquals('documentation', $response['APP_ENV']);
-        $this->assertEquals('queryValue', $response['queryParam']);
-        $this->assertEquals('bodyValue', $response['bodyParam']);
-        $this->assertEquals('value', $response['header']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+        $responseContent = json_decode($response['content'], true);
+        $this->assertEquals(3, $responseContent['{id}']);
+        $this->assertEquals('documentation', $responseContent['APP_ENV']);
+        $this->assertEquals('queryValue', $responseContent['queryParam']);
+        $this->assertEquals('bodyValue', $responseContent['bodyParam']);
+        $this->assertEquals('value', $responseContent['header']);
     }
 
     abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false);

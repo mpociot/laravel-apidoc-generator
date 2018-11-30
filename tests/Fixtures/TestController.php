@@ -131,6 +131,33 @@ class TestController extends Controller
     }
 
     /**
+     * @response 422 {
+     *   "message": "Validation error"
+     * }
+     */
+    public function withResponseTagAndStatusCode()
+    {
+        return '';
+    }
+
+    /**
+     * @response {
+     *   "id": 4,
+     *   "name": "banana",
+     *   "color": "red",
+     *   "weight": "1 kg",
+     *   "delicious": true
+     * }
+     * @response 401 {
+     *   "message": "Unauthorized"
+     * }
+     */
+    public function withMultipleResponseTagsAndStatusCode()
+    {
+        return '';
+    }
+
+    /**
      * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
      */
     public function transformerTag()
@@ -168,6 +195,15 @@ class TestController extends Controller
      * @responseFile response_test.json
      */
     public function responseFileTag()
+    {
+        return '';
+    }
+
+    /**
+     * @responseFile response_test.json
+     * @responseFile 401 response_error_test.json
+     */
+    public function withResponseFileTagAndStatusCode()
     {
         return '';
     }
