@@ -195,7 +195,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($response));
         $this->assertEquals(422, $response['status']);
         $this->assertArraySubset([
-            'message' => 'Validation error'
+            'message' => 'Validation error',
         ], json_decode($response['content'], true));
     }
 
@@ -220,7 +220,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($parsed['response'][1]));
         $this->assertEquals(401, $parsed['response'][1]['status']);
         $this->assertArraySubset([
-            'message' => 'Unauthorized'
+            'message' => 'Unauthorized',
         ], json_decode($parsed['response'][1]['content'], true));
     }
 

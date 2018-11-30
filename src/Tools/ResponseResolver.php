@@ -2,8 +2,8 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Route;
+use Illuminate\Http\JsonResponse;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseCallStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseFileStrategy;
@@ -66,6 +66,7 @@ class ResponseResolver
      * @param $route
      * @param $tags
      * @param $routeProps
+     *
      * @return array
      */
     public static function getResponse($route, $tags, $routeProps)
