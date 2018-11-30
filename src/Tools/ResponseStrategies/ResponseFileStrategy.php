@@ -10,6 +10,13 @@ use Mpociot\Reflection\DocBlock\Tag;
  */
 class ResponseFileStrategy
 {
+    /**
+     * @param Route $route
+     * @param array $tags
+     * @param array $routeProps
+     *
+     * @return mixed
+     */
     public function __invoke(Route $route, array $tags, array $routeProps)
     {
         return $this->getFileResponse($tags);
@@ -25,15 +32,20 @@ class ResponseFileStrategy
     protected function getFileResponse(array $tags)
     {
         $responseFileTags = array_filter($tags, function ($tag) {
-            return $tag instanceof Tag && strtolower($tag->getName()) == 'responsefile';
+            return $tag instanceof Tag && strtolower($tag->getName()) === 'responsefile';
         });
+
         if (empty($responseFileTags)) {
             return;
         }
-        $responseFileTag = array_first($responseFileTags);
 
-        $json = json_decode(file_get_contents(storage_path($responseFileTag->getContent()), true), true);
+        return array_map(function ($responseFileTag) {
+            preg_match('/^(\d{3})?\s?([\s\S]*)$/', $responseFileTag->getContent(), $result);
 
-        return response()->json($json);
+            $status = $result[1] ?: 200;
+            $content = $result[2] ? file_get_contents(storage_path($result[2]), true) : '{}';
+
+            return response()->json(json_decode($content, true), (int) $status);
+        }, $responseFileTags);
     }
 }
