@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
 use Illuminate\Routing\Route;
+use Illuminate\Http\JsonResponse;
 use Mpociot\Reflection\DocBlock\Tag;
 
 /**
@@ -45,7 +46,7 @@ class ResponseTagStrategy
             $status = $result[1] ?: 200;
             $content = $result[2] ?: '{}';
 
-            return response()->json(json_decode($content, true), (int) $status);
+            return new JsonResponse(json_decode($content, true), (int) $status);
         }, $responseTags);
     }
 }
