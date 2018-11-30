@@ -259,6 +259,24 @@ public function show($id)
 }
 ```
 
+Moreover, you can define multiple `@response` tags as well as the HTTP status code related to a particular response (if no status code set, `200` will be returned):
+```php
+/**
+ * @response {
+ *  "id": 4,
+ *  "name": "Jessica Jones",
+ *  "roles": ["admin"]
+ * }
+ * @response 404 {
+ *  "message": "No query results for model [\App\User]"
+ * }
+ */
+public function show($id)
+{
+    return User::findOrFail($id);
+}
+```
+
 #### @transformer, @transformerCollection, and @transformerModel
 You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
@@ -326,6 +344,18 @@ public function getUser(int $id)
 }
 ```
 The package will parse this response and display in the examples for this route.
+
+Similarly to `@response` tag, you can provide multiple `@responseFile` tags along with the HTTP status code of the response:
+```php
+/**
+ * @responseFile responses/users.get.json
+ * @responseFile 404 responses/model.not.found.json
+ */
+public function getUser(int $id)
+{
+  // ...
+}
+```
 
 #### Generating responses automatically
 If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
