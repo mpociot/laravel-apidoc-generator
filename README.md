@@ -308,7 +308,7 @@ composer require league/fractal
 
 #### @responseFile
 
-For large reponse bodies, you may want to use a dump of an actual response. You can put this response in a file (as a JSON string) within your Laravel storage directory and link to it. For instance, we can put this response in a file named `users.get.json` in `storage/responses`:
+For large response bodies, you may want to use a dump of an actual response. You can put this response in a file (as a JSON string) within your Laravel storage directory and link to it. For instance, we can put this response in a file named `users.get.json` in `storage/responses`:
 
 ```
 {"id":5,"name":"Jessica Jones","gender":"female"}
