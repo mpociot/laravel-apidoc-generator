@@ -37,7 +37,7 @@ class ResponseFileStrategy
         });
 
         if (empty($responseFileTags)) {
-            return null;
+            return;
         }
 
         return array_map(function (Tag $responseFileTag) {

@@ -23,7 +23,7 @@ class ResponseCallStrategy
     {
         $rulesToApply = $routeProps['rules']['response_calls'] ?? [];
         if (! $this->shouldMakeApiCall($route, $rulesToApply)) {
-            return null;
+            return;
         }
 
         $this->configureEnvironment($rulesToApply);
@@ -244,8 +244,9 @@ class ResponseCallStrategy
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse|mixed|\Symfony\Component\HttpFoundation\Response
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed|\Symfony\Component\HttpFoundation\Response
      */
     private function makeApiCall(Request $request)
     {
@@ -261,8 +262,9 @@ class ResponseCallStrategy
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     private function callLaravelRoute(Request $request): \Symfony\Component\HttpFoundation\Response
     {

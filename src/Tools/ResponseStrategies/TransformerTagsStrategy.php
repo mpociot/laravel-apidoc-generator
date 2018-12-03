@@ -38,7 +38,7 @@ class TransformerTagsStrategy
     {
         try {
             if (empty($transformerTag = $this->getTransformerTag($tags))) {
-                return null;
+                return;
             }
 
             $transformer = $this->getTransformerClass($transformerTag);
@@ -52,7 +52,7 @@ class TransformerTagsStrategy
 
             return [response($fractal->createData($resource)->toJson())];
         } catch (\Exception $e) {
-            return null;
+            return;
         }
     }
 
