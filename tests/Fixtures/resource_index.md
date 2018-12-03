@@ -47,7 +47,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-> Example response:
+> Example response (200):
 
 ```json
 {
@@ -87,7 +87,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-> Example response:
+> Example response (200):
 
 ```json
 {
@@ -160,7 +160,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-> Example response:
+> Example response (200):
 
 ```json
 {
@@ -200,7 +200,7 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-> Example response:
+> Example response (200):
 
 ```json
 {

@@ -69,6 +69,19 @@ fetch(url, {
 ```
 
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))
+@if(is_array($route['response']))
+@foreach($route['response'] as $response)
+> Example response ({{$response['status']}}):
+
+```json
+@if(is_object($response['content']) || is_array($response['content']))
+{!! json_encode($response['content'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+@else
+{!! json_encode(json_decode($response['content']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+@endif
+```
+@endforeach
+@else
 > Example response:
 
 ```json
@@ -78,6 +91,7 @@ fetch(url, {
 {!! json_encode(json_decode($route['response']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
 @endif
 ```
+@endif
 @endif
 
 ### HTTP Request
