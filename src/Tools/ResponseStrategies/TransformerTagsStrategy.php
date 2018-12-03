@@ -15,6 +15,13 @@ use League\Fractal\Resource\Collection;
  */
 class TransformerTagsStrategy
 {
+    /**
+     * @param Route $route
+     * @param array $tags
+     * @param array $routeProps
+     *
+     * @return array|null
+     */
     public function __invoke(Route $route, array $tags, array $routeProps)
     {
         return $this->getTransformerResponse($tags);
@@ -25,13 +32,13 @@ class TransformerTagsStrategy
      *
      * @param array $tags
      *
-     * @return mixed
+     * @return array|null
      */
     protected function getTransformerResponse(array $tags)
     {
         try {
             if (empty($transformerTag = $this->getTransformerTag($tags))) {
-                return;
+                return null;
             }
 
             $transformer = $this->getTransformerClass($transformerTag);
@@ -43,9 +50,9 @@ class TransformerTagsStrategy
                 ? new Collection([$modelInstance, $modelInstance], new $transformer)
                 : new Item($modelInstance, new $transformer);
 
-            return response($fractal->createData($resource)->toJson());
+            return [response($fractal->createData($resource)->toJson())];
         } catch (\Exception $e) {
-            return;
+            return null;
         }
     }
 

@@ -12,17 +12,25 @@ use Illuminate\Routing\Route;
  */
 class ResponseCallStrategy
 {
+    /**
+     * @param Route $route
+     * @param array $tags
+     * @param array $routeProps
+     *
+     * @return array|null
+     */
     public function __invoke(Route $route, array $tags, array $routeProps)
     {
         $rulesToApply = $routeProps['rules']['response_calls'] ?? [];
         if (! $this->shouldMakeApiCall($route, $rulesToApply)) {
-            return;
+            return null;
         }
 
         $this->configureEnvironment($rulesToApply);
         $request = $this->prepareRequest($route, $rulesToApply, $routeProps['body'], $routeProps['query']);
+
         try {
-            $response = $this->makeApiCall($request);
+            $response = [$this->makeApiCall($request)];
         } catch (\Exception $e) {
             $response = null;
         } finally {
@@ -32,12 +40,25 @@ class ResponseCallStrategy
         return $response;
     }
 
+    /**
+     * @param array $rulesToApply
+     *
+     * @return void
+     */
     private function configureEnvironment(array $rulesToApply)
     {
         $this->startDbTransaction();
         $this->setEnvironmentVariables($rulesToApply['env'] ?? []);
     }
 
+    /**
+     * @param Route $route
+     * @param array $rulesToApply
+     * @param array $bodyParams
+     * @param array $queryParams
+     *
+     * @return Request
+     */
     private function prepareRequest(Route $route, array $rulesToApply, array $bodyParams, array $queryParams)
     {
         $uri = $this->replaceUrlParameterBindings($route, $rulesToApply['bindings'] ?? []);
@@ -77,6 +98,11 @@ class ResponseCallStrategy
         return $uri;
     }
 
+    /**
+     * @param array $env
+     *
+     * @return void
+     */
     private function setEnvironmentVariables(array $env)
     {
         foreach ($env as $name => $value) {
@@ -87,6 +113,9 @@ class ResponseCallStrategy
         }
     }
 
+    /**
+     * @return void
+     */
     private function startDbTransaction()
     {
         try {
@@ -95,6 +124,9 @@ class ResponseCallStrategy
         }
     }
 
+    /**
+     * @return void
+     */
     private function endDbTransaction()
     {
         try {
@@ -103,11 +135,19 @@ class ResponseCallStrategy
         }
     }
 
+    /**
+     * @return void
+     */
     private function finish()
     {
         $this->endDbTransaction();
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
     public function callDingoRoute(Request $request)
     {
         /** @var Dispatcher $dispatcher */
@@ -138,11 +178,23 @@ class ResponseCallStrategy
         return $response;
     }
 
+    /**
+     * @param Route $route
+     *
+     * @return array
+     */
     public function getMethods(Route $route)
     {
         return array_diff($route->methods(), ['HEAD']);
     }
 
+    /**
+     * @param Request $request
+     * @param Route $route
+     * @param array|null $headers
+     *
+     * @return Request
+     */
     private function addHeaders(Request $request, Route $route, $headers)
     {
         // set the proper domain
@@ -162,6 +214,12 @@ class ResponseCallStrategy
         return $request;
     }
 
+    /**
+     * @param Request $request
+     * @param array $query
+     *
+     * @return Request
+     */
     private function addQueryParameters(Request $request, array $query)
     {
         $request->query->add($query);
@@ -170,6 +228,12 @@ class ResponseCallStrategy
         return $request;
     }
 
+    /**
+     * @param Request $request
+     * @param array $body
+     *
+     * @return Request
+     */
     private function addBodyParameters(Request $request, array $body)
     {
         $request->request->add($body);
@@ -177,6 +241,12 @@ class ResponseCallStrategy
         return $request;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
+     */
     private function makeApiCall(Request $request)
     {
         if (config('apidoc.router') == 'dingo') {
@@ -189,9 +259,10 @@ class ResponseCallStrategy
     }
 
     /**
-     * @param $request
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     private function callLaravelRoute(Request $request): \Symfony\Component\HttpFoundation\Response
     {
@@ -202,6 +273,12 @@ class ResponseCallStrategy
         return $response;
     }
 
+    /**
+     * @param Route $route
+     * @param array $rulesToApply
+     *
+     * @return bool
+     */
     private function shouldMakeApiCall(Route $route, array $rulesToApply): bool
     {
         $allowedMethods = $rulesToApply['methods'] ?? [];

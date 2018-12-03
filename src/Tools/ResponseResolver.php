@@ -3,11 +3,11 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
-use Illuminate\Http\JsonResponse;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseCallStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseFileStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\TransformerTagsStrategy;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResponseResolver
 {
@@ -38,28 +38,24 @@ class ResponseResolver
      * @param array $tags
      * @param array $routeProps
      *
-     * @return array
+     * @return array|null
      */
     private function resolve(array $tags, array $routeProps)
     {
-        $response = null;
-
         foreach (static::$strategies as $strategy) {
             $strategy = new $strategy();
 
-            /** @var JsonResponse|array|null $response */
-            $response = $strategy($this->route, $tags, $routeProps);
+            /** @var Response[]|null $response */
+            $responses = $strategy($this->route, $tags, $routeProps);
 
-            if (! is_null($response)) {
-                if (is_array($response)) {
-                    return array_map(function (JsonResponse $response) {
-                        return ['status' => $response->getStatusCode(), 'content' => $this->getResponseContent($response)];
-                    }, $response);
-                }
-
-                return [['status' => $response->getStatusCode(), 'content' => $this->getResponseContent($response)]];
+            if (! is_null($responses)) {
+                return array_map(function (Response $response) {
+                    return ['status' => $response->getStatusCode(), 'content' => $this->getResponseContent($response)];
+                }, $responses);
             }
         }
+
+        return null;
     }
 
     /**

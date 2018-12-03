@@ -16,11 +16,11 @@ class ResponseTagStrategy
      * @param array $tags
      * @param array $routeProps
      *
-     * @return mixed
+     * @return array|null
      */
     public function __invoke(Route $route, array $tags, array $routeProps)
     {
-        return $this->getDocBlockResponse($tags);
+        return $this->getDocBlockResponses($tags);
     }
 
     /**
@@ -28,19 +28,19 @@ class ResponseTagStrategy
      *
      * @param array $tags
      *
-     * @return mixed
+     * @return array|null
      */
-    protected function getDocBlockResponse(array $tags)
+    protected function getDocBlockResponses(array $tags)
     {
         $responseTags = array_filter($tags, function ($tag) {
             return $tag instanceof Tag && strtolower($tag->getName()) === 'response';
         });
 
         if (empty($responseTags)) {
-            return;
+            return null;
         }
 
-        return array_map(function ($responseTag) {
+        return array_map(function (Tag $responseTag) {
             preg_match('/^(\d{3})?\s?([\s\S]*)$/', $responseTag->getContent(), $result);
 
             $status = $result[1] ?: 200;
