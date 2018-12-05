@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.1.1] - Wednesday, 5 December 2018
+### Added
+- Ability to specify different responses for different status codes. (https://github.com/mpociot/laravel-apidoc-generator/pull/416)
+
 ## [3.1.0] - Wednesday, 28 November 2018
 ### Added
 - Add `ResponseFileStrategy` to retrieve responses from files. (https://github.com/mpociot/laravel-apidoc-generator/pull/410)
