@@ -37,14 +37,15 @@ class CollectionWriter
                     'name' => $groupName,
                     'description' => '',
                     'item' => $routes->map(function ($route) {
+                        $mode = $route['methods'][0] === 'PUT' ? 'urlencoded' : 'formdata';
                         return [
                             'name' => $route['title'] != '' ? $route['title'] : url($route['uri']),
                             'request' => [
                                 'url' => url($route['uri']),
                                 'method' => $route['methods'][0],
                                 'body' => [
-                                    'mode' => 'formdata',
-                                    'formdata' => collect($route['bodyParameters'])->map(function ($parameter, $key) {
+                                    'mode' => $mode,
+                                    $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
                                         return [
                                             'key' => $key,
                                             'value' => isset($parameter['value']) ? $parameter['value'] : '',
