@@ -38,6 +38,7 @@ class CollectionWriter
                     'description' => '',
                     'item' => $routes->map(function ($route) {
                         $mode = $route['methods'][0] === 'PUT' ? 'urlencoded' : 'formdata';
+
                         return [
                             'name' => $route['title'] != '' ? $route['title'] : url($route['uri']),
                             'request' => [
