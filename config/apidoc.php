@@ -81,12 +81,12 @@ return [
                  * Specify headers to be added to the example requests
                  */
                 'headers' => [
-                    // 'Authorization' => 'Bearer: {token}',
+                    // 'Authorization' => 'Bearer {token}',
                     // 'Api-Version' => 'v2',
                 ],
 
                 /*
-                 * If no @response or @transformer declaratons are found for the route,
+                 * If no @response or @transformer declarations are found for the route,
                  * we'll try to get a sample response by attempting an API call.
                  * Configure the settings for the API call here,
                  */
