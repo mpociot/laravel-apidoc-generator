@@ -75,6 +75,6 @@ class ResponseResolver
      */
     private function getResponseContent($response)
     {
-        return $response ? $response->getData() : '';
+        return $response ? $response->getContent() : '';
     }
 }
