@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Mpociot\ApiDoc\Tests\Fixtures\TestNaturalSortController;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
@@ -12,6 +11,7 @@ use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestNaturalSortController;
 
 class GenerateDocumentationTest extends TestCase
 {
