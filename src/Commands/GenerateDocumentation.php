@@ -215,15 +215,16 @@ class GenerateDocumentation extends Command
     /**
      * @param $route
      *
-     * @return bool
      * @throws ReflectionException
+     *
+     * @return bool
      */
     private function isRouteVisibleForDocumentation($route)
     {
         list($class, $method) = explode('@', $route);
         $reflection = new ReflectionClass($class);
 
-        if (!$reflection->hasMethod($method)) {
+        if (! $reflection->hasMethod($method)) {
             return false;
         }
 
