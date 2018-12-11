@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Commands;
 
 use ReflectionClass;
+use ReflectionException;
 use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
@@ -215,12 +216,19 @@ class GenerateDocumentation extends Command
      * @param $route
      *
      * @return bool
+     * @throws ReflectionException
      */
     private function isRouteVisibleForDocumentation($route)
     {
         list($class, $method) = explode('@', $route);
         $reflection = new ReflectionClass($class);
+
+        if (!$reflection->hasMethod($method)) {
+            return false;
+        }
+
         $comment = $reflection->getMethod($method)->getDocComment();
+
         if ($comment) {
             $phpdoc = new DocBlock($comment);
 
