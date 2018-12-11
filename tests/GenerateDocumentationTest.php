@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
+use Mpociot\ApiDoc\Tests\Fixtures\TestNaturalSortController;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
@@ -254,6 +255,30 @@ class GenerateDocumentationTest extends TestCase
 
         $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
         $this->assertContains('Лорем ипсум долор сит амет', $generatedMarkdown);
+    }
+
+    /** @test */
+    public function sorts_group_naturally()
+    {
+        RouteFacade::get('/api/action1', TestNaturalSortController::class.'@action1');
+        RouteFacade::get('/api/action2', TestNaturalSortController::class.'@action2');
+        RouteFacade::get('/api/action10', TestNaturalSortController::class.'@action10');
+
+        config(['apidoc.routes.0.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+
+        $firstGroup1Occurrence = strpos($generatedMarkdown, '#1. Group 1');
+        $firstGroup2Occurrence = strpos($generatedMarkdown, '#2. Group 2');
+        $firstGroup10Occurrence = strpos($generatedMarkdown, '#10. Group 10');
+
+        $this->assertNotFalse($firstGroup1Occurrence);
+        $this->assertNotFalse($firstGroup2Occurrence);
+        $this->assertNotFalse($firstGroup2Occurrence);
+
+        $this->assertTrue(
+            $firstGroup1Occurrence < $firstGroup2Occurrence && $firstGroup2Occurrence < $firstGroup10Occurrence
+        );
     }
 
     /**
