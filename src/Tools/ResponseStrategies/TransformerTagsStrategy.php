@@ -127,9 +127,11 @@ class TransformerTagsStrategy
      */
     private function getTransformerTag(array $tags)
     {
-        $transFormerTags = array_filter($tags, function ($tag) {
-            return ($tag instanceof Tag) && in_array(strtolower($tag->getName()), ['transformer', 'transformercollection']);
-        });
+        $transFormerTags = array_values(
+            array_filter($tags, function ($tag) {
+                return ($tag instanceof Tag) && in_array(strtolower($tag->getName()), ['transformer', 'transformercollection']);
+            })
+        );
 
         return array_first($transFormerTags);
     }
