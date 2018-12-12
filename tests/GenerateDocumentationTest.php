@@ -282,7 +282,7 @@ class GenerateDocumentationTest extends TestCase
             $firstGroup1Occurrence < $firstGroup2Occurrence && $firstGroup2Occurrence < $firstGroup10Occurrence
         );
     }
-  
+
     /** @test */
     public function supports_partial_resource_controller()
     {
