@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
+use ReflectionException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
@@ -12,6 +13,7 @@ use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestNaturalSortController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestPartialResourceController;
 
 class GenerateDocumentationTest extends TestCase
 {
@@ -279,6 +281,26 @@ class GenerateDocumentationTest extends TestCase
         $this->assertTrue(
             $firstGroup1Occurrence < $firstGroup2Occurrence && $firstGroup2Occurrence < $firstGroup10Occurrence
         );
+  
+    /** @test */
+    public function supports_partial_resource_controller()
+    {
+        RouteFacade::resource('/api/partial', TestPartialResourceController::class);
+
+        config(['apidoc.routes.0.prefixes' => ['api/*']]);
+
+        $thrownException = null;
+
+        try {
+            $this->artisan('apidoc:generate');
+        } catch (ReflectionException $e) {
+            $thrownException = $e;
+        }
+
+        $this->assertNull($thrownException);
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $this->assertContains('Group A', $generatedMarkdown);
+        $this->assertContains('Group B', $generatedMarkdown);
     }
 
     /**

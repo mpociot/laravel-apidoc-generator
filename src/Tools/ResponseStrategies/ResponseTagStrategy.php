@@ -32,9 +32,11 @@ class ResponseTagStrategy
      */
     protected function getDocBlockResponses(array $tags)
     {
-        $responseTags = array_filter($tags, function ($tag) {
-            return $tag instanceof Tag && strtolower($tag->getName()) === 'response';
-        });
+        $responseTags = array_values(
+            array_filter($tags, function ($tag) {
+                return $tag instanceof Tag && strtolower($tag->getName()) === 'response';
+            })
+        );
 
         if (empty($responseTags)) {
             return;

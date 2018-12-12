@@ -32,9 +32,12 @@ class ResponseFileStrategy
      */
     protected function getFileResponses(array $tags)
     {
-        $responseFileTags = array_filter($tags, function ($tag) {
-            return $tag instanceof Tag && strtolower($tag->getName()) === 'responsefile';
-        });
+        // avoid "holes" in the keys of the filtered array, by using array_values on the filtered array
+        $responseFileTags = array_values(
+            array_filter($tags, function ($tag) {
+                return $tag instanceof Tag && strtolower($tag->getName()) === 'responsefile';
+            })
+        );
 
         if (empty($responseFileTags)) {
             return;
