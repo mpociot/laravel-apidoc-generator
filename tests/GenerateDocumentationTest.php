@@ -12,6 +12,7 @@ use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestNaturalSortController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestPartialResourceController;
 
 class GenerateDocumentationTest extends TestCase
@@ -258,6 +259,30 @@ class GenerateDocumentationTest extends TestCase
         $this->assertContains('Лорем ипсум долор сит амет', $generatedMarkdown);
     }
 
+    /** @test */
+    public function sorts_group_naturally()
+    {
+        RouteFacade::get('/api/action1', TestNaturalSortController::class.'@action1');
+        RouteFacade::get('/api/action2', TestNaturalSortController::class.'@action2');
+        RouteFacade::get('/api/action10', TestNaturalSortController::class.'@action10');
+
+        config(['apidoc.routes.0.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+
+        $firstGroup1Occurrence = strpos($generatedMarkdown, '#1. Group 1');
+        $firstGroup2Occurrence = strpos($generatedMarkdown, '#2. Group 2');
+        $firstGroup10Occurrence = strpos($generatedMarkdown, '#10. Group 10');
+
+        $this->assertNotFalse($firstGroup1Occurrence);
+        $this->assertNotFalse($firstGroup2Occurrence);
+        $this->assertNotFalse($firstGroup2Occurrence);
+
+        $this->assertTrue(
+            $firstGroup1Occurrence < $firstGroup2Occurrence && $firstGroup2Occurrence < $firstGroup10Occurrence
+        );
+    }
+  
     /** @test */
     public function supports_partial_resource_controller()
     {

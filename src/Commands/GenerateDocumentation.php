@@ -42,7 +42,7 @@ class GenerateDocumentation extends Command
     /**
      * Execute the console command.
      *
-     * @return false|null
+     * @return void
      */
     public function handle()
     {
@@ -56,9 +56,10 @@ class GenerateDocumentation extends Command
         $generator = new Generator();
         $parsedRoutes = $this->processRoutes($generator, $routes);
         $parsedRoutes = collect($parsedRoutes)->groupBy('group')
-            ->sort(function ($a, $b) {
-                return strcmp($a->first()['group'], $b->first()['group']);
-            });
+            ->sortBy(static function ($group) {
+                /* @var $group Collection */
+                return $group->first()['group'];
+            }, SORT_NATURAL);
 
         $this->writeMarkdown($parsedRoutes);
     }
