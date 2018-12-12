@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.2.0] - Wednesday, 12 December 2018
+### Changed
+- API groups are now sorted "naturally" (https://github.com/mpociot/laravel-apidoc-generator/pull/428)
+
+### Fixed
+- Partial resource controllers are now properly supported (https://github.com/mpociot/laravel-apidoc-generator/pull/429)
+- PUT request body now formatted as `urlencoded` in Postman collection (https://github.com/mpociot/laravel-apidoc-generator/pull/418)
+- `@responseFile` strategy now properly renders responses (https://github.com/mpociot/laravel-apidoc-generator/pull/427)
+
 ## [3.1.1] - Wednesday, 5 December 2018
 ### Added
 - Ability to specify different responses for different status codes. (https://github.com/mpociot/laravel-apidoc-generator/pull/416)
