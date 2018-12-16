@@ -355,7 +355,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function can_replace_key_value_pair_in_response_file()
+    public function can_add_or_replace_key_value_pair_in_response_file()
     {
         // copy file to storage
         $filePath = __DIR__.'/../Fixtures/response_test.json';
