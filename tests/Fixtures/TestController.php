@@ -207,4 +207,12 @@ class TestController extends Controller
     {
         return '';
     }
+
+    /**
+     * @responseFile response_test.json {"message" : "Serendipity"}
+     */
+    public function responseFileTagAndCustomJson()
+    {
+        return '';
+    }
 }

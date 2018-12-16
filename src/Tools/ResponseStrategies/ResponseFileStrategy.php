@@ -47,7 +47,7 @@ class ResponseFileStrategy
             preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $status = $result[1] ?: 200;
             $content = $result[2] ? file_get_contents(storage_path(trim($result[2])), true) : '{}';
-            $json = isset($result[3]) ? preg_replace("/'/", "\"", $result[3]) : "{}";
+            $json = !empty($result[3]) ? str_replace("'", "\"", $result[3]) : "{}";
             $merged = array_merge(json_decode($content, true), json_decode($json, true));
             return new JsonResponse($merged, (int) $status);
         }, $responseFileTags);
