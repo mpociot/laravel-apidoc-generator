@@ -44,12 +44,12 @@ class ResponseFileStrategy
         }
 
         return array_map(function (Tag $responseFileTag) {
-            preg_match('/^(\d{3})?\s?([\s\S]*)$/', $responseFileTag->getContent(), $result);
-
+            preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $status = $result[1] ?: 200;
-            $content = $result[2] ? file_get_contents(storage_path($result[2]), true) : '{}';
-
-            return new JsonResponse(json_decode($content, true), (int) $status);
+            $content = $result[2] ? file_get_contents(storage_path(trim($result[2])), true) : '{}';
+            $json = !empty($result[3]) ? str_replace("'", "\"", $result[3]) : "{}";
+            $merged = array_merge(json_decode($content, true), json_decode($json, true));
+            return new JsonResponse($merged, (int) $status);
         }, $responseFileTags);
     }
 }

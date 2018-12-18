@@ -355,6 +355,31 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function can_add_or_replace_key_value_pair_in_response_file()
+    {
+        // copy file to storage
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
+        $fixtureFileJson = file_get_contents($filePath);
+        copy($filePath, storage_path('response_test.json'));
+
+        $route = $this->createRoute('GET', '/responseFileTagAndCustomJson', 'responseFileTagAndCustomJson');
+        $parsed = $this->generator->processRoute($route);
+        $response = array_first($parsed['response']);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+        $this->assertNotSame(
+            $response['content'],
+            $fixtureFileJson
+        );
+
+        unlink(storage_path('response_test.json'));
+    }
+
+    /** @test */
     public function can_parse_multiple_response_file_tags_with_status_codes()
     {
         // copy file to storage
