@@ -366,6 +366,39 @@ If you don't specify an example response using any of the above means, this pack
 - You can configure environment variables (this is useful so you can prevent external services like notifications from being triggered). By default the APP_ENV is set to 'documentation'. You can add more variables in the `env` key.
 - By default, the package will generate dummy values for your documented body and query parameters and send in the request. (If you specified example values using `@bodyParam` or `@queryParam`, those will be used instead.) You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
 
+### Generating based on tags
+
+Sometimes, you may want only a set of endpoints documented, for example, if some endpoints are for internal usage only. Introducing `@tags`
+
+#### @tags
+
+While `@hideFromAPIDocumentation` hides all so-tagged methods from the documentation, `@tags` allows for a more fine-tuned documentation of methods.
+
+
+```php
+/**
+ * @tags internal
+ */
+public function index()
+{
+    # code...
+}
+```
+
+With methods so tagged, you can go ahead to skip **internal** endpoints by using the `--skip-tags` option:
+
+```php
+php artisan apidoc:generate --skip-tags=internal
+```
+
+And if you want to generate only **internal** endpoints, use the `--only-tags` options:
+
+```php
+php artisan apidoc:generate --only-tags=internal
+```
+
+>**Note:**  A method may have multiple tags e.g. `@tags internal important`
+>**Note:** `--skip-tags` and `--only-tags` may target multiple tags e.g. `php artisan apidoc:generate --skip-tags=internal,important
 
 ### Postman collections
 

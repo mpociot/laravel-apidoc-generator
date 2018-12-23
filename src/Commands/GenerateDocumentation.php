@@ -22,6 +22,8 @@ class GenerateDocumentation extends Command
      */
     protected $signature = 'apidoc:generate
                             {--force : Force rewriting of existing routes}
+                            {--only-tags= : Comma-separated list of tags to generate}
+                            {--skip-tags= : Comma-separated list of tags to skip}
     ';
 
     /**
@@ -231,14 +233,32 @@ class GenerateDocumentation extends Command
 
         $comment = $reflection->getMethod($method)->getDocComment();
 
+        $allowedTags = str_replace(',,', ',', $this->option('only-tags'));
+        $disallowedTags = str_replace(',,', ',', $this->option('skip-tags'));
+
+        $allowedTags = trim($allowedTags) ? explode(',', $allowedTags) : [];
+        $disallowedTags = trim($disallowedTags) ? explode(',', $disallowedTags) : [];
+
         if ($comment) {
             $phpdoc = new DocBlock($comment);
 
+            if (count($allowedTags) && !$phpdoc->hasTag('tags')) {
+                return false;
+            }
             return collect($phpdoc->getTags())
-                ->filter(function ($tag) use ($route) {
+                ->filter(function ($tag) use ($route, $allowedTags, $disallowedTags) {
+                    if ((count($allowedTags) || count($disallowedTags)) &&
+                        $tag->getName() == 'tags') {
+                        $tags = explode(' ', $tag->getContent());
+                        $containedAllowedTags = array_intersect($tags, $allowedTags);
+                        $containedDisallowedTags = array_intersect($tags, $disallowedTags);
+                        return !count($containedAllowedTags) || count($containedDisallowedTags);
+                    }
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
+        } elseif (count($allowedTags)) {
+            return false;
         }
 
         return true;
