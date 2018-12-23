@@ -242,7 +242,7 @@ class GenerateDocumentation extends Command
         if ($comment) {
             $phpdoc = new DocBlock($comment);
 
-            if (count($allowedTags) && !$phpdoc->hasTag('tags')) {
+            if (count($allowedTags) && ! $phpdoc->hasTag('tags')) {
                 return false;
             }
             return collect($phpdoc->getTags())
@@ -252,7 +252,7 @@ class GenerateDocumentation extends Command
                         $tags = explode(' ', $tag->getContent());
                         $containedAllowedTags = array_intersect($tags, $allowedTags);
                         $containedDisallowedTags = array_intersect($tags, $disallowedTags);
-                        return !count($containedAllowedTags) || count($containedDisallowedTags);
+                        return ! count($containedAllowedTags) || count($containedDisallowedTags);
                     }
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
