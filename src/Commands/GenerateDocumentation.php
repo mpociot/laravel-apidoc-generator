@@ -245,6 +245,7 @@ class GenerateDocumentation extends Command
             if (count($allowedTags) && ! $phpdoc->hasTag('tags')) {
                 return false;
             }
+
             return collect($phpdoc->getTags())
                 ->filter(function ($tag) use ($route, $allowedTags, $disallowedTags) {
                     if ((count($allowedTags) || count($disallowedTags)) &&
@@ -252,8 +253,10 @@ class GenerateDocumentation extends Command
                         $tags = explode(' ', $tag->getContent());
                         $containedAllowedTags = array_intersect($tags, $allowedTags);
                         $containedDisallowedTags = array_intersect($tags, $disallowedTags);
+
                         return ! count($containedAllowedTags) || count($containedDisallowedTags);
                     }
+
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
