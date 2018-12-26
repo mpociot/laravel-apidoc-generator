@@ -46,6 +46,7 @@ class TransformerTagsStrategy
             $modelInstance = $this->instantiateTransformerModel($model);
 
             $fractal = new Manager();
+            $fractal->setSerializer(app(config('apidoc.fractal.serializer')));
             $resource = (strtolower($transformerTag->getName()) == 'transformercollection')
                 ? new Collection([$modelInstance, $modelInstance], new $transformer)
                 : new Item($modelInstance, new $transformer);
