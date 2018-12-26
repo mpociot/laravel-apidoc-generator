@@ -17,7 +17,7 @@ return [
      */
     'postman' => true,
 
-     /**
+     /*
      * Fractal Transformer Config
      *
      * must install

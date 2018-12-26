@@ -47,7 +47,7 @@ class TransformerTagsStrategy
 
             $fractal = new Manager();
  
-            if (!is_null(config('apidoc.fractal.serializer'))) {
+            if (! is_null(config('apidoc.fractal.serializer'))) {
                 $fractal->setSerializer(app(config('apidoc.fractal.serializer')));
             }
 
