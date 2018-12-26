@@ -29,7 +29,7 @@ return [
      * -JsonApiSerializer
      */
     'fractal' => [
-        'serializer' => League\Fractal\Serializer\JsonApiSerializer::class,
+        'serializer' => League\Fractal\Serializer\ArraySerializer::class,
     ],
 
     /*
