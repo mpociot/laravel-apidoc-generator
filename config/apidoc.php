@@ -16,10 +16,10 @@ return [
      * Generate a Postman collection in addition to HTML docs.
      */
     'postman' => true,
-    
+
      /**
      * Fractal Transformer Config
-     * 
+     *
      * must install
      * composer require league/fractal
      *
