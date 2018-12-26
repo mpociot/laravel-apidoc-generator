@@ -34,6 +34,8 @@ return [
       * default null means no serializer or just json return.
       */
     'fractal' => [
+        // example:
+        // serializer' => League\Fractal\Serializer\JsonApiSerializer::class,
         'serializer' => null,
     ],
 
