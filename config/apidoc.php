@@ -16,6 +16,21 @@ return [
      * Generate a Postman collection in addition to HTML docs.
      */
     'postman' => true,
+    
+     /**
+     * Fractal Transformer Config
+     * 
+     * must install
+     * composer require league/fractal
+     *
+     * Available serializers:
+     * -ArraySerializer
+     * -DataArraySerializer
+     * -JsonApiSerializer
+     */
+    'fractal' => [
+        'serializer' => League\Fractal\Serializer\JsonApiSerializer::class,
+    ],
 
     /*
      * The routes for which documentation should be generated.
