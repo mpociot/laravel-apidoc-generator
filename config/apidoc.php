@@ -18,18 +18,21 @@ return [
     'postman' => true,
 
      /*
-     * Fractal Transformer Config
-     *
-     * must install
-     * composer require league/fractal
-     *
-     * Available serializers:
-     * -League\Fractal\Serializer\ArraySerializer::class
-     * -League\Fractal\Serializer\DataArraySerializer::class
-     * -League\Fractal\Serializer\JsonApiSerializer::class
-     *
-     * null means no serializer
-     */
+      * Fractal Transformer Config
+      *
+      * this is require https://github.com/thephpleague/fractal
+      * composer require league/fractal
+      *
+      * If you are using custom serializer with league/fractal,
+      * you can specify it here.
+      *
+      * Available serializers:
+      * -League\Fractal\Serializer\ArraySerializer::class
+      * -League\Fractal\Serializer\DataArraySerializer::class
+      * -League\Fractal\Serializer\JsonApiSerializer::class
+      *
+      * default null means no serializer or just json return.
+      */
     'fractal' => [
         'serializer' => null,
     ],
