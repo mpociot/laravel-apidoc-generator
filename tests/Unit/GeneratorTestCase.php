@@ -254,11 +254,11 @@ abstract class GeneratorTestCase extends TestCase
         return [
             [
                 null,
-                '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
+                '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}',
             ],
             [
                 'League\Fractal\Serializer\JsonApiSerializer',
-                '{"data":{"type":null,"id":"1","attributes":{"description":"Welcome on this test versions","name":"TestName"}}}'
+                '{"data":{"type":null,"id":"1","attributes":{"description":"Welcome on this test versions","name":"TestName"}}}',
             ],
         ];
     }
