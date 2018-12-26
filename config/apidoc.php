@@ -24,12 +24,14 @@ return [
      * composer require league/fractal
      *
      * Available serializers:
-     * -ArraySerializer
-     * -DataArraySerializer
-     * -JsonApiSerializer
+     * -League\Fractal\Serializer\ArraySerializer::class
+     * -League\Fractal\Serializer\DataArraySerializer::class
+     * -League\Fractal\Serializer\JsonApiSerializer::class
+     *
+     * null means no serializer
      */
     'fractal' => [
-        'serializer' => League\Fractal\Serializer\ArraySerializer::class,
+        'serializer' => null,
     ],
 
     /*
