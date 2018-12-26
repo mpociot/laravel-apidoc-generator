@@ -291,7 +291,7 @@ For example:
 
 ```php
 /**
- * @transformer \App\Transformers\UserTransformer
+ * @transformercollection \App\Transformers\UserTransformer
  * @transformerModel \App\User
  */
 public function listUsers()
