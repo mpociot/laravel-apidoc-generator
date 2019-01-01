@@ -368,9 +368,19 @@ If you don't specify an example response using any of the above means, this pack
 
 ### Generating based on tags
 
-Sometimes, you may want only a set of endpoints documented, for example, if some endpoints are for internal usage only. Introducing `@tags`
+Sometimes, you may want only a set of endpoints documented, for example, if some endpoints are for internal usage only. Introducing `tags`:
 
-#### @tags
+#### Route group tags
+
+Routes may be grouped together and tagged:
+
+```php
+Route::group(['tags' => ['internal']], function () {
+    Route::resource('/books', 'BooksController')
+});
+```
+
+#### Annotation tags
 
 While `@hideFromAPIDocumentation` hides all so-tagged methods from the documentation, `@tags` allows for a more fine-tuned documentation of methods.
 
@@ -385,7 +395,9 @@ public function index()
 }
 ```
 
-With methods so tagged, you can go ahead to skip **internal** endpoints by using the `--skip-tags` option:
+#### Using tags with command
+
+With either or both of the above tagging methods, you can go ahead to skip **internal** endpoints by using the `--skip-tags` option:
 
 ```php
 php artisan apidoc:generate --skip-tags=internal
@@ -397,7 +409,7 @@ And if you want to generate only **internal** endpoints, use the `--only-tags` o
 php artisan apidoc:generate --only-tags=internal
 ```
 
->**Note:**  A method may have multiple tags e.g. `@tags internal important`
+>**Note:**  Route groups and methods may have multiple tags e.g. `@tags internal important`
 >**Note:** `--skip-tags` and `--only-tags` may target multiple tags e.g. `php artisan apidoc:generate --skip-tags=internal,important
 
 ### Postman collections
