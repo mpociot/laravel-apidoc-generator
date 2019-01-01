@@ -272,6 +272,7 @@ class GenerateDocumentation extends Command
         } elseif (count($allowedTags)) {
             return false;
         }
+
         return true;
     }
 
