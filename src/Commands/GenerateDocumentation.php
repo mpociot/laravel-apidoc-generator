@@ -264,7 +264,6 @@ class GenerateDocumentation extends Command
                         $tags = explode(' ', $tag->getContent());
                         return $this->skipRouteWithTags($tags, $allowedTags, $disallowedTags);
                     }
-
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
