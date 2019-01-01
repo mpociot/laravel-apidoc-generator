@@ -262,8 +262,10 @@ class GenerateDocumentation extends Command
                     if ((count($allowedTags) || count($disallowedTags)) &&
                         $tag->getName() == 'tags') {
                         $tags = explode(' ', $tag->getContent());
+
                         return $this->skipRouteWithTags($tags, $allowedTags, $disallowedTags);
                     }
+
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
