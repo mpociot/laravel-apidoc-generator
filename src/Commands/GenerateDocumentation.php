@@ -242,10 +242,10 @@ class GenerateDocumentation extends Command
         $routeTags = $route->getAction('tags');
 
         if ($routeTags) {
-            if (!is_array($routeTags)) {
+            if (! is_array($routeTags)) {
                 $routeTags = [$routeTags];
             }
-            if (!$this->skipRouteWithTags($routeTags, $allowedTags, $disallowedTags)) {
+            if (! $this->skipRouteWithTags($routeTags, $allowedTags, $disallowedTags)) {
                 return true;
             }
         }
