@@ -17,28 +17,6 @@ return [
      */
     'postman' => true,
 
-     /*
-      * Fractal Transformer Config
-      *
-      * this is require https://github.com/thephpleague/fractal
-      * composer require league/fractal
-      *
-      * If you are using custom serializer with league/fractal,
-      * you can specify it here.
-      *
-      * Available serializers:
-      * -League\Fractal\Serializer\ArraySerializer::class
-      * -League\Fractal\Serializer\DataArraySerializer::class
-      * -League\Fractal\Serializer\JsonApiSerializer::class
-      *
-      * default null means no serializer or just json return.
-      */
-    'fractal' => [
-        // example:
-        // serializer' => League\Fractal\Serializer\JsonApiSerializer::class,
-        'serializer' => null,
-    ],
-
     /*
      * The routes for which documentation should be generated.
      * Each group contains rules defining which routes should be included ('match', 'include' and 'exclude' sections)
@@ -176,4 +154,22 @@ return [
      * - size: 230 x 52
      */
     'logo' => false,
+    
+    /*
+     * Configure how responses are transformed using @transformer and @transformerCollection
+     * Requires league/fractal package: composer require league/fractal
+     *
+     * If you are using a custom serializer with league/fractal,
+     * you can specify it here.
+     *
+     * Serializers included with league/fractal:
+     * - \League\Fractal\Serializer\ArraySerializer::class
+     * - \League\Fractal\Serializer\DataArraySerializer::class
+     * - \League\Fractal\Serializer\JsonApiSerializer::class
+     *
+     * Leave as null to use no serializer or return a simple JSON.
+     */
+    'fractal' => [
+        'serializer' => null,
+    ],
 ];
