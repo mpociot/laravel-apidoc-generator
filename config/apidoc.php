@@ -154,4 +154,22 @@ return [
      * - size: 230 x 52
      */
     'logo' => false,
+    
+    /*
+     * Configure how responses are transformed using @transformer and @transformerCollection
+     * Requires league/fractal package: composer require league/fractal
+     *
+     * If you are using a custom serializer with league/fractal,
+     * you can specify it here.
+     *
+     * Serializers included with league/fractal:
+     * - \League\Fractal\Serializer\ArraySerializer::class
+     * - \League\Fractal\Serializer\DataArraySerializer::class
+     * - \League\Fractal\Serializer\JsonApiSerializer::class
+     *
+     * Leave as null to use no serializer or return a simple JSON.
+     */
+    'fractal' => [
+        'serializer' => null,
+    ],
 ];

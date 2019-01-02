@@ -224,9 +224,16 @@ abstract class GeneratorTestCase extends TestCase
         ], json_decode($parsed['response'][1]['content'], true));
     }
 
-    /** @test */
-    public function can_parse_transformer_tag()
+    /**
+     * @param $serializer
+     * @param $expected
+     *
+     * @test
+     * @dataProvider dataResources
+     */
+    public function can_parse_transformer_tag($serializer, $expected)
     {
+        config(['apidoc.fractal.serializer' => $serializer]);
         $route = $this->createRoute('GET', '/transformerTag', 'transformerTag');
         $parsed = $this->generator->processRoute($route);
         $response = array_first($parsed['response']);
@@ -238,8 +245,22 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
+            $expected
         );
+    }
+
+    public function dataResources()
+    {
+        return [
+            [
+                null,
+                '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}',
+            ],
+            [
+                'League\Fractal\Serializer\JsonApiSerializer',
+                '{"data":{"type":null,"id":"1","attributes":{"description":"Welcome on this test versions","name":"TestName"}}}',
+            ],
+        ];
     }
 
     /** @test */
