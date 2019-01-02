@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.3.0] - Wednesday, 2 January 2019
+### Added
+- Added ability to replace json key values in response file (https://github.com/mpociot/laravel-apidoc-generator/pull/434)
+- Added support for custom transfer serializers (https://github.com/mpociot/laravel-apidoc-generator/pull/441)
+
 ## [3.2.0] - Wednesday, 12 December 2018
 ### Changed
 - API groups are now sorted "naturally" (https://github.com/mpociot/laravel-apidoc-generator/pull/428)
