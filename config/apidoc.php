@@ -154,7 +154,7 @@ return [
      * - size: 230 x 52
      */
     'logo' => false,
-    
+
     /*
      * Configure how responses are transformed using @transformer and @transformerCollection
      * Requires league/fractal package: composer require league/fractal
