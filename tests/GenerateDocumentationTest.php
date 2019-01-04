@@ -2,13 +2,12 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\URL;
 use ReflectionException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Contracts\Console\Kernel;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
