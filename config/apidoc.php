@@ -15,7 +15,22 @@ return [
     /*
      * Generate a Postman collection in addition to HTML docs.
      */
-    'postman' => true,
+    'postman' => [
+        /*
+         * Specify whether the Postman collection should be generated.
+         */
+        'enabled' => true,
+
+        /*
+         * The name for the exported Postman collection. Default: config('APP_NAME') API
+         */
+        'name' => null,
+
+        /*
+         * The description for the exported Postman collection.
+         */
+        'description' => null,
+    ],
 
     /*
      * The routes for which documentation should be generated.
