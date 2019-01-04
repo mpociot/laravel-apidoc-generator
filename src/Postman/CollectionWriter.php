@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Postman;
 
+use Illuminate\Support\Facades\URL;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Collection;
 
@@ -24,6 +25,8 @@ class CollectionWriter
 
     public function getCollection()
     {
+        URL::forceRootUrl(config('app.url'));
+
         $collection = [
             'variables' => [],
             'info' => [
