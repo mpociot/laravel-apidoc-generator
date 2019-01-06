@@ -79,7 +79,7 @@ class GenerateDocumentation extends Command
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', ltrim($outputPath, 'public/'))
-            ->with('showPostmanCollectionButton', config('apidoc.postman.enabled') ?? config('apidoc.postman'));
+            ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection());
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
             return $routeGroup->map(function ($route) {
@@ -135,7 +135,7 @@ class GenerateDocumentation extends Command
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
             ->with('outputPath', config('apidoc.output'))
-            ->with('showPostmanCollectionButton', config('apidoc.postman.enabled') ?? config('apidoc.postman'))
+            ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
         if (! is_dir($outputPath)) {
@@ -153,7 +153,7 @@ class GenerateDocumentation extends Command
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
             ->with('outputPath', config('apidoc.output'))
-            ->with('showPostmanCollectionButton', config('apidoc.postman.enabled') ?? config('apidoc.postman'))
+            ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
         file_put_contents($compareFile, $compareMarkdown);
@@ -166,7 +166,7 @@ class GenerateDocumentation extends Command
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
 
-        if (config('apidoc.postman.enabled') ?? config('apidoc.postman')) {
+        if ($this->shouldGeneratePostmanCollection()) {
             $this->info('Generating Postman collection');
 
             file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
@@ -256,5 +256,15 @@ class GenerateDocumentation extends Command
         $writer = new CollectionWriter($routes);
 
         return $writer->getCollection();
+    }
+
+    /**
+     * Checks config if it should generate Postman collection.
+     *
+     * @return boolean
+     */
+    private function shouldGeneratePostmanCollection()
+    {
+        return config('apidoc.postman.enabled', is_bool(config('apidoc.postman')) ? config('apidoc.postman') : false);
     }
 }
