@@ -6,12 +6,15 @@ use Dingo\Api\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
  * Make a call to the route and retrieve its response.
  */
 class ResponseCallStrategy
 {
+    use ParamHelpers;
+
     /**
      * @param Route $route
      * @param array $tags
@@ -68,8 +71,8 @@ class ResponseCallStrategy
         $request = $this->addHeaders($request, $route, $rulesToApply['headers'] ?? []);
 
         // Mix in parsed parameters with manually specified parameters.
-        $queryParams = collect($queryParams)->map->value->merge($rulesToApply['query'] ?? [])->toArray();
-        $bodyParams = collect($bodyParams)->map->value->merge($rulesToApply['body'] ?? [])->toArray();
+        $queryParams = collect($this->cleanParams($queryParams))->merge($rulesToApply['query'] ?? [])->toArray();
+        $bodyParams = collect($this->cleanParams($bodyParams))->merge($rulesToApply['body'] ?? [])->toArray();
 
         $request = $this->addQueryParameters($request, $queryParams);
         $request = $this->addBodyParameters($request, $bodyParams);
