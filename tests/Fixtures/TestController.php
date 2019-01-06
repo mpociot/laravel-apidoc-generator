@@ -40,6 +40,9 @@ class TestController extends Controller
      * @bodyParam another_one number Just need something here.
      * @bodyParam yet_another_param object required
      * @bodyParam even_more_param array
+     * @bodyParam book.name string
+     * @bodyParam book.author_id integer
+     * @bodyParam ids.* integer
      */
     public function withBodyParameters()
     {
