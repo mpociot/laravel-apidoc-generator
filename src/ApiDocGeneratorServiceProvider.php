@@ -19,11 +19,11 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../resources/views' => app()->basePath().'/resources/views/vendor/apidoc',
-        ], 'views');
+        ], 'apidoc-views');
 
         $this->publishes([
             __DIR__.'/../config/apidoc.php' => app()->basePath().'/config/apidoc.php',
-        ], 'config');
+        ], 'apidoc-config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/apidoc.php', 'apidoc');
 
