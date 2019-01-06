@@ -261,7 +261,7 @@ class GenerateDocumentation extends Command
     /**
      * Checks config if it should generate Postman collection.
      *
-     * @return boolean
+     * @return bool
      */
     private function shouldGeneratePostmanCollection()
     {
