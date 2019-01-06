@@ -24,7 +24,7 @@ $ composer require mpociot/laravel-apidoc-generator
 Publish the config file by running:
 
 ```bash
-php artisan vendor:publish --provider="Mpociot\ApiDoc\ApiDocGeneratorServiceProvider" --tag=config
+php artisan vendor:publish --provider="Mpociot\ApiDoc\ApiDocGeneratorServiceProvider" --tag=apidoc-config
 ```
 This will create an `apidoc.php` file in your `config` folder.
 
