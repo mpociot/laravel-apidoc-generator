@@ -18,10 +18,9 @@ curl -X {{$route['methods'][0]}} {{$route['methods'][0] == 'GET' ? '-G ' : ''}}"
 @endif
 @endforeach
 @endif
-@foreach($route['bodyParameters'] as $attribute => $parameter)
-    -d "{{$attribute}}"="{{$parameter['value'] === false ? "false" : $parameter['value']}}" @if(! ($loop->last))\
+@if(count($route['cleanBodyParameters']))
+    -d '{!! json_encode($route['cleanBodyParameters']) !!}'
 @endif
-@endforeach
 
 ```
 
@@ -50,11 +49,7 @@ let headers = {
 }
 @if(count($route['bodyParameters']))
 
-let body = JSON.stringify({
-@foreach($route['bodyParameters'] as $attribute => $parameter)
-    "{{ $attribute }}": "{{ $parameter['value'] }}",
-@endforeach
-})
+let body = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
 @endif
 
 fetch(url, {
