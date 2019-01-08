@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.3.1] - Tuesday, 8 January 2019
+### Fixed
+- Fixed vendor tags (https://github.com/mpociot/laravel-apidoc-generator/pull/444)
+
 ## [3.3.0] - Wednesday, 2 January 2019
 ### Added
 - Ability to replace json key values in response file (https://github.com/mpociot/laravel-apidoc-generator/pull/434)
