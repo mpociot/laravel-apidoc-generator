@@ -250,10 +250,10 @@ class Generator
                 return str_random();
             },
             'array' => function () {
-                return '[]';
+                return [];
             },
             'object' => function () {
-                return '{}';
+                return new \stdClass;
             },
         ];
 
