@@ -14,7 +14,7 @@ trait ParamHelpers {
     {
         $values = [];
         foreach ($params as $name => $details) {
-            $this->cleanValueFrom($name, $description['value'], $values);
+            $this->cleanValueFrom($name, $details['value'], $values);
         }
         return $values;
     }
