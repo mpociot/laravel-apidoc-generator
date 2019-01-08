@@ -44,6 +44,8 @@ class TestController extends Controller
      * @bodyParam book.author_id integer
      * @bodyParam book[pages_count] integer
      * @bodyParam ids.* integer
+     * @bodyParam users.*.first_name string The first name of the user. Example: John
+     * @bodyParam users.*.last_name string The last name of the user. Example: Doe
      */
     public function withBodyParameters()
     {
