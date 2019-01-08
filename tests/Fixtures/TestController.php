@@ -42,6 +42,7 @@ class TestController extends Controller
      * @bodyParam even_more_param array
      * @bodyParam book.name string
      * @bodyParam book.author_id integer
+     * @bodyParam book[pages_count] integer
      * @bodyParam ids.* integer
      */
     public function withBodyParameters()
