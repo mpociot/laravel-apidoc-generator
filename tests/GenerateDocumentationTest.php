@@ -7,6 +7,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Contracts\Console\Kernel;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
@@ -226,6 +227,22 @@ class GenerateDocumentationTest extends TestCase
         $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
         $generatedCollection->info->_postman_id = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection.json'));
+        $this->assertEquals($generatedCollection, $fixtureCollection);
+    }
+
+    /** @test */
+    public function generated_postman_collection_can_have_custom_url()
+    {
+        Config::set('app.url', 'http://yourapp.app');
+        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
+        RouteFacade::post('/api/responseTag', TestController::class.'@withResponseTag');
+
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
+        $generatedCollection->info->_postman_id = '';
+        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_updated_url.json'));
         $this->assertEquals($generatedCollection, $fixtureCollection);
     }
 
