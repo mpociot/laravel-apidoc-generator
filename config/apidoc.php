@@ -22,7 +22,7 @@ return [
         'enabled' => true,
 
         /*
-         * The name for the exported Postman collection. Default: config('APP_NAME')." API"
+         * The name for the exported Postman collection. Default: config('app.name')." API"
          */
         'name' => null,
 
