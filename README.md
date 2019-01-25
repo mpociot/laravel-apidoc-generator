@@ -45,7 +45,7 @@ Before you can generate your documentation, you'll need to configure a few thing
 This is the file path where the generated documentation will be written to. Default: **public/docs**
 
 - `postman`
-This is where you specify the Postman collection to be generated along with the documentation. Default: **enabled**
+This package can automatically generate a Postman collection for your routes, along with the documentation. This section is where you can configure (or disable) that.
 
 - `router`
 The router to use when processing the route (can be Laravel or Dingo. Defaults to **Laravel**)
