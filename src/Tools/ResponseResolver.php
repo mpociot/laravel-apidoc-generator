@@ -3,11 +3,11 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
-use Symfony\Component\HttpFoundation\Response;
-use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseCallStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseFileStrategy;
+use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\TransformerTagsStrategy;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResponseResolver
 {
@@ -50,7 +50,12 @@ class ResponseResolver
 
             if (! is_null($responses)) {
                 return array_map(function (Response $response) {
-                    return [ 'headers' => $response->headers, 'statusText' => $response::$statusTexts[$response->getStatusCode()], 'status' => $response->getStatusCode(), 'content' => $this->getResponseContent($response)];
+                    return [
+                        'headers' => $response->headers,
+                        'statusText' => Response::$statusTexts[$response->getStatusCode()],
+                        'status' => $response->getStatusCode(),
+                        'content' => $this->getResponseContent($response),
+                    ];
                 }, $responses);
             }
         }
