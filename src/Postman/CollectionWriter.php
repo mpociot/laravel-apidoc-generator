@@ -144,6 +144,7 @@ class CollectionWriter
             ],
             'item' => $this->routeGroups->map(function ($routes, $group) {
                 list($groupName, $groupDescription) = explode("\n\n", $group);
+
                 return [
                     'name' => $groupName,
                     'description' => $groupDescription,
