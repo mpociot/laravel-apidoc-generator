@@ -3,11 +3,11 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseCallStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseFileStrategy;
-use Mpociot\ApiDoc\Tools\ResponseStrategies\ResponseTagStrategy;
 use Mpociot\ApiDoc\Tools\ResponseStrategies\TransformerTagsStrategy;
-use Symfony\Component\HttpFoundation\Response;
 
 class ResponseResolver
 {

@@ -30,7 +30,7 @@ return [
          */
         'description' => null,
 
-        /**
+        /*
          * Postman Environment variables
          * More info: https://learning.getpostman.com/docs/postman/environments_and_globals/manage_environments/
          * If baseUrl is set then your API URI in Postman collection will look like: {{baseUrl}}/your/api/resource

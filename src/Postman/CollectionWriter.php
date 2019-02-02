@@ -36,6 +36,7 @@ class CollectionWriter
 
     /**
      * @param $route
+     *
      * @return string
      */
     function getRouteUri($route): string
@@ -53,7 +54,7 @@ class CollectionWriter
     }
 
     /**
-     * Returns Auth response object key with access token string
+     * Returns Auth response object key with access token string.
      *
      * @return string
      */
@@ -96,7 +97,7 @@ class CollectionWriter
             'auth' => $route['authenticated'] ? [
                 'type' => 'bearer',
                 'bearer' => [
-                    'token' => '{{' . $this->getAccessTokenVariable() . '}}',
+                    'token' => '{{'.$this->getAccessTokenVariable().'}}',
                 ],
             ] : false,
             'url' => $this->getRouteUri($route),
@@ -118,7 +119,7 @@ class CollectionWriter
                 $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
                     return [
                         'key' => $key,
-                        'value' => isset($parameter['value']) ? ($parameter['type'] === 'boolean' ? (string)$parameter['value'] : $parameter['value']) : '',
+                        'value' => isset($parameter['value']) ? ($parameter['type'] === 'boolean' ? (string) $parameter['value'] : $parameter['value']) : '',
                         'description' => implode(' | ', [($parameter['required'] ? 'required' : 'optional'), $parameter['type'], $parameter['description']]),
                         'type' => 'text',
                         'enabled' => true,
@@ -157,9 +158,9 @@ class CollectionWriter
                                     'id' => Uuid::uuid4()->toString(),
                                     'exec' => [
                                         'var response = JSON.parse(responseBody);',
-                                        'tests["Successfull POST request"] = responseCode.code === 200;',
-                                        'if (response.' . $this->getResponseAccessTokenKey() . ') { postman.setEnvironmentVariable("'. $this->getAccessTokenVariable() .'", response.' . $this->getResponseAccessTokenKey() . '); }',
-                                        'if (response.' . $this->getResponseRefreshTokenKey() . ') { postman.setEnvironmentVariable("'. $this->getRefreshTokenVariable() .'", response.' . $this->getResponseRefreshTokenKey() . '); }',
+                                        'tests["Successful request"] = responseCode.code === 200;',
+                                        'if (response.'.$this->getResponseAccessTokenKey().') { postman.setEnvironmentVariable("'.$this->getAccessTokenVariable().'", response.'.$this->getResponseAccessTokenKey().'); }',
+                                        'if (response.'.$this->getResponseRefreshTokenKey().') { postman.setEnvironmentVariable("'.$this->getRefreshTokenVariable().'", response.'.$this->getResponseRefreshTokenKey().'); }',
                                     ],
                                     'type' => 'text/javascript',
                                 ] : [],
