@@ -30,6 +30,28 @@ return [
          * The description for the exported Postman collection.
          */
         'description' => null,
+
+        /**
+         * Postman Environment variables
+         * More info: https://learning.getpostman.com/docs/postman/environments_and_globals/manage_environments/
+         * If baseUrl is set then your API URI in Postman collection will look like: {{baseUrl}}/your/api/resource
+         * Set 'environment' => null to turn this feature off
+         */
+        'environment' => [
+            'variables' => [
+                'accessToken' => 'accessToken',
+                'refreshToken' => 'refreshToken',
+                'baseUrl' => 'baseUrl',
+                'email' => 'email',
+                'password' => 'password',
+            ],
+            // Auth response object key with access token string
+            'auth_response_access_token_key' => 'data.access_token',
+            'auth_response_refresh_token_key' => 'data.refresh_token',
+        ],
+
+        // Add API responses as Postman collection example
+        'add_response_example' => false,
     ],
 
     /*
