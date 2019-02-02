@@ -143,7 +143,7 @@ class CollectionWriter
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
             ],
             'item' => $this->routeGroups->map(function ($routes, $group) {
-                list($groupName, $groupDescription) = explode("\n\n", $group);
+                list($groupName, $groupDescription) = array_pad(explode("\n\n", $group), 2, null);
 
                 return [
                     'name' => $groupName,
