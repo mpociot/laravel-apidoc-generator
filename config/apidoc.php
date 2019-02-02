@@ -38,11 +38,9 @@ return [
          */
         'environment' => [
             'variables' => [
+                'baseUrl' => 'baseUrl',
                 'accessToken' => 'accessToken',
                 'refreshToken' => 'refreshToken',
-                'baseUrl' => 'baseUrl',
-                'email' => 'email',
-                'password' => 'password',
             ],
             // Auth response object key with access token string
             'auth_response_access_token_key' => 'data.access_token',
