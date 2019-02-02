@@ -38,7 +38,7 @@ class CollectionWriter
      * @param $route
      * @return string
      */
-    function getRouteUri($route)
+    function getRouteUri($route): string
     {
         if ($this->usePostmanEnvironment) {
             $baseUrl = config('apidoc.postman.environment.variables.baseUrl');
@@ -57,7 +57,7 @@ class CollectionWriter
      *
      * @return string
      */
-    protected function getResponseAccessTokenKey()
+    protected function getResponseAccessTokenKey(): string
     {
         return config('apidoc.postman.environment.auth_response_access_token_key', 'data');
     }
@@ -67,19 +67,66 @@ class CollectionWriter
      *
      * @return string
      */
-    protected function getResponseRefreshTokenKey()
+    protected function getResponseRefreshTokenKey(): string
     {
         return config('apidoc.postman.environment.auth_response_refresh_token_key', 'data');
     }
 
-    protected function getAccessTokenVariable()
+    protected function getAccessTokenVariable(): string
     {
-        return config('apidoc.postman.environment.variables.accessToken');
+        return config('apidoc.postman.environment.variables.accessToken', '');
     }
 
-    protected function getRefreshTokenVariable()
+    protected function getRefreshTokenVariable(): string
     {
-        return config('apidoc.postman.environment.variables.refreshToken');
+        return config('apidoc.postman.environment.variables.refreshToken', '');
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExcludingHeaders()
+    {
+        return config('apidoc.postman.excluded_headers', []);
+    }
+
+    protected function getRequest($route, $mode)
+    {
+        return [
+            'auth' => $route['authenticated'] ? [
+                'type' => 'bearer',
+                'bearer' => [
+                    'token' => '{{' . $this->getAccessTokenVariable() . '}}',
+                ],
+            ] : false,
+            'url' => $this->getRouteUri($route),
+            'method' => $route['methods'][0],
+            'header' => collect($route['headers'])->map(function ($header, $key) use ($route) {
+                if (in_array($key, $this->getExcludingHeaders())) {
+                    return;
+                }
+
+                return [
+                    'key' => $key,
+                    'name' => $key,
+                    'type' => 'text',
+                    'value' => $header,
+                ];
+            })->filter()->values()->toArray(),
+            'body' => [
+                'mode' => $mode,
+                $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
+                    return [
+                        'key' => $key,
+                        'value' => isset($parameter['value']) ? ($parameter['type'] === 'boolean' ? (string)$parameter['value'] : $parameter['value']) : '',
+                        'description' => implode(' | ', [($parameter['required'] ? 'required' : 'optional'), $parameter['type'], $parameter['description']]),
+                        'type' => 'text',
+                        'enabled' => true,
+                    ];
+                })->values()->toArray(),
+            ],
+            'description' => $route['description'],
+        ];
     }
 
     public function getCollection()
@@ -117,69 +164,11 @@ class CollectionWriter
                                     'type' => 'text/javascript',
                                 ] : [],
                             ]],
-                            'request' => [
-                                'auth' => [
-                                    'type' => 'bearer',
-                                    'bearer' => [
-                                        'token' => '{{'. $this->getAccessTokenVariable() .'}}',
-                                    ],
-                                ],
-                                'url' => $this->getRouteUri($route),
-                                'method' => $route['methods'][0],
-                                'header' => collect($route['headers'])->map(function ($header, $key) use ($route) {
-                                    return [
-                                        'key' => $key,
-                                        'name' => $key,
-                                        'type' => 'text',
-                                        'value' => $header,
-                                    ];
-                                })->values()->toArray(),
-                                'body' => [
-                                    'mode' => $mode,
-                                    $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
-                                        return [
-                                            'key' => $key,
-                                            'value' => isset($parameter['value']) ? ($parameter['type'] === 'boolean' ? (string) $parameter['value'] : $parameter['value']) : '',
-                                            'type' => 'text',
-                                            'enabled' => true,
-                                        ];
-                                    })->values()->toArray(),
-                                ],
-                                'description' => $route['description'],
-                            ],
+                            'request' => $this->getRequest($route, $mode),
                             'response' => $this->addResponseExample ? [
                                 [
                                     'name' => $route['title'] != '' ? $route['title'] : $this->getRouteUri($route),
-                                    'originalRequest' => [
-                                        'auth' => [
-                                            'type' => 'bearer',
-                                            'bearer' => [
-                                                'token' => '{{'. $this->getAccessTokenVariable() .'}}',
-                                            ],
-                                        ],
-                                        'url' => $this->getRouteUri($route),
-                                        'method' => $route['methods'][0],
-                                        'header' => collect($route['headers'])->map(function ($header, $key) use ($route) {
-                                            return [
-                                                'key' => $key,
-                                                'name' => $key,
-                                                'type' => 'text',
-                                                'value' => $header,
-                                            ];
-                                        })->values()->toArray(),
-                                        'body' => [
-                                            'mode' => $mode,
-                                            $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
-                                                return [
-                                                    'key' => $key,
-                                                    'value' => isset($parameter['value']) ? ($parameter['type'] === 'boolean' ? (string) $parameter['value'] : $parameter['value']) : '',
-                                                    'type' => 'text',
-                                                    'enabled' => true,
-                                                ];
-                                            })->values()->toArray(),
-                                        ],
-                                        'description' => $route['description'],
-                                    ],
+                                    'originalRequest' => $this->getRequest($route, $mode),
                                     'status' => $route['response'][0]['statusText'],
                                     'code' => $route['response'][0]['status'],
                                     '_postman_previewlanguage' => 'json',

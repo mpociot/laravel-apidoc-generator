@@ -20,7 +20,6 @@ return [
          * Specify whether the Postman collection should be generated.
          */
         'enabled' => true,
-
         /*
          * The name for the exported Postman collection. Default: config('app.name')." API"
          */
@@ -50,10 +49,12 @@ return [
             'auth_response_refresh_token_key' => 'data.refresh_token',
         ],
 
-        // Add API responses as Postman collection example
-        'add_response_example' => false,
-    ],
+        // Add API responses as Postman collection example. Default is false for the sake of security.
+        'add_response_example' => true,
 
+        // Exclude following HTTP headers from being populated to Postman request headers
+        'excluded_headers' => ['Authorization'],
+    ],
     /*
      * The routes for which documentation should be generated.
      * Each group contains rules defining which routes should be included ('match', 'include' and 'exclude' sections)
