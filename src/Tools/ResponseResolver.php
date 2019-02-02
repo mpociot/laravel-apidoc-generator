@@ -50,7 +50,7 @@ class ResponseResolver
 
             if (! is_null($responses)) {
                 return array_map(function (Response $response) {
-                    return ['status' => $response->getStatusCode(), 'content' => $this->getResponseContent($response)];
+                    return [ 'headers' => $response->headers, 'statusText' => $response::$statusTexts[$response->getStatusCode()], 'status' => $response->getStatusCode(), 'content' => $this->getResponseContent($response)];
                 }, $responses);
             }
         }
