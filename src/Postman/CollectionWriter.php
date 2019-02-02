@@ -39,12 +39,12 @@ class CollectionWriter
      *
      * @return string
      */
-    function getRouteUri($route): string
+    protected function getRouteUri($route): string
     {
         if ($this->usePostmanEnvironment) {
             $baseUrl = config('apidoc.postman.environment.variables.baseUrl');
             if ($baseUrl) {
-                return '{{' . $baseUrl . '}}' . '/' . $route['uri'];
+                return '{{'.$baseUrl.'}}'.'/'.$route['uri'];
             } else {
                 return url($route['uri']);
             }
@@ -64,7 +64,7 @@ class CollectionWriter
     }
 
     /**
-     * Returns Auth response object key with refresh token string
+     * Returns Auth response object key with refresh token string.
      *
      * @return string
      */
