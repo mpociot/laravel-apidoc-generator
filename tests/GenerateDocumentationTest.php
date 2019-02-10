@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Tests;
 
 use ReflectionException;
+use Illuminate\Support\Str;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
@@ -228,6 +229,21 @@ class GenerateDocumentationTest extends TestCase
         $generatedCollection->info->_postman_id = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection.json'));
         $this->assertEquals($generatedCollection, $fixtureCollection);
+    }
+
+    /** @test */
+    public function generated_postman_collection_domain_is_correct()
+    {
+        $domain = 'http://somedomain.test';
+        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
+
+        config(['app.url' => $domain]);
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
+        $endpointUrl = $generatedCollection->item[0]->item[0]->request->url;
+        $this->assertTrue(Str::startsWith($endpointUrl, $domain));
     }
 
     /** @test */

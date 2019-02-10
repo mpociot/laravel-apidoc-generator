@@ -8,6 +8,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\URL;
 use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Mpociot\Documentarian\Documentarian;
@@ -46,6 +47,7 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
+        URL::forceRootUrl(config('app.url'));
         $usingDingoRouter = strtolower(config('apidoc.router')) == 'dingo';
         if ($usingDingoRouter) {
             $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
