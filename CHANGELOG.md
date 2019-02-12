@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.3.2] - Tuesday, 12 February 2019
+### Added
+- Ability to specify array and object body/query params using dot notation (https://github.com/mpociot/laravel-apidoc-generator/pull/445)
+- Ability to specify name and description of Postman collection (https://github.com/mpociot/laravel-apidoc-generator/pull/443)
+
+### Fixed
+- Postman collection and documentation base URL now uses `config('app.url')` (https://github.com/mpociot/laravel-apidoc-generator/pull/458)
+
 ## [3.3.1] - Tuesday, 8 January 2019
 ### Fixed
 - Fixed vendor tags (https://github.com/mpociot/laravel-apidoc-generator/pull/444)
