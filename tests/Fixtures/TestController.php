@@ -52,6 +52,11 @@ class TestController extends Controller
         return '';
     }
 
+    public function withFormRequestParameter(TestRequest $request)
+    {
+        return '';
+    }
+
     /**
      * @queryParam location_id required The id of the location.
      * @queryParam user_id required The id of the user. Example: me

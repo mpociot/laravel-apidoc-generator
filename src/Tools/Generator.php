@@ -49,7 +49,7 @@ class Generator
 
         $routeGroup = $this->getRouteGroup($controller, $method);
         $docBlock = $this->parseDocBlock($method);
-        $bodyParameters = $this->getBodyParametersFromDocBlock($docBlock['tags']);
+        $bodyParameters = $this->getBodyParameters($method, $docBlock['tags']);
         $queryParameters = $this->getQueryParametersFromDocBlock($docBlock['tags']);
         $content = ResponseResolver::getResponse($route, $docBlock['tags'], [
             'rules' => $rulesToApply,
@@ -74,6 +74,32 @@ class Generator
         $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
 
         return $parsedRoute;
+    }
+
+    protected function getBodyParameters(ReflectionMethod $method, array $tags)
+    {
+        /** @var ReflectionClass $cls */
+        $cls = collect($method->getParameters())
+            ->reduce(function ($carry, $param) use ($method) {
+                if (!$param->getType()) {
+                    return $carry;
+                }
+
+                $cls = new ReflectionClass($param->getType()->getName());
+
+                if ($cls->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class)) {
+                    return $cls;
+                }
+
+                return $carry;
+            }, null);
+
+        if ($cls) {
+            $docBlock = new DocBlock($cls->getDocComment());
+            return $this->getBodyParametersFromDocBlock($docBlock->getTags());
+        }
+
+        return $this->getBodyParametersFromDocBlock($tags);
     }
 
     /**
