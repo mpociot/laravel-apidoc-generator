@@ -58,6 +58,14 @@ class TestController extends Controller
     }
 
     /**
+     * @bodyParam direct_one string Is found directly on the method.
+     */
+    public function withNonCommentedFormRequestParameter(TestNonCommentedRequest $request)
+    {
+        return '';
+    }
+
+    /**
      * @queryParam location_id required The id of the location.
      * @queryParam user_id required The id of the user. Example: me
      * @queryParam page required The page number. Example: 4

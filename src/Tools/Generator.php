@@ -96,7 +96,11 @@ class Generator
 
         if ($cls) {
             $docBlock = new DocBlock($cls->getDocComment());
-            return $this->getBodyParametersFromDocBlock($docBlock->getTags());
+            $result = $this->getBodyParametersFromDocBlock($docBlock->getTags());
+
+            if (count($result)) {
+                return $result;
+            }
         }
 
         return $this->getBodyParametersFromDocBlock($tags);

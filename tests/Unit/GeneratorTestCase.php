@@ -84,6 +84,20 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function it_ignores_non_commented_form_request()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withNonCommentedFormRequestParameter');
+        $bodyParameters = $this->generator->processRoute($route)['bodyParameters'];
+
+        $this->assertArraySubset([
+            'direct_one' => [
+                'type' => 'string',
+                'description' => 'Is found directly on the method.'
+            ],
+        ], $bodyParameters);
+    }
+
+    /** @test */
     public function can_parse_form_request_body_parameters()
     {
         $route = $this->createRoute('GET', '/api/test', 'withFormRequestParameter');
