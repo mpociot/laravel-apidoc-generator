@@ -78,28 +78,20 @@ class Generator
 
     protected function getBodyParameters(ReflectionMethod $method, array $tags)
     {
-        /** @var ReflectionClass $cls */
-        $cls = collect($method->getParameters())
-            ->reduce(function ($carry, $param) use ($method) {
-                if (! $param->getType() ) {
-                    return $carry;
+        foreach ($method->getParameters() as $param) {
+            $paramType = $param->getType();
+            if ($paramType === null) {
+                continue;
+            }
+
+            $formRequestClass = new ReflectionClass($paramType->getName());
+            if ($formRequestClass->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class)) {
+                $formRequestDocBlock = new DocBlock($formRequestClass->getDocComment());
+                $bodyParametersFromDocBlock = $this->getBodyParametersFromDocBlock($formRequestDocBlock->getTags());
+
+                if (count($bodyParametersFromDocBlock)) {
+                    return $bodyParametersFromDocBlock;
                 }
-
-                $cls = new ReflectionClass($param->getType()->getName());
-
-                if ($cls->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class)) {
-                    return $cls;
-                }
-
-                return $carry;
-            }, null);
-
-        if ($cls) {
-            $docBlock = new DocBlock($cls->getDocComment());
-            $result = $this->getBodyParametersFromDocBlock($docBlock->getTags());
-
-            if (count($result)) {
-                return $result;
             }
         }
 
