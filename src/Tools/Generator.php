@@ -81,7 +81,7 @@ class Generator
         /** @var ReflectionClass $cls */
         $cls = collect($method->getParameters())
             ->reduce(function ($carry, $param) use ($method) {
-                if (!$param->getType()) {
+                if (! $param->getType() ) {
                     return $carry;
                 }
 

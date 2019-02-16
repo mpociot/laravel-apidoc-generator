@@ -1,4 +1,6 @@
-<?php namespace Mpociot\ApiDoc\Tests\Fixtures;
+<?php
+
+namespace Mpociot\ApiDoc\Tests\Fixtures;
 
 use Dingo\Api\Http\FormRequest;
 

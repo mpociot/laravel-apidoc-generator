@@ -92,7 +92,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertArraySubset([
             'direct_one' => [
                 'type' => 'string',
-                'description' => 'Is found directly on the method.'
+                'description' => 'Is found directly on the method.',
             ],
         ], $bodyParameters);
     }
