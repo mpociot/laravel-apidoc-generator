@@ -17,9 +17,9 @@
     "require": {
         "php": ">=7.0.0",
         "fzaninotto/faker": "~1.8",
-        "illuminate/routing": "5.5.* || 5.6.* || 5.7.*",
-        "illuminate/support": "5.5.* || 5.6.* || 5.7.*",
-        "illuminate/console": "5.5.* || 5.6.* || 5.7.*",
+        "illuminate/routing": "5.5.* || 5.6.* || 5.7.* || 5.8.*",
+        "illuminate/support": "5.5.* || 5.6.* || 5.7.* || 5.8.*",
+        "illuminate/console": "5.5.* || 5.6.* || 5.7.* || 5.8.*",
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0.1",
         "ramsey/uuid": "^3.8"
