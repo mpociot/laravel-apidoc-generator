@@ -6,5 +6,4 @@ use Dingo\Api\Http\FormRequest;
 
 class TestNonCommentedRequest extends FormRequest
 {
-
 }

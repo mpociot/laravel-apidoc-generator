@@ -20,5 +20,4 @@ use Dingo\Api\Http\FormRequest;
  */
 class TestRequest extends FormRequest
 {
-
 }
