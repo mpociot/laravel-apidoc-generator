@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.4.0] - Wednesday, 27 February 2019
+### Added
+- Support for Laravel 5.8 (https://github.com/mpociot/laravel-apidoc-generator/pull/462)
+- Ability to annotate body parameters on FormRequest (https://github.com/mpociot/laravel-apidoc-generator/pull/460)
+
+
 ## [3.3.2] - Tuesday, 12 February 2019
 ### Added
 - Ability to specify array and object body/query params using dot notation (https://github.com/mpociot/laravel-apidoc-generator/pull/445)
