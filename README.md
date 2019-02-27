@@ -236,6 +236,27 @@ Note: a random value will be used as the value of each parameter in the example 
      */
 ```
 
+Note: You can also add the `@bodyParam` annotations to a `\Illuminate\Foundation\Http\FormRequest` subclass:
+
+```php
+/**
+ * @bodyParam title string required The title of the post.
+ * @bodyParam body string required The title of the post.
+ * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
+ * @bodyParam author_id int the ID of the author
+ * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
+ */
+class MyRequest extends \Illuminate\Foundation\Http\FormRequest
+{
+
+}
+
+public function createPost(MyRequest $request)
+{
+    // ...
+}
+```
+
 ### Indicating auth status
 You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
 
