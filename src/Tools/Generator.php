@@ -88,7 +88,7 @@ class Generator
                 ? $paramType->__toString()
                 : $paramType->getName();
             $parameterClass = new ReflectionClass($parameterClassName);
-            if ($parameterClass->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class)) {
+            if (class_exists('\Illuminate\Foundation\Http\FormRequest') && $parameterClass->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class)) {
                 $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
                 $bodyParametersFromDocBlock = $this->getBodyParametersFromDocBlock($formRequestDocBlock->getTags());
 
