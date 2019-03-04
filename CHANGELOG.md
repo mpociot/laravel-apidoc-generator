@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+
+## [3.4.1] - Monday, 4 March 2019
+### Fixed
+- Support for Lumen 5.7 (https://github.com/mpociot/laravel-apidoc-generator/pull/467)
+
 ## [3.4.0] - Wednesday, 27 February 2019
 ### Added
 - Support for Laravel 5.8 (https://github.com/mpociot/laravel-apidoc-generator/pull/462)
