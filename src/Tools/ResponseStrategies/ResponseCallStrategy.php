@@ -67,7 +67,7 @@ class ResponseCallStrategy
         $uri = $this->replaceUrlParameterBindings($route, $rulesToApply['bindings'] ?? []);
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
-        $request = Request::create($uri, $method, [], [], [], $this->transformHeadersToServerVars($rulesToApply['headers'] ?? []));
+        $request = Request::create($uri, $method, [], $rulesToApply['cookies'], [], $this->transformHeadersToServerVars($rulesToApply['headers'] ?? []));
         $request = $this->addHeaders($request, $route, $rulesToApply['headers'] ?? []);
 
         // Mix in parsed parameters with manually specified parameters.

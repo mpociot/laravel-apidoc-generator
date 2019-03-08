@@ -142,6 +142,13 @@ return [
                     ],
 
                     /*
+                     * Cookies which should be sent with the API call.
+                     */
+                    'cookies' => [
+                        // 'name' => 'value'
+                    ],
+
+                    /*
                      * Query parameters which should be sent with the API call.
                      */
                     'query' => [
