@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
+## [3.4.2] - Sunday, 10 March 2019
+### Added
+- Ability to set cookies on response calls (https://github.com/mpociot/laravel-apidoc-generator/pull/471)
+
 ## [3.4.1] - Monday, 4 March 2019
 ### Fixed
 - Support for Lumen 5.7 (https://github.com/mpociot/laravel-apidoc-generator/pull/467)
