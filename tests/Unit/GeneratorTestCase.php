@@ -140,6 +140,48 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function can_parse_multiple_form_request_body_parameters()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withMultipleFormRequestParameters');
+        $bodyParameters = $this->generator->processRoute($route)['bodyParameters'];
+
+        $this->assertArraySubset([
+            'user_id' => [
+                'type' => 'integer',
+                'required' => true,
+                'description' => 'The id of the user.',
+                'value' => 9,
+            ],
+            'room_id' => [
+                'type' => 'string',
+                'required' => false,
+                'description' => 'The id of the room.',
+            ],
+            'forever' => [
+                'type' => 'boolean',
+                'required' => false,
+                'description' => 'Whether to ban the user forever.',
+                'value' => false,
+            ],
+            'another_one' => [
+                'type' => 'number',
+                'required' => false,
+                'description' => 'Just need something here.',
+            ],
+            'yet_another_param' => [
+                'type' => 'object',
+                'required' => true,
+                'description' => '',
+            ],
+            'even_more_param' => [
+                'type' => 'array',
+                'required' => false,
+                'description' => '',
+            ],
+        ], $bodyParameters);
+    }
+
+    /** @test */
     public function can_parse_query_parameters()
     {
         $route = $this->createRoute('GET', '/api/test', 'withQueryParameters');
