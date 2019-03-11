@@ -47,6 +47,12 @@ class CollectionWriter
                             'request' => [
                                 'url' => url($route['uri']),
                                 'method' => $route['methods'][0],
+                                'headers' => collect($route['headers'])->map(function ($parameter, $key) {
+                                    return [
+                                        'key' => $key,
+                                        'value' => $parameter,
+                                    ];
+                                })->values()->toArray(),
                                 'body' => [
                                     'mode' => $mode,
                                     $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
