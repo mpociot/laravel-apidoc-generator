@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
+## [3.4.3] - Wednesday, 13 March 2019
+### Fixed
+- Ignore scalar type hints when checking for FormRequests (https://github.com/mpociot/laravel-apidoc-generator/pull/474)
+
 ## [3.4.2] - Sunday, 10 March 2019
 ### Added
 - Ability to set cookies on response calls (https://github.com/mpociot/laravel-apidoc-generator/pull/471)
