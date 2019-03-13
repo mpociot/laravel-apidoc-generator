@@ -57,6 +57,11 @@ class TestController extends Controller
         return '';
     }
 
+    public function withMultipleFormRequestParameters(string $test, TestRequest $request)
+    {
+        return '';
+    }
+
     /**
      * @bodyParam direct_one string Is found directly on the method.
      */
