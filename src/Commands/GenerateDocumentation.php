@@ -85,7 +85,7 @@ class GenerateDocumentation extends Command
 
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
             return $routeGroup->map(function ($route) {
-                if (count($route['cleanBodyParameters'])) {
+                if (count($route['cleanBodyParameters']) && ! isset($route['headers']['Content-Type'])) {
                     $route['headers']['Content-Type'] = 'application/json';
                 }
                 $route['output'] = (string) view('apidoc::partials.route')->with('route', $route)->render();
