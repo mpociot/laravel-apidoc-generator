@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.4.4] - Saturday, 30 March 2019
+### Fixed
+- Allow users specify custom Content-type header for Markdown examples (https://github.com/mpociot/laravel-apidoc-generator/pull/486)
 
 ## [3.4.3] - Wednesday, 13 March 2019
 ### Fixed
