@@ -178,6 +178,11 @@ return [
     'logo' => false,
 
     /*
+     * Name for the group of routes which do not have a @group set.
+     */
+    'ungrouped_name' => 'general',
+
+    /*
      * Configure how responses are transformed using @transformer and @transformerCollection
      * Requires league/fractal package: composer require league/fractal
      *
