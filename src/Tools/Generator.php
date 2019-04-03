@@ -247,7 +247,7 @@ class Generator
             }
         }
 
-        return 'general';
+        return config('apidoc.ungrouped_name') ?: 'general';
     }
 
     private function normalizeParameterType($type)
