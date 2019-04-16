@@ -203,6 +203,9 @@ class ResponseCallStrategy
     {
         // set the proper domain
         if ($route->getDomain()) {
+            $request->headers->add([
+                'HOST' => $route->getDomain(),
+            ]);
             $request->server->add([
                 'HTTP_HOST' => $route->getDomain(),
                 'SERVER_NAME' => $route->getDomain(),
