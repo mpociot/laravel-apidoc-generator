@@ -3,10 +3,10 @@
 namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
 use Dingo\Api\Dispatcher;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
@@ -116,6 +116,7 @@ class ResponseCallStrategy
      * @param array $config
      *
      * @return void
+     *
      * @deprecated in favour of Laravel config variables
      */
     private function setEnvironmentVariables(array $env)
