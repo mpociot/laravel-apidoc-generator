@@ -103,7 +103,7 @@ return [
                 /*
                  * If no @response or @transformer declarations are found for the route,
                  * we'll try to get a sample response by attempting an API call.
-                 * Configure the settings for the API call here,
+                 * Configure the settings for the API call here.
                  */
                 'response_calls' => [
                     /*
@@ -122,14 +122,15 @@ return [
                     ],
 
                     /*
-                     * Environment variables which should be set for the API call.
+                     * Laravel config variables which should be set for the API call.
                      * This is a good place to ensure that notifications, emails
-                     * and other external services are not triggered during the documentation API calls
+                     * and other external services are not triggered
+                     * during the documentation API calls
                      */
-                    'env' => [
-                        'APP_ENV' => 'documentation',
-                        'APP_DEBUG' => false,
-                        // 'env_var' => 'value',
+                    'config' => [
+                        'app.env' => 'documentation',
+                        'app.debug' => false,
+                        // 'service.key' => 'value',
                     ],
 
                     /*

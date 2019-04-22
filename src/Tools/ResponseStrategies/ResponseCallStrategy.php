@@ -52,6 +52,7 @@ class ResponseCallStrategy
     {
         $this->startDbTransaction();
         $this->setEnvironmentVariables($rulesToApply['env'] ?? []);
+        $this->setLaravelConfigs($rulesToApply['config'] ?? []);
     }
 
     /**
@@ -103,9 +104,11 @@ class ResponseCallStrategy
     }
 
     /**
-     * @param array $env
+     * @param array $config
      *
      * @return void
+     *
+     * @deprecated in favour of Laravel config variables
      */
     private function setEnvironmentVariables(array $env)
     {
@@ -114,6 +117,22 @@ class ResponseCallStrategy
 
             $_ENV[$name] = $value;
             $_SERVER[$name] = $value;
+        }
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return void
+     */
+    private function setLaravelConfigs(array $config)
+    {
+        if (empty($config)) {
+            return;
+        }
+
+        foreach ($config as $name => $value) {
+            config([$name => $value]);
         }
     }
 
