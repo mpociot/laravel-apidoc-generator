@@ -1,17 +1,16 @@
 <?php
 
-
 namespace Mpociot\ApiDoc\Tools;
 
-
-use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
+use Illuminate\Routing\Route;
 
 class Utils
 {
     public static function getFullUrl(Route $route, array $bindings = []): string
     {
         $uri = $route->uri();
+
         return self::replaceUrlParameterBindings($uri, $bindings);
     }
 
