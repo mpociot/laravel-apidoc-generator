@@ -6,9 +6,8 @@ use Dingo\Api\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Str;
-use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 use Mpociot\ApiDoc\Tools\Utils;
+use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
  * Make a call to the route and retrieve its response.
@@ -84,11 +83,11 @@ class ResponseCallStrategy
         return $request;
     }
 
-
     /**
      * @param array $config
      *
      * @return void
+     *
      * @deprecated in favour of Laravel config variables
      */
     private function setEnvironmentVariables(array $env)
