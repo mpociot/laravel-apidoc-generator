@@ -1,0 +1,2 @@
+- Add tests for bindings
+- Add tests for config overrdes

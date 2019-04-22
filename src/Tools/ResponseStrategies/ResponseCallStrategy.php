@@ -6,6 +6,7 @@ use Dingo\Api\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
@@ -94,11 +95,19 @@ class ResponseCallStrategy
     protected function replaceUrlParameterBindings(Route $route, $bindings)
     {
         $uri = $route->uri();
-        foreach ($bindings as $parameter => $binding) {
-            $uri = str_replace($parameter, $binding, $uri);
+        foreach ($bindings as $path => $binding) {
+            // So we can support partial bindings like
+            // 'bindings' => [
+            //  'foo/{type}' => 4,
+            //  'bar/{type}' => 2
+            //],
+            if (Str::is("*$path*", $uri)) {
+                preg_match('/({.+?})/', $path, $parameter);
+                $uri = str_replace("{$parameter['1']}", $binding, $uri);
+            }
         }
         // Replace any unbound parameters with '1'
-        $uri = preg_replace('/{(.*?)}/', 1, $uri);
+        $uri = preg_replace('/{(.+?)}/', 1, $uri);
 
         return $uri;
     }
