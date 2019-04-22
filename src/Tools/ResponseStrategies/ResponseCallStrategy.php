@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
+use Mpociot\ApiDoc\Tools\Utils;
 
 /**
  * Make a call to the route and retrieve its response.
@@ -66,7 +67,7 @@ class ResponseCallStrategy
      */
     private function prepareRequest(Route $route, array $rulesToApply, array $bodyParams, array $queryParams)
     {
-        $uri = $this->replaceUrlParameterBindings($route, $rulesToApply['bindings'] ?? []);
+        $uri = Utils::getFullUrl($route, $rulesToApply['bindings'] ?? []);
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
         $cookies = isset($rulesToApply['cookies']) ? $rulesToApply['cookies'] : [];
@@ -83,34 +84,6 @@ class ResponseCallStrategy
         return $request;
     }
 
-    /**
-     * Transform parameters in URLs into real values (/users/{user} -> /users/2).
-     * Uses bindings specified by caller, otherwise just uses '1'.
-     *
-     * @param Route $route
-     * @param array $bindings
-     *
-     * @return mixed
-     */
-    protected function replaceUrlParameterBindings(Route $route, $bindings)
-    {
-        $uri = $route->uri();
-        foreach ($bindings as $path => $binding) {
-            // So we can support partial bindings like
-            // 'bindings' => [
-            //  'foo/{type}' => 4,
-            //  'bar/{type}' => 2
-            //],
-            if (Str::is("*$path*", $uri)) {
-                preg_match('/({.+?})/', $path, $parameter);
-                $uri = str_replace("{$parameter['1']}", $binding, $uri);
-            }
-        }
-        // Replace any unbound parameters with '1'
-        $uri = preg_replace('/{(.+?)}/', 1, $uri);
-
-        return $uri;
-    }
 
     /**
      * @param array $config
