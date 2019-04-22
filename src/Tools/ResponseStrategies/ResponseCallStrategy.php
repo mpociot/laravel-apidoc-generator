@@ -107,6 +107,7 @@ class ResponseCallStrategy
      * @param array $config
      *
      * @return void
+     *
      * @deprecated in favour of Laravel config variables
      */
     private function setEnvironmentVariables(array $env)
