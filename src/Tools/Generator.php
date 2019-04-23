@@ -64,6 +64,7 @@ class Generator
             'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
+            'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? []),
             'bodyParameters' => $bodyParameters,
             'cleanBodyParameters' => $this->cleanParams($bodyParameters),
             'queryParameters' => $queryParameters,
