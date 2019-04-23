@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.5.0] - Tuesday, 23 April 2019
+### Added
+- Option to seed faker for deterministic output (https://github.com/mpociot/laravel-apidoc-generator/pull/503)
+- Support for binding prefixes (https://github.com/mpociot/laravel-apidoc-generator/pull/498)
+- Ability to override Laravel `config` (https://github.com/mpociot/laravel-apidoc-generator/pull/496)
+- Allow override of the name 'general' for ungrouped routes (https://github.com/mpociot/laravel-apidoc-generator/pull/491)
+
+### Changed
+- Use parameter-bound URL in doc examples (https://github.com/mpociot/laravel-apidoc-generator/pull/500)
+
+### Fixed
+- Request router now matches when router has sub-domain (https://github.com/mpociot/laravel-apidoc-generator/pull/493)
+
 ## [3.4.4] - Saturday, 30 March 2019
 ### Fixed
 - Allow users specify custom Content-type header for Markdown examples (https://github.com/mpociot/laravel-apidoc-generator/pull/486)

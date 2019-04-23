@@ -279,7 +279,7 @@ class Generator
         if ($this->fakerSeed) {
             $faker->seed($this->fakerSeed);
         }
-        $fakes = [
+        $fakeFactories = [
             'integer' => function () use ($faker) {
                 return $faker->numberBetween(1, 20);
             },
@@ -303,9 +303,9 @@ class Generator
             },
         ];
 
-        $fake = $fakes[$type] ?? $fakes['string'];
+        $fakeFactory = $fakeFactories[$type] ?? $fakeFactories['string'];
 
-        return $fake();
+        return $fakeFactory();
     }
 
     /**
