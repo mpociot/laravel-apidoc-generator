@@ -55,7 +55,7 @@ class GenerateDocumentation extends Command
             $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
         }
 
-        $generator = new Generator();
+        $generator = new Generator(config('apidoc.faker_seed'));
         $parsedRoutes = $this->processRoutes($generator, $routes);
         $parsedRoutes = collect($parsedRoutes)->groupBy('group')
             ->sortBy(static function ($group) {

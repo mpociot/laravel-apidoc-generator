@@ -15,6 +15,17 @@ class Generator
     use ParamHelpers;
 
     /**
+     * @var string The seed to be used with Faker.
+     * Useful when you want to always have the same fake output.
+     */
+    private $fakerSeed = null;
+
+    public function __construct(string $fakerSeed = null)
+    {
+        $this->fakerSeed = $fakerSeed;
+    }
+
+    /**
      * @param Route $route
      *
      * @return mixed
@@ -265,9 +276,12 @@ class Generator
     private function generateDummyValue(string $type)
     {
         $faker = Factory::create();
+        if ($this->fakerSeed) {
+            $faker->seed($this->fakerSeed);
+        }
         $fakes = [
-            'integer' => function () {
-                return rand(1, 20);
+            'integer' => function () use ($faker) {
+                return $faker->numberBetween(1, 20);
             },
             'number' => function () use ($faker) {
                 return $faker->randomFloat();
@@ -279,7 +293,7 @@ class Generator
                 return $faker->boolean();
             },
             'string' => function () use ($faker) {
-                return str_random();
+                return $faker->word;
             },
             'array' => function () {
                 return [];
