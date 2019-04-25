@@ -6,3 +6,5 @@ composer.lock
 .idea/
 coverage.xml
 results.xml
+docs/_build
+docs/make.bat
