@@ -160,6 +160,7 @@ class Generator
     /**
      * @param ReflectionMethod $method
      * @param array $tags
+     *
      * @return array
      */
     protected function getQueryParameters(ReflectionMethod $method, array $tags)
