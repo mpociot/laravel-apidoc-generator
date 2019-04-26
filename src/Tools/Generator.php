@@ -61,7 +61,7 @@ class Generator
         $routeGroup = $this->getRouteGroup($controller, $method);
         $docBlock = $this->parseDocBlock($method);
         $bodyParameters = $this->getBodyParameters($method, $docBlock['tags']);
-        $queryParameters = $this->getQueryParametersFromDocBlock($docBlock['tags']);
+        $queryParameters = $this->getQueryParameters($method, $docBlock['tags']);
         $content = ResponseResolver::getResponse($route, $docBlock['tags'], [
             'rules' => $rulesToApply,
             'body' => $bodyParameters,
@@ -76,9 +76,9 @@ class Generator
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
             'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? []),
+            'queryParameters' => $queryParameters,
             'bodyParameters' => $bodyParameters,
             'cleanBodyParameters' => $this->cleanParams($bodyParameters),
-            'queryParameters' => $queryParameters,
             'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
@@ -155,6 +155,42 @@ class Generator
             })->toArray();
 
         return $parameters;
+    }
+
+    /**
+     * @param ReflectionMethod $method
+     * @param array $tags
+     * @return array
+     */
+    protected function getQueryParameters(ReflectionMethod $method, array $tags)
+    {
+        foreach ($method->getParameters() as $param) {
+            $paramType = $param->getType();
+            if ($paramType === null) {
+                continue;
+            }
+
+            $parameterClassName = version_compare(phpversion(), '7.1.0', '<')
+                ? $paramType->__toString()
+                : $paramType->getName();
+
+            try {
+                $parameterClass = new ReflectionClass($parameterClassName);
+            } catch (\ReflectionException $e) {
+                continue;
+            }
+
+            if (class_exists('\Illuminate\Foundation\Http\FormRequest') && $parameterClass->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class)) {
+                $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
+                $queryParametersFromDocBlock = $this->getQueryParametersFromDocBlock($formRequestDocBlock->getTags());
+
+                if (count($queryParametersFromDocBlock)) {
+                    return $queryParametersFromDocBlock;
+                }
+            }
+        }
+
+        return $this->getQueryParametersFromDocBlock($tags);
     }
 
     /**
