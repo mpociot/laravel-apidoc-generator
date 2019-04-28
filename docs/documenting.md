@@ -1,15 +1,15 @@
 # Documenting Your API
-This package uses these resources to generate the API documentation:
+This package generates documentation from your code using mainly annotations (in doc block comments).
 
 ## Grouping endpoints
+All endpoints are grouped for easy organization. Using `@group` in a controller doc block creates a Group within the API documentation. All routes handled by that controller will be grouped under this group in the table of conetns shown in the sidebar. 
 
-This package uses the HTTP controller doc blocks to create a table of contents and show descriptions for your API methods.
+The short description after the `@group` should be unique to allow anchor tags to navigate to this section. A longer description can be included below. Custom formatting and `<aside>` tags are also supported. (see the [Documentarian docs](http://marcelpociot.de/documentarian/installation/markdown_syntax))
 
-Using `@group` in a controller doc block creates a Group within the API documentation. All routes handled by that controller will be grouped under this group in the sidebar. The short description after the `@group` should be unique to allow anchor tags to navigate to this section. A longer description can be included below. Custom formatting and `<aside>` tags are also supported. (see the [Documentarian docs](http://marcelpociot.de/documentarian/installation/markdown_syntax))
+ > Note: using `@group` is optional. Ungrouped routes will be placed in a default group.
 
- > Note: using `@group` is optional. Ungrouped routes will be placed in a "general" group.
+Above each route in the controller, you should have a doc block. This should include a unique short description as the first entry. An optional second entry can be added with further information. Both descriptions will appear in the API documentation in a different format as shown below.
 
-Above each method within the controller you wish to include in your API documentation you should have a doc block. This should include a unique short description as the first entry. An optional second entry can be added with further information. Both descriptions will appear in the API documentation in a different format as shown below.
 You can also specify an `@group` on a single method to override the group defined at the controller level.
 
 ```php
@@ -48,11 +48,11 @@ class UserController extends Controller
 ![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
 ## Specifying request parameters
-
 To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
 - The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description. 
-- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description
+- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description,
 
+Examples:
 
 ```php
 /**
@@ -97,14 +97,15 @@ Note: a random value will be used as the value of each parameter in the example 
      */
 ```
 
-Note: You can also add the `@bodyParam` annotations to a `\Illuminate\Foundation\Http\FormRequest` subclass:
+Note: You can also add the `@queryParam` and `@bodyParam` annotations to a `\Illuminate\Foundation\Http\FormRequest` subclass instead, if you are using one in your controller method
 
 ```php
 /**
+ * @queryParam user_id required The id of the user. Example: me
  * @bodyParam title string required The title of the post.
- * @bodyParam body string required The title of the post.
+ * @bodyParam body string required The content of the post.
  * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
- * @bodyParam author_id int the ID of the author
+ * @bodyParam author_id int the ID of the author. Example: 2
  * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
  */
 class MyRequest extends \Illuminate\Foundation\Http\FormRequest
@@ -112,13 +113,14 @@ class MyRequest extends \Illuminate\Foundation\Http\FormRequest
 
 }
 
+// in your controller...
 public function createPost(MyRequest $request)
 {
     // ...
 }
 ```
 
-### Indicating auth status
+### Indicating authentication status
 You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
 
 ### Providing an example response
@@ -141,7 +143,7 @@ public function show($id)
 }
 ```
 
-Moreover, you can define multiple `@response` tags as well as the HTTP status code related to a particular response (if no status code set, `200` will be returned):
+Moreover, you can define multiple `@response` tags as well as the HTTP status code related to a particular response (if no status code set, `200` will be assumed):
 ```php
 /**
  * @response {
@@ -241,9 +243,15 @@ public function getUser(int $id)
 
 ### Generating responses automatically
 If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
-- They are done within a database transaction and changes are rolled back afterwards.
-- The configuration for response calls is located in the `config/apidoc.php`. They are configured within the `['apply']['response_calls']` section for each route group, allowing you to apply different settings for different sets of routes.
+
+- Response calls are done within a database transaction and changes are rolled back afterwards.
+
+- The configuration for response calls is located in the `config/apidoc.php`. They are configured within the `apply.response_calls` section for each route group, allowing you to apply different settings for different sets of routes.
+
 - By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
-- Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however. Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key.
-- You can set Laravel config variables (this is useful so you can prevent external services like notifications from being triggered). By default the `app.env` is set to 'documentation'. You can add more variables in the `config` key.
+
+- Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however. Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key. You may also specify the preceding path, to allow for variations; for instance, you can set `['users/{id}' => 1, 'apps/{id}' => 'htTviP']`. However, there must only be one parameter per path (ie `users/{name}/{id}` is invalid).
+
+- You can set Laravel config variables. This is useful so you can prevent external services like notifications from being triggered. By default the `app.env` is set to 'documentation'. You can add more variables in the `config` key.
+
 - By default, the package will generate dummy values for your documented body and query parameters and send in the request. (If you specified example values using `@bodyParam` or `@queryParam`, those will be used instead.) You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).

@@ -116,10 +116,15 @@ return [
                     /*
                      * For URLs which have parameters (/users/{user}, /orders/{id?}),
                      * specify what values the parameters should be replaced with.
-                     * Note that you must specify the full parameter, including curly brackets and question marks if any.
+                     * Note that you must specify the full parameter,
+                     * including curly brackets and question marks if any.
+                     *
+                     * You may also specify the preceding path, to allow for variations,
+                     * for instance 'users/{id}' => 1 and 'apps/{id}' => 'htTviP'.
+                     * However, there must only be one parameter per path.
                      */
                     'bindings' => [
-                        // '{user}' => 1
+                        // '{user}' => 1,
                     ],
 
                     /*

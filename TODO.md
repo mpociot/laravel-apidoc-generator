@@ -1,4 +1,7 @@
 - Add tests for bindings and bindings prefixes
-- Add tests for config overrdes
+- Add tests for config overrides
 - Add tests for faker seed
-- Add tests on output
+- Add tests on output (deterministic)
+- Remove ungrouped_name for default_group
+- Bring `bindings` outside of `response_calls`
+- Should `routes.*.apply.response_calls.headers` be replaced by `routes.*.apply.headers`?

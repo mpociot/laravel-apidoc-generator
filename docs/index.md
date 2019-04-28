@@ -5,6 +5,7 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 `php artisan apidoc:generate`
 
 ## Contents
+* [How This Works](description.md)
 * [Configuration](config.md)
 * [Generating Documentation](generating-documentation.md)
 * [Documenting Your API](documenting.md)
