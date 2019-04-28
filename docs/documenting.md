@@ -120,13 +120,13 @@ public function createPost(MyRequest $request)
 }
 ```
 
-### Indicating authentication status
+## Indicating authentication status
 You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
 
-### Providing an example response
+## Providing an example response
 You can provide an example response for a route. This will be displayed in the examples section. There are several ways of doing this.
 
-#### @response
+### @response
 You can provide an example response for a route by using the `@response` annotation with valid JSON:
 
 ```php
@@ -161,7 +161,7 @@ public function show($id)
 }
 ```
 
-#### @transformer, @transformerCollection, and @transformerModel
+### @transformer, @transformerCollection, and @transformerModel
 You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
 1. Check if there is a `@transformerModel` tag to define the model being transformed. If there is none, use the class of the first parameter to the transformer's `transform()` method.
@@ -208,7 +208,7 @@ For the first route above, this package will generate a set of two users then pa
 composer require league/fractal
 ```
 
-#### @responseFile
+### @responseFile
 
 For large response bodies, you may want to use a dump of an actual response. You can put this response in a file (as a JSON string) within your Laravel storage directory and link to it. For instance, we can put this response in a file named `users.get.json` in `storage/responses`:
 
@@ -241,7 +241,7 @@ public function getUser(int $id)
 }
 ```
 
-### Generating responses automatically
+## Generating responses automatically
 If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
 
 - Response calls are done within a database transaction and changes are rolled back afterwards.

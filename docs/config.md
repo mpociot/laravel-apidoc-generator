@@ -1,6 +1,6 @@
 # Configuration
 
-Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`. If you aren't sure what an option does, it's best to leave it set to the default. If you don't have this config file, see the [installation instructions](index.md#installation).
+Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`. If you aren't sure what an option does, it's best to leave it set to the default. If you don't have this config file, see the [installation instructions](index.html#installation).
 
 ## `output`
 This is the file path where the generated documentation will be written to. Note that the documentation is generated as static HTML and CSS assets, so the route is accessed directly, and not via the Laravel routing mechanism. This path should be relative to the root of your application. Default: **public/docs**
@@ -32,7 +32,7 @@ If you want to use this, please note that the image size must be 230 x 52.
 When [documenting your api](documenting.md), you use `@group` annotations to group API endpoints. Endpoints which do not have a ggroup annotation will be grouped under the `default_group`. Defaults to **"general"**.
 
 ##  `faker_seed`
-When generating example requests, this package uses fzanninoto/faker to generate random values. If you would like the package to generate the same example values for parameters on each run, set this to any number (eg. 1234). (Note: alternatively, you can set example values for parameters when [documenting them.](documenting.md#specifying-request-parameters))
+When generating example requests, this package uses fzanninoto/faker to generate random values. If you would like the package to generate the same example values for parameters on each run, set this to any number (eg. 1234). (Note: alternatively, you can set example values for parameters when [documenting them.](documenting.html#specifying-request-parameters))
        
 ## `fractal`
 This section only applies if you're using [Transformers]() for your API, and documenting responses with `@transformer` and `@transformerCollection`. Here, you configure how responses are transformed.
@@ -211,4 +211,4 @@ After defining the routes in `match` (and `include` or `exclude`), `apply` is wh
 Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documenation. Headers are specified as key => value strings.
 
 #### `response_calls`
-These are the settings that will be applied when making ["response calls"](documenting.md#generating-responses-automatically). See the linked section for details.
+These are the settings that will be applied when making ["response calls"](documenting.html#generating-responses-automatically). See the linked section for details.

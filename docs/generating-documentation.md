@@ -23,7 +23,7 @@ The base URL added to the Postman collection will be the value of the `url` key 
 ## Manually modifying the content of the generated documentation
 If you want to modify the content of your generated documentation without changing the routes, go ahead and edit the generated `index.md` file.
 
-This file is located in the `source` folder of  your `output` directory (see [configuration](config.md#output)), so by default, this is `public/docs/source/index.md`.
+This file is located in the `source` folder of  your `output` directory (see [configuration](config.html#output)), so by default, this is `public/docs/source/index.md`.
  
 After editing the markdown file, you can use the `apidoc:rebuild` command to rebuild your documentation into HTML.
 
