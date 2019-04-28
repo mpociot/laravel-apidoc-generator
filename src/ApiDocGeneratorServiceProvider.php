@@ -3,7 +3,7 @@
 namespace Mpociot\ApiDoc;
 
 use Illuminate\Support\ServiceProvider;
-use Mpociot\ApiDoc\Commands\UpdateDocumentation;
+use Mpociot\ApiDoc\Commands\RebuildDocumentation;
 use Mpociot\ApiDoc\Commands\GenerateDocumentation;
 
 class ApiDocGeneratorServiceProvider extends ServiceProvider
@@ -30,7 +30,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 GenerateDocumentation::class,
-                UpdateDocumentation::class,
+                RebuildDocumentation::class,
             ]);
         }
     }

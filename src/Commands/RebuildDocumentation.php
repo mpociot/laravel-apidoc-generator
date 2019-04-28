@@ -5,7 +5,7 @@ namespace Mpociot\ApiDoc\Commands;
 use Illuminate\Console\Command;
 use Mpociot\Documentarian\Documentarian;
 
-class UpdateDocumentation extends Command
+class RebuildDocumentation extends Command
 {
     /**
      * The name and signature of the console command.
