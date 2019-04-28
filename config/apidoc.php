@@ -4,6 +4,7 @@ return [
 
     /*
      * The output path for the generated documentation.
+     * This path should be relative to the root of your application.
      */
     'output' => 'public/docs',
 
@@ -168,42 +169,38 @@ return [
     ],
 
     /*
-     * Custom logo path. Will be copied during generate command. Set this to false to use the default logo.
+     * Custom logo path. The logo will be copied from this location
+     * during the generate process. Set this to false to use the default logo.
      *
      * Change to an absolute path to use your custom logo. For example:
      * 'logo' => resource_path('views') . '/api/logo.png'
      *
      * If you want to use this, please be aware of the following rules:
-     * - size: 230 x 52
+     * - the image size must be 230 x 52
      */
     'logo' => false,
 
     /*
      * Name for the group of routes which do not have a @group set.
      */
-    'ungrouped_name' => 'general',
+    'default_group' => 'general',
 
     /*
      * Configure how responses are transformed using @transformer and @transformerCollection
      * Requires league/fractal package: composer require league/fractal
      *
-     * If you are using a custom serializer with league/fractal,
-     * you can specify it here.
-     *
-     * Serializers included with league/fractal:
-     * - \League\Fractal\Serializer\ArraySerializer::class
-     * - \League\Fractal\Serializer\DataArraySerializer::class
-     * - \League\Fractal\Serializer\JsonApiSerializer::class
-     *
-     * Leave as null to use no serializer or return a simple JSON.
      */
     'fractal' => [
+        /* If you are using a custom serializer with league/fractal,
+         * you can specify it here.
+         *
+         * Serializers included with league/fractal:
+         * - \League\Fractal\Serializer\ArraySerializer::class
+         * - \League\Fractal\Serializer\DataArraySerializer::class
+         * - \League\Fractal\Serializer\JsonApiSerializer::class
+         *
+         * Leave as null to use no serializer or return a simple JSON.
+         */
         'serializer' => null,
     ],
-
-    /*
-     * If you would like the package to generate the same example values for parameters on each run,
-     * set this to any number (eg. 1234)
-     */
-    'faker_seed' => null,
 ];
