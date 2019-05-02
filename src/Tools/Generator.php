@@ -297,8 +297,7 @@ class Generator
             }
         }
 
-        // TODO: get rid of ungrouped_name in next major release
-        return config('apidoc.default_group', config('apidoc.ungrouped_name', 'general'));
+        return config('apidoc.default_group', 'general');
     }
 
     private function normalizeParameterType($type)

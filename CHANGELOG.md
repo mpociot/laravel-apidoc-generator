@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.6.0] - Monday, 29 April 2019
 ### Added
 - Support for `@ueryParams` in FormRequests (https://github.com/mpociot/laravel-apidoc-generator/pull/504)
-- Added `default_group` key to (eventually) replace `ungrouped_name` (https://github.com/mpociot/laravel-apidoc-generator/commit/72b5f546c1b84e69fe43c720a04f448c3b96e345)
+- Added `default_group` key to replace `ungrouped_name` (https://github.com/mpociot/laravel-apidoc-generator/commit/72b5f546c1b84e69fe43c720a04f448c3b96e345)
 
 ## [3.5.0] - Tuesday, 23 April 2019
 ### Added
