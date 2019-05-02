@@ -1,8 +1,10 @@
 title: API Reference
 
 language_tabs:
-- bash
-- javascript
+@foreach($settings['languages'] as $language)
+- {{ $language }}
+
+@endforeach
 
 includes:
 

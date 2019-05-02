@@ -31,6 +31,9 @@ If you want to use this, please note that the image size must be 230 x 52.
 ## `default_group`
 When [documenting your api](documenting.md), you use `@group` annotations to group API endpoints. Endpoints which do not have a ggroup annotation will be grouped under the `default_group`. Defaults to **"general"**.
 
+## example_languages
+For each endpoint, an example request is shown in each of the languages specified in this array. Currently only `bash`, `javascript` and `php` are supported. You can add your own language, but you must also define the corresponding view (see [Specifying languages for examples](generating-documentation.html#specifying-language-for-examples)). Default: `["bash", "javascript"]` 
+ 
 ##  `faker_seed`
 When generating example requests, this package uses fzanninoto/faker to generate random values. If you would like the package to generate the same example values for parameters on each run, set this to any number (eg. 1234). (Note: alternatively, you can set example values for parameters when [documenting them.](documenting.html#specifying-request-parameters))
        

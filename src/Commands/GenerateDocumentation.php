@@ -83,18 +83,23 @@ class GenerateDocumentation extends Command
             ->with('outputPath', ltrim($outputPath, 'public/'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection());
 
-        $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) {
-            return $routeGroup->map(function ($route) {
+        $settings = ['languages' => config('apidoc.example_languages')];
+        $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) use ($settings) {
+            return $routeGroup->map(function ($route) use ($settings) {
                 if (count($route['cleanBodyParameters']) && ! isset($route['headers']['Content-Type'])) {
                     $route['headers']['Content-Type'] = 'application/json';
                 }
-                $route['output'] = (string) view('apidoc::partials.route')->with('route', $route)->render();
+                $route['output'] = (string) view('apidoc::partials.route')
+                    ->with('route', $route)
+                    ->with('settings', $settings)
+                    ->render();
 
                 return $route;
             });
         });
 
-        $frontmatter = view('apidoc::partials.frontmatter');
+        $frontmatter = view('apidoc::partials.frontmatter')
+            ->with('settings', $settings);
         /*
          * In case the target file already exists, we should check if the documentation was modified
          * and skip the modified parts of the routes.

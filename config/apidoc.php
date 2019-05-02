@@ -191,6 +191,19 @@ return [
     'default_group' => 'general',
 
     /*
+     * Example requests for each endpoint will be shown in each of these languages.
+     * Supported options are: bash, javascript, php
+     * You can add a language of your own, but you must publish the package's views
+     * and define a corresponding view for it in the partials/example-requests directory.
+     * See https://laravel-apidoc-generator.readthedocs.io/en/latest/generating-documentation.html
+     *
+     */
+    'example_languages' => [
+        'bash',
+        'javascript',
+    ],
+
+    /*
      * Configure how responses are transformed using @transformer and @transformerCollection
      * Requires league/fractal package: composer require league/fractal
      *

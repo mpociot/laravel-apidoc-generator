@@ -35,6 +35,28 @@ php artisan apidoc:rebuild
  If you wish to automatically add the same content to the docs every time you generate (for instance, an introduction, a disclaimer or an authenticatino guide), you can add a `prepend.md` and/or `append.md` file to the `source` folder in the `output` directory, and they will be added to the generated documentation. 
  
  The contents of `prepend.md` will be added after the front matter and info text, while the contents of `append.md` will be added at the end of the document.
+ 
+ ## Specifying language for examples
+ For each endpoint, an example request is shown in [each language configured](config.html#example_languages). To add a language which is not supported by this package, you'll have to create your own view for how an example should render. Here's how:
+ 
+ - Publish the vendor views by running:
+ 
+ ```bash
+ php artisan vendor:publish --provider="Mpociot\ApiDoc\ApiDocGeneratorServiceProvider" --tag=apidoc-views
+ ```
+ 
+ This will copy the views files to `\resources\views\vendor\apidoc`.
+ 
+ - Next, create a file called {language-name}.blade.php (for example, python.blade.php) in the partials/example-requests directory. You can then write Markdown with Blade templating that describes how the example request for the language should be rendered. You have the `$route` variable available to you. This variable is an array with the following keys:
+    - `methods`: an array of the HTTP methods for that route
+    - `boundUri`: the complete URL for the route, with any url parameters replaced (/users/{id} -> /users/1)
+    - `headers`: key-value array of headers to be sent with route (according to your configuration)
+    - `cleanQueryParameters`: key-value array of query parameters (with example values) to be sent with the request
+    - `cleanBodyParameters`: key-value array of body parameters (with example values) to be sent with the request
+
+- Add the language to the `example_languages` array in the package config.
+
+- Generate your documentation 
 
 ## Further modification
 

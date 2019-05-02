@@ -79,6 +79,7 @@ class Generator
             'queryParameters' => $queryParameters,
             'bodyParameters' => $bodyParameters,
             'cleanBodyParameters' => $this->cleanParams($bodyParameters),
+            'cleanQueryParameters' => $this->cleanParams($queryParameters),
             'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
