@@ -30,7 +30,6 @@ Welcome to the generated API reference.
 curl -X GET -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users");
 
@@ -70,7 +69,6 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users/create");
 

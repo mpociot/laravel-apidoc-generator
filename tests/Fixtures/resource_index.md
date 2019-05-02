@@ -30,7 +30,6 @@ Welcome to the generated API reference.
 curl -X GET -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users");
 
@@ -70,7 +69,6 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users/create");
 
@@ -110,7 +108,6 @@ fetch(url, {
 curl -X POST "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users");
 
@@ -143,7 +140,6 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users/1");
 
@@ -183,7 +179,6 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/1/edit" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users/1/edit");
 
@@ -223,7 +218,6 @@ fetch(url, {
 curl -X PUT "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users/1");
 
@@ -258,7 +252,6 @@ fetch(url, {
 curl -X DELETE "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
-
 ```javascript
 const url = new URL("http://localhost/api/users/1");
 

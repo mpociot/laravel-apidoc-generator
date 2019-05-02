@@ -15,11 +15,11 @@
 @include("apidoc::partials.example-requests.$language")
 
 @endforeach
+
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))
 @if(is_array($route['response']))
 @foreach($route['response'] as $response)
 > Example response ({{$response['status']}}):
-
 
 ```json
 @if(is_object($response['content']) || is_array($response['content']))
