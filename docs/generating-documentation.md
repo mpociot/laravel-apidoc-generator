@@ -37,7 +37,7 @@ php artisan apidoc:rebuild
  The contents of `prepend.md` will be added after the front matter and info text, while the contents of `append.md` will be added at the end of the document.
  
  ## Specifying language for examples
- For each endpoint, an example request is shown in [each language configured](config.html#example_languages). To add a language which is not supported by this package, you'll have to create your own view for how an example should render. Here's how:
+ For each endpoint, an example request is shown in [each language configured](config.html#example-languages). To add a language which is not supported by this package, you'll have to create your own view for how an example should render. Here's how:
  
  - Publish the vendor views by running:
  
