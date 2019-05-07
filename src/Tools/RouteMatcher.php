@@ -78,6 +78,7 @@ class RouteMatcher
     {
         $excludes = $routeRule['exclude'] ?? [];
 
-        return str_is($excludes, $route->getName());
+        return str_is($excludes, $route->getName())
+            || str_is($excludes, $route->uri());
     }
 }
