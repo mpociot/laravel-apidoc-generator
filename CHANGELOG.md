@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.7.1] - Friday, 17 May 2019
 ### Fixed
 - Handle exception for no URL::forceRootURL() method in Lumen (https://github.com/mpociot/laravel-apidoc-generator/commit/2146fa114dc18bc32c00b5c5550266d753d5aef3)
+- Url parameter bindings (https://github.com/mpociot/laravel-apidoc-generator/commit/f0dc118c6b7792894bf9baa352d7fc4ca8ca74b5)
 
 ## [3.7.0] - Thursday, 2 May 2019
 ### Added
