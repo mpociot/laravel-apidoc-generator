@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.7.1] - Thursday, 2 May 2019
+### Fixed
+- Handle exception for no URL::forceRootURL() method in Lumen ()
+
 ## [3.7.0] - Thursday, 2 May 2019
 ### Added
 - Support for `@queryParams` in Dingo FormRequests (https://github.com/mpociot/laravel-apidoc-generator/pull/506)
