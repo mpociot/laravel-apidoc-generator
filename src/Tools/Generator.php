@@ -54,7 +54,7 @@ class Generator
     public function processRoute(Route $route, array $rulesToApply = [])
     {
         $routeAction = $route->getAction();
-        list($class, $method) = explode('@', $routeAction['uses']);
+        [$class, $method] = explode('@', $routeAction['uses']);
         $controller = new ReflectionClass($class);
         $method = $controller->getMethod($method);
 
@@ -135,11 +135,11 @@ class Generator
                 preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 if (empty($content)) {
                     // this means only name and type were supplied
-                    list($name, $type) = preg_split('/\s+/', $tag->getContent());
+                    [$name, $type] = preg_split('/\s+/', $tag->getContent());
                     $required = false;
                     $description = '';
                 } else {
-                    list($_, $name, $type, $required, $description) = $content;
+                    [$_, $name, $type, $required, $description] = $content;
                     $description = trim($description);
                     if ($description == 'required' && empty(trim($required))) {
                         $required = $description;
@@ -149,7 +149,7 @@ class Generator
                 }
 
                 $type = $this->normalizeParameterType($type);
-                list($description, $example) = $this->parseDescription($description, $type);
+                [$description, $example] = $this->parseDescription($description, $type);
                 $value = is_null($example) ? $this->generateDummyValue($type) : $example;
 
                 return [$name => compact('type', 'description', 'required', 'value')];
@@ -210,11 +210,11 @@ class Generator
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 if (empty($content)) {
                     // this means only name was supplied
-                    list($name) = preg_split('/\s+/', $tag->getContent());
+                    [$name] = preg_split('/\s+/', $tag->getContent());
                     $required = false;
                     $description = '';
                 } else {
-                    list($_, $name, $required, $description) = $content;
+                    [$_, $name, $required, $description] = $content;
                     $description = trim($description);
                     if ($description == 'required' && empty(trim($required))) {
                         $required = $description;
@@ -223,7 +223,7 @@ class Generator
                     $required = trim($required) == 'required' ? true : false;
                 }
 
-                list($description, $value) = $this->parseDescription($description, 'string');
+                [$description, $value] = $this->parseDescription($description, 'string');
                 if (is_null($value)) {
                     $value = str_contains($description, ['number', 'count', 'page'])
                         ? $this->generateDummyValue('integer')
