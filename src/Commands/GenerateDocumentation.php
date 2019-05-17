@@ -47,7 +47,12 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        URL::forceRootUrl(config('app.url'));
+        try {
+            URL::forceRootUrl(config('app.url'));
+        } catch (\Exception $e) {
+            echo "Warning: Couldn't force base url as Lumen currently doesn't have the forceRootUrl method.\n";
+            echo "You should probably double check URLs in your generated documentation.\n";
+        }
         $usingDingoRouter = strtolower(config('apidoc.router')) == 'dingo';
         if ($usingDingoRouter) {
             $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
