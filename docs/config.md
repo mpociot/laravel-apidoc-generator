@@ -173,10 +173,8 @@ return [
 ```
 
 ### `include` and `exclude`
-The `include` key holds an array of route names which should be included in this group, *even if they do not match the rules in the `match` section*.
-The `exclude` key holds an array of route names which should be excluded from this group, *even if they match the rules in the `match` section*.
-
-> Remember that these two keys work with route *names*, not paths.
+The `include` key holds an array of patterns (route names or paths) which should be included in this group, *even if they do not match the rules in the `match` section*.
+The `exclude` key holds an array of patterns (route names or paths) which should be excluded from this group, *even if they match the rules in the `match` section*.
 
 Using our above sample routes, asuming you wanted to place the `users.list` route in the second group (no Authorization header), here's how you could do it:
 
@@ -206,6 +204,8 @@ return [
   ],
 ];
 ```
+
+These values support wildcards and paths, so you can have `'exclude' => ['users/*']` to exclude all routes with URLs matching the pattern.
 
 ### `apply`
 After defining the routes in `match` (and `include` or `exclude`), `apply` is where you specify the settings to be applied to those routes when generating documentation. There are a bunch of settings you can tweak here:
