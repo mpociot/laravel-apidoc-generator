@@ -69,6 +69,7 @@ class RouteMatcher
             : true;
 
         return str_is($mustIncludes, $route->getName())
+            || str_is($mustIncludes, $route->uri())
             || (str_is($routeRule['match']['domains'] ?? [], $route->getDomain())
             && str_is($routeRule['match']['prefixes'] ?? [], $route->uri())
             && $matchesVersion);
