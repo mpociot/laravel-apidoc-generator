@@ -221,4 +221,11 @@ return [
          */
         'serializer' => null,
     ],
+
+    /*
+     * If you would like the package to generate the same example values for parameters on each run,
+     * set this to any number (eg. 1234)
+     *
+     */
+    'faker_seed' => null,
 ];

@@ -533,6 +533,30 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function generates_consistent_examples_when_faker_seed_is_set()
+    {
+        $route = $this->createRoute('GET', '/withBodyParameters', 'withBodyParameters');
+
+        $paramName = 'room_id';
+        $results = [];
+        $results[$this->generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$this->generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$this->generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$this->generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$this->generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        // Examples should have different values
+        $this->assertNotEquals(count($results), 1);
+
+        $generator = new Generator(12345);
+        $results = [];
+        $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
+        // Examples should have same values
+        $this->assertEquals(count($results), 1);
+    }
+    /** @test */
     public function uses_configured_settings_when_calling_route()
     {
         $route = $this->createRoute('PUT', '/echo/{id}', 'shouldFetchRouteResponseWithEchoedSettings', true);
