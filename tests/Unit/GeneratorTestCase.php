@@ -556,6 +556,7 @@ abstract class GeneratorTestCase extends TestCase
         // Examples should have same values
         $this->assertEquals(count($results), 1);
     }
+
     /** @test */
     public function uses_configured_settings_when_calling_route()
     {
