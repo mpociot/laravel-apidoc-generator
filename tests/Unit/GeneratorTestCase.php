@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
 use Illuminate\Support\Facades\Storage;
@@ -547,7 +548,7 @@ abstract class GeneratorTestCase extends TestCase
         // Examples should have different values
         $this->assertNotEquals(count($results), 1);
 
-        $generator = new Generator(12345);
+        $generator = new Generator(new DocumentationConfig(['faker_seed' => 12345]));
         $results = [];
         $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
         $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
