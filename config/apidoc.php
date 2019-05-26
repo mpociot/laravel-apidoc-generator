@@ -6,7 +6,11 @@ return [
      * The output path for the generated documentation.
      * This path should be relative to the root of your application.
      */
-    'output' => 'public/docs',
+    'output' => [
+        'type' => 'static',
+        'source' => 'public/docs',
+        'path' => 'public/docs',
+    ],
 
     /*
      * The router to be used (Laravel or Dingo).

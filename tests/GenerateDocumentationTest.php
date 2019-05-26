@@ -2,10 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
+use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionException;
 use Illuminate\Support\Str;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -30,19 +29,7 @@ class GenerateDocumentationTest extends TestCase
     public function tearDown()
     {
         // delete the generated docs - compatible cross-platform
-        $dir = __DIR__.'/../public/docs';
-        if (is_dir($dir)) {
-            $files = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-
-            foreach ($files as $fileinfo) {
-                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                $todo($fileinfo->getRealPath());
-            }
-            rmdir($dir);
-        }
+        Utils::deleteFolderWithFiles(__DIR__.'/../public/docs');
     }
 
     /**

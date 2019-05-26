@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Commands;
 
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
@@ -87,14 +88,14 @@ class GenerateDocumentation extends Command
      */
     private function writeMarkdown($parsedRoutes)
     {
-        $outputPath = $this->docConfig->get('output');
-        $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
-        $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
-        $prependFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
-        $appendFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'append.md';
+        $sourcePath = $this->docConfig->get('output.source');
+        $outputPath = $this->docConfig->get('output.path');
+        $targetFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
+        $compareFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
+        $prependFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
+        $appendFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'append.md';
 
         $infoText = view('apidoc::partials.info')
-            ->with('outputPath', ltrim($outputPath, 'public/'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection());
 
         $settings = ['languages' => $this->docConfig->get('example_languages')];
@@ -158,12 +159,11 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', $this->docConfig->get('output'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
-        if (! is_dir($outputPath)) {
-            $documentarian->create($outputPath);
+        if (! is_dir($sourcePath)) {
+            $documentarian->create($sourcePath);
         }
 
         // Write output file
@@ -176,17 +176,22 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', $this->docConfig->get('output'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
         file_put_contents($compareFile, $compareMarkdown);
 
-        $this->info('Wrote index.md to: '.$outputPath);
+        $this->info('Wrote index.md to: '.$sourcePath);
 
         $this->info('Generating API HTML code');
 
+        // Documentarian expects output path and source path to be the same,
+        // so we deceive it by copying output over to source momentarily
+        rcopy($sourcePath, $outputPath);
         $documentarian->generate($outputPath);
+        if ($outputPath !== $sourcePath) {
+            Utils::deleteFolderWithFiles(rtrim($outputPath, '/') . '/source');
+        }
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
 
