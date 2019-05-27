@@ -229,6 +229,7 @@ class GenerateDocumentation extends Command
         if (is_array($action)) {
             $action = implode('@', $action);
         }
+
         return ! is_callable($action) && ! is_null($action);
     }
 
