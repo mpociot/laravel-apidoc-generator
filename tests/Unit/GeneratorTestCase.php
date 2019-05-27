@@ -604,7 +604,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_use_arrays_in_routes_uses()
     {
         $route = $this->createRouteUsesArray('GET', '/api/test', 'withEndpointDescription');
-        $parsed = $this->generator->processRoute($route)['group'];
+        $parsed = $this->generator->processRoute($route);
 
         $this->assertSame('Group A', $parsed['group']);
         $this->assertSame('Example title.', $parsed['title']);
