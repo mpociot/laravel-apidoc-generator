@@ -94,6 +94,35 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
+    public function console_command_work_with_rotes_uses_array()
+    {
+        RouteFacade::get('/api/test', [TestController::class, 'withEndpointDescription']);
+
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $output = $this->artisan('apidoc:generate');
+
+        $this->assertNotContains('Skipping route: [GET] test', $output);
+        $this->assertContains('Processed route: [GET] test', $output);
+    }
+
+    /** @test */
+    public function console_command_work_with_dingo_rotes_uses_array()
+    {
+        $api = app(\Dingo\Api\Routing\Router::class);
+        $api->version('v1', function ($api) {
+            $api->get('/test', [TestController::class, 'withEndpointDescription']);
+        });
+
+        config(['apidoc.router' => 'dingo']);
+        config(['apidoc.routes.0.match.prefixes' => ['*']]);
+        config(['apidoc.routes.0.match.versions' => ['v1']]);
+        $output = $this->artisan('apidoc:generate');
+
+        $this->assertNotContains('Skipping route: [GET] test', $output);
+        $this->assertContains('Processed route: [GET] test', $output);
+    }
+
+    /** @test */
     public function can_skip_single_routes()
     {
         RouteFacade::get('/api/skip', TestController::class.'@skip');

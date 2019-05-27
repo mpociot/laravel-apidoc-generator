@@ -600,5 +600,18 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals('value', $responseContent['header']);
     }
 
+    /** @test */
+    public function can_use_arrays_in_routes_uses()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withEndpointDescription');
+        $parsed = $this->generator->processRoute($route)['group'];
+
+        $this->assertSame('Group A', $parsed['group']);
+        $this->assertSame('Example title.', $parsed['title']);
+        $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
+    }
+
     abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false);
+
+    abstract public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false);
 }
