@@ -226,7 +226,9 @@ class GenerateDocumentation extends Command
     private function isValidRoute(Route $route)
     {
         $action = $route->getAction()['uses'];
-        if (is_array($action)) $action = implode('@', $action);
+        if (is_array($action)) {
+            $action = implode('@', $action);
+        }
         return ! is_callable($action) && ! is_null($action);
     }
 

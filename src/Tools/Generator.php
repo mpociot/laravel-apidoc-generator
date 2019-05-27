@@ -53,7 +53,7 @@ class Generator
      */
     public function processRoute(Route $route, array $rulesToApply = [])
     {
-        $action = $route->getAction()["uses"];
+        $action = $route->getAction()['uses'];
         list($class, $method) = is_array($action) ? $action : explode('@', $action);
         $controller = new ReflectionClass($class);
         $method = $controller->getMethod($method);
