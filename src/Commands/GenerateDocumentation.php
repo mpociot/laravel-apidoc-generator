@@ -225,7 +225,9 @@ class GenerateDocumentation extends Command
      */
     private function isValidRoute(Route $route)
     {
-        return ! is_callable($route->getAction()['uses']) && ! is_null($route->getAction()['uses']);
+        $action = $route->getAction()['uses'];
+        if (is_array($action)) $action = implode('@', $action);
+        return ! is_callable($action) && ! is_null($action);
     }
 
     /**
@@ -237,7 +239,7 @@ class GenerateDocumentation extends Command
      */
     private function isRouteVisibleForDocumentation($route)
     {
-        list($class, $method) = explode('@', $route);
+        list($class, $method) = is_array($route) ? $route : explode('@', $route);
         $reflection = new ReflectionClass($class);
 
         if (! $reflection->hasMethod($method)) {
