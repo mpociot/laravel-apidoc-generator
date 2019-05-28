@@ -16,6 +16,7 @@ class Utils
 
     /**
      * @param array $action
+     *
      * @return array|null
      */
     public static function getRouteActionUses(array $action)
@@ -33,8 +34,6 @@ class Utils
                 1 => $action[1],
             ];
         }
-
-        return null;
     }
 
     /**
