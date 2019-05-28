@@ -2,11 +2,11 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
@@ -237,9 +237,9 @@ class GenerateDocumentation extends Command
     /**
      * @param $action
      *
-     * @return bool
-     *@throws ReflectionException
+     * @throws ReflectionException
      *
+     * @return bool
      */
     private function isRouteVisibleForDocumentation($action)
     {

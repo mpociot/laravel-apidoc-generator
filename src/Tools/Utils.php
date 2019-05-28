@@ -19,15 +19,14 @@ class Utils
         if ($action['uses'] !== null) {
             if (is_array($action['uses'])) {
                 return $action['uses'];
-            }
-            elseif (is_string($action['uses'])) {
+            } elseif (is_string($action['uses'])) {
                 return explode('@', $action['uses']);
             }
         }
         if (array_key_exists(0, $action) && array_key_exists(1, $action)) {
             return [
                 0 => $action[0],
-                1 => $action[1]
+                1 => $action[1],
             ];
         }
 
