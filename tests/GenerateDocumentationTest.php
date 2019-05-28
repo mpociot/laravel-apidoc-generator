@@ -96,13 +96,13 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function console_command_work_with_rotes_uses_array()
     {
-        RouteFacade::get('/api/test', [TestController::class, 'withEndpointDescription']);
+        RouteFacade::get('/api/array/laravel/test', [TestController::class, 'withEndpointDescription']);
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertNotContains('Skipping route: [GET] test', $output);
-        $this->assertContains('Processed route: [GET] test', $output);
+        $this->assertNotContains('Skipping route: [GET] array/laravel/test', $output);
+        $this->assertContains('Processed route: [GET] array/laravel/test', $output);
     }
 
     /** @test */
@@ -110,7 +110,7 @@ class GenerateDocumentationTest extends TestCase
     {
         $api = app(\Dingo\Api\Routing\Router::class);
         $api->version('v1', function ($api) {
-            $api->get('/test', [TestController::class, 'withEndpointDescription']);
+            $api->get('/array/dingo/test', [TestController::class, 'withEndpointDescription']);
         });
 
         config(['apidoc.router' => 'dingo']);
@@ -118,8 +118,8 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.versions' => ['v1']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertNotContains('Skipping route: [GET] test', $output);
-        $this->assertContains('Processed route: [GET] test', $output);
+        $this->assertNotContains('Skipping route: [GET] array/dingo/test', $output);
+        $this->assertContains('Processed route: [GET] array/dingo/test', $output);
     }
 
     /** @test */
