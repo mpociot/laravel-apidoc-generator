@@ -96,7 +96,7 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function console_command_work_with_rotes_uses_array()
     {
-        RouteFacade::get('/api/array/laravel/test', [TestController::class, 'withEndpointDescription']);
+        RouteFacade::get('/array/laravel/test', [TestController::class, 'withEndpointDescription']);
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
