@@ -14,7 +14,11 @@ class Utils
         return self::replaceUrlParameterBindings($uri, $bindings);
     }
 
-    public static function getRouteActionUses(array $action): ?array
+    /**
+     * @param array $action
+     * @return array|null
+     */
+    public static function getRouteActionUses(array $action)
     {
         if ($action['uses'] !== null) {
             if (is_array($action['uses'])) {
