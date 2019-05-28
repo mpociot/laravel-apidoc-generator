@@ -96,13 +96,13 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function console_command_work_with_rotes_uses_array()
     {
-        RouteFacade::get('/array/laravel/test', [TestController::class, 'withEndpointDescription']);
+        RouteFacade::get('/api/array/test', [TestController::class, 'withEndpointDescription']);
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertNotContains('Skipping route: [GET] array/laravel/test', $output);
-        $this->assertContains('Processed route: [GET] array/laravel/test', $output);
+        $this->assertNotContains('Skipping route: [GET] api/array/test', $output);
+        $this->assertContains('Processed route: [GET] api/array/test', $output);
     }
 
     /** @test */
