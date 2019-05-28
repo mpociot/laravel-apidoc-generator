@@ -14,6 +14,26 @@ class Utils
         return self::replaceUrlParameterBindings($uri, $bindings);
     }
 
+    public static function getRouteActionUses(array $action): ?array
+    {
+        if ($action['uses'] !== null) {
+            if (is_array($action['uses'])) {
+                return $action['uses'];
+            }
+            elseif (is_string($action['uses'])) {
+                return explode('@', $action['uses']);
+            }
+        }
+        if (array_key_exists(0, $action) && array_key_exists(1, $action)) {
+            return [
+                0 => $action[0],
+                1 => $action[1]
+            ];
+        }
+
+        return null;
+    }
+
     /**
      * Transform parameters in URLs into real values (/users/{user} -> /users/2).
      * Uses bindings specified by caller, otherwise just uses '1'.

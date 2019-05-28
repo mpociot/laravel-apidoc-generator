@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
+use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
@@ -207,7 +208,7 @@ class GenerateDocumentation extends Command
         foreach ($routes as $routeItem) {
             $route = $routeItem['route'];
             /** @var Route $route */
-            if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
+            if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction())) {
                 $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply']);
                 $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
@@ -225,7 +226,7 @@ class GenerateDocumentation extends Command
      */
     private function isValidRoute(Route $route)
     {
-        $action = $route->getAction()['uses'];
+        $action = Utils::getRouteActionUses($route->getAction());
         if (is_array($action)) {
             $action = implode('@', $action);
         }
@@ -234,15 +235,15 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param $route
-     *
-     * @throws ReflectionException
+     * @param $action
      *
      * @return bool
+     *@throws ReflectionException
+     *
      */
-    private function isRouteVisibleForDocumentation($route)
+    private function isRouteVisibleForDocumentation($action)
     {
-        list($class, $method) = is_array($route) ? $route : explode('@', $route);
+        list($class, $method) = Utils::getRouteActionUses($action);
         $reflection = new ReflectionClass($class);
 
         if (! $reflection->hasMethod($method)) {
@@ -255,7 +256,7 @@ class GenerateDocumentation extends Command
             $phpdoc = new DocBlock($comment);
 
             return collect($phpdoc->getTags())
-                ->filter(function ($tag) use ($route) {
+                ->filter(function ($tag) use ($action) {
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
