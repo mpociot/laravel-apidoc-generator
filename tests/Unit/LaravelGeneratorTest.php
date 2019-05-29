@@ -24,4 +24,13 @@ class LaravelGeneratorTest extends GeneratorTestCase
             return new Route([$httpMethod], $path, ['uses' => TestController::class."@$controllerMethod"]);
         }
     }
+
+    public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false)
+    {
+        if ($register) {
+            return RouteFacade::{$httpMethod}($path, TestController::class."@$controllerMethod");
+        } else {
+            return new Route([$httpMethod], $path, ['uses' => [TestController::class, $controllerMethod]]);
+        }
+    }
 }
