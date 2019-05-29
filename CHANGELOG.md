@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.8.0] - Wednesday, 29 May 2019
+### Added
+- Support for PHP array callable syntax in route action (https://github.com/mpociot/laravel-apidoc-generator/pull/516)
+
 ## [3.7.3] - Thursday, 23 May 2019
 ### Fixed
 - Added faker_seed (https://github.com/mpociot/laravel-apidoc-generator/commit/d2901e51a68c17066d4dd96054ff5bfdf124945b)
