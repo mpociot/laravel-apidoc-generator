@@ -94,7 +94,7 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
-    public function console_command_work_with_rotes_uses_array()
+    public function console_command_work_with_routes_uses_array()
     {
         RouteFacade::get('/api/array/test', [TestController::class, 'withEndpointDescription']);
 
@@ -106,7 +106,7 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
-    public function console_command_work_with_dingo_rotes_uses_array()
+    public function console_command_work_with_dingo_routes_uses_array()
     {
         $api = app(\Dingo\Api\Routing\Router::class);
         $api->version('v1', function ($api) {
