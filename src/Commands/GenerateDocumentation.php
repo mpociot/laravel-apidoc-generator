@@ -50,7 +50,7 @@ class GenerateDocumentation extends Command
     {
         try {
             URL::forceRootUrl(config('app.url'));
-        } catch (\Exception $e) {
+        } catch (\Error $e) {
             echo "Warning: Couldn't force base url as Lumen currently doesn't have the forceRootUrl method.\n";
             echo "You should probably double check URLs in your generated documentation.\n";
         }
