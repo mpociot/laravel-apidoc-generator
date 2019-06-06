@@ -25,7 +25,12 @@ class CollectionWriter
 
     public function getCollection()
     {
-        URL::forceRootUrl(config('app.url'));
+        try {
+            URL::forceRootUrl(config('app.url'));
+        } catch (\Error $e) {
+            echo "Warning: Couldn't force base url as Lumen currently doesn't have the forceRootUrl method.\n";
+            echo "You should probably double check URLs in your generated documentation.\n";
+        }
 
         $collection = [
             'variables' => [],
