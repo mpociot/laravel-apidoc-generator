@@ -2,10 +2,10 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
 use Illuminate\Support\Facades\Storage;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 abstract class GeneratorTestCase extends TestCase
