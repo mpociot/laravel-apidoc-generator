@@ -14,18 +14,29 @@ class CollectionWriter
     private $routeGroups;
 
     /**
+     * @var string
+     */
+    private $baseUrl;
+
+    /**
      * CollectionWriter constructor.
      *
      * @param Collection $routeGroups
      */
-    public function __construct(Collection $routeGroups)
+    public function __construct(Collection $routeGroups, $baseUrl)
     {
         $this->routeGroups = $routeGroups;
+        $this->baseUrl = $baseUrl;
     }
 
     public function getCollection()
     {
-        URL::forceRootUrl(config('app.url'));
+        try {
+            URL::forceRootUrl($this->baseUrl);
+        } catch (\Exception $e) {
+            echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
+            echo "You should probably double check URLs in your generated Postman collection.\n";
+        }
 
         $collection = [
             'variables' => [],

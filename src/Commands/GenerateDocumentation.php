@@ -56,9 +56,9 @@ class GenerateDocumentation extends Command
         $this->docConfig = new DocumentationConfig(config('apidoc'));
         
         try {
-            URL::forceRootUrl(config('app.url'));
+            URL::forceRootUrl($this->docConfig->get('base_url'));
         } catch (\Exception $e) {
-            echo "Warning: Couldn't force base url as Lumen currently doesn't have the forceRootUrl method.\n";
+            echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
             echo "You should probably double check URLs in your generated documentation.\n";
         }
         $usingDingoRouter = strtolower($this->docConfig->get('router')) == 'dingo';
@@ -106,6 +106,7 @@ class GenerateDocumentation extends Command
                 $route['output'] = (string) view('apidoc::partials.route')
                     ->with('route', $route)
                     ->with('settings', $settings)
+                    ->with('baseUrl', $this->docConfig->get('base_url'))
                     ->render();
 
                 return $route;
@@ -277,7 +278,7 @@ class GenerateDocumentation extends Command
      */
     private function generatePostmanCollection(Collection $routes)
     {
-        $writer = new CollectionWriter($routes);
+        $writer = new CollectionWriter($routes, $this->docConfig->get('base_url'));
 
         return $writer->getCollection();
     }

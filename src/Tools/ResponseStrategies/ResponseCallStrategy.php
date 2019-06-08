@@ -36,6 +36,9 @@ class ResponseCallStrategy
         try {
             $response = [$this->makeApiCall($request)];
         } catch (\Exception $e) {
+            echo "Response call failed for [". implode(',', $route->methods). "] {$route->uri}";
+            // TODO
+            // echo "Run this again with the --debug flag for details
             $response = null;
         } finally {
             $this->finish();

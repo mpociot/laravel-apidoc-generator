@@ -237,7 +237,7 @@ class GenerateDocumentationTest extends TestCase
         $domain = 'http://somedomain.test';
         RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
 
-        config(['app.url' => $domain]);
+        config(['apidoc.base_url' => $domain]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
@@ -249,7 +249,7 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function generated_postman_collection_can_have_custom_url()
     {
-        Config::set('app.url', 'http://yourapp.app');
+        Config::set('apidoc.base_url', 'http://yourapp.app');
         RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
         RouteFacade::post('/api/responseTag', TestController::class.'@withResponseTag');
 
