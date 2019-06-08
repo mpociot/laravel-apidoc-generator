@@ -1,12 +1,9 @@
 <?php
 
-
 namespace Mpociot\ApiDoc\Tools;
-
 
 class DocumentationConfig
 {
-
     private $data;
 
     public function __construct(array $config = [])

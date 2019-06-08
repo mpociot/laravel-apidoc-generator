@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
@@ -14,6 +13,7 @@ use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 
 class GenerateDocumentation extends Command
 {
@@ -54,7 +54,7 @@ class GenerateDocumentation extends Command
     public function handle()
     {
         $this->docConfig = new DocumentationConfig(config('apidoc'));
-        
+
         try {
             URL::forceRootUrl($this->docConfig->get('base_url'));
         } catch (\Exception $e) {
