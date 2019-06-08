@@ -8,6 +8,9 @@ This is the file path where the generated documentation will be written to. Note
 ## `router`
 The router to use when processing your routes (can be Laravel or Dingo. Defaults to **Laravel**)
 
+## `base_url`
+The base URL to be used in examples and the Postman collection. By default, this will be the value of config('app.url').
+
 ## `postman`
 This package can automatically generate a Postman collection for your routes, along with the documentation. This section is where you can configure (or disable) that.
 

@@ -14,6 +14,7 @@ use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 
 class GenerateDocumentation extends Command
 {
@@ -35,6 +36,11 @@ class GenerateDocumentation extends Command
 
     private $routeMatcher;
 
+    /**
+     * @var DocumentationConfig
+     */
+    private $docConfig;
+
     public function __construct(RouteMatcher $routeMatcher)
     {
         parent::__construct();
@@ -48,20 +54,23 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
+        $this->docConfig = new DocumentationConfig(config('apidoc'));
+
         try {
-            URL::forceRootUrl(config('app.url'));
+            URL::forceRootUrl($this->docConfig->get('base_url'));
         } catch (\Exception $e) {
-            echo "Warning: Couldn't force base url as Lumen currently doesn't have the forceRootUrl method.\n";
+            echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
             echo "You should probably double check URLs in your generated documentation.\n";
         }
-        $usingDingoRouter = strtolower(config('apidoc.router')) == 'dingo';
+        $usingDingoRouter = strtolower($this->docConfig->get('router')) == 'dingo';
+        $routes = $this->docConfig->get('routes');
         if ($usingDingoRouter) {
-            $routes = $this->routeMatcher->getDingoRoutesToBeDocumented(config('apidoc.routes'));
+            $routes = $this->routeMatcher->getDingoRoutesToBeDocumented($routes);
         } else {
-            $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented(config('apidoc.routes'));
+            $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented($routes);
         }
 
-        $generator = new Generator(config('apidoc.faker_seed'));
+        $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
         $parsedRoutes = collect($parsedRoutes)->groupBy('group')
             ->sortBy(static function ($group) {
@@ -79,7 +88,7 @@ class GenerateDocumentation extends Command
      */
     private function writeMarkdown($parsedRoutes)
     {
-        $outputPath = config('apidoc.output');
+        $outputPath = $this->docConfig->get('output');
         $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
         $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
         $prependFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
@@ -89,7 +98,7 @@ class GenerateDocumentation extends Command
             ->with('outputPath', ltrim($outputPath, 'public/'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection());
 
-        $settings = ['languages' => config('apidoc.example_languages')];
+        $settings = ['languages' => $this->docConfig->get('example_languages')];
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) use ($settings) {
             return $routeGroup->map(function ($route) use ($settings) {
                 if (count($route['cleanBodyParameters']) && ! isset($route['headers']['Content-Type'])) {
@@ -98,6 +107,7 @@ class GenerateDocumentation extends Command
                 $route['output'] = (string) view('apidoc::partials.route')
                     ->with('route', $route)
                     ->with('settings', $settings)
+                    ->with('baseUrl', $this->docConfig->get('base_url'))
                     ->render();
 
                 return $route;
@@ -150,7 +160,7 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', config('apidoc.output'))
+            ->with('outputPath', $this->docConfig->get('output'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
@@ -168,7 +178,7 @@ class GenerateDocumentation extends Command
             ->with('infoText', $infoText)
             ->with('prependMd', $prependFileContents)
             ->with('appendMd', $appendFileContents)
-            ->with('outputPath', config('apidoc.output'))
+            ->with('outputPath', $this->docConfig->get('output'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
@@ -188,7 +198,7 @@ class GenerateDocumentation extends Command
             file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
         }
 
-        if ($logo = config('apidoc.logo')) {
+        if ($logo = $this->docConfig->get('logo')) {
             copy(
                 $logo,
                 $outputPath.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png'
@@ -274,7 +284,7 @@ class GenerateDocumentation extends Command
      */
     private function generatePostmanCollection(Collection $routes)
     {
-        $writer = new CollectionWriter($routes);
+        $writer = new CollectionWriter($routes, $this->docConfig->get('base_url'));
 
         return $writer->getCollection();
     }
@@ -286,6 +296,6 @@ class GenerateDocumentation extends Command
      */
     private function shouldGeneratePostmanCollection()
     {
-        return config('apidoc.postman.enabled', is_bool(config('apidoc.postman')) ? config('apidoc.postman') : false);
+        return $this->docConfig->get('postman.enabled', is_bool($this->docConfig->get('postman')) ? $this->docConfig->get('postman') : false);
     }
 }

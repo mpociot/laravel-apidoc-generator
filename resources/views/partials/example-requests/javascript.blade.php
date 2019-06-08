@@ -1,5 +1,5 @@
 ```javascript
-const url = new URL("{{ rtrim(config('app.docs_url') ?: config('app.url'), '/') }}/{{ ltrim($route['boundUri'], '/') }}");
+const url = new URL("{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}");
 @if(count($route['queryParameters']))
 
     let params = {
