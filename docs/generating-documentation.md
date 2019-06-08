@@ -18,7 +18,7 @@ The generator automatically creates a Postman collection file, which you can imp
 
 If you don't want to create a Postman collection, set the `postman.enabled` config option to false.
 
-The base URL added to the Postman collection will be the value of the `url` key in your Laravel `config/app.php` file. 
+The base URL used in the Postman collection will be the value of the `base_url` key in your Laravel `config/apidoc.php` file. 
 
 ## Manually modifying the content of the generated documentation
 If you want to modify the content of your generated documentation without changing the routes, go ahead and edit the generated `index.md` file.
