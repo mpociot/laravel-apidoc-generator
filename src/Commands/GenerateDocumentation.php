@@ -2,12 +2,11 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
@@ -15,6 +14,7 @@ use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Postman\CollectionWriter;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 
 class GenerateDocumentation extends Command
 {
@@ -66,7 +66,6 @@ class GenerateDocumentation extends Command
                 echo "You should probably double check URLs in your generated documentation.\n";
             }
 
-
             $usingDingoRouter = strtolower($this->docConfig->get('router')) == 'dingo';
             $routes = $this->docConfig->get('routes');
             if ($usingDingoRouter) {
@@ -99,7 +98,7 @@ class GenerateDocumentation extends Command
         $isStatic = $this->docConfig->get('output') === 'static';
         $path = $this->docConfig->get('id');
         $sourcePath = resource_path("apidoc/$path");
-        $outputPath = $isStatic ? public_path("apidoc/$path") : resource_path("views/apidoc");
+        $outputPath = $isStatic ? public_path("apidoc/$path") : resource_path('views/apidoc');
 
         $targetFile = $sourcePath.$slash.'source'.$slash.'index.md';
         $compareFile = $sourcePath.$slash.'source'.$slash.'.compare.md';
@@ -201,7 +200,7 @@ class GenerateDocumentation extends Command
         rcopy($sourcePath, $outputPath);
         $documentarian->generate($outputPath);
         if ($outputPath !== $sourcePath) {
-            Utils::deleteFolderWithFiles($outputPath . '/source');
+            Utils::deleteFolderWithFiles($outputPath.'/source');
         }
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
@@ -219,7 +218,7 @@ class GenerateDocumentation extends Command
             );
         }
 
-        if (!$isStatic) {
+        if (! $isStatic) {
             Utils::moveFilesFromFolder(
                 "$outputPath{$slash}images",
                 public_path("apidoc/$path/images")
