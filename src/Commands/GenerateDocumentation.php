@@ -7,6 +7,7 @@ use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
@@ -217,7 +218,7 @@ class GenerateDocumentation extends Command
         foreach ($routes as $routeItem) {
             $route = $routeItem['route'];
             /** @var Route $route */
-            if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction()['uses'])) {
+            if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction())) {
                 $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply']);
                 $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
@@ -235,19 +236,24 @@ class GenerateDocumentation extends Command
      */
     private function isValidRoute(Route $route)
     {
-        return ! is_callable($route->getAction()['uses']) && ! is_null($route->getAction()['uses']);
+        $action = Utils::getRouteActionUses($route->getAction());
+        if (is_array($action)) {
+            $action = implode('@', $action);
+        }
+
+        return ! is_callable($action) && ! is_null($action);
     }
 
     /**
-     * @param $route
+     * @param $action
      *
      * @throws ReflectionException
      *
      * @return bool
      */
-    private function isRouteVisibleForDocumentation($route)
+    private function isRouteVisibleForDocumentation($action)
     {
-        list($class, $method) = explode('@', $route);
+        list($class, $method) = Utils::getRouteActionUses($action);
         $reflection = new ReflectionClass($class);
 
         if (! $reflection->hasMethod($method)) {
@@ -260,7 +266,7 @@ class GenerateDocumentation extends Command
             $phpdoc = new DocBlock($comment);
 
             return collect($phpdoc->getTags())
-                ->filter(function ($tag) use ($route) {
+                ->filter(function ($tag) use ($action) {
                     return $tag->getName() === 'hideFromAPIDocumentation';
                 })
                 ->isEmpty();
