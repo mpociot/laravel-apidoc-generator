@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
+use DirectoryIterator;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use RecursiveIteratorIterator;
@@ -57,6 +58,32 @@ class Utils
                 $todo($fileinfo->getRealPath());
             }
             rmdir($folder);
+        }
+    }
+
+    // TODO replace this shit with a better file manipulation library
+    public static function moveFilesFromFolder($src, $dest)
+    {
+
+        // If source is not a directory stop processing
+        if (!is_dir($src)) return false;
+
+        // If the destination directory does not exist create it
+        if (!is_dir($dest)) {
+            if (!mkdir($dest)) {
+                // If the destination directory could not be created stop processing
+                return false;
+            }
+        }
+
+        // Open the source directory to read in files
+        $i = new DirectoryIterator($src);
+        foreach ($i as $f) {
+            if ($f->isFile()) {
+                rename($f->getRealPath(), "$dest/" . $f->getFilename());
+            } else if (!$f->isDot() && $f->isDir()) {
+                rcopy($f->getRealPath(), "$dest/$f");
+            }
         }
     }
 }

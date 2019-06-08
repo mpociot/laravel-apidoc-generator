@@ -26,6 +26,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         ], 'apidoc-config');
 
         $this->mergeConfigFrom(__DIR__.'/../config/apidoc.php', 'apidoc');
+        $this->loadRoutesFrom(__DIR__.'/../routes/apidoc.php');
 
         if ($this->app->runningInConsole()) {
             $this->commands([

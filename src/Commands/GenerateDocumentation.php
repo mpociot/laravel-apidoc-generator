@@ -54,31 +54,37 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        $this->docConfig = new DocumentationConfig(config('apidoc'));
-        
-        try {
-            URL::forceRootUrl(config('app.url'));
-        } catch (\Exception $e) {
-            echo "Warning: Couldn't force base url as Lumen currently doesn't have the forceRootUrl method.\n";
-            echo "You should probably double check URLs in your generated documentation.\n";
-        }
-        $usingDingoRouter = strtolower($this->docConfig->get('router')) == 'dingo';
-        $routes = $this->docConfig->get('routes');
-        if ($usingDingoRouter) {
-            $routes = $this->routeMatcher->getDingoRoutesToBeDocumented($routes);
-        } else {
-            $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented($routes);
-        }
+        $docConfigs = config('apidoc');
 
-        $generator = new Generator($this->docConfig);
-        $parsedRoutes = $this->processRoutes($generator, $routes);
-        $parsedRoutes = collect($parsedRoutes)->groupBy('group')
-            ->sortBy(static function ($group) {
-                /* @var $group Collection */
-                return $group->first()['group'];
-            }, SORT_NATURAL);
+        foreach ($docConfigs as $docConfig) {
+            $this->docConfig = new DocumentationConfig($docConfig);
 
-        $this->writeMarkdown($parsedRoutes);
+            try {
+                URL::forceRootUrl(config('app.url'));
+            } catch (\Exception $e) {
+                echo "Warning: Couldn't force base url for {$this->docConfig->get('id')} as Lumen currently doesn't have the forceRootUrl method.\n";
+                echo "You should probably double check URLs in your generated documentation.\n";
+            }
+
+
+            $usingDingoRouter = strtolower($this->docConfig->get('router')) == 'dingo';
+            $routes = $this->docConfig->get('routes');
+            if ($usingDingoRouter) {
+                $routes = $this->routeMatcher->getDingoRoutesToBeDocumented($routes);
+            } else {
+                $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented($routes);
+            }
+
+            $generator = new Generator($this->docConfig);
+            $parsedRoutes = $this->processRoutes($generator, $routes);
+            $parsedRoutes = collect($parsedRoutes)->groupBy('group')
+                ->sortBy(static function ($group) {
+                    /* @var $group Collection */
+                    return $group->first()['group'];
+                }, SORT_NATURAL);
+
+            $this->writeMarkdown($parsedRoutes);
+        }
     }
 
     /**
@@ -88,12 +94,17 @@ class GenerateDocumentation extends Command
      */
     private function writeMarkdown($parsedRoutes)
     {
-        $sourcePath = $this->docConfig->get('output.source');
-        $outputPath = $this->docConfig->get('output.path');
-        $targetFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
-        $compareFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
-        $prependFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
-        $appendFile = $sourcePath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'append.md';
+        $slash = DIRECTORY_SEPARATOR;
+
+        $isStatic = $this->docConfig->get('output') === 'static';
+        $path = $this->docConfig->get('id');
+        $sourcePath = resource_path("apidoc/$path");
+        $outputPath = $isStatic ? public_path("apidoc/$path") : resource_path("views/apidoc");
+
+        $targetFile = $sourcePath.$slash.'source'.$slash.'index.md';
+        $compareFile = $sourcePath.$slash.'source'.$slash.'.compare.md';
+        $prependFile = $sourcePath.$slash.'source'.$slash.'prepend.md';
+        $appendFile = $sourcePath.$slash.'source'.$slash.'append.md';
 
         $infoText = view('apidoc::partials.info')
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection());
@@ -190,15 +201,15 @@ class GenerateDocumentation extends Command
         rcopy($sourcePath, $outputPath);
         $documentarian->generate($outputPath);
         if ($outputPath !== $sourcePath) {
-            Utils::deleteFolderWithFiles(rtrim($outputPath, '/') . '/source');
+            Utils::deleteFolderWithFiles($outputPath . '/source');
         }
 
         $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
 
         if ($this->shouldGeneratePostmanCollection()) {
             $this->info('Generating Postman collection');
-
-            file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
+            $collectionName = $outputPath.DIRECTORY_SEPARATOR.($isStatic ? 'collection.json' : "$path.json");
+            file_put_contents($collectionName, $this->generatePostmanCollection($parsedRoutes));
         }
 
         if ($logo = $this->docConfig->get('logo')) {
@@ -206,6 +217,28 @@ class GenerateDocumentation extends Command
                 $logo,
                 $outputPath.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png'
             );
+        }
+
+        if (!$isStatic) {
+            Utils::moveFilesFromFolder(
+                "$outputPath{$slash}images",
+                public_path("apidoc/$path/images")
+            );
+            Utils::moveFilesFromFolder(
+                "$outputPath{$slash}css",
+                public_path("apidoc/$path/css")
+            );
+            Utils::moveFilesFromFolder(
+                "$outputPath{$slash}js",
+                public_path("apidoc/$path/js")
+            );
+            $filename = $outputPath."/$path.blade.php";
+            rename($outputPath.'/index.html', $filename);
+            $doc = file_get_contents($filename);
+            $doc = str_replace('href="css/', "href=\"apidoc/$path/css/", $doc);
+            $doc = str_replace('src="js/', "src=\"apidoc/$path/js/", $doc);
+            $doc = str_replace('src="images/', "src=\"apidoc/$path/images/", $doc);
+            file_put_contents($filename, $doc);
         }
     }
 

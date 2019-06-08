@@ -1,5 +1,7 @@
 - Add tests for bindings and bindings prefixes
-- Add tests for config overrides
+- Add tests for Laravel config overrides
+- https://github.com/mpociot/laravel-apidoc-generator/issues/520 -> apidoc.base_url
 - Add tests on output (deterministic)
 - Bring `bindings` outside of `response_calls`
 - Should `routes.*.apply.response_calls.headers` be replaced by `routes.*.apply.headers`?
+- Replace file utils with a better file manipulation library
