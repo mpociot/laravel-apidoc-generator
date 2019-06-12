@@ -13,9 +13,9 @@
 
 @foreach($settings['languages'] as $language)
 @if(view()->exists("apidoc::partials.example-requests.$language"))
-  @include("apidoc::partials.example-requests.$language")
+@include("apidoc::partials.example-requests.$language")
 @else
-  @include("vendor.apidoc.partials.example-requests.$language")
+@include("vendor.apidoc.partials.example-requests.$language")
 @endif
 
 @endforeach
