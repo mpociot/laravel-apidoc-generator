@@ -12,7 +12,7 @@
 > Example request:
 
 @foreach($settings['languages'] as $language)
-@include("apidoc::partials.example-requests.$language")
+@includeFirst(["apidoc::partials.example-requests.$language"], ["vendor.apidoc.partials.example-requests.$language"])
 
 @endforeach
 
