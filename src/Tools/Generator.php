@@ -59,6 +59,7 @@ class Generator
 
         $routeGroup = $this->getRouteGroup($controller, $method);
         $docBlock = $this->parseDocBlock($method);
+        $uriParameters = $this->getUriParameters($method, $docBlock['tags']);
         $bodyParameters = $this->getBodyParameters($method, $docBlock['tags']);
         $queryParameters = $this->getQueryParameters($method, $docBlock['tags']);
         $content = ResponseResolver::getResponse($route, $docBlock['tags'], [
@@ -75,8 +76,10 @@ class Generator
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
             'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? ($rulesToApply['response_calls']['bindings'] ?? [])),
+            'uriParameters' => $uriParameters,
             'queryParameters' => $queryParameters,
             'bodyParameters' => $bodyParameters,
+            'cleanUriParameters' => $this->cleanParams($uriParameters),
             'cleanBodyParameters' => $this->cleanParams($bodyParameters),
             'cleanQueryParameters' => $this->cleanParams($queryParameters),
             'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
@@ -86,6 +89,76 @@ class Generator
         $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
 
         return $parsedRoute;
+    }
+
+    /**
+     * @param ReflectionMethod $method
+     * @param array $tags
+     *
+     * @return array
+     */
+    protected function getUriParameters(ReflectionMethod $method, array $tags)
+    {
+        foreach ($method->getParameters() as $param) {
+            $paramType = $param->getType();
+            if ($paramType === null) {
+                continue;
+            }
+
+            $parameterClassName = version_compare(phpversion(), '7.1.0', '<')
+                ? $paramType->__toString()
+                : $paramType->getName();
+
+            try {
+                $parameterClass = new ReflectionClass($parameterClassName);
+            } catch (\ReflectionException $e) {
+                continue;
+            }
+
+            if (class_exists('\Illuminate\Foundation\Http\FormRequest') && $parameterClass->isSubclassOf(\Illuminate\Foundation\Http\FormRequest::class) || class_exists('\Dingo\Api\Http\FormRequest') && $parameterClass->isSubclassOf(\Dingo\Api\Http\FormRequest::class)) {
+                $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
+                $uriParametersFromDocBlock = $this->getUriParametersFromDocBlock($formRequestDocBlock->getTags());
+
+                if (count($uriParametersFromDocBlock)) {
+                    return $uriParametersFromDocBlock;
+                }
+            }
+        }
+
+        return $this->getUriParametersFromDocBlock($tags);
+    }
+
+    /**
+     * @param array $tags
+     *
+     * @return array
+     */
+    protected function getUriParametersFromDocBlock(array $tags)
+    {
+        $parameters = collect($tags)
+            ->filter(function ($tag) {
+                return $tag instanceof Tag && $tag->getName() === 'uriParam';
+            })
+            ->mapWithKeys(function ($tag) {
+                preg_match('/(.+?)\s+(.+?)\s+?(.*)/', $tag->getContent(), $content);
+                if (empty($content)) {
+                    // this means only name and type were supplied
+                    list($name, $type) = preg_split('/\s+/', $tag->getContent());
+                    $required = false;
+                    $description = '';
+                } else {
+                    list($_, $name, $type, $description) = $content;
+                    $description = trim($description);
+                }
+
+                $type = $this->normalizeParameterType($type);
+                list($description, $example) = $this->parseDescription($description, $type);
+                $value = is_null($example) ? $this->generateDummyValue($type) : $example;
+
+                return [$name => compact('type', 'description', 'value')];
+            })->toArray();
+
+        return $parameters;
     }
 
     protected function getBodyParameters(ReflectionMethod $method, array $tags)

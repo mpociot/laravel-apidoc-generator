@@ -47,6 +47,15 @@
 `{{$method}} {{$route['uri']}}`
 
 @endforeach
+@if(count($route['uriParameters']))
+    #### URI Parameters
+
+    Parameter | Type | Description
+    --------- | ------- | ------- | -------
+    @foreach($route['uriParameters'] as $attribute => $parameter)
+        {{$attribute}} | {{$parameter['type']}} | {!! $parameter['description'] !!}
+    @endforeach
+@endif
 @if(count($route['bodyParameters']))
 #### Body Parameters
 
