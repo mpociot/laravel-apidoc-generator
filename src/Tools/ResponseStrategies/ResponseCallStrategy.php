@@ -6,6 +6,7 @@ use Dingo\Api\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
@@ -37,8 +38,11 @@ class ResponseCallStrategy
             $response = [$this->makeApiCall($request)];
         } catch (\Exception $e) {
             echo 'Response call failed for ['.implode(',', $route->methods)."] {$route->uri}";
-            // TODO
-            // echo "Run this again with the --debug flag for details
+            if (Flags::$shouldBeVerbose) {
+                dump($e);
+            } else {
+                echo "Run this again with the --verbose flag for details";
+            }
             $response = null;
         } finally {
             $this->finish();

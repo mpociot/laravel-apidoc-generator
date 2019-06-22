@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
+use Mpociot\ApiDoc\Tools\Flags;
 use ReflectionClass;
 use ReflectionMethod;
 use League\Fractal\Manager;
@@ -108,6 +109,10 @@ class TransformerTagsStrategy
             // try Eloquent model factory
             return factory($type)->make();
         } catch (\Exception $e) {
+            if (Flags::$shouldBeVerbose) {
+                echo "Eloquent model factory failed to instantiate {$type}; trying to fetch from database";
+            }
+
             $instance = new $type;
             if ($instance instanceof \Illuminate\Database\Eloquent\Model) {
                 try {
@@ -118,6 +123,9 @@ class TransformerTagsStrategy
                     }
                 } catch (\Exception $e) {
                     // okay, we'll stick with `new`
+                    if (Flags::$shouldBeVerbose) {
+                        echo "Failed to fetch first {$type} from database; using `new` to instantiate";
+                    }
                 }
             }
         }

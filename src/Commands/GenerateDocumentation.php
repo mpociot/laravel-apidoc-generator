@@ -6,6 +6,7 @@ use ReflectionClass;
 use ReflectionException;
 use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
+use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Illuminate\Support\Collection;
@@ -25,6 +26,7 @@ class GenerateDocumentation extends Command
      */
     protected $signature = 'apidoc:generate
                             {--force : Force rewriting of existing routes}
+                            {--verbose : Show verbose output}
     ';
 
     /**
@@ -54,6 +56,9 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
+        // Using a global static variable here, so fuck off if you don't like it
+        Flags::$shouldBeVerbose = $this->option('verbose');
+
         $this->docConfig = new DocumentationConfig(config('apidoc'));
 
         try {
@@ -62,13 +67,12 @@ class GenerateDocumentation extends Command
             echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
             echo "You should probably double check URLs in your generated documentation.\n";
         }
+
         $usingDingoRouter = strtolower($this->docConfig->get('router')) == 'dingo';
         $routes = $this->docConfig->get('routes');
-        if ($usingDingoRouter) {
-            $routes = $this->routeMatcher->getDingoRoutesToBeDocumented($routes);
-        } else {
-            $routes = $this->routeMatcher->getLaravelRoutesToBeDocumented($routes);
-        }
+        $routes = $usingDingoRouter
+            ? $this->routeMatcher->getDingoRoutesToBeDocumented($routes)
+            : $this->routeMatcher->getLaravelRoutesToBeDocumented($routes);
 
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
