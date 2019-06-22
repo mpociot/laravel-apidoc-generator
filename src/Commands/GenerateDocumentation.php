@@ -26,7 +26,6 @@ class GenerateDocumentation extends Command
      */
     protected $signature = 'apidoc:generate
                             {--force : Force rewriting of existing routes}
-                            {--verbose : Show verbose output}
     ';
 
     /**
@@ -57,6 +56,7 @@ class GenerateDocumentation extends Command
     public function handle()
     {
         // Using a global static variable here, so fuck off if you don't like it
+        // Also, the --verbose option is included with all Artisan commands
         Flags::$shouldBeVerbose = $this->option('verbose');
 
         $this->docConfig = new DocumentationConfig(config('apidoc'));
