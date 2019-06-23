@@ -68,7 +68,7 @@ class Utils
 
     public static function deleteDirectoryAndContents($dir)
     {
-        $adapter = new Local(realpath(__DIR__."/../../"));
+        $adapter = new Local(realpath(__DIR__.'/../../'));
         $fs = new Filesystem($adapter);
         $fs->deleteDir($dir);
     }
