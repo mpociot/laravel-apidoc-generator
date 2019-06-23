@@ -14,6 +14,7 @@
 @foreach($settings['languages'] as $language)
 @include("apidoc::partials.example-requests.$language")
 
+
 @endforeach
 
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))

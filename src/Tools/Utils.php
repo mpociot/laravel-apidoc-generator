@@ -4,6 +4,10 @@ namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class Utils
 {
@@ -45,7 +49,7 @@ class Utils
      *
      * @return mixed
      */
-    protected static function replaceUrlParameterBindings(string $uri, array $bindings)
+    public static function replaceUrlParameterBindings(string $uri, array $bindings)
     {
         foreach ($bindings as $path => $binding) {
             // So we can support partial bindings like
@@ -62,5 +66,24 @@ class Utils
         $uri = preg_replace('/{(.+?)}/', 1, $uri);
 
         return $uri;
+    }
+
+    public static function deleteDirectoryAndContents($dir)
+    {
+        if (is_dir($dir)) {
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($files as $fileinfo) {
+                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                $todo($fileinfo->getRealPath());
+            }
+            rmdir($dir);
+        }
+        /*
+        $adapter = new Local(__DIR__.'../../');
+        $filesystem = new Filesystem($adapter);*/
     }
 }
