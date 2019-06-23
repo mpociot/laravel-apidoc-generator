@@ -115,14 +115,14 @@ class TestController extends Controller
     public function echoesConfig()
     {
         return [
-            'app.env' => config('app.env')
+            'app.env' => config('app.env'),
         ];
     }
 
     public function echoesUrlPathParameters($param)
     {
         return [
-            'param' => $param
+            'param' => $param,
         ];
     }
 

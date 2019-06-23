@@ -2,11 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionException;
 use Illuminate\Support\Str;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
+use Mpociot\ApiDoc\Tools\Utils;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
