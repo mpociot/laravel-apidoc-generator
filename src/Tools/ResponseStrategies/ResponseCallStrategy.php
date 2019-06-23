@@ -8,7 +8,9 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
+use NunoMaduro\Collision\Handler;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
+use Whoops\Exception\Inspector;
 
 /**
  * Make a call to the route and retrieve its response.
@@ -37,11 +39,14 @@ class ResponseCallStrategy
         try {
             $response = [$this->makeApiCall($request)];
         } catch (\Exception $e) {
-            echo 'Response call failed for ['.implode(',', $route->methods)."] {$route->uri}";
+            echo 'Exception thrown during response call for ['.implode(',', $route->methods)."] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
-                dump($e);
+                $handler = new Handler;
+                $handler->setInspector(new Inspector($e));
+                $handler->setException($e);
+                $handler->handle();
             } else {
-                echo "Run this again with the --verbose flag for details";
+                echo "Run this again with the --verbose flag to see the exception.\n";
             }
             $response = null;
         } finally {

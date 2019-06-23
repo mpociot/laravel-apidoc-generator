@@ -3,4 +3,3 @@
 - Add tests on output (deterministic)
 - Bring `bindings` outside of `response_calls`
 - Should `routes.*.apply.response_calls.headers` be replaced by `routes.*.apply.headers`?
-- Implement debug flag
