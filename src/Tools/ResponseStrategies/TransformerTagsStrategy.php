@@ -2,11 +2,11 @@
 
 namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
-use Mpociot\ApiDoc\Tools\Flags;
 use ReflectionClass;
 use ReflectionMethod;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\Flags;
 use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
 use League\Fractal\Resource\Collection;
