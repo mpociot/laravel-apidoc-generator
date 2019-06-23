@@ -4,10 +4,8 @@ namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use League\Flysystem\Adapter\Local;
 
 class Utils
 {
@@ -70,20 +68,8 @@ class Utils
 
     public static function deleteDirectoryAndContents($dir)
     {
-        if (is_dir($dir)) {
-            $files = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-
-            foreach ($files as $fileinfo) {
-                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                $todo($fileinfo->getRealPath());
-            }
-            rmdir($dir);
-        }
-        /*
-        $adapter = new Local(__DIR__.'../../');
-        $filesystem = new Filesystem($adapter);*/
+        $adapter = new Local(realpath(__DIR__."/../../"));
+        $fs = new Filesystem($adapter);
+        $fs->deleteDir($dir);
     }
 }
