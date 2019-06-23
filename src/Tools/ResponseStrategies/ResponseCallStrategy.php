@@ -8,9 +8,9 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
+use Whoops\Exception\Inspector;
 use NunoMaduro\Collision\Handler;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
-use Whoops\Exception\Inspector;
 
 /**
  * Make a call to the route and retrieve its response.
