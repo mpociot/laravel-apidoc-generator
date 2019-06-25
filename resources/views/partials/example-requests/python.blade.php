@@ -2,17 +2,17 @@
 import requests
 import json
 
-url = '{{ trim(config('app.docs_url') ?: config('app.url'), '/')}}/{{ ltrim($route['uri'], '/') }}'
-@if(count($route['bodyParameters']))
+url = '{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}'
+@if(count($route['cleanBodyParameters']))
 payload = {
-	@foreach($route['bodyParameters'] as $attribute => $parameter)
+	@foreach($route['cleancleanBodyParameters'] as $attribute => $parameter)
 	    '{{ $attribute }}': '{{ $parameter['value'] }}'@if(!($loop->last)),@endif  {{ !$parameter['required'] ? '# optional' : '' }}
 	@endforeach
 }
 @endif
-@if(count($route['queryParameters']))
+@if(count($route['cleanQueryParameters']))
 params = {
-	@foreach($route['queryParameters'] as $attribute => $parameter)
+	@foreach($route['cleanQueryParameters'] as $attribute => $parameter)
 	    '{{ $attribute }}': '{{ $parameter['value'] }}'@if(!($loop->last)),@endif  {{ !$parameter['required'] ? '# optional' : '' }}
 	@endforeach
 }
@@ -22,6 +22,6 @@ headers = {
 	    '{{$header}}': '{{$value}}'@if(!($loop->last)),@endif
 	@endforeach
 }
-response = requests.request('{{$route['methods'][0]}}', url, headers=headers{{ count($route['bodyParameters']) ? ', data=payload' : '' }}{{ count($route['queryParameters']) ? ', params=params' : ''}})
+response = requests.request('{{$route['methods'][0]}}', url, headers=headers{{ count($route['cleanBodyParameters']) ? ', data=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
 response.json()
 ```
