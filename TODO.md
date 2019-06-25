@@ -1,6 +1,3 @@
-- Add tests for bindings and bindings prefixes
-- Add tests for config overrides
-- Add tests on output (deterministic)
+Major
 - Bring `bindings` outside of `response_calls`
 - Should `routes.*.apply.response_calls.headers` be replaced by `routes.*.apply.headers`?
-- Implement debug flag
