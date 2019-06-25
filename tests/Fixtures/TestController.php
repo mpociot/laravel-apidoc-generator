@@ -112,6 +112,20 @@ class TestController extends Controller
         ];
     }
 
+    public function echoesConfig()
+    {
+        return [
+            'app.env' => config('app.env'),
+        ];
+    }
+
+    public function echoesUrlPathParameters($param)
+    {
+        return [
+            'param' => $param,
+        ];
+    }
+
     public function shouldFetchRouteResponseWithEchoedSettings($id)
     {
         return [

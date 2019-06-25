@@ -20,10 +20,10 @@ Welcome to the generated API reference.
 
 <!-- END_INFO -->
 
-#general
+#Group A
 <!-- START_264ee15c728df32e7ca6eedce5e42dcb -->
 ## Example title.
- 
+
 This will be the long description.
 It can also be multiple lines long.
 
@@ -31,15 +31,16 @@ It can also be multiple lines long.
 
 ```bash
 curl -X GET -G "http://localhost/api/withDescription" \
-    -H "Accept: application/json" \
     -H "Authorization: customAuthToken" \
-        -H "Custom-Header: NotSoCustom" 
+    -H "Custom-Header: NotSoCustom"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users");
+const url = new URL("http://localhost/api/withDescription");
 
 let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
     "Accept": "application/json",
     "Content-Type": "application/json",
 }
@@ -52,7 +53,8 @@ fetch(url, {
     .then(json => console.log(json));
 ```
 
-> Example response:
+
+> Example response (200):
 
 ```json
 null
@@ -66,35 +68,34 @@ null
 
 <!-- START_9cedd363be06f5512f9e844b100fcc9d -->
 ## api/withResponseTag
- 
 > Example request:
 
 ```bash
 curl -X GET -G "http://localhost/api/withResponseTag" \
-    -H "Accept: application/json" \
     -H "Authorization: customAuthToken" \
-        -H "Custom-Header: NotSoCustom" 
+    -H "Custom-Header: NotSoCustom"
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/withResponseTag",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json",
-        "Authorization": "customAuthToken",
-        "Custom-Header": "NotSoCustom",
-    }
+const url = new URL("http://localhost/api/withResponseTag");
+
+let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
+    "Accept": "application/json",
+    "Content-Type": "application/json",
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
-> Example response:
+
+> Example response (200):
 
 ```json
 {
@@ -114,49 +115,61 @@ $.ajax(settings).done(function (response) {
 
 <!-- START_a25cb3b490fa579d7d77b386bbb7ec03 -->
 ## api/withBodyParameters
- 
 > Example request:
 
 ```bash
 curl -X GET -G "http://localhost/api/withBodyParameters" \
-    -H "Accept: application/json" \
     -H "Authorization: customAuthToken" \
-        -H "Custom-Header: NotSoCustom"  \
-    -d "user_id"=20 \
-        -d "room_id"=6DZyNcBgezdjdAIs \
-        -d "forever"= \
-        -d "another_one"=2153.4 \
-        -d "yet_another_param"={} \
-        -d "even_more_param"=[] 
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -d '{"user_id":9,"room_id":"consequatur","forever":false,"another_one":11613.31890586,"yet_another_param":{},"even_more_param":[],"book":{"name":"consequatur","author_id":17,"pages_count":17},"ids":[17],"users":[{"first_name":"John","last_name":"Doe"}]}'
+
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/withBodyParameters",
-    "method": "GET",
-    "data": {
-        "user_id": 20,
-        "room_id": "6DZyNcBgezdjdAIs",
-        "forever": false,
-        "another_one": 2153.4,
-        "yet_another_param": "{}",
-        "even_more_param": "[]"
-    },
-    "headers": {
-        "accept": "application/json",
-        "Authorization": "customAuthToken",
-        "Custom-Header": "NotSoCustom",
-    }
+const url = new URL("http://localhost/api/withBodyParameters");
+
+let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+let body = {
+    "user_id": 9,
+    "room_id": "consequatur",
+    "forever": false,
+    "another_one": 11613.31890586,
+    "yet_another_param": {},
+    "even_more_param": [],
+    "book": {
+        "name": "consequatur",
+        "author_id": 17,
+        "pages_count": 17
+    },
+    "ids": [
+        17
+    ],
+    "users": [
+        {
+            "first_name": "John",
+            "last_name": "Doe"
+        }
+    ]
+}
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
-> Example response:
+
+> Example response (200):
 
 ```json
 null
@@ -165,7 +178,7 @@ null
 ### HTTP Request
 `GET api/withBodyParameters`
 
-#### Parameters
+#### Body Parameters
 
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
@@ -175,49 +188,46 @@ Parameter | Type | Status | Description
     another_one | number |  optional  | Just need something here.
     yet_another_param | object |  required  | 
     even_more_param | array |  optional  | 
+    book.name | string |  optional  | 
+    book.author_id | integer |  optional  | 
+    book[pages_count] | integer |  optional  | 
+    ids.* | integer |  optional  | 
+    users.*.first_name | string |  optional  | The first name of the user.
+    users.*.last_name | string |  optional  | The last name of the user.
 
 <!-- END_a25cb3b490fa579d7d77b386bbb7ec03 -->
 
 <!-- START_5c08cc4d72b6e5830f6814c64086e197 -->
 ## api/withAuthTag
- <small style="
-  padding: 1px 9px 2px;
-  font-weight: bold;
-  white-space: nowrap;
-  color: #ffffff;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
-  border-radius: 9px;
-  background-color: #3a87ad;">Requires authentication</small>
-
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
 
 ```bash
 curl -X GET -G "http://localhost/api/withAuthTag" \
-    -H "Accept: application/json" \
     -H "Authorization: customAuthToken" \
-        -H "Custom-Header: NotSoCustom" 
+    -H "Custom-Header: NotSoCustom"
 ```
 
 ```javascript
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "http://localhost/api/withAuthTag",
-    "method": "GET",
-    "headers": {
-        "accept": "application/json",
-        "Authorization": "customAuthToken",
-        "Custom-Header": "NotSoCustom",
-    }
+const url = new URL("http://localhost/api/withAuthTag");
+
+let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
+    "Accept": "application/json",
+    "Content-Type": "application/json",
 }
 
-$.ajax(settings).done(function (response) {
-    console.log(response);
-});
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
 ```
 
-> Example response:
+
+> Example response (200):
 
 ```json
 null

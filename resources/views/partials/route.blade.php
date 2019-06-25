@@ -18,6 +18,7 @@
 @include("vendor.apidoc.partials.example-requests.$language")
 @endif
 
+
 @endforeach
 
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))

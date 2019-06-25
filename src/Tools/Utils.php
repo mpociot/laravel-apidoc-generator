@@ -4,6 +4,8 @@ namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 
 class Utils
 {
@@ -45,7 +47,7 @@ class Utils
      *
      * @return mixed
      */
-    protected static function replaceUrlParameterBindings(string $uri, array $bindings)
+    public static function replaceUrlParameterBindings(string $uri, array $bindings)
     {
         foreach ($bindings as $path => $binding) {
             // So we can support partial bindings like
@@ -62,5 +64,12 @@ class Utils
         $uri = preg_replace('/{(.+?)}/', 1, $uri);
 
         return $uri;
+    }
+
+    public static function deleteDirectoryAndContents($dir)
+    {
+        $adapter = new Local(realpath(__DIR__.'/../../'));
+        $fs = new Filesystem($adapter);
+        $fs->deleteDir($dir);
     }
 }
