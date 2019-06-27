@@ -394,6 +394,22 @@ class Generator
             return $casts[$type]($value);
         }
 
+        //In case of type be an array, converts the string in an array,
+        //preserving the type.
+        if (strpos(str_replace(' ', '', $type), '[]') > 0) {
+            $value = str_replace('[','', $value);
+            $value = str_replace(']','', $value);
+            $value = str_replace(', ',',', $value);
+            $value = explode(',', $value);
+
+            $type_item =  str_replace('[]', '',  str_replace(' ', '', $type));
+            foreach ($value as &$item) {
+                if (isset($casts[$type_item])) {
+                    $item =  $casts[$type_item]($item);
+                }
+            }
+        }
+
         return $value;
     }
 }
