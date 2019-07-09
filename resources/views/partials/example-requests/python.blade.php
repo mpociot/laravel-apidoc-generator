@@ -22,6 +22,6 @@ headers = {
 	    '{{$header}}': '{{$value}}'@if(!($loop->last)),@endif
 	@endforeach
 }
-response = requests.request('{{$route['methods'][0]}}', url, headers=headers{{ count($route['cleanBodyParameters']) ? ', data=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
+response = requests.request('{{$route['methods'][0]}}', url, headers=headers{{ count($route['cleanBodyParameters']) ? ', json=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
 response.json()
 ```
