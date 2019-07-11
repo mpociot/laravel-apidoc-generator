@@ -66,6 +66,19 @@ class Utils
         return $uri;
     }
 
+    public function dumpException(\Exception $e)
+    {
+        if (class_exists(\NunoMaduro\Collision\Handler::class)) {
+            $handler = new \NunoMaduro\Collision\Handler;
+            $handler->setInspector(new \Whoops\Exception\Inspector($e));
+            $handler->setException($e);
+            $handler->handle();
+        } else {
+            dump($e);
+            echo "You can get better exception output by installing the library \nunomaduro/collision (PHP 7.1+ only).\n";
+        }
+    }
+
     public static function deleteDirectoryAndContents($dir)
     {
         $adapter = new Local(realpath(__DIR__.'/../../'));

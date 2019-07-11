@@ -8,8 +8,6 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
-use Whoops\Exception\Inspector;
-use NunoMaduro\Collision\Handler;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
@@ -41,10 +39,7 @@ class ResponseCallStrategy
         } catch (\Exception $e) {
             echo 'Exception thrown during response call for ['.implode(',', $route->methods)."] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
-                $handler = new Handler;
-                $handler->setInspector(new Inspector($e));
-                $handler->setException($e);
-                $handler->handle();
+                Utils::dumpException($e);
             } else {
                 echo "Run this again with the --verbose flag to see the exception.\n";
             }
