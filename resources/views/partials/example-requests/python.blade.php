@@ -5,7 +5,7 @@ import json
 url = '{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}'
 @if(count($route['cleanBodyParameters']))
 payload = {
-	@foreach($route['cleancleanBodyParameters'] as $attribute => $parameter)
+	@foreach($route['cleanBodyParameters'] as $attribute => $parameter)
 	    '{{ $attribute }}': '{{ $parameter['value'] }}'@if(!($loop->last)),@endif  {{ !$parameter['required'] ? '# optional' : '' }}
 	@endforeach
 }
