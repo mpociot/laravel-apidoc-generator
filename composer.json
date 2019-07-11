@@ -23,7 +23,7 @@
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0.1",
         "ramsey/uuid": "^3.8",
-        "nunomaduro/collision": "^3.0",
+        "nunomaduro/collision": "^2.0 || ^3.0",
         "league/flysystem": "^1.0"
     },
     "require-dev": {
