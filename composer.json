@@ -23,7 +23,6 @@
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0.1",
         "ramsey/uuid": "^3.8",
-        "nunomaduro/collision": "^3.0",
         "league/flysystem": "^1.0"
     },
     "require-dev": {
@@ -34,7 +33,8 @@
         "league/fractal": "^0.17.0"
     },
     "suggest": {
-        "league/fractal": "Required for transformers support"
+        "league/fractal": "Required for transformers support",
+        "nunomaduro/collision": "For better reporting of errors that are thrpwn when generating docs"
     },
     "autoload": {
         "psr-4": {

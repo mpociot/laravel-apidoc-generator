@@ -30,6 +30,7 @@ Welcome to the generated API reference.
 curl -X GET -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users");
 
@@ -45,6 +46,7 @@ fetch(url, {
     .then(response => response.json())
     .then(json => console.log(json));
 ```
+
 
 > Example response (200):
 
@@ -69,6 +71,7 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users/create");
 
@@ -84,6 +87,7 @@ fetch(url, {
     .then(response => response.json())
     .then(json => console.log(json));
 ```
+
 
 > Example response (200):
 
@@ -108,6 +112,7 @@ fetch(url, {
 curl -X POST "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users");
 
@@ -125,6 +130,7 @@ fetch(url, {
 ```
 
 
+
 ### HTTP Request
 `POST api/users`
 
@@ -140,6 +146,7 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users/1");
 
@@ -155,6 +162,7 @@ fetch(url, {
     .then(response => response.json())
     .then(json => console.log(json));
 ```
+
 
 > Example response (200):
 
@@ -179,6 +187,7 @@ fetch(url, {
 curl -X GET -G "http://localhost/api/users/1/edit" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users/1/edit");
 
@@ -194,6 +203,7 @@ fetch(url, {
     .then(response => response.json())
     .then(json => console.log(json));
 ```
+
 
 > Example response (200):
 
@@ -218,6 +228,7 @@ fetch(url, {
 curl -X PUT "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users/1");
 
@@ -233,6 +244,7 @@ fetch(url, {
     .then(response => response.json())
     .then(json => console.log(json));
 ```
+
 
 
 ### HTTP Request
@@ -252,6 +264,7 @@ fetch(url, {
 curl -X DELETE "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
+
 ```javascript
 const url = new URL("http://localhost/api/users/1");
 
@@ -267,6 +280,7 @@ fetch(url, {
     .then(response => response.json())
     .then(json => console.log(json));
 ```
+
 
 
 ### HTTP Request
