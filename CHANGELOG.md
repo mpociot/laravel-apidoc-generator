@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.10.0] - Sunday, 23 June 2019
 ### Added
-- `--verbose` flag to show exception encountered when making response call.
+- `--verbose` flag to show exception encountered when making response calls (https://github.com/mpociot/laravel-apidoc-generator/commit/dc987f296e5a3d073f56c67911b2cb61ae47e9dc)
 
 ## [3.9.0] - Saturday, 8 June 2019
 ### Modified
