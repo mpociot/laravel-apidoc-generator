@@ -56,7 +56,11 @@ class CollectionWriter
                         return [
                             'name' => $route['title'] != '' ? $route['title'] : url($route['uri']),
                             'request' => [
-                                'url' => url($route['uri']),
+                                'url' => url($route['uri']) . (collect($route['queryParameters'])->isEmpty()
+                                    ? ''
+                                    : '?' . collect($route['queryParameters'])->map(function ($parameter, $key) {
+                                        return $key . '=' . (isset($parameter['value']) ? $parameter['value'] : '');
+                                    })->join('&')),
                                 'method' => $route['methods'][0],
                                 'body' => [
                                     'mode' => $mode,
