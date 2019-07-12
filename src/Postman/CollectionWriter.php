@@ -62,12 +62,17 @@ class CollectionWriter
                                         return $key.'='.(isset($parameter['value']) ? $parameter['value'] : '');
                                     })->join('&'))),
                                 'method' => $route['methods'][0],
-                                'header' => collect($route['headers'])->map(function ($value, $header) {
-                                    return [
-                                        'key' => $header,
-                                        'value' => $value,
-                                    ];
-                                }),
+                                'header' => collect($route['headers'])
+                                    ->union([
+                                        'Accept' => 'application/json',
+                                        'Content-Type' => 'application/json',
+                                    ])
+                                    ->map(function ($value, $header) {
+                                        return [
+                                            'key' => $header,
+                                            'value' => $value,
+                                        ];
+                                    }),
                                 'body' => [
                                     'mode' => $mode,
                                     $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
