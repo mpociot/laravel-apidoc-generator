@@ -299,6 +299,19 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
+    public function generated_postman_collection_can_add_body_parameters()
+    {
+        RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection['info']['_postman_id'] = '';
+        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_body_parameters.json'), true);
+        $this->assertEquals($generatedCollection, $fixtureCollection);
+    }
+
+    /** @test */
     public function can_append_custom_http_headers()
     {
         RouteFacade::get('/api/headers', TestController::class.'@checkCustomHeaders');
