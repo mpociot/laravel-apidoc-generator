@@ -72,7 +72,8 @@ class CollectionWriter
                                             'key' => $header,
                                             'value' => $value,
                                         ];
-                                    }),
+                                    })
+                                    ->values()->all(),
                                 'body' => [
                                     'mode' => $mode,
                                     $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
