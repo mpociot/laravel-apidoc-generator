@@ -299,9 +299,26 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
+    public function generated_postman_collection_can_have_query_parameters()
+    {
+        RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
+        // We want to have the same values for params each time
+        config(['apidoc.faker_seed' => 1234]);
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection['info']['_postman_id'] = '';
+        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_query_parameters.json'), true);
+        $this->assertEquals($generatedCollection, $fixtureCollection);
+    }
+
+    /** @test */
     public function generated_postman_collection_can_add_body_parameters()
     {
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        // We want to have the same values for params each time
+        config(['apidoc.faker_seed' => 1234]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 

@@ -33,7 +33,7 @@
                                 },
                                 {
                                     "key": "room_id",
-                                    "value": "dolores",
+                                    "value": "consequatur",
                                     "type": "text",
                                     "enabled": true
                                 },
@@ -45,7 +45,7 @@
                                 },
                                 {
                                     "key": "another_one",
-                                    "value": 33.666154,
+                                    "value": 11613.31890586,
                                     "type": "text",
                                     "enabled": true
                                 },
@@ -63,25 +63,25 @@
                                 },
                                 {
                                     "key": "book.name",
-                                    "value": "eius",
+                                    "value": "consequatur",
                                     "type": "text",
                                     "enabled": true
                                 },
                                 {
                                     "key": "book.author_id",
-                                    "value": 16,
+                                    "value": 17,
                                     "type": "text",
                                     "enabled": true
                                 },
                                 {
                                     "key": "book[pages_count]",
-                                    "value": 16,
+                                    "value": 17,
                                     "type": "text",
                                     "enabled": true
                                 },
                                 {
                                     "key": "ids.*",
-                                    "value": 3,
+                                    "value": 17,
                                     "type": "text",
                                     "enabled": true
                                 },

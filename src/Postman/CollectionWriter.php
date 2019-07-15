@@ -58,9 +58,9 @@ class CollectionWriter
                             'request' => [
                                 'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
                                     ? ''
-                                    : ('?'.collect($route['queryParameters'])->map(function ($parameter, $key) {
+                                    : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
                                         return $key.'='.(isset($parameter['value']) ? $parameter['value'] : '');
-                                    })->join('&'))),
+                                    })->all()))),
                                 'method' => $route['methods'][0],
                                 'header' => collect($route['headers'])
                                     ->union([
