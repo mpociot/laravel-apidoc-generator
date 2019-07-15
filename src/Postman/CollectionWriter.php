@@ -65,7 +65,6 @@ class CollectionWriter
                                 'header' => collect($route['headers'])
                                     ->union([
                                         'Accept' => 'application/json',
-                                        'Content-Type' => 'application/json',
                                     ])
                                     ->map(function ($value, $header) {
                                         return [

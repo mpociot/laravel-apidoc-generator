@@ -20,10 +20,6 @@
                             {
                                 "key": "Accept",
                                 "value": "application/json"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
                             }
                         ],
                         "body": {
@@ -42,10 +38,6 @@
                         "header": [
                             {
                                 "key": "Accept",
-                                "value": "application/json"
-                            },
-                            {
-                                "key": "Content-Type",
                                 "value": "application/json"
                             }
                         ],
