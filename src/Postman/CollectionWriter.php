@@ -59,7 +59,7 @@ class CollectionWriter
                                 'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
                                     ? ''
                                     : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
-                                        return $key.'='.(isset($parameter['value']) ? $parameter['value'] : '');
+                                        return $key.'='.($parameter['value'] ?? '');
                                     })->all()))),
                                 'method' => $route['methods'][0],
                                 'header' => collect($route['headers'])
@@ -78,7 +78,7 @@ class CollectionWriter
                                     $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
                                         return [
                                             'key' => $key,
-                                            'value' => isset($parameter['value']) ? $parameter['value'] : '',
+                                            'value' => $parameter['value'] ?? '',
                                             'type' => 'text',
                                             'enabled' => true,
                                         ];
