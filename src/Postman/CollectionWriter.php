@@ -56,14 +56,29 @@ class CollectionWriter
                         return [
                             'name' => $route['title'] != '' ? $route['title'] : url($route['uri']),
                             'request' => [
-                                'url' => url($route['uri']),
+                                'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
+                                    ? ''
+                                    : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
+                                        return $key.'='.($parameter['value'] ?? '');
+                                    })->all()))),
                                 'method' => $route['methods'][0],
+                                'header' => collect($route['headers'])
+                                    ->union([
+                                        'Accept' => 'application/json',
+                                    ])
+                                    ->map(function ($value, $header) {
+                                        return [
+                                            'key' => $header,
+                                            'value' => $value,
+                                        ];
+                                    })
+                                    ->values()->all(),
                                 'body' => [
                                     'mode' => $mode,
                                     $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
                                         return [
                                             'key' => $key,
-                                            'value' => isset($parameter['value']) ? $parameter['value'] : '',
+                                            'value' => $parameter['value'] ?? '',
                                             'type' => 'text',
                                             'enabled' => true,
                                         ];

@@ -12,30 +12,19 @@
             "description": "",
             "item": [
                 {
-                    "name": "Example title.",
+                    "name": "http://localhost/api/headers",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/test",
+                        "url": "http:\/\/localhost\/api\/headers",
                         "method": "GET",
                         "header": [
                             {
-                                "key": "Accept",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "formdata",
-                            "formdata": []
-                        },
-                        "description": "This will be the long description.\nIt can also be multiple lines long.",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "http:\/\/localhost\/api\/responseTag",
-                    "request": {
-                        "url": "http:\/\/localhost\/api\/responseTag",
-                        "method": "POST",
-                        "header": [
+                                "key": "Authorization",
+                                "value": "customAuthToken"
+                            },
+                            {
+                                "key": "Custom-Header",
+                                "value": "NotSoCustom"
+                            },
                             {
                                 "key": "Accept",
                                 "value": "application/json"

@@ -1,1 +1,55 @@
-{"variables":[],"info":{"name":"Laravel API","_postman_id":"","description":"","schema":"https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"},"item":[{"name":"Group A","description":"","item":[{"name":"Example title.","request":{"url":"http:\/\/yourapp.app\/api\/test","method":"GET","body":{"mode":"formdata","formdata":[]},"description":"This will be the long description.\nIt can also be multiple lines long.","response":[]}},{"name":"http:\/\/yourapp.app\/api\/responseTag","request":{"url":"http:\/\/yourapp.app\/api\/responseTag","method":"POST","body":{"mode":"formdata","formdata":[]},"description":"","response":[]}}]}]}
+{
+    "variables": [],
+    "info": {
+        "name": "Laravel API",
+        "_postman_id": "",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Group A",
+            "description": "",
+            "item": [
+                {
+                    "name": "Example title.",
+                    "request": {
+                        "url": "http:\/\/yourapp.app\/api\/test",
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        },
+                        "description": "This will be the long description.\nIt can also be multiple lines long.",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "http:\/\/yourapp.app\/api\/responseTag",
+                    "request": {
+                        "url": "http:\/\/yourapp.app\/api\/responseTag",
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -12,29 +12,10 @@
             "description": "",
             "item": [
                 {
-                    "name": "Example title.",
+                    "name": "http://localhost/api/withQueryParameters",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/test",
+                        "url": "http:\/\/localhost\/api\/withQueryParameters?location_id=consequatur&user_id=me&page=4&filters=consequatur",
                         "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "formdata",
-                            "formdata": []
-                        },
-                        "description": "This will be the long description.\nIt can also be multiple lines long.",
-                        "response": []
-                    }
-                },
-                {
-                    "name": "http:\/\/localhost\/api\/responseTag",
-                    "request": {
-                        "url": "http:\/\/localhost\/api\/responseTag",
-                        "method": "POST",
                         "header": [
                             {
                                 "key": "Accept",
