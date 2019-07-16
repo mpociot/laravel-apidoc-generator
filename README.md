@@ -15,7 +15,7 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 PHP 7 and Laravel 5.5 or higher are required.
 
 ```sh
-composer require mpociot/laravel-apidoc-generator
+composer require --dev mpociot/laravel-apidoc-generator
 ```
 
 ### Laravel
@@ -28,6 +28,7 @@ php artisan vendor:publish --provider="Mpociot\ApiDoc\ApiDocGeneratorServiceProv
 This will create an `apidoc.php` file in your `config` folder.
 
 ### Lumen
+- When using Lumen, you will need to run `composer require mpociot/laravel-apidoc-generator` instead.
 - Register the service provider in your `bootstrap/app.php`:
 
 ```php
