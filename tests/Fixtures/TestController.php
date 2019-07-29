@@ -75,6 +75,7 @@ class TestController extends Controller
      * @queryParam user_id required The id of the user. Example: me
      * @queryParam page required The page number. Example: 4
      * @queryParam filters  The filters.
+     * @queryParam url_encoded  Used for testing that URL parameters will be URL-encoded where needed. Example: + []&=
      */
     public function withQueryParameters()
     {
