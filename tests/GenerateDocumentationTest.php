@@ -191,6 +191,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/withDescription', TestController::class.'@withEndpointDescription');
         RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
         RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
 
         // We want to have the same values for params each time

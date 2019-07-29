@@ -14,7 +14,7 @@
                 {
                     "name": "http://localhost/api/withQueryParameters",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withQueryParameters?location_id=consequatur&user_id=me&page=4&filters=consequatur",
+                        "url": "http:\/\/localhost\/api\/withQueryParameters?location_id=consequatur&user_id=me&page=4&filters=consequatur&url_encoded=%2B+%5B%5D%26%3D",
                         "method": "GET",
                         "header": [
                             {
