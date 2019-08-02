@@ -42,6 +42,11 @@ class GenerateDocumentation extends Command
      */
     private $docConfig;
 
+    /**
+     * @var string
+     */
+    private $baseUrl;
+
     public function __construct(RouteMatcher $routeMatcher)
     {
         parent::__construct();
@@ -60,9 +65,10 @@ class GenerateDocumentation extends Command
         Flags::$shouldBeVerbose = $this->option('verbose');
 
         $this->docConfig = new DocumentationConfig(config('apidoc'));
+        $this->baseUrl = $this->docConfig->get('base_url') ?? config('app.url');
 
         try {
-            URL::forceRootUrl($this->docConfig->get('base_url'));
+            URL::forceRootUrl($this->baseUrl);
         } catch (\Error $e) {
             echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
             echo "You should probably double check URLs in your generated documentation.\n";
@@ -111,7 +117,7 @@ class GenerateDocumentation extends Command
                 $route['output'] = (string) view('apidoc::partials.route')
                     ->with('route', $route)
                     ->with('settings', $settings)
-                    ->with('baseUrl', $this->docConfig->get('base_url'))
+                    ->with('baseUrl', $this->baseUrl)
                     ->render();
 
                 return $route;
@@ -288,7 +294,7 @@ class GenerateDocumentation extends Command
      */
     private function generatePostmanCollection(Collection $routes)
     {
-        $writer = new CollectionWriter($routes, $this->docConfig->get('base_url'));
+        $writer = new CollectionWriter($routes, $this->baseUrl);
 
         return $writer->getCollection();
     }
