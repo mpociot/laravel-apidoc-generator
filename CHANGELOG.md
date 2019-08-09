@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.11.0] - Friday, 9 August 2019
+### Added
+- Support for query parameters in the bash template (https://github.com/mpociot/laravel-apidoc-generator/pull/545)
+- Include query parameters and headers in the generated Postman collection (https://github.com/mpociot/laravel-apidoc-generator/pull/537)
+- Include Python out of the box as example language (https://github.com/mpociot/laravel-apidoc-generator/pull/524)
+
+### Changed
+- Moved nunomaduro/collision to "suggested" so it doesn't break PHP 7.0 (https://github.com/mpociot/laravel-apidoc-generator/commit/2f3a2144e1a4f1eb0229aea8b4d11707cb4aabbf)
+
+### Fixed
+- Stopped using config helper inside config file (https://github.com/mpociot/laravel-apidoc-generator/pull/548)
+
 ## [3.10.0] - Sunday, 23 June 2019
 ### Added
 - `--verbose` flag to show exception encountered when making response calls (https://github.com/mpociot/laravel-apidoc-generator/commit/dc987f296e5a3d073f56c67911b2cb61ae47e9dc)
