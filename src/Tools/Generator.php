@@ -131,7 +131,7 @@ class Generator
                 return $tag instanceof Tag && $tag->getName() === 'bodyParam';
             })
             ->filter(function (Tag $tag) {
-                return !$this->shouldExcludeExample($tag);
+                return ! $this->shouldExcludeExample($tag);
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
@@ -209,7 +209,7 @@ class Generator
                 return $tag instanceof Tag && $tag->getName() === 'queryParam';
             })
             ->filter(function (Tag $tag) {
-                return !$this->shouldExcludeExample($tag);
+                return ! $this->shouldExcludeExample($tag);
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
@@ -375,7 +375,7 @@ class Generator
 
     /**
      * Allows users to specify that we shouldn't generate an example for the parameter
-     * by writing 'No-example'
+     * by writing 'No-example'.
      *
      * @param Tag $tag
      *
