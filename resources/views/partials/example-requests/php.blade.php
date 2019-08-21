@@ -1,7 +1,7 @@
 ```php
 
 $client = new \GuzzleHttp\Client();
-$response = $client->{{ strtolower($route['methods'][0]) }}("{{ rtrim($baseUrl, '/') . '/' . $route['boundUri'] }}", [
+$response = $client->{{ strtolower($route['methods'][0]) }}("{{ rtrim($baseUrl, '/') . '/' . ltrim($route['boundUri'], '/') }}", [
 @if(!empty($route['headers']))
     'headers' => [
     @foreach($route['headers'] as $header => $value)
