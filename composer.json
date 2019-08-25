@@ -23,12 +23,13 @@
         "mpociot/documentarian": "^0.2.0",
         "mpociot/reflection-docblock": "^1.0.1",
         "ramsey/uuid": "^3.8",
-        "league/flysystem": "^1.0"
+        "league/flysystem": "^1.0",
+        "nunomaduro/collision": "^3.0"
     },
     "require-dev": {
         "orchestra/testbench": "3.5.* || 3.6.* || 3.7.*",
         "phpunit/phpunit": "^6.0.0 || ^7.4.0",
-        "dingo/api": "2.0.0-alpha1",
+        "dingo/api": "^2",
         "mockery/mockery": "^1.2.0",
         "league/fractal": "^0.17.0"
     },
@@ -47,7 +48,8 @@
         }
     },
     "scripts": {
-        "test-ci": "phpunit --coverage-clover=coverage.xml"
+        "test-ci": "phpunit --coverage-clover=coverage.xml",
+        "test": "phpunit --stop-on-failure"
     },
     "extra": {
         "laravel": {
