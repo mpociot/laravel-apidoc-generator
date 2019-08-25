@@ -28,7 +28,7 @@ class ResponseCallStrategy
     {
         $rulesToApply = $routeProps['rules']['response_calls'] ?? [];
         if (! $this->shouldMakeApiCall($route, $rulesToApply)) {
-            return null;
+            return;
         }
 
         $this->configureEnvironment($rulesToApply);
