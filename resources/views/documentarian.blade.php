@@ -5,10 +5,12 @@
 {!! $infoText !!}
 <!-- END_INFO -->
 {!! $prependMd !!}
-@foreach($parsedRoutes as $group => $routes)
-@if($group)
-#{!! $group !!}
+@foreach($parsedRoutes as $groupName => $routes)
+@if($groupName)
+#{!! $groupName !!}
 @endif
+{{-- We pick the first non-empty description we see. --}}
+{!! array_first($routes, function ($route) { return $route['groupDescription'] !== ''; })['groupDescription'] ?? '' !!}
 @foreach($routes as $parsedRoute)
 @if($writeCompareFile === true)
 {!! $parsedRoute['output'] !!}
