@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Utils
 {
@@ -66,10 +68,11 @@ class Utils
         return $uri;
     }
 
-    public function dumpException(\Exception $e)
+    public static function dumpException(\Exception $e)
     {
         if (class_exists(\NunoMaduro\Collision\Handler::class)) {
-            $handler = new \NunoMaduro\Collision\Handler;
+            $output = new ConsoleOutput(OutputInterface::VERBOSITY_VERBOSE);
+            $handler = new \NunoMaduro\Collision\Handler(new \NunoMaduro\Collision\Writer($output));
             $handler->setInspector(new \Whoops\Exception\Inspector($e));
             $handler->setException($e);
             $handler->handle();
