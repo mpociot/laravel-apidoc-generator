@@ -57,24 +57,24 @@ class ResponseResolver
     }
 
     /**
-     * @param $route
-     * @param $tags
-     * @param $routeProps
+     * @param Route $route
+     * @param array $tags
+     * @param array $routeProps
      *
      * @return array
      */
-    public static function getResponse($route, $tags, $routeProps)
+    public static function getResponse(Route $route, array $tags, array $routeProps)
     {
         return (new static($route))->resolve($tags, $routeProps);
     }
 
     /**
-     * @param $response
+     * @param Response $response
      *
-     * @return mixed
+     * @return string
      */
-    private function getResponseContent($response)
+    private function getResponseContent(Response $response)
     {
-        return $response ? $response->getContent() : '';
+        return $response->getContent() ?: '';
     }
 }

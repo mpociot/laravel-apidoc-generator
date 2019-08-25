@@ -46,8 +46,8 @@ class Generator
     }
 
     /**
-     * @param  \Illuminate\Routing\Route $route
-     * @param array $apply Rules to apply when generating documentation for this route
+     * @param \Illuminate\Routing\Route $route
+     * @param array $rulesToApply Rules to apply when generating documentation for this route
      *
      * @return array
      */

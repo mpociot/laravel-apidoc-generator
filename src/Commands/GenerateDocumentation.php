@@ -240,7 +240,7 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param $route
+     * @param Route $route
      *
      * @return bool
      */
@@ -255,13 +255,13 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param $action
+     * @param array $action
      *
      * @throws ReflectionException
      *
      * @return bool
      */
-    private function isRouteVisibleForDocumentation($action)
+    private function isRouteVisibleForDocumentation(array $action)
     {
         list($class, $method) = Utils::getRouteActionUses($action);
         $reflection = new ReflectionClass($class);

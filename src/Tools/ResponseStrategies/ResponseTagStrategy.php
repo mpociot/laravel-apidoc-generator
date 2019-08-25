@@ -39,7 +39,7 @@ class ResponseTagStrategy
         );
 
         if (empty($responseTags)) {
-            return;
+            return null;
         }
 
         return array_map(function (Tag $responseTag) {

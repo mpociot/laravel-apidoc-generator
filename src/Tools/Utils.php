@@ -63,7 +63,7 @@ class Utils
             }
         }
         // Replace any unbound parameters with '1'
-        $uri = preg_replace('/{(.+?)}/', 1, $uri);
+        $uri = preg_replace('/{(.+?)}/', '1', $uri);
 
         return $uri;
     }

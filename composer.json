@@ -48,6 +48,7 @@
         }
     },
     "scripts": {
+        "lint": "phpstan analyse -c phpstan.neon src",
         "test": "phpunit --stop-on-failure",
         "test-ci": "phpunit --coverage-clover=coverage.xml"
     },
