@@ -9,7 +9,6 @@ namespace Mpociot\ApiDoc\Tests\Fixtures;
  */
 class TestGroupController
 {
-
     /**
      * Some endpoint.
      *
@@ -20,7 +19,7 @@ class TestGroupController
     }
 
     /**
-     * Another endpoint
+     * Another endpoint.
      *
      * Here we specify a group. This is also in Group 1.
      *
