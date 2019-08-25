@@ -31,7 +31,7 @@
         "dingo/api": "2.0.0-alpha1",
         "mockery/mockery": "^1.2.0",
         "league/fractal": "^0.17.0",
-        "phpstan/phpstan": "^0.11.0"
+        "phpstan/phpstan": "^0.11.15"
     },
     "suggest": {
         "league/fractal": "Required for transformers support",
