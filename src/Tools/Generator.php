@@ -287,6 +287,7 @@ class Generator
                     $routeGroupParts = explode("\n", $tag->getContent());
                     $routeGroupName = array_shift($routeGroupParts);
                     $routeGroupDescription = implode("\n", $routeGroupParts);
+
                     return [$routeGroupName, $routeGroupDescription];
                 }
             }
@@ -300,6 +301,7 @@ class Generator
                     $routeGroupParts = explode("\n", $tag->getContent());
                     $routeGroupName = array_shift($routeGroupParts);
                     $routeGroupDescription = implode("\n", $routeGroupParts);
+
                     return [$routeGroupName, $routeGroupDescription];
                 }
             }

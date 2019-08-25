@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Config;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
-use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestGroupController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestPartialResourceController;
 
 class GenerateDocumentationTest extends TestCase
