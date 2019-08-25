@@ -214,7 +214,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_route_group()
     {
         $route = $this->createRoute('GET', '/api/test', 'dummy');
-        $routeGroup = $this->generator->processRoute($route)['group'];
+        $routeGroup = $this->generator->processRoute($route)['groupName'];
 
         $this->assertSame('Group A', $routeGroup);
     }
@@ -223,7 +223,7 @@ abstract class GeneratorTestCase extends TestCase
     public function method_can_override_controller_group()
     {
         $route = $this->createRoute('GET', '/api/test', 'withGroupOverride');
-        $routeGroup = $this->generator->processRoute($route)['group'];
+        $routeGroup = $this->generator->processRoute($route)['groupName'];
 
         $this->assertSame('Group B', $routeGroup);
     }

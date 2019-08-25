@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Config;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Mpociot\ApiDoc\Tests\Fixtures\TestGroupController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
-use Mpociot\ApiDoc\Tests\Fixtures\TestNaturalSortController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestPartialResourceController;
 
 class GenerateDocumentationTest extends TestCase
@@ -81,7 +81,7 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
-    public function console_command_work_with_routes_uses_array()
+    public function console_command_work_with_routes_callable_tuple()
     {
         RouteFacade::get('/api/array/test', [TestController::class, 'withEndpointDescription']);
 
@@ -90,23 +90,6 @@ class GenerateDocumentationTest extends TestCase
 
         $this->assertNotContains('Skipping route: [GET] api/array/test', $output);
         $this->assertContains('Processed route: [GET] api/array/test', $output);
-    }
-
-    /** @test */
-    public function console_command_work_with_dingo_routes_uses_array()
-    {
-        $api = app(\Dingo\Api\Routing\Router::class);
-        $api->version('v1', function ($api) {
-            $api->get('/array/dingo/test', [TestController::class, 'withEndpointDescription']);
-        });
-
-        config(['apidoc.router' => 'dingo']);
-        config(['apidoc.routes.0.match.prefixes' => ['*']]);
-        config(['apidoc.routes.0.match.versions' => ['v1']]);
-        $output = $this->artisan('apidoc:generate');
-
-        $this->assertNotContains('Skipping route: [GET] array/dingo/test', $output);
-        $this->assertContains('Processed route: [GET] array/dingo/test', $output);
     }
 
     /** @test */
@@ -367,9 +350,10 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function sorts_group_naturally()
     {
-        RouteFacade::get('/api/action1', TestNaturalSortController::class.'@action1');
-        RouteFacade::get('/api/action2', TestNaturalSortController::class.'@action2');
-        RouteFacade::get('/api/action10', TestNaturalSortController::class.'@action10');
+        RouteFacade::get('/api/action1', TestGroupController::class.'@action1');
+        RouteFacade::get('/api/action1b', TestGroupController::class.'@action1b');
+        RouteFacade::get('/api/action2', TestGroupController::class.'@action2');
+        RouteFacade::get('/api/action10', TestGroupController::class.'@action10');
 
         config(['apidoc.routes.0.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
