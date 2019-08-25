@@ -1,28 +1,22 @@
 language: php
 
 php:
-  - 7.0.0
-  - 7.1.3
   - 7.2.0
+  - 7.1.3
+  - 7.0.0
 
 env:
-  matrix:
-    - PREFER_LOWEST="--prefer-lowest"
-    - PREFER_LOWEST=""
+  - PREFER_LOWEST=""
+  - PREFER_LOWEST="--prefer-lowest"
 
-stages:
-  - name: test
-  - name: lint
+script: composer test-ci
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer update --no-interaction --prefer-dist $PREFER_LOWEST
+
 jobs:
   include:
-    - stage: test
-      script: composer test-ci
-      before_script:
-        - travis_retry composer self-update
-        - travis_retry composer update --no-interaction --prefer-dist $PREFER_LOWEST
-
-    - stage: lint
-      script: composer lint
+    - script: composer lint
 
 before_install:
   - pip install --user codecov
