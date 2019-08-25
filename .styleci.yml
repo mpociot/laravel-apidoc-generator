@@ -7,3 +7,4 @@ enabled:
 
 disabled:
   - short_list_syntax
+  - simplified_null_return
