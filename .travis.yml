@@ -10,13 +10,19 @@ env:
     - PREFER_LOWEST="--prefer-lowest"
     - PREFER_LOWEST=""
 
-before_script:
-  - travis_retry composer self-update
-  - travis_retry composer update --no-interaction --prefer-dist $PREFER_LOWEST
+stages:
+  - name: test
+  - name: lint
+jobs:
+  include:
+    - stage: test
+      script: composer test-ci
+      before_script:
+        - travis_retry composer self-update
+        - travis_retry composer update --no-interaction --prefer-dist $PREFER_LOWEST
 
-script:
-  - composer lint
-  - composer test-ci
+    - stage: lint
+      script: composer lint
 
 before_install:
   - pip install --user codecov
