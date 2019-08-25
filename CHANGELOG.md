@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.12.0] - Sunday, 25 August 2019
+### Fixed
+- Specifying an `@group` for a method no longer requires you to add the description. (https://github.com/mpociot/laravel-apidoc-generator/pull/556)
+- Pass the verbosity level down to the Collision library. (https://github.com/mpociot/laravel-apidoc-generator/pull/556)
+
 ## [3.11.0] - Friday, 9 August 2019
 ### Added
 - Support for query parameters in the bash template (https://github.com/mpociot/laravel-apidoc-generator/pull/545)
