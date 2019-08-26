@@ -232,13 +232,13 @@ abstract class GeneratorTestCase extends TestCase
             ],
             'excluded_body_param' => [
                 'type' => 'integer',
-                'description' => 'Does not exist in examples.'
+                'description' => 'Does not exist in examples.',
             ],
         ], $bodyParameters);
 
         $this->assertArraySubset([
             'excluded_query_param' => [
-                'description' => 'Does not exist in examples.'
+                'description' => 'Does not exist in examples.',
             ],
         ], $queryParameters);
     }
