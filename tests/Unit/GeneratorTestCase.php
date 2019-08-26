@@ -211,6 +211,28 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function it_ignores_excluded_params()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withExcludedExamples');
+        $parsed = $this->generator->processRoute($route);
+        $bodyParameters = $parsed['bodyParameters'];
+        $queryParameters = $parsed['queryParameters'];
+
+        $this->assertArraySubset([
+            'included' => [
+                'required' => true,
+                'type' => 'string',
+                'description' => 'Exists in examples.',
+            ],
+        ], $bodyParameters);
+
+        $this->assertArrayNotHasKey('excluded_body_param', $bodyParameters);
+
+        $this->assertEmpty($queryParameters);
+
+    }
+
+    /** @test */
     public function can_parse_route_group()
     {
         $route = $this->createRoute('GET', '/api/test', 'dummy');

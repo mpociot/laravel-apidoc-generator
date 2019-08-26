@@ -83,6 +83,16 @@ class TestController extends Controller
     }
 
     /**
+     * @bodyParam included string required Exists in examples. Example: 'Here'
+     * @bodyParam  excluded_body_param int Does not exist in examples. No-example
+     * @queryParam excluded_query_param Does not exist in examples. No-example
+     */
+    public function withExcludedExamples()
+    {
+        return '';
+    }
+
+    /**
      * @authenticated
      */
     public function withAuthenticatedTag()
