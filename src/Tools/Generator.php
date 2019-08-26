@@ -130,9 +130,6 @@ class Generator
             ->filter(function ($tag) {
                 return $tag instanceof Tag && $tag->getName() === 'bodyParam';
             })
-            ->filter(function (Tag $tag) {
-                return ! $this->shouldExcludeExample($tag);
-            })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 if (empty($content)) {
@@ -207,9 +204,6 @@ class Generator
         $parameters = collect($tags)
             ->filter(function ($tag) {
                 return $tag instanceof Tag && $tag->getName() === 'queryParam';
-            })
-            ->filter(function (Tag $tag) {
-                return ! $this->shouldExcludeExample($tag);
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
