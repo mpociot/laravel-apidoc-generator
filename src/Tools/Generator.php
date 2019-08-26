@@ -132,6 +132,7 @@ class Generator
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
+                $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
                     // this means only name and type were supplied
                     list($name, $type) = preg_split('/\s+/', $tag->getContent());
@@ -207,6 +208,7 @@ class Generator
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
+                $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
                     // this means only name was supplied
                     list($name) = preg_split('/\s+/', $tag->getContent());
