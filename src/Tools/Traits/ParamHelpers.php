@@ -14,6 +14,10 @@ trait ParamHelpers
     protected function cleanParams(array $params)
     {
         $values = [];
+        $params = array_filter($params, function ($details) {
+            return is_string($details['value']) && strlen($details['value']);
+        });
+
         foreach ($params as $name => $details) {
             $this->cleanValueFrom($name, $details['value'], $values);
         }
