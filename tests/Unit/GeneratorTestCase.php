@@ -229,7 +229,6 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertArrayNotHasKey('excluded_body_param', $bodyParameters);
 
         $this->assertEmpty($queryParameters);
-
     }
 
     /** @test */
