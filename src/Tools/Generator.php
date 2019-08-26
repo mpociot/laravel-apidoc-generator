@@ -150,7 +150,7 @@ class Generator
 
                 $type = $this->normalizeParameterType($type);
                 list($description, $example) = $this->parseDescription($description, $type);
-                $value = is_null($example)  && ! $this->shouldExcludeExample($tag) ? $this->generateDummyValue($type) : $example;
+                $value = is_null($example) && ! $this->shouldExcludeExample($tag) ? $this->generateDummyValue($type) : $example;
 
                 return [$name => compact('type', 'description', 'required', 'value')];
             })->toArray();
