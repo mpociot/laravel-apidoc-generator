@@ -215,20 +215,12 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/api/test', 'withExcludedExamples');
         $parsed = $this->generator->processRoute($route);
-        $bodyParameters = $parsed['bodyParameters'];
-        $queryParameters = $parsed['queryParameters'];
+        $cleanBodyParameters = $parsed['cleanBodyParameters'];
+        $cleanQueryParameters = $parsed['cleanQueryParameters'];
 
-        $this->assertArraySubset([
-            'included' => [
-                'required' => true,
-                'type' => 'string',
-                'description' => 'Exists in examples.',
-            ],
-        ], $bodyParameters);
-
-        $this->assertArrayNotHasKey('excluded_body_param', $bodyParameters);
-
-        $this->assertEmpty($queryParameters);
+        $this->assertArrayHasKey('included', $cleanBodyParameters);
+        $this->assertArrayNotHasKey('excluded_body_param', $cleanBodyParameters);
+        $this->assertEmpty($cleanQueryParameters);
     }
 
     /** @test */
