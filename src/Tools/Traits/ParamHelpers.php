@@ -15,7 +15,7 @@ trait ParamHelpers
     {
         $values = [];
         $params = array_filter($params, function ($details) {
-            return is_string($details['value']) && strlen($details['value']);
+            return ! is_null($details['value']);
         });
 
         foreach ($params as $name => $details) {
