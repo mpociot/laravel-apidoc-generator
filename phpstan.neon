@@ -7,3 +7,4 @@ parameters:
         - '#Call to an undefined static method Illuminate\\Support\\Facades\\URL::forceRootUrl()#'
         - '#Call to an undefined method Illuminate\\Routing\\Route::versions().#'
         - '#(.*)NunoMaduro\\Collision(.*)#'
+        - '#Instantiated class Whoops\\Exception\\Inspector not found\.#'
