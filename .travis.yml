@@ -10,8 +10,7 @@ env:
 
 jobs:
   include:
-    - before_script: composer install --no-interaction --prefer-dist $PREFER_LOWEST
-      script: composer lint
+    - script: composer lint
       name: "Lint code"
 
 script: composer test-ci
