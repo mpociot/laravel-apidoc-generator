@@ -10,11 +10,10 @@ env:
 
 jobs:
   include:
-    - before_script: composer update --no-interaction --prefer-dist $PREFER_LOWEST
+    - before_script: composer install --no-interaction --prefer-dist $PREFER_LOWEST
       script: composer lint
       name: "Lint code"
-      env:
-      - PREFER_LOWEST=""
+      env: PREFER_LOWEST=""
       php: 7.2.0
 
 script: composer test-ci
