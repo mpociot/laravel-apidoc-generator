@@ -6,19 +6,22 @@ php:
   - 7.0.0
 
 env:
-  - PREFER_LOWEST=""
   - PREFER_LOWEST="--prefer-lowest"
 
 jobs:
   include:
-    - script: composer lint
+    - before_script: composer update --no-interaction --prefer-dist $PREFER_LOWEST
+      script: composer lint
       name: "Lint code"
+      env:
+      - PREFER_LOWEST=""
+      -php: 7.2.0
 
 script: composer test-ci
 before_script:
   - travis_retry composer self-update
   - travis_retry composer update --no-interaction --prefer-dist $PREFER_LOWEST
-  -
+
 before_install:
   - pip install --user codecov
 
