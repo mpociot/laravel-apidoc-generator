@@ -15,7 +15,7 @@ jobs:
       name: "Lint code"
       env:
       - PREFER_LOWEST=""
-      -php: 7.2.0
+      php: 7.2.0
 
 script: composer test-ci
 before_script:
