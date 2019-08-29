@@ -6,12 +6,15 @@ php:
   - 7.0.0
 
 env:
+  - PREFER_LOWEST=""
   - PREFER_LOWEST="--prefer-lowest"
 
 jobs:
   include:
     - script: composer lint
       name: "Lint code"
+      php: 7.2.0
+      env: PREFER_LOWEST=""
 
 script: composer test-ci
 before_script:
