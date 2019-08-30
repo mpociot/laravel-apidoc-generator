@@ -82,10 +82,10 @@ class GenerateDocumentation extends Command
 
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
-        $parsedRoutes = collect($parsedRoutes)->groupBy('groupName')
+        $parsedRoutes = collect($parsedRoutes)->groupBy('group')
             ->sortBy(static function ($group) {
                 /* @var $group Collection */
-                return $group->first()['groupName'];
+                return $group->first()['group'];
             }, SORT_NATURAL);
 
         $this->writeMarkdown($parsedRoutes);
