@@ -59,7 +59,6 @@ class TestController extends Controller
      * @group Group C
      *
      * Group description after group.
-     *
      */
     public function withGroupOverride4()
     {

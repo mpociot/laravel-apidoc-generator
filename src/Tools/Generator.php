@@ -57,7 +57,6 @@ class Generator
         $controller = new ReflectionClass($class);
         $method = $controller->getMethod($method);
 
-
         $docBlock = $this->parseDocBlock($method);
         list($routeGroupName, $routeGroupDescription, $routeTitle) = $this->getRouteGroup($controller, $docBlock);
         $bodyParameters = $this->getBodyParameters($method, $docBlock['tags']);
@@ -278,7 +277,7 @@ class Generator
     protected function getRouteGroup(ReflectionClass $controller, array $methodDocBlock)
     {
         // @group tag on the method overrides that on the controller
-        if (!empty($methodDocBlock['tags'])) {
+        if (! empty($methodDocBlock['tags'])) {
             foreach ($methodDocBlock['tags'] as $tag) {
                 if ($tag->getName() === 'group') {
                     $routeGroupParts = explode("\n", trim($tag->getContent()));
@@ -304,6 +303,7 @@ class Generator
                     if (empty($methodDocBlock['short'])) {
                         return [$routeGroupName, '', $routeGroupDescription];
                     }
+
                     return [$routeGroupName, $routeGroupDescription, $methodDocBlock['short']];
                 }
             }
