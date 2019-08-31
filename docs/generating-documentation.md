@@ -51,8 +51,8 @@ php artisan apidoc:rebuild
     - `methods`: an array of the HTTP methods for that route
     - `boundUri`: the complete URL for the route, with any url parameters replaced (/users/{id} -> /users/1)
     - `headers`: key-value array of headers to be sent with route (according to your configuration)
-    - `cleanQueryParameters`: key-value array of query parameters (with example values) to be sent with the request
-    - `cleanBodyParameters`: key-value array of body parameters (with example values) to be sent with the request
+    - `cleanQueryParameters`: key-value array of query parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
+    - `cleanBodyParameters`: key-value array of body parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
 
 - Add the language to the `example_languages` array in the package config.
 

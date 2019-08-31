@@ -9,6 +9,7 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 * [Configuration](config.md)
 * [Generating Documentation](generating-documentation.md)
 * [Documenting Your API](documenting.md)
+* [Internal Architecture](architecture.md)
 
 ## Installation
 > Note: PHP 7 and Laravel 5.5 or higher are required.

@@ -84,7 +84,8 @@ They will be included in the generated documentation text and example requests.
 
 ![](body_params.png)
 
-Note: a random value will be used as the value of each parameter in the example requests. If you'd like to specify an example value, you can do so by adding `Example: your-example` to the end of your description. For instance:
+### Example parameters
+For each parameter in your request, this package will generate a random value to be used in the example requests. If you'd like to specify an example value, you can do so by adding `Example: your-example` to the end of your description. For instance:
 
 ```php
     /**
@@ -97,7 +98,7 @@ Note: a random value will be used as the value of each parameter in the example 
      */
 ```
 
-Note: To exclude a particular parameter from the generated examples (for all languages), you can annotate it with `No-example`. For instance:
+You can also exclude a particular parameter from the generated examples (for all languages) by annotating it with `No-example`. For instance:
 ```php
        /**
         * @queryParam location_id required The id of the location. Example: 1
