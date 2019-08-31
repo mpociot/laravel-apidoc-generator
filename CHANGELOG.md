@@ -13,11 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.15.0] - Saturday, 31 August 2019
+### Added
+- Ability to exclude a query or body parameter from being included in the example requests (https://github.com/mpociot/laravel-apidoc-generator/pull/552)
+
 ## [3.14.0] - Saturday, 31 August 2019
 ### Fixed
-- Backwards compatibility for the changes to `@group` introduced in 3.12.0 (https://github.com/mpociot/laravel-apidoc-generator/pull/556)
+- Backwards compatibility for the changes to `@group` introduced in 3.12.0 (https://github.com/mpociot/laravel-apidoc-generator/commit/5647eda35ebb7f8aed35b31790c5f220b736e985)
 
-## [3.13.0] - Sunday, 25 August 2019
+## [3.13.0] (deleted)
 
 ## [3.12.0] - Sunday, 25 August 2019
 ### Fixed
