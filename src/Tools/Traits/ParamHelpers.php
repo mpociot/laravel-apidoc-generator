@@ -5,7 +5,7 @@ namespace Mpociot\ApiDoc\Tools\Traits;
 trait ParamHelpers
 {
     /**
-     * Create proper arrays from dot-noted parameter names.
+     * Create proper arrays from dot-noted parameter names. Also filter out parameters which were excluded from having examples.
      *
      * @param array $params
      *
