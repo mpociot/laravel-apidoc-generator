@@ -211,7 +211,7 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
-    public function it_ignores_excluded_params()
+    public function it_does_not_generate_values_for_excluded_params_and_excludes_them_from_clean_params()
     {
         $route = $this->createRoute('GET', '/api/test', 'withExcludedExamples');
         $parsed = $this->generator->processRoute($route);
