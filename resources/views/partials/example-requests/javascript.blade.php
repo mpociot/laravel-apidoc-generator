@@ -1,10 +1,10 @@
 ```javascript
 const url = new URL("{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}");
-@if(count($route['queryParameters']))
+@if(count($route['cleanQueryParameters']))
 
     let params = {
-    @foreach($route['queryParameters'] as $attribute => $parameter)
-        "{{ $attribute }}": "{{ $parameter['value'] }}",
+    @foreach($route['cleanQueryParameters'] as $parameter => $value)
+        "{{ $parameter }}": "{{ $value }}",
     @endforeach
     };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));

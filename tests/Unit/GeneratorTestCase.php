@@ -210,6 +210,39 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function it_does_not_generate_values_for_excluded_params_and_excludes_them_from_clean_params()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withExcludedExamples');
+        $parsed = $this->generator->processRoute($route);
+        $cleanBodyParameters = $parsed['cleanBodyParameters'];
+        $cleanQueryParameters = $parsed['cleanQueryParameters'];
+        $bodyParameters = $parsed['bodyParameters'];
+        $queryParameters = $parsed['queryParameters'];
+
+        $this->assertArrayHasKey('included', $cleanBodyParameters);
+        $this->assertArrayNotHasKey('excluded_body_param', $cleanBodyParameters);
+        $this->assertEmpty($cleanQueryParameters);
+
+        $this->assertArraySubset([
+            'included' => [
+                'required' => true,
+                'type' => 'string',
+                'description' => 'Exists in examples.',
+            ],
+            'excluded_body_param' => [
+                'type' => 'integer',
+                'description' => 'Does not exist in examples.',
+            ],
+        ], $bodyParameters);
+
+        $this->assertArraySubset([
+            'excluded_query_param' => [
+                'description' => 'Does not exist in examples.',
+            ],
+        ], $queryParameters);
+    }
+
+    /** @test */
     public function can_parse_route_group()
     {
         $route = $this->createRoute('GET', '/api/test', 'dummy');

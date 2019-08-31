@@ -97,6 +97,19 @@ Note: a random value will be used as the value of each parameter in the example 
      */
 ```
 
+Note: To exclude a particular parameter from the generated examples (for all languages), you can annotate it with `No-example`. For instance:
+```php
+       /**
+        * @queryParam location_id required The id of the location. Example: 1
+        * @queryParam user_id required The id of the user. No-example
+        * @queryParam page required The page number. Example: 4
+        */
+```
+Outputs: 
+```bash
+curl -X GET -G "https://example.com/api?location_id=1&page=4"
+```
+
 Note: You can also add the `@queryParam` and `@bodyParam` annotations to a `\Illuminate\Foundation\Http\FormRequest` subclass instead, if you are using one in your controller method
 
 ```php

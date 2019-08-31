@@ -5,7 +5,7 @@ namespace Mpociot\ApiDoc\Tools\Traits;
 trait ParamHelpers
 {
     /**
-     * Create proper arrays from dot-noted parameter names.
+     * Create proper arrays from dot-noted parameter names. Also filter out parameters which were excluded from having examples.
      *
      * @param array $params
      *
@@ -14,6 +14,10 @@ trait ParamHelpers
     protected function cleanParams(array $params)
     {
         $values = [];
+        $params = array_filter($params, function ($details) {
+            return ! is_null($details['value']);
+        });
+
         foreach ($params as $name => $details) {
             $this->cleanValueFrom($name, $details['value'], $values);
         }
