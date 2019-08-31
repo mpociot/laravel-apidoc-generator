@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.14.0] - Saturday, 31 August 2019
+### Fixed
+- Backwards compatibility for the changes to `@group` introduced in 3.12.0 (https://github.com/mpociot/laravel-apidoc-generator/pull/556)
+
+## [3.13.0] - Sunday, 25 August 2019
+
 ## [3.12.0] - Sunday, 25 August 2019
 ### Fixed
 - Specifying an `@group` for a method no longer requires you to add the description. (https://github.com/mpociot/laravel-apidoc-generator/pull/556)
