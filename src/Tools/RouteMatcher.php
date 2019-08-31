@@ -48,6 +48,9 @@ class RouteMatcher
         return $matchedRoutes;
     }
 
+    // TODO we should cache the results of this, for Laravel routes at least,
+    // to improve performance, since this method gets called
+    // for each ruleset in the config file. Not a high priority, though.
     private function getAllRoutes(bool $usingDingoRouter, array $versions = [])
     {
         if (! $usingDingoRouter) {

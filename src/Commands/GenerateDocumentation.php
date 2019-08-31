@@ -60,8 +60,8 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
-        // Using a global static variable here, so fuck off if you don't like it
-        // Also, the --verbose option is included with all Artisan commands
+        // Using a global static variable here, so fuck off if you don't like it.
+        // Also, the --verbose option is included with all Artisan commands.
         Flags::$shouldBeVerbose = $this->option('verbose');
 
         $this->docConfig = new DocumentationConfig(config('apidoc'));
@@ -82,13 +82,14 @@ class GenerateDocumentation extends Command
 
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
-        $parsedRoutes = collect($parsedRoutes)->groupBy('groupName')
+        $groupedRoutes = collect($parsedRoutes)
+            ->groupBy('groupName')
             ->sortBy(static function ($group) {
                 /* @var $group Collection */
                 return $group->first()['groupName'];
             }, SORT_NATURAL);
 
-        $this->writeMarkdown($parsedRoutes);
+        $this->writeMarkdown($groupedRoutes);
     }
 
     /**

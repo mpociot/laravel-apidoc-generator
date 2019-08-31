@@ -4,7 +4,6 @@ namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
-use Illuminate\Support\Facades\Storage;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
@@ -222,10 +221,28 @@ abstract class GeneratorTestCase extends TestCase
     /** @test */
     public function method_can_override_controller_group()
     {
-        $route = $this->createRoute('GET', '/api/test', 'withGroupOverride');
-        $routeGroup = $this->generator->processRoute($route)['groupName'];
+        $route = $this->createRoute('GET', '/group/1', 'withGroupOverride');
+        $parsedRoute = $this->generator->processRoute($route);
+        $this->assertSame('Group B', $parsedRoute['groupName']);
+        $this->assertSame('', $parsedRoute['groupDescription']);
 
-        $this->assertSame('Group B', $routeGroup);
+        $route = $this->createRoute('GET', '/group/2', 'withGroupOverride2');
+        $parsedRoute = $this->generator->processRoute($route);
+        $this->assertSame('Group B', $parsedRoute['groupName']);
+        $this->assertSame('', $parsedRoute['groupDescription']);
+        $this->assertSame('This is also in Group B. No route description. Route title before gropp.', $parsedRoute['title']);
+
+        $route = $this->createRoute('GET', '/group/3', 'withGroupOverride3');
+        $parsedRoute = $this->generator->processRoute($route);
+        $this->assertSame('Group B', $parsedRoute['groupName']);
+        $this->assertSame('', $parsedRoute['groupDescription']);
+        $this->assertSame('This is also in Group B. Route title after group.', $parsedRoute['title']);
+
+        $route = $this->createRoute('GET', '/group/4', 'withGroupOverride4');
+        $parsedRoute = $this->generator->processRoute($route);
+        $this->assertSame('Group C', $parsedRoute['groupName']);
+        $this->assertSame('Group description after group.', $parsedRoute['groupDescription']);
+        $this->assertSame('This is in Group C. Route title before group.', $parsedRoute['title']);
     }
 
     /** @test */

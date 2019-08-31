@@ -57,9 +57,9 @@ class Generator
         $controller = new ReflectionClass($class);
         $method = $controller->getMethod($method);
 
-        list($routeGroupName, $routeGroupDescription) = $this->getRouteGroup($controller, $method);
 
         $docBlock = $this->parseDocBlock($method);
+        list($routeGroupName, $routeGroupDescription, $routeTitle) = $this->getRouteGroup($controller, $docBlock);
         $bodyParameters = $this->getBodyParameters($method, $docBlock['tags']);
         $queryParameters = $this->getQueryParameters($method, $docBlock['tags']);
         $content = ResponseResolver::getResponse($route, $docBlock['tags'], [
@@ -72,7 +72,7 @@ class Generator
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'groupName' => $routeGroupName,
             'groupDescription' => $routeGroupDescription,
-            'title' => $docBlock['short'],
+            'title' => $routeTitle ?: $docBlock['short'],
             'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
@@ -271,24 +271,40 @@ class Generator
 
     /**
      * @param ReflectionClass $controller
-     * @param ReflectionMethod $method
+     * @param array $methodDocBlock
      *
-     * @return array The route group name and description
+     * @return array The route group name, the group description, ad the route title
      */
-    protected function getRouteGroup(ReflectionClass $controller, ReflectionMethod $method)
+    protected function getRouteGroup(ReflectionClass $controller, array $methodDocBlock)
     {
         // @group tag on the method overrides that on the controller
-        $docBlockComment = $method->getDocComment();
-        if ($docBlockComment) {
-            $phpdoc = new DocBlock($docBlockComment);
-            foreach ($phpdoc->getTags() as $tag) {
+        if (!empty($methodDocBlock['tags'])) {
+            foreach ($methodDocBlock['tags'] as $tag) {
                 if ($tag->getName() === 'group') {
-                    $routeGroup = trim($tag->getContent());
-                    $routeGroupParts = explode("\n", $tag->getContent());
+                    $routeGroupParts = explode("\n", trim($tag->getContent()));
                     $routeGroupName = array_shift($routeGroupParts);
-                    $routeGroupDescription = implode("\n", $routeGroupParts);
+                    $routeGroupDescription = trim(implode("\n", $routeGroupParts));
 
-                    return [$routeGroupName, $routeGroupDescription];
+                    // If the route has no title (aka "short"),
+                    // we'll assume the routeGroupDescription is actually the title
+                    // Something like this:
+                    // /**
+                    //   * Fetch cars. <-- This is route title.
+                    //   * @group Cars <-- This is group name.
+                    //   * APIs for cars. <-- This is group description (not required).
+                    //   **/
+                    // VS
+                    // /**
+                    //   * @group Cars <-- This is group name.
+                    //   * Fetch cars. <-- This is route title, NOT group description.
+                    //   **/
+
+                    // BTW, this is a spaghetti way of doing this.
+                    // It shall be refactored soon. Deus vult!💪
+                    if (empty($methodDocBlock['short'])) {
+                        return [$routeGroupName, '', $routeGroupDescription];
+                    }
+                    return [$routeGroupName, $routeGroupDescription, $methodDocBlock['short']];
                 }
             }
         }
@@ -298,16 +314,16 @@ class Generator
             $phpdoc = new DocBlock($docBlockComment);
             foreach ($phpdoc->getTags() as $tag) {
                 if ($tag->getName() === 'group') {
-                    $routeGroupParts = explode("\n", $tag->getContent());
+                    $routeGroupParts = explode("\n", trim($tag->getContent()));
                     $routeGroupName = array_shift($routeGroupParts);
                     $routeGroupDescription = implode("\n", $routeGroupParts);
 
-                    return [$routeGroupName, $routeGroupDescription];
+                    return [$routeGroupName, $routeGroupDescription, $methodDocBlock['short']];
                 }
             }
         }
 
-        return [$this->config->get(('default_group')), ''];
+        return [$this->config->get(('default_group')), '', $methodDocBlock['short']];
     }
 
     private function normalizeParameterType($type)
