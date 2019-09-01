@@ -53,15 +53,21 @@ class Generator
      */
     public function processRoute(Route $route, array $rulesToApply = [])
     {
-        list($class, $method) = Utils::getRouteActionUses($route->getAction());
-        $controller = new ReflectionClass($class);
-        $method = $controller->getMethod($method);
+        list($controllerName, $methodName) = Utils::getRouteClassAndMethodNames($route->getAction());
+        $controller = new ReflectionClass($controllerName);
+        $method = $controller->getMethod($methodName);
 
-        $docBlock = $this->parseDocBlock($method);
-        list($routeGroupName, $routeGroupDescription, $routeTitle) = $this->getRouteGroup($controller, $docBlock);
-        $bodyParameters = $this->getBodyParameters($method, $docBlock['tags']);
-        $queryParameters = $this->getQueryParameters($method, $docBlock['tags']);
-        $content = ResponseResolver::getResponse($route, $docBlock['tags'], [
+        $metadata = $this->fetchMetadata($controller, $method, $route);
+        // $this->fetchBodyParameters();
+        // $this->fetchQueryParameters();
+        // $this->fetchResponse();
+
+        $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
+        /** @var DocBlock $methodDocBlock */
+        $methodDocBlock = $docBlocks['method'];
+        $bodyParameters = $this->getBodyParameters($method, $methodDocBlock->getTags());
+        $queryParameters = $this->getQueryParameters($method, $methodDocBlock->getTags());
+        $content = ResponseResolver::getResponse($route, $methodDocBlock->getTags(), [
             'rules' => $rulesToApply,
             'body' => $bodyParameters,
             'query' => $queryParameters,
@@ -69,10 +75,6 @@ class Generator
 
         $parsedRoute = [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
-            'groupName' => $routeGroupName,
-            'groupDescription' => $routeGroupDescription,
-            'title' => $routeTitle ?: $docBlock['short'],
-            'description' => $docBlock['long'],
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
             'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? ($rulesToApply['response_calls']['bindings'] ?? [])),
@@ -80,13 +82,28 @@ class Generator
             'bodyParameters' => $bodyParameters,
             'cleanBodyParameters' => $this->cleanParams($bodyParameters),
             'cleanQueryParameters' => $this->cleanParams($queryParameters),
-            'authenticated' => $this->getAuthStatusFromDocBlock($docBlock['tags']),
             'response' => $content,
             'showresponse' => ! empty($content),
         ];
         $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
+        $parsedRoute += $metadata;
 
         return $parsedRoute;
+    }
+
+    protected function fetchMetadata(ReflectionClass $controller, ReflectionMethod $method, Route $route)
+    {
+        $metadataStrategies = $this->config->get('strategies.metadata', []);
+        $results = [];
+
+        foreach ($metadataStrategies as $strategyClass) {
+            $strategy = new $strategyClass($this->config);
+            $results = $strategy($route, $controller, $method);
+            if (count($results)) {
+                break;
+            }
+        }
+        return count($results) ? $results : [];
     }
 
     protected function getBodyParameters(ReflectionMethod $method, array $tags)
@@ -150,7 +167,7 @@ class Generator
                 }
 
                 $type = $this->normalizeParameterType($type);
-                list($description, $example) = $this->parseDescription($description, $type);
+                list($description, $example) = $this->parseParamDescription($description, $type);
                 $value = is_null($example) && ! $this->shouldExcludeExample($tag) ? $this->generateDummyValue($type) : $example;
 
                 return [$name => compact('type', 'description', 'required', 'value')];
@@ -225,7 +242,7 @@ class Generator
                     $required = trim($required) == 'required' ? true : false;
                 }
 
-                list($description, $value) = $this->parseDescription($description, 'string');
+                list($description, $value) = $this->parseParamDescription($description, 'string');
                 if (is_null($value) && ! $this->shouldExcludeExample($tag)) {
                     $value = str_contains($description, ['number', 'count', 'page'])
                         ? $this->generateDummyValue('integer')
@@ -236,96 +253,6 @@ class Generator
             })->toArray();
 
         return $parameters;
-    }
-
-    /**
-     * @param array $tags
-     *
-     * @return bool
-     */
-    protected function getAuthStatusFromDocBlock(array $tags)
-    {
-        $authTag = collect($tags)
-            ->first(function ($tag) {
-                return $tag instanceof Tag && strtolower($tag->getName()) === 'authenticated';
-            });
-
-        return (bool) $authTag;
-    }
-
-    /**
-     * @param ReflectionMethod $method
-     *
-     * @return array
-     */
-    protected function parseDocBlock(ReflectionMethod $method)
-    {
-        $comment = $method->getDocComment();
-        $phpdoc = new DocBlock($comment);
-
-        return [
-            'short' => $phpdoc->getShortDescription(),
-            'long' => $phpdoc->getLongDescription()->getContents(),
-            'tags' => $phpdoc->getTags(),
-        ];
-    }
-
-    /**
-     * @param ReflectionClass $controller
-     * @param array $methodDocBlock
-     *
-     * @return array The route group name, the group description, ad the route title
-     */
-    protected function getRouteGroup(ReflectionClass $controller, array $methodDocBlock)
-    {
-        // @group tag on the method overrides that on the controller
-        if (! empty($methodDocBlock['tags'])) {
-            foreach ($methodDocBlock['tags'] as $tag) {
-                if ($tag->getName() === 'group') {
-                    $routeGroupParts = explode("\n", trim($tag->getContent()));
-                    $routeGroupName = array_shift($routeGroupParts);
-                    $routeGroupDescription = trim(implode("\n", $routeGroupParts));
-
-                    // If the route has no title (aka "short"),
-                    // we'll assume the routeGroupDescription is actually the title
-                    // Something like this:
-                    // /**
-                    //   * Fetch cars. <-- This is route title.
-                    //   * @group Cars <-- This is group name.
-                    //   * APIs for cars. <-- This is group description (not required).
-                    //   **/
-                    // VS
-                    // /**
-                    //   * @group Cars <-- This is group name.
-                    //   * Fetch cars. <-- This is route title, NOT group description.
-                    //   **/
-
-                    // BTW, this is a spaghetti way of doing this.
-                    // It shall be refactored soon. Deus vult!💪
-                    if (empty($methodDocBlock['short'])) {
-                        return [$routeGroupName, '', $routeGroupDescription];
-                    }
-
-                    return [$routeGroupName, $routeGroupDescription, $methodDocBlock['short']];
-                }
-            }
-        }
-
-        $docBlockComment = $controller->getDocComment();
-        if ($docBlockComment) {
-            $phpdoc = new DocBlock($docBlockComment);
-            foreach ($phpdoc->getTags() as $tag) {
-                if ($tag->getName() === 'group') {
-                    $routeGroupParts = explode("\n", trim($tag->getContent()));
-                    $routeGroupName = array_shift($routeGroupParts);
-                    $routeGroupDescription = implode("\n", $routeGroupParts);
-
-                    return [$routeGroupName, $routeGroupDescription, $methodDocBlock['short']];
-                }
-            }
-        }
-
-        return [$this->config->get(('default_group')), '', $methodDocBlock['short']];
     }
 
     private function normalizeParameterType($type)
@@ -383,7 +310,7 @@ class Generator
      *
      * @return array The description and included example.
      */
-    private function parseDescription(string $description, string $type)
+    private function parseParamDescription(string $description, string $type)
     {
         $example = null;
         if (preg_match('/(.*)\s+Example:\s*(.*)\s*/', $description, $content)) {

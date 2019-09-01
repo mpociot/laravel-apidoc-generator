@@ -247,7 +247,7 @@ class GenerateDocumentation extends Command
      */
     private function isValidRoute(Route $route)
     {
-        $action = Utils::getRouteActionUses($route->getAction());
+        $action = Utils::getRouteClassAndMethodNames($route->getAction());
         if (is_array($action)) {
             $action = implode('@', $action);
         }
@@ -264,7 +264,7 @@ class GenerateDocumentation extends Command
      */
     private function isRouteVisibleForDocumentation(array $action)
     {
-        list($class, $method) = Utils::getRouteActionUses($action);
+        list($class, $method) = Utils::getRouteClassAndMethodNames($action);
         $reflection = new ReflectionClass($class);
 
         if (! $reflection->hasMethod($method)) {
