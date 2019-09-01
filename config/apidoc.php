@@ -1,7 +1,5 @@
 <?php
 
-use Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks;
-
 return [
 
     /*
@@ -183,16 +181,15 @@ return [
 
     'strategies' => [
         'metadata' => [
-            GetFromDocBlocks::class,
+            \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
         ],
         'bodyParameters' => [
-
+            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromDocBlocks::class,
         ],
         'queryParameters' => [
-
+            \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromDocBlocks::class,
         ],
         'responses' => [
-
         ],
     ],
 

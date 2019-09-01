@@ -20,7 +20,16 @@ class GetFromDocBlocks
         $this->config = $config;
     }
 
-    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method)
+    /**
+     * @param Route $route
+     * @param ReflectionClass $controller
+     * @param ReflectionMethod $method
+     * @param array $routeConfig Array of rules for the ruleset which this route belongs to.
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeConfig)
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
