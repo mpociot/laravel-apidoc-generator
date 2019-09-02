@@ -7,29 +7,12 @@ use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
 
-class GetFromDocBlocks
+class GetFromDocBlocks extends Strategy
 {
-
-    public $config;
-
-    public function __construct(DocumentationConfig $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * @param Route $route
-     * @param ReflectionClass $controller
-     * @param ReflectionMethod $method
-     * @param array $routeConfig Array of rules for the ruleset which this route belongs to.
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeConfig)
+    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
