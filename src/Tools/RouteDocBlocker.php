@@ -8,7 +8,6 @@ use Mpociot\Reflection\DocBlock;
 
 class RouteDocBlocker
 {
-
     public static $docBlocks = [];
 
     public static function getDocBlocksFromRoute(Route $route)
@@ -27,15 +26,17 @@ class RouteDocBlocker
 
         $docBlocks = [
             'method' => new DocBlock($class->getMethod($methodName)->getDocComment() ?: ''),
-            'class' => new DocBlock($class->getDocComment() ?: '')
+            'class' => new DocBlock($class->getDocComment() ?: ''),
         ];
         self::cacheDocBlocks($route, $className, $methodName, $docBlocks);
+
         return $docBlocks;
     }
 
     protected static function getCachedDocBlock(Route $route, string $className, string $methodName)
     {
         $routeId = self::getRouteId($route, $className, $methodName);
+
         return self::$docBlocks[$routeId] ?? null;
     }
 

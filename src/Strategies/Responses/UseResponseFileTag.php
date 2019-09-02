@@ -21,14 +21,16 @@ class UseResponseFileTag extends Strategy
      * @param array $routeRules
      * @param array $context
      *
-     * @return array|null
      * @throws \Exception
+     *
+     * @return array|null
      */
     public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
         $methodDocBlock = $docBlocks['method'];
+
         return $this->getFileResponses($methodDocBlock->getTags());
     }
 

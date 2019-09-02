@@ -2,11 +2,11 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use Faker\Factory;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
+use Symfony\Component\HttpFoundation\Response;
 
 class Generator
 {
@@ -117,6 +117,7 @@ class Generator
                 ];
             })->values()->toArray();
         }
+
         return null;
     }
 
