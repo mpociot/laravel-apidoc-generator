@@ -23,8 +23,9 @@ abstract class Strategy
      * @param array $routeRules Array of rules for the ruleset which this route belongs to.
      * @param array $context Results from the previous stages
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     abstract public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = []);
 }

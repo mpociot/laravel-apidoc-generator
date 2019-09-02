@@ -10,8 +10,8 @@ use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\Reflection\DocBlock;
 use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
 use League\Fractal\Resource\Collection;
+use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
 
 /**
@@ -26,14 +26,16 @@ class UseTransformerTags extends Strategy
      * @param array $rulesToApply
      * @param array $context
      *
-     * @return array|null
      * @throws \Exception
+     *
+     * @return array|null
      */
     public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $rulesToApply, array $context = [])
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
         $methodDocBlock = $docBlocks['method'];
+
         return $this->getTransformerResponse($methodDocBlock->getTags());
     }
 

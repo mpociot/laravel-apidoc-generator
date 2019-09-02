@@ -15,7 +15,6 @@ use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
 class GetFromDocBlocks extends Strategy
 {
-
     use ParamHelpers;
 
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
@@ -49,6 +48,7 @@ class GetFromDocBlocks extends Strategy
         }
 
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
+
         return $this->getBodyParametersFromDocBlock($methodDocBlock->getTags());
     }
 

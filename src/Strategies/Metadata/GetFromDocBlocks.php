@@ -46,7 +46,6 @@ class GetFromDocBlocks extends Strategy
 
     /**
      * @param DocBlock $methodDocBlock
-     *
      * @param DocBlock $controllerDocBlock
      *
      * @return array The route group name, the group description, ad the route title
@@ -86,15 +85,15 @@ class GetFromDocBlocks extends Strategy
             }
         }
 
-            foreach ($controllerDocBlock->getTags() as $tag) {
-                if ($tag->getName() === 'group') {
-                    $routeGroupParts = explode("\n", trim($tag->getContent()));
-                    $routeGroupName = array_shift($routeGroupParts);
-                    $routeGroupDescription = implode("\n", $routeGroupParts);
+        foreach ($controllerDocBlock->getTags() as $tag) {
+            if ($tag->getName() === 'group') {
+                $routeGroupParts = explode("\n", trim($tag->getContent()));
+                $routeGroupName = array_shift($routeGroupParts);
+                $routeGroupDescription = implode("\n", $routeGroupParts);
 
-                    return [$routeGroupName, $routeGroupDescription, $methodDocBlock->getShortDescription()];
-                }
+                return [$routeGroupName, $routeGroupDescription, $methodDocBlock->getShortDescription()];
             }
+        }
 
         return [$this->config->get('default_group'), '', $methodDocBlock->getShortDescription()];
     }
