@@ -117,7 +117,7 @@ fetch(url, {
 <!-- END_9cedd363be06f5512f9e844b100fcc9d -->
 
 <!-- START_a25cb3b490fa579d7d77b386bbb7ec03 -->
-## Endpoint with body parameters
+## Endpoint with body parameters.
 
 > Example request:
 

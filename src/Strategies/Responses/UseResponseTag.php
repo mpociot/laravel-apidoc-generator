@@ -63,6 +63,6 @@ class UseResponseTag extends Strategy
         }, $responseTags);
 
         // Convert responses to [200 => 'response', 401 => 'response']
-        return collect($responses)->pluck(0, 1)->toArray();
+        return collect($responses)->pluck("0", "1")->toArray();
     }
 }
