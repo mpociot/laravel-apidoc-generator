@@ -2,11 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use Faker\Factory;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
-use Mpociot\Reflection\DocBlock;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -104,25 +102,27 @@ class Generator
             return array_map(function (Response $response) {
                 return [
                     'status' => $response->getStatusCode(),
-                    'content' => $response->getContent()
+                    'content' => $response->getContent(),
                 ];
             }, $responses);
         }
+
         return null;
     }
 
     protected function iterateThroughStrategies(string $key, array $arguments)
     {
-    $strategies = $this->config->get("strategies.$key", []);
-    $results = [];
+        $strategies = $this->config->get("strategies.$key", []);
+        $results = [];
 
-    foreach ($strategies as $strategyClass) {
-        $strategy = new $strategyClass($this->config);
-        $results = $strategy(...$arguments);
-        if (! is_null($results)) {
-            break;
+        foreach ($strategies as $strategyClass) {
+            $strategy = new $strategyClass($this->config);
+            $results = $strategy(...$arguments);
+            if (! is_null($results)) {
+                break;
+            }
         }
+
+        return is_null($results) ? [] : $results;
     }
-    return is_null($results) ? [] : $results;
-}
 }

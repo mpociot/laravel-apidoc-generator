@@ -30,7 +30,7 @@ class TestController extends Controller
      */
     public function withGroupOverride()
     {
-        return "Group B, baby!";
+        return 'Group B, baby!';
     }
 
     /**
@@ -66,7 +66,7 @@ class TestController extends Controller
     }
 
     /**
-     * Endpoint with body parameters
+     * Endpoint with body parameters.
      *
      * @bodyParam user_id int required The id of the user. Example: 9
      * @bodyParam room_id string The id of the room.
