@@ -25,7 +25,10 @@ abstract class GeneratorTestCase extends TestCase
                 \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromDocBlocks::class,
             ],
             'responses' => [
-
+                \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
+                \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
             ],
         ],
         'default_group' => 'general',

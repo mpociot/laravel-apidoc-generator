@@ -1,26 +1,35 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
+namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Illuminate\Routing\Route;
+use Mpociot\Reflection\DocBlock;
 use Illuminate\Http\JsonResponse;
 use Mpociot\Reflection\DocBlock\Tag;
+use Mpociot\ApiDoc\Strategies\Strategy;
+use Mpociot\ApiDoc\Tools\RouteDocBlocker;
 
 /**
  * Get a response from the docblock ( @response ).
  */
-class ResponseTagStrategy
+class UseResponseTag extends Strategy
 {
     /**
      * @param Route $route
-     * @param array $tags
-     * @param array $routeProps
+     * @param \ReflectionClass $controller
+     * @param \ReflectionMethod $method
+     * @param array $routeRules
+     * @param array $context
      *
      * @return array|null
+     * @throws \Exception
      */
-    public function __invoke(Route $route, array $tags, array $routeProps)
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return $this->getDocBlockResponses($tags);
+        $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
+        /** @var DocBlock $methodDocBlock */
+        $methodDocBlock = $docBlocks['method'];
+        return $this->getDocBlockResponses($methodDocBlock->getTags());
     }
 
     /**

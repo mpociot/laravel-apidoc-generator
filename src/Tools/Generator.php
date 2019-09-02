@@ -7,8 +7,8 @@ use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
-use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
+use Symfony\Component\HttpFoundation\Response;
 
 class Generator
 {
@@ -57,80 +57,72 @@ class Generator
         $controller = new ReflectionClass($controllerName);
         $method = $controller->getMethod($methodName);
 
-        $metadata = $this->fetchMetadata($controller, $method, $route, $rulesToApply);
-        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $rulesToApply);
-        $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $rulesToApply);
-        // $this->fetchResponse();
-
-        $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
-        /** @var DocBlock $methodDocBlock */
-        $methodDocBlock = $docBlocks['method'];
-        $content = ResponseResolver::getResponse($route, $methodDocBlock->getTags(), [
-            'rules' => $rulesToApply,
-            'body' => $bodyParameters,
-            'query' => $queryParameters,
-        ]);
-
         $parsedRoute = [
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
             'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? ($rulesToApply['response_calls']['bindings'] ?? [])),
-            'queryParameters' => $queryParameters,
-            'bodyParameters' => $bodyParameters,
-            'cleanBodyParameters' => $this->cleanParams($bodyParameters),
-            'cleanQueryParameters' => $this->cleanParams($queryParameters),
-            'response' => $content,
-            'showresponse' => ! empty($content),
         ];
-        $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
+        $metadata = $this->fetchMetadata($controller, $method, $route, $rulesToApply);
         $parsedRoute += $metadata;
+        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $parsedRoute['bodyParameters'] = $bodyParameters;
+        $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
+
+        $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $parsedRoute['queryParameters'] = $queryParameters;
+        $parsedRoute['cleanQueryParameters'] = $this->cleanParams($queryParameters);
+
+        $responses = $this->fetchResponses($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $parsedRoute['response'] = $responses;
+        $parsedRoute['showresponse'] = ! empty($responses);
+
+        $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
 
         return $parsedRoute;
     }
 
     protected function fetchMetadata(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply)
     {
-        $metadataStrategies = $this->config->get('strategies.metadata', []);
-        $results = [];
-
-        foreach ($metadataStrategies as $strategyClass) {
-            $strategy = new $strategyClass($this->config);
-            $results = $strategy($route, $controller, $method, $rulesToApply);
-            if (count($results)) {
-                break;
-            }
-        }
-        return count($results) ? $results : [];
+        return $this->iterateThroughStrategies('metadata', [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply)
+    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
-        $bodyParametersStrategies = $this->config->get('strategies.bodyParameters', []);
-        $results = [];
-
-        foreach ($bodyParametersStrategies as $strategyClass) {
-            $strategy = new $strategyClass($this->config);
-            $results = $strategy($route, $controller, $method, $rulesToApply);
-            if (count($results)) {
-                break;
-            }
-        }
-        return count($results) ? $results : [];
+        return $this->iterateThroughStrategies('bodyParameters', [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchQueryParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply)
+    protected function fetchQueryParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
-        $queryParametersStrategies = $this->config->get('strategies.queryParameters', []);
-        $results = [];
-
-        foreach ($queryParametersStrategies as $strategyClass) {
-            $strategy = new $strategyClass($this->config);
-            $results = $strategy($route, $controller, $method, $rulesToApply);
-            if (count($results)) {
-                break;
-            }
-        }
-        return count($results) ? $results : [];
+        return $this->iterateThroughStrategies('queryParameters', [$route, $controller, $method, $rulesToApply]);
     }
+
+    protected function fetchResponses(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    {
+        $responses = $this->iterateThroughStrategies('responses', [$route, $controller, $method, $rulesToApply, $context]);
+        if (count($responses)) {
+            return array_map(function (Response $response) {
+                return [
+                    'status' => $response->getStatusCode(),
+                    'content' => $response->getContent()
+                ];
+            }, $responses);
+        }
+        return null;
+    }
+
+    protected function iterateThroughStrategies(string $key, array $arguments)
+    {
+    $strategies = $this->config->get("strategies.$key", []);
+    $results = [];
+
+    foreach ($strategies as $strategyClass) {
+        $strategy = new $strategyClass($this->config);
+        $results = $strategy(...$arguments);
+        if (! is_null($results)) {
+            break;
+        }
+    }
+    return is_null($results) ? [] : $results;
+}
 }

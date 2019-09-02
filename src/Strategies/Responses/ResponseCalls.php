@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
+namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Dingo\Api\Dispatcher;
 use Illuminate\Http\Request;
@@ -8,31 +8,38 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
+use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
  * Make a call to the route and retrieve its response.
  */
-class ResponseCallStrategy
+class ResponseCalls extends Strategy
 {
     use ParamHelpers;
 
     /**
      * @param Route $route
-     * @param array $tags
-     * @param array $routeProps
+     * @param \ReflectionClass $controller
+     * @param \ReflectionMethod $method
+     * @param array $routeRules
+     * @param array $context
      *
      * @return array|null
      */
-    public function __invoke(Route $route, array $tags, array $routeProps)
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        $rulesToApply = $routeProps['rules']['response_calls'] ?? [];
+        $rulesToApply = $routeRules['response_calls'] ?? [];
         if (! $this->shouldMakeApiCall($route, $rulesToApply)) {
             return null;
         }
 
         $this->configureEnvironment($rulesToApply);
-        $request = $this->prepareRequest($route, $rulesToApply, $routeProps['body'], $routeProps['query']);
+
+        // Mix in parsed parameters with manually specified parameters.
+        $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['body'] ?? []);
+        $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['query'] ?? []);
+        $request = $this->prepareRequest($route, $rulesToApply, $bodyParameters, $queryParameters);
 
         try {
             $response = [$this->makeApiCall($request)];
@@ -79,10 +86,6 @@ class ResponseCallStrategy
         $cookies = isset($rulesToApply['cookies']) ? $rulesToApply['cookies'] : [];
         $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($rulesToApply['headers'] ?? []));
         $request = $this->addHeaders($request, $route, $rulesToApply['headers'] ?? []);
-
-        // Mix in parsed parameters with manually specified parameters.
-        $queryParams = collect($this->cleanParams($queryParams))->merge($rulesToApply['query'] ?? [])->toArray();
-        $bodyParams = collect($this->cleanParams($bodyParams))->merge($rulesToApply['body'] ?? [])->toArray();
 
         $request = $this->addQueryParameters($request, $queryParams);
         $request = $this->addBodyParameters($request, $bodyParams);

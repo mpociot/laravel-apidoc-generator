@@ -105,7 +105,8 @@ fetch(url, {
     "name": "banana",
     "color": "red",
     "weight": "1 kg",
-    "delicious": true
+    "delicious": true,
+    "responseTag": true
 }
 ```
 
@@ -116,7 +117,8 @@ fetch(url, {
 <!-- END_9cedd363be06f5512f9e844b100fcc9d -->
 
 <!-- START_a25cb3b490fa579d7d77b386bbb7ec03 -->
-## api/withBodyParameters
+## Endpoint with body parameters
+
 > Example request:
 
 ```bash
@@ -299,5 +301,60 @@ null
 
 
 <!-- END_5c08cc4d72b6e5830f6814c64086e197 -->
+
+<!-- START_55f321056bfc0de7269ac70e24eb84be -->
+## api/withMultipleResponseTagsAndStatusCode
+> Example request:
+
+```bash
+curl -X POST "http://localhost/api/withMultipleResponseTagsAndStatusCode" \
+    -H "Authorization: customAuthToken" \
+    -H "Custom-Header: NotSoCustom"
+```
+
+```javascript
+const url = new URL("http://localhost/api/withMultipleResponseTagsAndStatusCode");
+
+let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "id": 4,
+    "name": "banana",
+    "color": "red",
+    "weight": "1 kg",
+    "delicious": true,
+    "multipleResponseTagsAndStatusCodes": true
+}
+```
+> Example response (401):
+
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+### HTTP Request
+`POST api/withMultipleResponseTagsAndStatusCode`
+
+
+<!-- END_55f321056bfc0de7269ac70e24eb84be -->
 
 
