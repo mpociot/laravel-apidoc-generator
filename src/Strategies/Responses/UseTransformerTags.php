@@ -65,7 +65,7 @@ class UseTransformerTags extends Strategy
                 ? new Collection([$modelInstance, $modelInstance], new $transformer)
                 : new Item($modelInstance, new $transformer);
 
-            return [response($fractal->createData($resource)->toJson())];
+            return [200 => response($fractal->createData($resource)->toJson())->getContent()];
         } catch (\Exception $e) {
             return null;
         }

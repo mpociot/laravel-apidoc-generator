@@ -52,14 +52,17 @@ class UseResponseFileTag extends Strategy
             return null;
         }
 
-        return array_map(function (Tag $responseFileTag) {
+        $responses = array_map(function (Tag $responseFileTag) {
             preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $status = $result[1] ?: 200;
             $content = $result[2] ? file_get_contents(storage_path(trim($result[2])), true) : '{}';
             $json = ! empty($result[3]) ? str_replace("'", '"', $result[3]) : '{}';
             $merged = array_merge(json_decode($content, true), json_decode($json, true));
 
-            return new JsonResponse($merged, (int) $status);
+            return [json_encode($merged), (int) $status];
         }, $responseFileTags);
+
+        // Convert responses to [200 => 'response', 401 => 'response']
+        return collect($responses)->pluck(0, 1)->toArray();
     }
 }

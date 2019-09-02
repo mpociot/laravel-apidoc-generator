@@ -51,13 +51,16 @@ class UseResponseTag extends Strategy
             return null;
         }
 
-        return array_map(function (Tag $responseTag) {
+        $responses = array_map(function (Tag $responseTag) {
             preg_match('/^(\d{3})?\s?([\s\S]*)$/', $responseTag->getContent(), $result);
 
             $status = $result[1] ?: 200;
             $content = $result[2] ?: '{}';
 
-            return new JsonResponse(json_decode($content, true), (int) $status);
+            return [$content, (int) $status];
         }, $responseTags);
+
+        // Convert responses to [200 => 'response', 401 => 'response']
+        return collect($responses)->pluck(0, 1)->toArray();
     }
 }

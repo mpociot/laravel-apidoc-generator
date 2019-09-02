@@ -16,21 +16,21 @@ class LaravelGeneratorTest extends GeneratorTestCase
         ];
     }
 
-    public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false)
+    public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class)
     {
         if ($register) {
-            return RouteFacade::{$httpMethod}($path, TestController::class."@$controllerMethod");
+            return RouteFacade::{$httpMethod}($path, $class."@$controllerMethod");
         } else {
-            return new Route([$httpMethod], $path, ['uses' => TestController::class."@$controllerMethod"]);
+            return new Route([$httpMethod], $path, ['uses' => $class."@$controllerMethod"]);
         }
     }
 
-    public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false)
+    public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class)
     {
         if ($register) {
-            return RouteFacade::{$httpMethod}($path, TestController::class."@$controllerMethod");
+            return RouteFacade::{$httpMethod}($path, [$class. "$controllerMethod"]);
         } else {
-            return new Route([$httpMethod], $path, ['uses' => [TestController::class, $controllerMethod]]);
+            return new Route([$httpMethod], $path, ['uses' => [$class, $controllerMethod]]);
         }
     }
 }

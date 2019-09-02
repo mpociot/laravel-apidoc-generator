@@ -30,7 +30,7 @@ class ResponseCalls extends Strategy
     public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
     {
         $rulesToApply = $routeRules['response_calls'] ?? [];
-        if (! $this->shouldMakeApiCall($route, $rulesToApply)) {
+        if (! $this->shouldMakeApiCall($route, $rulesToApply, $context)) {
             return null;
         }
 
@@ -42,7 +42,7 @@ class ResponseCalls extends Strategy
         $request = $this->prepareRequest($route, $rulesToApply, $bodyParameters, $queryParameters);
 
         try {
-            $response = [$this->makeApiCall($request)];
+            $response = [200 => $this->makeApiCall($request)->getContent()];
         } catch (\Exception $e) {
             echo 'Exception thrown during response call for ['.implode(',', $route->methods)."] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
@@ -297,10 +297,15 @@ class ResponseCalls extends Strategy
      *
      * @return bool
      */
-    private function shouldMakeApiCall(Route $route, array $rulesToApply): bool
+    private function shouldMakeApiCall(Route $route, array $rulesToApply, array $context): bool
     {
         $allowedMethods = $rulesToApply['methods'] ?? [];
         if (empty($allowedMethods)) {
+            return false;
+        }
+
+        if (!empty($context['responses'])) {
+            // Don't attempt a response call if there are already responses
             return false;
         }
 

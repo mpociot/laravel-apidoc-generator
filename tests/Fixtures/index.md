@@ -56,7 +56,7 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response:
 
 ```json
 null
@@ -173,7 +173,7 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response:
 
 ```json
 null
@@ -239,7 +239,7 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response:
 
 ```json
 null
@@ -290,7 +290,7 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response:
 
 ```json
 null
