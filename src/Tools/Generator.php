@@ -6,7 +6,6 @@ use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
-use Symfony\Component\HttpFoundation\Response;
 
 class Generator
 {
@@ -56,7 +55,7 @@ class Generator
         $method = $controller->getMethod($methodName);
 
         $parsedRoute = [
-            'id' => md5($this->getUri($route) . ':' . implode($this->getMethods($route))),
+            'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
             'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? ($rulesToApply['response_calls']['bindings'] ?? [])),
@@ -73,7 +72,7 @@ class Generator
 
         $responses = $this->fetchResponses($controller, $method, $route, $rulesToApply, $parsedRoute);
         $parsedRoute['response'] = $responses;
-        $parsedRoute['showresponse'] = !empty($responses);
+        $parsedRoute['showresponse'] = ! empty($responses);
 
         $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
 
@@ -93,6 +92,7 @@ class Generator
             'description' => '',
             'authenticated' => false,
         ];
+
         return $this->iterateThroughStrategies('metadata', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
@@ -129,7 +129,7 @@ class Generator
             $strategy = new $strategyClass($this->config);
             $arguments[] = $context;
             $results = $strategy(...$arguments);
-            if (!is_null($results)) {
+            if (! is_null($results)) {
                 foreach ($results as $index => $item) {
                     // Using a for loop rather than array_merge or +=
                     // so it does not renumber numeric keys
@@ -144,6 +144,7 @@ class Generator
                 }
             }
         }
+
         return $context[$key];
     }
 }

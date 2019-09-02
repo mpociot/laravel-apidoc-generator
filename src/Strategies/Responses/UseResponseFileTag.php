@@ -4,7 +4,6 @@ namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
-use Illuminate\Http\JsonResponse;
 use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
@@ -65,6 +64,6 @@ class UseResponseFileTag extends Strategy
         }, $responseFileTags);
 
         // Convert responses to [200 => 'response', 401 => 'response']
-        return collect($responses)->pluck("0", "1")->toArray();
+        return collect($responses)->pluck('0', '1')->toArray();
     }
 }
