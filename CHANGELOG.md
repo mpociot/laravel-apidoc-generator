@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.16.1] - Wednesday, 4 September 2019
+### Added
+- Use HTTPS in Postman collection if base_url is HTTPS (https://github.com/mpociot/laravel-apidoc-generator/pull/575)
+
 ## [3.16.0] - Wednesday, 4 September 2019
 ### Added
 - Support for Laravel 6 (https://github.com/mpociot/laravel-apidoc-generator/pull/572)
