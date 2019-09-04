@@ -102,7 +102,7 @@ class RouteMatcherTest extends TestCase
         $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
-            $this->assertTrue(str_is('prefix1/*', $route['route']->uri()));
+            $this->assertTrue(Str::is('prefix1/*', $route['route']->uri()));
         }
 
         $routeRules[0]['match']['prefixes'] = ['prefix2/*'];

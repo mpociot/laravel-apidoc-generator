@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc\Strategies\QueryParameters;
 
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
@@ -78,7 +79,7 @@ class GetFromDocBlocks extends Strategy
 
                 list($description, $value) = $this->parseParamDescription($description, 'string');
                 if (is_null($value) && ! $this->shouldExcludeExample($tag)) {
-                    $value = str_contains($description, ['number', 'count', 'page'])
+                    $value = Str::contains($description, ['number', 'count', 'page'])
                         ? $this->generateDummyValue('integer')
                         : $this->generateDummyValue('string');
                 }
