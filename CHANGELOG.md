@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.16.0] - Wednesday, 4 September 2019
+### Added
+- Support for Laravel 6 (https://github.com/mpociot/laravel-apidoc-generator/pull/572)
+
 ## [3.15.0] - Saturday, 31 August 2019
 ### Added
 - Ability to exclude a query or body parameter from being included in the example requests (https://github.com/mpociot/laravel-apidoc-generator/pull/552)
