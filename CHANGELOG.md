@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
+c-generator/pull/575)
+
+## [3.16.2] - Wednesday, 4 September 2019
+### Fixed
+- Support for Laravel 6 (https://github.com/mpociot/laravel-apidoc-generator/commit/f7dd8d19b75755763e8e20ab4025075eba5cd51a)
 
 ## [3.16.1] - Wednesday, 4 September 2019
 ### Added
