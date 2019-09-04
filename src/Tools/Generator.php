@@ -5,6 +5,7 @@ namespace Mpociot\ApiDoc\Tools;
 use Faker\Factory;
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
@@ -227,7 +228,7 @@ class Generator
 
                 list($description, $value) = $this->parseDescription($description, 'string');
                 if (is_null($value) && ! $this->shouldExcludeExample($tag)) {
-                    $value = str_contains($description, ['number', 'count', 'page'])
+                    $value = Str::contains($description, ['number', 'count', 'page'])
                         ? $this->generateDummyValue('integer')
                         : $this->generateDummyValue('string');
                 }
