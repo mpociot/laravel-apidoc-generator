@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Postman;
 
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 
@@ -33,6 +34,9 @@ class CollectionWriter
     {
         try {
             URL::forceRootUrl($this->baseUrl);
+            if (Str::startsWith($this->baseUrl, 'https://')) {
+                URL::forceScheme('https');
+            }
         } catch (\Error $e) {
             echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
             echo "You should probably double check URLs in your generated Postman collection.\n";
