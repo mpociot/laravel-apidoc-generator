@@ -3,6 +3,8 @@
 namespace Mpociot\ApiDoc\Tools\Traits;
 
 use Faker\Factory;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Mpociot\Reflection\DocBlock\Tag;
 
 trait ParamHelpers
@@ -39,10 +41,10 @@ trait ParamHelpers
      */
     protected function cleanValueFrom($name, $value, array &$values = [])
     {
-        if (str_contains($name, '[')) {
+        if (Str::contains($name, '[')) {
             $name = str_replace(['][', '[', ']', '..'], ['.', '.', '', '.*.'], $name);
         }
-        array_set($values, str_replace('.*', '.0', $name), $value);
+        Arr::set($values, str_replace('.*', '.0', $name), $value);
     }
 
     /**

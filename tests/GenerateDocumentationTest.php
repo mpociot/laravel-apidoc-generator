@@ -280,6 +280,23 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
+    public function generated_postman_collection_can_have_secure_url()
+    {
+        Config::set('apidoc.base_url', 'https://yourapp.app');
+        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
+        RouteFacade::post('/api/responseTag', TestController::class.'@withResponseTag');
+
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $this->artisan('apidoc:generate');
+
+        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        // The Postman ID varies from call to call; erase it to make the test data reproducible.
+        $generatedCollection['info']['_postman_id'] = '';
+        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_secure_url.json'), true);
+        $this->assertEquals($generatedCollection, $fixtureCollection);
+    }
+
+    /** @test */
     public function generated_postman_collection_can_append_custom_http_headers()
     {
         RouteFacade::get('/api/headers', TestController::class.'@checkCustomHeaders');

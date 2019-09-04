@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc\Tools;
 
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 use Symfony\Component\HttpFoundation\Response;

@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Arr;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
@@ -91,7 +92,7 @@ class UseTransformerTags extends Strategy
      */
     private function getClassToBeTransformed(array $tags, ReflectionMethod $transformerMethod)
     {
-        $modelTag = array_first(array_filter($tags, function ($tag) {
+        $modelTag = Arr::first(array_filter($tags, function ($tag) {
             return ($tag instanceof Tag) && strtolower($tag->getName()) == 'transformermodel';
         }));
 
@@ -99,7 +100,7 @@ class UseTransformerTags extends Strategy
         if ($modelTag) {
             $type = $modelTag->getContent();
         } else {
-            $parameter = array_first($transformerMethod->getParameters());
+            $parameter = Arr::first($transformerMethod->getParameters());
             if ($parameter->hasType() && ! $parameter->getType()->isBuiltin() && class_exists((string) $parameter->getType())) {
                 // ladies and gentlemen, we have a type!
                 $type = (string) $parameter->getType();
@@ -157,6 +158,6 @@ class UseTransformerTags extends Strategy
             })
         );
 
-        return array_first($transFormerTags);
+        return Arr::first($transFormerTags);
     }
 }

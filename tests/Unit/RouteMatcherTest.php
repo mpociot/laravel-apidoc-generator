@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use Illuminate\Support\Str;
 use Dingo\Api\Routing\Router;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
@@ -108,7 +109,7 @@ class RouteMatcherTest extends TestCase
         $routes = $this->matcher->getRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
-            $this->assertTrue(str_is('prefix2/*', $route['route']->uri()));
+            $this->assertTrue(Str::is('prefix2/*', $route['route']->uri()));
         }
     }
 
@@ -130,14 +131,14 @@ class RouteMatcherTest extends TestCase
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
-            $this->assertTrue(str_is('prefix1/*', $route['route']->uri()));
+            $this->assertTrue(Str::is('prefix1/*', $route['route']->uri()));
         }
 
         $routeRules[0]['match']['prefixes'] = ['prefix2/*'];
         $routes = $this->matcher->getDingoRoutesToBeDocumented($routeRules);
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
-            $this->assertTrue(str_is('prefix2/*', $route['route']->uri()));
+            $this->assertTrue(Str::is('prefix2/*', $route['route']->uri()));
         }
     }
 
@@ -337,14 +338,14 @@ class RouteMatcherTest extends TestCase
 
         $routes = collect($routes);
         $firstRuleGroup = $routes->filter(function ($route) {
-            return str_is('prefix1/*', $route['route']->uri())
-                && str_is('domain1.*', $route['route']->getDomain());
+            return Str::is('prefix1/*', $route['route']->uri())
+                && Str::is('domain1.*', $route['route']->getDomain());
         });
         $this->assertCount(2, $firstRuleGroup);
 
         $secondRuleGroup = $routes->filter(function ($route) {
-            return str_is('prefix2/*', $route['route']->uri())
-                && str_is('domain2.*', $route['route']->getDomain());
+            return Str::is('prefix2/*', $route['route']->uri())
+                && Str::is('domain2.*', $route['route']->getDomain());
         });
         $this->assertCount(2, $secondRuleGroup);
     }
