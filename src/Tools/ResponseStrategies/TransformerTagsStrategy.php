@@ -2,9 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
 
-use Illuminate\Support\Arr;
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Arr;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;

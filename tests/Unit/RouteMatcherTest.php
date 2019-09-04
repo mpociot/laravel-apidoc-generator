@@ -2,8 +2,8 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
-use Dingo\Api\Routing\Router;
 use Illuminate\Support\Str;
+use Dingo\Api\Routing\Router;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Illuminate\Support\Facades\Route as RouteFacade;

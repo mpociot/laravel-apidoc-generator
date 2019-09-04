@@ -3,9 +3,9 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Faker\Factory;
-use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
