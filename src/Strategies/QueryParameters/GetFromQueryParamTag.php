@@ -1,21 +1,22 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\BodyParameters;
+namespace Mpociot\ApiDoc\Strategies\QueryParameters;
 
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
-use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 use Dingo\Api\Http\FormRequest as DingoFormRequest;
+use Mpociot\ApiDoc\Tools\Traits\DocBlockParamHelpers;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class GetFromDocBlocks extends Strategy
+class GetFromQueryParamTag extends Strategy
 {
-    use ParamHelpers;
+    use DocBlockParamHelpers;
 
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
@@ -35,39 +36,39 @@ class GetFromDocBlocks extends Strategy
                 continue;
             }
 
-            // If there's a FormRequest, we check there for @bodyParam tags.
+            // If there's a FormRequest, we check there for @queryParam tags.
             if (class_exists(LaravelFormRequest::class) && $parameterClass->isSubclassOf(LaravelFormRequest::class)
                 || class_exists(DingoFormRequest::class) && $parameterClass->isSubclassOf(DingoFormRequest::class)) {
                 $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
-                $bodyParametersFromDocBlock = $this->getBodyParametersFromDocBlock($formRequestDocBlock->getTags());
+                $queryParametersFromDocBlock = $this->getqueryParametersFromDocBlock($formRequestDocBlock->getTags());
 
-                if (count($bodyParametersFromDocBlock)) {
-                    return $bodyParametersFromDocBlock;
+                if (count($queryParametersFromDocBlock)) {
+                    return $queryParametersFromDocBlock;
                 }
             }
         }
 
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
 
-        return $this->getBodyParametersFromDocBlock($methodDocBlock->getTags());
+        return $this->getqueryParametersFromDocBlock($methodDocBlock->getTags());
     }
 
-    private function getBodyParametersFromDocBlock($tags)
+    private function getQueryParametersFromDocBlock($tags)
     {
         $parameters = collect($tags)
             ->filter(function ($tag) {
-                return $tag instanceof Tag && $tag->getName() === 'bodyParam';
+                return $tag instanceof Tag && $tag->getName() === 'queryParam';
             })
             ->mapWithKeys(function ($tag) {
-                preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
+                preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
-                    // this means only name and type were supplied
-                    list($name, $type) = preg_split('/\s+/', $tag->getContent());
+                    // this means only name was supplied
+                    list($name) = preg_split('/\s+/', $tag->getContent());
                     $required = false;
                     $description = '';
                 } else {
-                    list($_, $name, $type, $required, $description) = $content;
+                    list($_, $name, $required, $description) = $content;
                     $description = trim($description);
                     if ($description == 'required' && empty(trim($required))) {
                         $required = $description;
@@ -76,11 +77,14 @@ class GetFromDocBlocks extends Strategy
                     $required = trim($required) == 'required' ? true : false;
                 }
 
-                $type = $this->normalizeParameterType($type);
-                list($description, $example) = $this->parseParamDescription($description, $type);
-                $value = is_null($example) && ! $this->shouldExcludeExample($tag) ? $this->generateDummyValue($type) : $example;
+                list($description, $value) = $this->parseParamDescription($description, 'string');
+                if (is_null($value) && ! $this->shouldExcludeExample($tag)) {
+                    $value = Str::contains($description, ['number', 'count', 'page'])
+                        ? $this->generateDummyValue('integer')
+                        : $this->generateDummyValue('string');
+                }
 
-                return [$name => compact('type', 'description', 'required', 'value')];
+                return [$name => compact('description', 'required', 'value')];
             })->toArray();
 
         return $parameters;

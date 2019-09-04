@@ -4,15 +4,12 @@ namespace Mpociot\ApiDoc\Tools;
 
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
-use Symfony\Component\HttpFoundation\Response;
 
 class Generator
 {
-    use ParamHelpers;
-
     /**
      * @var DocumentationConfig
      */
@@ -146,5 +143,51 @@ class Generator
             }
         }
         return $context[$key];
+    }
+
+    /**
+     * Create samples at index 0 for array parameters.
+     * Also filter out parameters which were excluded from having examples.
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function cleanParams(array $params)
+    {
+        $values = [];
+
+        // Remove params which have no examples.
+        $params = array_filter($params, function ($details) {
+            return ! is_null($details['value']);
+        });
+
+        foreach ($params as $paramName => $details) {
+            $this->generateConcreteSampleForArrayKeys(
+                $paramName, $details['value'], $values
+            );
+        }
+
+        return $values;
+    }
+
+    /**
+     * For each array notation parameter (eg user.*, item.*.name, object.*.*, user[])
+     * generate concrete sample (user.0, item.0.name, object.0.0, user.0) with example as value
+     *
+     * @param string $paramName
+     * @param mixed $paramExample
+     * @param array $values The array that holds the result
+     *
+     * @return void
+     */
+    protected function generateConcreteSampleForArrayKeys($paramName, $paramExample, array &$values = [])
+    {
+        if (Str::contains($paramName, '[')) {
+            // Replace usages of [] with dot notation
+            $paramName = str_replace(['][', '[', ']', '..'], ['.', '.', '', '.*.'], $paramName);
+        }
+        // Then generate a sample item for the dot notation
+        Arr::set($values, str_replace('.*', '.0', $paramName), $paramExample);
     }
 }

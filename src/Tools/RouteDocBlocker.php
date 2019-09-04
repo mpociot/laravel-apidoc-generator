@@ -8,9 +8,15 @@ use Mpociot\Reflection\DocBlock;
 
 class RouteDocBlocker
 {
-    public static $docBlocks = [];
+    protected static $docBlocks = [];
 
-    public static function getDocBlocksFromRoute(Route $route)
+    /**
+     * @param Route $route
+     *
+     * @return array<string, DocBlock> Method and class docblocks
+     * @throws \ReflectionException
+     */
+    public static function getDocBlocksFromRoute(Route $route): array
     {
         list($className, $methodName) = Utils::getRouteClassAndMethodNames($route);
         $docBlocks = self::getCachedDocBlock($route, $className, $methodName);
@@ -35,18 +41,18 @@ class RouteDocBlocker
 
     protected static function getCachedDocBlock(Route $route, string $className, string $methodName)
     {
-        $routeId = self::getRouteId($route, $className, $methodName);
+        $routeId = self::getRouteCacheId($route, $className, $methodName);
 
         return self::$docBlocks[$routeId] ?? null;
     }
 
     protected static function cacheDocBlocks(Route $route, string $className, string $methodName, array $docBlocks)
     {
-        $routeId = self::getRouteId($route, $className, $methodName);
+        $routeId = self::getRouteCacheId($route, $className, $methodName);
         self::$docBlocks[$routeId] = $docBlocks;
     }
 
-    private static function getRouteId(Route $route, string $className, string $methodName)
+    private static function getRouteCacheId(Route $route, string $className, string $methodName): string
     {
         return $route->uri()
             .':'

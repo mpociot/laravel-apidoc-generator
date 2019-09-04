@@ -22,10 +22,10 @@ abstract class GeneratorTestCase extends TestCase
                 \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
             ],
             'bodyParameters' => [
-                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromDocBlocks::class,
+                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'queryParameters' => [
-                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromDocBlocks::class,
+                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
             ],
             'responses' => [
                 \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
