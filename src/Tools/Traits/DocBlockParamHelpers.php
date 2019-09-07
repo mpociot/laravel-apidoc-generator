@@ -2,9 +2,6 @@
 
 namespace Mpociot\ApiDoc\Tools\Traits;
 
-use Faker\Factory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Mpociot\Reflection\DocBlock\Tag;
 
 trait DocBlockParamHelpers
@@ -19,7 +16,7 @@ trait DocBlockParamHelpers
      *
      * @return bool Whether no example should be generated
      */
-    protected  function shouldExcludeExample(Tag $tag)
+    protected function shouldExcludeExample(Tag $tag)
     {
         return strpos($tag->getContent(), ' No-example') !== false;
     }
@@ -33,7 +30,7 @@ trait DocBlockParamHelpers
      *
      * @return array The description and included example.
      */
-    protected  function parseParamDescription(string $description, string $type)
+    protected function parseParamDescription(string $description, string $type)
     {
         $example = null;
         if (preg_match('/(.*)\s+Example:\s*(.*)\s*/', $description, $content)) {
