@@ -135,7 +135,7 @@ class Generator
                 \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
                 \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
-            ]
+            ],
         ];
 
         // Use the default strategies for the stage, unless they were explicitly set
