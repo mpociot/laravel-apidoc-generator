@@ -99,7 +99,7 @@ class ResponseCalls extends Strategy
      *
      * @return void
      *
-     * @deprecated in favour of Laravel config variables
+     * @deprecated Not guaranteed to overwrite application's env. Use Laravel config variables instead.
      */
     private function setEnvironmentVariables(array $env)
     {

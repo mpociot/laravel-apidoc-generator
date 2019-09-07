@@ -83,6 +83,11 @@ class RouteMatcher
     {
         $excludes = $routeRule['exclude'] ?? [];
 
+        // Exclude Laravel Telescope routes
+        if (class_exists("Laravel\Telescope\Telescope")) {
+            $excludes[] = 'telescope/*';
+        }
+
         return Str::is($excludes, $route->getName())
             || Str::is($excludes, $route->uri());
     }

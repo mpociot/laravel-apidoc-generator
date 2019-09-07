@@ -2,7 +2,8 @@
 composer.lock
 .php_cs.cache
 /vendor/
-/public
+public/
+tests/public/
 .idea/
 coverage.xml
 results.xml
