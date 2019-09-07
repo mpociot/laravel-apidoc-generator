@@ -75,8 +75,6 @@ class Generator
 
         $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
 
-        // Currently too lazy to tinker with Blade files; change this later
-        unset($parsedRoute['metadata']);
         $parsedRoute += $metadata;
 
         return $parsedRoute;
@@ -85,7 +83,7 @@ class Generator
     protected function fetchMetadata(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
         $context['metadata'] = [
-            'groupName' => $this->config->get('default_group'),
+            'groupName' => $this->config->get('default_group', ''),
             'groupDescription' => '',
             'title' => '',
             'description' => '',
@@ -120,12 +118,12 @@ class Generator
         return null;
     }
 
-    protected function iterateThroughStrategies(string $key, array $context, array $arguments)
+    protected function iterateThroughStrategies(string $stage, array $context, array $arguments)
     {
-        $strategies = $this->config->get("strategies.$key", []);
-        $context[$key] = $context[$key] ?? [];
+        $strategies = $this->config->get("strategies.$stage", []);
+        $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
-            $strategy = new $strategyClass($this->config);
+            $strategy = new $strategyClass($stage, $this->config);
             $arguments[] = $context;
             $results = $strategy(...$arguments);
             if (! is_null($results)) {
@@ -135,16 +133,16 @@ class Generator
                     // and also allows values to be overwritten
 
                     // Don't allow overwriting if an empty value is trying to replace a set one
-                    if (! in_array($context[$key], [null, ''], true) && in_array($item, [null, ''], true)) {
+                    if (! in_array($context[$stage], [null, ''], true) && in_array($item, [null, ''], true)) {
                         continue;
                     } else {
-                        $context[$key][$index] = $item;
+                        $context[$stage][$index] = $item;
                     }
                 }
             }
         }
 
-        return $context[$key];
+        return $context[$stage];
     }
 
     /**

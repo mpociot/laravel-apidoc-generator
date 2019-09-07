@@ -105,7 +105,9 @@ public function __invoke(Route $route, \ReflectionClass $controller, \Reflection
 }
 ```
 
-The strategy class also has access to the current apidoc configuration via its config property. For instance, you can retrieve the deafult group with `$this->config->get('default_group')`.
+The strategy class also has access to the current apidoc configuration via its `config` property. For instance, you can retrieve the default group with `$this->config->get('default_group')`.
+
+Yopu are also provided with the instance pproperty `stage`, which is set to the name of the currently executing stage.
 
 
 ## Utilities
@@ -135,9 +137,4 @@ Each strategy class must implement the __invoke method with the parameters as de
 'required', // boolean
 'value', // An example value for the parameter
 ```
-- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each key in the array should be a HTTP status code, and each value should be an array with two keys:
-
-```
-status // The same status code
-content // The response content as a string
-```
+- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each key in the array should be a HTTP status code, and each value should be a string containing the response.

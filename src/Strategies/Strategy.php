@@ -9,10 +9,19 @@ use Mpociot\ApiDoc\Tools\DocumentationConfig;
 
 abstract class Strategy
 {
+    /**
+     * @var DocumentationConfig The apidoc config
+     */
     protected $config;
 
-    public function __construct(DocumentationConfig $config)
+    /**
+     * @var string The current stage of route processing
+     */
+    protected $stage;
+
+    public function __construct(string $stage, DocumentationConfig $config)
     {
+        $this->stage = $stage;
         $this->config = $config;
     }
 
