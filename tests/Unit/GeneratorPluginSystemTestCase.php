@@ -2,17 +2,14 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use ReflectionClass;
+use ReflectionMethod;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Arr;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
+use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
-use ReflectionClass;
-use ReflectionMethod;
 
 class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
 {
@@ -33,12 +30,12 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
     {
         $config = [
             'strategies' => [
-                'metadata' => [ EmptyStrategy1::class, ],
+                'metadata' => [EmptyStrategy1::class],
                 'bodyParameters' => [
                     EmptyStrategy1::class,
                     EmptyStrategy2::class,
                 ],
-                'responses' => [ EmptyStrategy1::class ],
+                'responses' => [EmptyStrategy1::class],
             ],
         ];
         $route = $this->createRoute('GET', '/api/test', 'dummy', true, TestController::class);
@@ -54,7 +51,6 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
         $this->assertArrayNotHasKey('queryParameters', EmptyStrategy1::$called);
 
         $this->assertTrue(EmptyStrategy1::$called['responses']);
-
     }
 
     /** @test */
@@ -62,7 +58,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
     {
         $config = [
             'strategies' => [
-                'responses' => [ DummyResponseStrategy200::class, DummyResponseStrategy400::class ],
+                'responses' => [DummyResponseStrategy200::class, DummyResponseStrategy400::class],
             ],
         ];
         $route = $this->createRoute('GET', '/api/test', 'dummy', true, TestController::class);
@@ -82,6 +78,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
     }
 
     // This is a generalized test, as opposed to the one above for responses only
+
     /** @test */
     public function combines_results_from_different_strategies_in_same_stage()
     {
@@ -110,7 +107,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
     {
         $config = [
             'strategies' => [
-                'metadata' => [ PartialDummyMetadataStrategy2::class, ],
+                'metadata' => [PartialDummyMetadataStrategy2::class],
             ],
         ];
         $route = $this->createRoute('GET', '/api/test', 'dummy', true, TestController::class);
@@ -133,7 +130,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
     {
         $config = [
             'strategies' => [
-                'responses' => [ DummyResponseStrategy200::class, StillDummyResponseStrategyAlso200::class ],
+                'responses' => [DummyResponseStrategy200::class, StillDummyResponseStrategyAlso200::class],
             ],
         ];
         $route = $this->createRoute('GET', '/api/test', 'dummy', true, TestController::class);
@@ -181,7 +178,6 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
         ];
     }
 }
-
 
 class EmptyStrategy1 extends Strategy
 {
@@ -245,7 +241,7 @@ class DummyResponseStrategy200 extends Strategy
 {
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return [ 200 => 'dummy', ];
+        return [200 => 'dummy'];
     }
 }
 
@@ -253,7 +249,7 @@ class StillDummyResponseStrategyAlso200 extends Strategy
 {
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return [ 200 => 'stilldummy', ];
+        return [200 => 'stilldummy'];
     }
 }
 
@@ -261,6 +257,6 @@ class DummyResponseStrategy400 extends Strategy
 {
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return [ 400 => 'dummy2', ];
+        return [400 => 'dummy2'];
     }
 }
