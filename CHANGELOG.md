@@ -12,7 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Removed
-c-generator/pull/575)
+
+## [3.17.0] - Saturday, 5 September 2019
+### Added
+- Switched to a plugin architecture that allows support for external strategies (https://github.com/mpociot/laravel-apidoc-generator/pull/570)
+
+### Changed
+- Exclude Laravel Telescope routes when present (https://github.com/mpociot/laravel-apidoc-generator/pull/579)
+- Set status code for transformer response from tag if present (https://github.com/mpociot/laravel-apidoc-generator/pull/581)
+- Set status code for response call from actual response (https://github.com/mpociot/laravel-apidoc-generator/pull/581)
 
 ## [3.16.3] - Thursday, 5 September 2019
 ### Fixed
