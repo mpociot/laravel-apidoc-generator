@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
+namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -8,25 +8,36 @@ use Illuminate\Support\Arr;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
+use Mpociot\Reflection\DocBlock;
 use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
 use League\Fractal\Resource\Collection;
+use Mpociot\ApiDoc\Strategies\Strategy;
+use Mpociot\ApiDoc\Tools\RouteDocBlocker;
 
 /**
  * Parse a transformer response from the docblock ( @transformer || @transformercollection ).
  */
-class TransformerTagsStrategy
+class UseTransformerTags extends Strategy
 {
     /**
      * @param Route $route
-     * @param array $tags
-     * @param array $routeProps
+     * @param ReflectionClass $controller
+     * @param ReflectionMethod $method
+     * @param array $rulesToApply
+     * @param array $context
+     *
+     * @throws \Exception
      *
      * @return array|null
      */
-    public function __invoke(Route $route, array $tags, array $routeProps)
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $rulesToApply, array $context = [])
     {
-        return $this->getTransformerResponse($tags);
+        $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
+        /** @var DocBlock $methodDocBlock */
+        $methodDocBlock = $docBlocks['method'];
+
+        return $this->getTransformerResponse($methodDocBlock->getTags());
     }
 
     /**
@@ -57,7 +68,7 @@ class TransformerTagsStrategy
                 ? new Collection([$modelInstance, $modelInstance], new $transformer)
                 : new Item($modelInstance, new $transformer);
 
-            return [response($fractal->createData($resource)->toJson())];
+            return [200 => response($fractal->createData($resource)->toJson())->getContent()];
         } catch (\Exception $e) {
             return null;
         }

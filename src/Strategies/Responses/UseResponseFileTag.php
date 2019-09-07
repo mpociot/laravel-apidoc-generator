@@ -1,26 +1,36 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools\ResponseStrategies;
+namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Illuminate\Routing\Route;
-use Illuminate\Http\JsonResponse;
+use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
+use Mpociot\ApiDoc\Strategies\Strategy;
+use Mpociot\ApiDoc\Tools\RouteDocBlocker;
 
 /**
  * Get a response from from a file in the docblock ( @responseFile ).
  */
-class ResponseFileStrategy
+class UseResponseFileTag extends Strategy
 {
     /**
      * @param Route $route
-     * @param array $tags
-     * @param array $routeProps
+     * @param \ReflectionClass $controller
+     * @param \ReflectionMethod $method
+     * @param array $routeRules
+     * @param array $context
+     *
+     * @throws \Exception
      *
      * @return array|null
      */
-    public function __invoke(Route $route, array $tags, array $routeProps)
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return $this->getFileResponses($tags);
+        $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
+        /** @var DocBlock $methodDocBlock */
+        $methodDocBlock = $docBlocks['method'];
+
+        return $this->getFileResponses($methodDocBlock->getTags());
     }
 
     /**
@@ -43,14 +53,17 @@ class ResponseFileStrategy
             return null;
         }
 
-        return array_map(function (Tag $responseFileTag) {
+        $responses = array_map(function (Tag $responseFileTag) {
             preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $status = $result[1] ?: 200;
             $content = $result[2] ? file_get_contents(storage_path(trim($result[2])), true) : '{}';
             $json = ! empty($result[3]) ? str_replace("'", '"', $result[3]) : '{}';
             $merged = array_merge(json_decode($content, true), json_decode($json, true));
 
-            return new JsonResponse($merged, (int) $status);
+            return [json_encode($merged), (int) $status];
         }, $responseFileTags);
+
+        // Convert responses to [200 => 'response', 401 => 'response']
+        return collect($responses)->pluck('0', '1')->toArray();
     }
 }

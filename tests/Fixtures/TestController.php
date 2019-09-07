@@ -30,7 +30,7 @@ class TestController extends Controller
      */
     public function withGroupOverride()
     {
-        return '';
+        return 'Group B, baby!';
     }
 
     /**
@@ -66,6 +66,8 @@ class TestController extends Controller
     }
 
     /**
+     * Endpoint with body parameters.
+     *
      * @bodyParam user_id int required The id of the user. Example: 9
      * @bodyParam room_id string The id of the room.
      * @bodyParam forever boolean Whether to ban the user forever. Example: false
@@ -152,6 +154,7 @@ class TestController extends Controller
             'color' => strtolower($fruit->color),
             'weight' => $fruit->weight.' kg',
             'delicious' => $fruit->delicious,
+            'responseCall' => true,
         ];
     }
 
@@ -203,7 +206,8 @@ class TestController extends Controller
      *   "name": "banana",
      *   "color": "red",
      *   "weight": "1 kg",
-     *   "delicious": true
+     *   "delicious": true,
+     *   "responseTag": true
      * }
      */
     public function withResponseTag()
@@ -227,7 +231,8 @@ class TestController extends Controller
      *   "name": "banana",
      *   "color": "red",
      *   "weight": "1 kg",
-     *   "delicious": true
+     *   "delicious": true,
+     *   "multipleResponseTagsAndStatusCodes": true
      * }
      * @response 401 {
      *   "message": "Unauthorized"

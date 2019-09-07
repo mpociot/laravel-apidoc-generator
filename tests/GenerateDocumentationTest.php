@@ -176,6 +176,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
         RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
         RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
+        RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
 
         // We want to have the same values for params each time
         config(['apidoc.faker_seed' => 1234]);
@@ -220,10 +221,23 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function generated_postman_collection_file_is_correct()
     {
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
-        RouteFacade::post('/api/responseTag', TestController::class.'@withResponseTag');
+        RouteFacade::get('/api/withDescription', TestController::class.'@withEndpointDescription');
+        RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
+        RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
+        RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
+        RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
 
+        // We want to have the same values for params each time
+        config(['apidoc.faker_seed' => 1234]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        config([
+            'apidoc.routes.0.apply.headers' => [
+                'Authorization' => 'customAuthToken',
+                'Custom-Header' => 'NotSoCustom',
+            ],
+        ]);
+
         $this->artisan('apidoc:generate');
 
         $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);

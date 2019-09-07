@@ -179,6 +179,24 @@ return [
         ],
     ],
 
+    'strategies' => [
+        'metadata' => [
+            \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+        ],
+        'bodyParameters' => [
+            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+        ],
+        'queryParameters' => [
+            \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+        ],
+        'responses' => [
+            \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
+            \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
+            \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
+            \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+        ],
+    ],
+
     /*
      * Custom logo path. The logo will be copied from this location
      * during the generate process. Set this to false to use the default logo.

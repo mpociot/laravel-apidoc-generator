@@ -6,7 +6,9 @@ use Illuminate\Support\Arr;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
 
 abstract class GeneratorTestCase extends TestCase
 {
@@ -14,6 +16,27 @@ abstract class GeneratorTestCase extends TestCase
      * @var \Mpociot\ApiDoc\Tools\Generator
      */
     protected $generator;
+    private $config = [
+        'strategies' => [
+            'metadata' => [
+                \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+            ],
+            'bodyParameters' => [
+                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            ],
+            'queryParameters' => [
+                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            ],
+            'responses' => [
+                \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
+                \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+            ],
+        ],
+        'default_group' => 'general',
+
+    ];
 
     protected function getPackageProviders($app)
     {
@@ -29,7 +52,7 @@ abstract class GeneratorTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->generator = new Generator();
+        $this->generator = new Generator(new DocumentationConfig($this->config));
     }
 
     /** @test */
@@ -394,8 +417,8 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($response));
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $response['content'],
-            $expected
+            $expected,
+            $response['content']
         );
     }
 
@@ -683,7 +706,7 @@ abstract class GeneratorTestCase extends TestCase
         // Examples should have different values
         $this->assertNotEquals(count($results), 1);
 
-        $generator = new Generator(new DocumentationConfig(['faker_seed' => 12345]));
+        $generator = new Generator(new DocumentationConfig($this->config + ['faker_seed' => 12345]));
         $results = [];
         $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
         $results[$generator->processRoute($route)['cleanBodyParameters'][$paramName]] = true;
@@ -743,9 +766,35 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
     }
 
-    abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false);
+    /** @test */
+    public function combines_responses_from_different_strategies()
+    {
+        $route = $this->createRoute('GET', '/api/indexResource', 'index', true, TestResourceController::class);
+        $rules = [
+            'response_calls' => [
+                'methods' => ['*'],
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ],
+        ];
 
-    abstract public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false);
+        $parsed = $this->generator->processRoute($route, $rules);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertSame(1, count($parsed['response']));
+        $this->assertTrue(is_array($parsed['response'][0]));
+        $this->assertEquals(200, $parsed['response'][0]['status']);
+        $this->assertArraySubset([
+            'index_resource' => true,
+        ], json_decode($parsed['response'][0]['content'], true));
+    }
+
+    abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
+
+    abstract public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
 
     public function dataResources()
     {

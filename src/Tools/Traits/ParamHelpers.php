@@ -2,46 +2,91 @@
 
 namespace Mpociot\ApiDoc\Tools\Traits;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Faker\Factory;
 
 trait ParamHelpers
 {
-    /**
-     * Create proper arrays from dot-noted parameter names. Also filter out parameters which were excluded from having examples.
-     *
-     * @param array $params
-     *
-     * @return array
-     */
-    protected function cleanParams(array $params)
+    protected function generateDummyValue(string $type)
     {
-        $values = [];
-        $params = array_filter($params, function ($details) {
-            return ! is_null($details['value']);
-        });
-
-        foreach ($params as $name => $details) {
-            $this->cleanValueFrom($name, $details['value'], $values);
+        $faker = Factory::create();
+        if ($this->config->get('faker_seed')) {
+            $faker->seed($this->config->get('faker_seed'));
         }
+        $fakeFactories = [
+            'integer' => function () use ($faker) {
+                return $faker->numberBetween(1, 20);
+            },
+            'number' => function () use ($faker) {
+                return $faker->randomFloat();
+            },
+            'float' => function () use ($faker) {
+                return $faker->randomFloat();
+            },
+            'boolean' => function () use ($faker) {
+                return $faker->boolean();
+            },
+            'string' => function () use ($faker) {
+                return $faker->word;
+            },
+            'array' => function () {
+                return [];
+            },
+            'object' => function () {
+                return new \stdClass;
+            },
+        ];
 
-        return $values;
+        $fakeFactory = $fakeFactories[$type] ?? $fakeFactories['string'];
+
+        return $fakeFactory();
     }
 
     /**
-     * Converts dot notation names to arrays and sets the value at the right depth.
+     * Cast a value from a string to a specified type.
      *
-     * @param string $name
-     * @param mixed $value
-     * @param array $values The array that holds the result
+     * @param string $value
+     * @param string $type
      *
-     * @return void
+     * @return mixed
      */
-    protected function cleanValueFrom($name, $value, array &$values = [])
+    protected function castToType(string $value, string $type)
     {
-        if (Str::contains($name, '[')) {
-            $name = str_replace(['][', '[', ']', '..'], ['.', '.', '', '.*.'], $name);
+        $casts = [
+            'integer' => 'intval',
+            'number' => 'floatval',
+            'float' => 'floatval',
+            'boolean' => 'boolval',
+        ];
+
+        // First, we handle booleans. We can't use a regular cast,
+        //because PHP considers string 'false' as true.
+        if ($value == 'false' && $type == 'boolean') {
+            return false;
         }
-        Arr::set($values, str_replace('.*', '.0', $name), $value);
+
+        if (isset($casts[$type])) {
+            return $casts[$type]($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Normalizes the stated "type" of a parameter (eg "int", "integer", "double")
+     * to a number of standard types (integer, boolean, float).
+     *
+     * @param string $type
+     *
+     * @return mixed|string
+     */
+    protected function normalizeParameterType(string $type)
+    {
+        $typeMap = [
+            'int' => 'integer',
+            'bool' => 'boolean',
+            'double' => 'float',
+        ];
+
+        return $type ? ($typeMap[$type] ?? $type) : 'string';
     }
 }

@@ -12,7 +12,7 @@
             "description": "",
             "item": [
                 {
-                    "name": "http://localhost/api/withBodyParameters",
+                    "name": "Endpoint with body parameters.",
                     "request": {
                         "url": "http:\/\/localhost\/api\/withBodyParameters",
                         "method": "GET",

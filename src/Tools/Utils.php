@@ -19,12 +19,14 @@ class Utils
     }
 
     /**
-     * @param array $action
+     * @param array|Route $routeOrAction
      *
      * @return array|null
      */
-    public static function getRouteActionUses(array $action)
+    public static function getRouteClassAndMethodNames($routeOrAction)
     {
+        $action = $routeOrAction instanceof Route ? $routeOrAction->getAction() : $routeOrAction;
+
         if ($action['uses'] !== null) {
             if (is_array($action['uses'])) {
                 return $action['uses'];

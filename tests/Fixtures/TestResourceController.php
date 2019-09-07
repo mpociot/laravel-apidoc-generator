@@ -64,7 +64,7 @@ class TestResourceController extends Controller
     public function show($id)
     {
         return [
-            'show_resource' => $id,
+            'show_resource' => true,
         ];
     }
 
@@ -82,7 +82,7 @@ class TestResourceController extends Controller
     public function edit($id)
     {
         return [
-            'edit_resource' => $id,
+            'edit_resource' => true,
         ];
     }
 

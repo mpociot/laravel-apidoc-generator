@@ -23,25 +23,25 @@ class DingoGeneratorTest extends GeneratorTestCase
         config(['apidoc.router' => 'dingo']);
     }
 
-    public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false)
+    public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class)
     {
         $route = null;
         /** @var Router $api */
         $api = app(Router::class);
-        $api->version('v1', function (Router $api) use ($controllerMethod, $path, $httpMethod, &$route) {
-            $route = $api->$httpMethod($path, TestController::class."@$controllerMethod");
+        $api->version('v1', function (Router $api) use ($class, $controllerMethod, $path, $httpMethod, &$route) {
+            $route = $api->$httpMethod($path, $class."@$controllerMethod");
         });
 
         return $route;
     }
 
-    public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false)
+    public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class)
     {
         $route = null;
         /** @var Router $api */
         $api = app(Router::class);
-        $api->version('v1', function (Router $api) use ($controllerMethod, $path, $httpMethod, &$route) {
-            $route = $api->$httpMethod($path, [TestController::class, $controllerMethod]);
+        $api->version('v1', function (Router $api) use ($class, $controllerMethod, $path, $httpMethod, &$route) {
+            $route = $api->$httpMethod($path, [$class, $controllerMethod]);
         });
 
         return $route;
