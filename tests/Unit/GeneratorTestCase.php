@@ -435,8 +435,26 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($response));
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
-            $response['content'],
-            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}'
+            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}',
+            $response['content']
+        );
+    }
+
+    /** @test */
+    public function can_parse_transformer_tag_with_status_code()
+    {
+        $route = $this->createRoute('GET', '/transformerTagWithStatusCode', 'transformerTagWithStatusCode');
+        $parsed = $this->generator->processRoute($route);
+        $response = Arr::first($parsed['response']);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(201, $response['status']);
+        $this->assertSame(
+            '{"data":{"id":1,"description":"Welcome on this test versions","name":"TestName"}}',
+            $response['content']
         );
     }
 
