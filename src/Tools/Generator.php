@@ -120,7 +120,26 @@ class Generator
 
     protected function iterateThroughStrategies(string $stage, array $context, array $arguments)
     {
-        $strategies = $this->config->get("strategies.$stage", []);
+        $defaultStrategies = [
+            'metadata' => [
+                \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+            ],
+            'bodyParameters' => [
+                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            ],
+            'queryParameters' => [
+                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            ],
+            'responses' => [
+                \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
+                \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+            ]
+        ];
+
+        // Use the default strategies for the stage, unless they were explicitly set
+        $strategies = $this->config->get("strategies.$stage", $defaultStrategies[$stage]);
         $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
             $strategy = new $strategyClass($stage, $this->config);

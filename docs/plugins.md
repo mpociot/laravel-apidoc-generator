@@ -8,7 +8,11 @@ Route processing is performed in four stages:
 - queryParameters
 - responses
 
-For each stage, the Generator attempts one or more configured strategies to fetch data. The Generator will call of the strategies configured, progressively combining their results together before to produce the final output of that stage.
+For each stage, the Generator attempts the specified strategies to fetch data. The Generator will call of the strategies configured, progressively combining their results together before to produce the final output of that stage.
+
+There are a number of strategies inccluded with the package, so you don't have to set up anything to get it working.
+
+> Note: The included ResponseCalls strategy is designed to stop if a response has already been gotten from any other strategy.
 
 ## Strategies
 To create a strategy, create a class that extends `\Mpociot\ApiDoc\Strategies\Strategy`.
