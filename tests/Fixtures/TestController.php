@@ -252,6 +252,14 @@ class TestController extends Controller
     }
 
     /**
+     * @transformer 201 \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     */
+    public function transformerTagWithStatusCode()
+    {
+        return '';
+    }
+
+    /**
      * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
      * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestModel
      */

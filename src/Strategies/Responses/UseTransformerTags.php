@@ -54,7 +54,7 @@ class UseTransformerTags extends Strategy
                 return null;
             }
 
-            $transformer = $this->getTransformerClass($transformerTag);
+            list($statusCode, $transformer) = $this->getStatusCodeAmdTransformerClass($transformerTag);
             $model = $this->getClassToBeTransformed($tags, (new ReflectionClass($transformer))->getMethod('transform'));
             $modelInstance = $this->instantiateTransformerModel($model);
 
@@ -68,7 +68,7 @@ class UseTransformerTags extends Strategy
                 ? new Collection([$modelInstance, $modelInstance], new $transformer)
                 : new Item($modelInstance, new $transformer);
 
-            return [200 => response($fractal->createData($resource)->toJson())->getContent()];
+            return [$statusCode => response($fractal->createData($resource)->toJson())->getContent()];
         } catch (\Exception $e) {
             return null;
         }
@@ -77,11 +77,16 @@ class UseTransformerTags extends Strategy
     /**
      * @param Tag $tag
      *
-     * @return string|null
+     * @return array
      */
-    private function getTransformerClass($tag)
+    private function getStatusCodeAmdTransformerClass($tag): array
     {
-        return $tag->getContent();
+        $content = $tag->getContent();
+        preg_match('/^(\d{3})?\s?([\s\S]*)$/', $content, $result);
+        $status = $result[1] ?: 200;
+        $transformerClass = $result[2];
+
+        return [$status, $transformerClass];
     }
 
     /**
