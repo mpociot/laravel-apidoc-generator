@@ -175,7 +175,7 @@ class Generator
 
     /**
      * For each array notation parameter (eg user.*, item.*.name, object.*.*, user[])
-     * generate concrete sample (user.0, item.0.name, object.0.0, user.0) with example as value
+     * generate concrete sample (user.0, item.0.name, object.0.0, user.0) with example as value.
      *
      * @param string $paramName
      * @param mixed $paramExample

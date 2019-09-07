@@ -6,7 +6,7 @@ use Faker\Factory;
 
 trait ParamHelpers
 {
-    protected  function generateDummyValue(string $type)
+    protected function generateDummyValue(string $type)
     {
         $faker = Factory::create();
         if ($this->config->get('faker_seed')) {
@@ -49,7 +49,7 @@ trait ParamHelpers
      *
      * @return mixed
      */
-    protected  function castToType(string $value, string $type)
+    protected function castToType(string $value, string $type)
     {
         $casts = [
             'integer' => 'intval',

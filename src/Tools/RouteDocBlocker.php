@@ -13,8 +13,9 @@ class RouteDocBlocker
     /**
      * @param Route $route
      *
-     * @return array<string, DocBlock> Method and class docblocks
      * @throws \ReflectionException
+     *
+     * @return array<string, DocBlock> Method and class docblocks
      */
     public static function getDocBlocksFromRoute(Route $route): array
     {
