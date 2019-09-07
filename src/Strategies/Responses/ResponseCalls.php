@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Dingo\Api\Dispatcher;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
@@ -338,7 +339,7 @@ class ResponseCalls extends Strategy
         $prefix = 'HTTP_';
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
-            if (! starts_with($name, $prefix) && $name !== 'CONTENT_TYPE') {
+            if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
                 $name = $prefix.$name;
             }
             $server[$name] = $value;
