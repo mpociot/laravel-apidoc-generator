@@ -19,15 +19,7 @@ class GenerateDocumentationTest extends TestCase
 {
     use TestHelpers;
 
-    /**
-     * Setup the test environment.
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
-    public function tearDown()
+    public function tearDown(): void
     {
         Utils::deleteDirectoryAndContents('/public/docs');
     }

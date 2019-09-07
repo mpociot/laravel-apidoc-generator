@@ -16,7 +16,7 @@ class DingoGeneratorTest extends GeneratorTestCase
         ];
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
