@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [3.17.0] - Saturday, 5 September 2019
+## [3.17.0] - Saturday, 7 September 2019
 ### Added
 - Switched to a plugin architecture that allows support for external strategies (https://github.com/mpociot/laravel-apidoc-generator/pull/570)
 
