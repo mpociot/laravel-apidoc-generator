@@ -304,7 +304,7 @@ class ResponseCalls extends Strategy
             return false;
         }
 
-        if (!empty($context['responses'])) {
+        if (! empty($context['responses'])) {
             // Don't attempt a response call if there are already responses
             return false;
         }
