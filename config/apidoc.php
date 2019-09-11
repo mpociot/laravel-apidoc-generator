@@ -247,6 +247,13 @@ return [
     ],
 
     /*
+     * If you are using a FormRequest class other than the standard Laravel or Dingo class,
+     * you can specify it here. The package will look for bodyParam tags on this class
+     * to append to request params.
+     */
+    'custom_form_request_class' => null,
+
+    /*
      * If you would like the package to generate the same example values for parameters on each run,
      * set this to any number (eg. 1234)
      *

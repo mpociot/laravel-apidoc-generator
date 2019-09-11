@@ -35,9 +35,12 @@ class GetFromBodyParamTag extends Strategy
                 continue;
             }
 
+            $customFormRequest = config('apidoc.custom_form_request_class');
+
             // If there's a FormRequest, we check there for @bodyParam tags.
             if (class_exists(LaravelFormRequest::class) && $parameterClass->isSubclassOf(LaravelFormRequest::class)
-                || class_exists(DingoFormRequest::class) && $parameterClass->isSubclassOf(DingoFormRequest::class)) {
+                || class_exists(DingoFormRequest::class) && $parameterClass->isSubclassOf(DingoFormRequest::class)
+                || !is_null($customFormRequest) && class_exists($customFormRequest) && $parameterClass->isSubclassOf($customFormRequest)) {
                 $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
                 $bodyParametersFromDocBlock = $this->getBodyParametersFromDocBlock($formRequestDocBlock->getTags());
 
