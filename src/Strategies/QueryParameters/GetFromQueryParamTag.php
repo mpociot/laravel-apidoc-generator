@@ -61,7 +61,7 @@ class GetFromQueryParamTag extends Strategy
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
-                $content = preg_replace('/Example:\s*No-example.?/', '', $content);
+                $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
                     // this means only name was supplied
                     list($name) = preg_split('/\s+/', $tag->getContent());
