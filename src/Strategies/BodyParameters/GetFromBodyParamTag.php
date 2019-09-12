@@ -60,7 +60,7 @@ class GetFromBodyParamTag extends Strategy
             })
             ->mapWithKeys(function ($tag) {
                 preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
-                $content = preg_replace('/\s?No-example.?/', '', $content);
+                $content = preg_replace('/Example:\s*No-example.?/', '', $content);
                 if (empty($content)) {
                     // this means only name and type were supplied
                     list($name, $type) = preg_split('/\s+/', $tag->getContent());
