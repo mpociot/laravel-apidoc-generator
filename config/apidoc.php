@@ -182,6 +182,7 @@ return [
     'strategies' => [
         'metadata' => [
             \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+            \Mpociot\ApiDoc\Strategies\Metadata\GetFromMiddleware::class,
         ],
         'bodyParameters' => [
             \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,

@@ -73,9 +73,15 @@ class Generator
         $parsedRoute['response'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
 
-        $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
+        $baseHeaders = $rulesToApply['headers'] ?? [];
 
         $parsedRoute += $metadata;
+        if (isset($metadata['headers'])) {
+            $parsedRoute['headers'] = array_merge($baseHeaders, $metadata['headers']);
+            unset($parsedRoute['metadata']['headers']);
+        } else {
+            $parsedRoute['headers'] = $baseHeaders;
+        }
 
         return $parsedRoute;
     }
@@ -123,6 +129,7 @@ class Generator
         $defaultStrategies = [
             'metadata' => [
                 \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+                \Mpociot\ApiDoc\Strategies\Metadata\GetFromMiddleware::class,
             ],
             'bodyParameters' => [
                 \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,

@@ -42,6 +42,23 @@
 @endif
 @endif
 
+@if(isset($route['scopes']) && !is_null($route['scopes']))
+### Scopes
+@if ($route['scopes']['type'] === 'all')
+Token should have **all the scopes** below to access the api:
+@endif
+@if ($route['scopes']['type'] === 'any')
+Token should have **one of the scopes** below to access the api:
+@endif
+
+  Scope | Description
+------- | ------------
+@foreach($route['scopes']['scopes'] as $scope)
+   {{$scope->id}} | {{$scope->description}}
+@endforeach
+
+@endif
+
 ### HTTP Request
 @foreach($route['methods'] as $method)
 `{{$method}} {{$route['uri']}}`
