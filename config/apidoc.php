@@ -185,6 +185,7 @@ return [
         ],
         'bodyParameters' => [
             \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromRequestClass::class,
         ],
         'queryParameters' => [
             \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
