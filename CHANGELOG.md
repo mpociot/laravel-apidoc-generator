@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [3.17.1] - Thursday, 12 September 2019
+### Fixed
+- ResponseCalls: Call Lumen application correctly since it does not use HttpKernel (https://github.com/mpociot/laravel-apidoc-generator/pull/585)
+- Update usage of `clean*Parameters` in python template (https://github.com/mpociot/laravel-apidoc-generator/commit/02fb719d0d6c25e6ce72f30dc8b9604449061156)
+- Bugfix: *really* exclude parameters from examples, not just send empty strings (https://github.com/mpociot/laravel-apidoc-generator/commit/762e2e1003d389d6e785d31144eca89c40515926, https://github.com/mpociot/laravel-apidoc-generator/commit/e54b474578b53f97f4737664a63131b315aaf82d)
+
 ## [3.17.0] - Saturday, 7 September 2019
 ### Added
 - Switched to a plugin architecture that allows support for external strategies (https://github.com/mpociot/laravel-apidoc-generator/pull/570)

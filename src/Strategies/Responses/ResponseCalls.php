@@ -286,9 +286,16 @@ class ResponseCalls extends Strategy
      */
     protected function callLaravelRoute(Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        $kernel = app(\Illuminate\Contracts\Http\Kernel::class);
-        $response = $kernel->handle($request);
-        $kernel->terminate($request, $response);
+        // Confirm we're running in Laravel, not Lumen
+        if (app()->bound(\Illuminate\Contracts\Http\Kernel::class)) {
+            $kernel = app(\Illuminate\Contracts\Http\Kernel::class);
+            $response = $kernel->handle($request);
+            $kernel->terminate($request, $response);
+        } else {
+            // Handle the request using the Lumen application.
+            $kernel = app();
+            $response = $kernel->handle($request);
+        }
 
         return $response;
     }
