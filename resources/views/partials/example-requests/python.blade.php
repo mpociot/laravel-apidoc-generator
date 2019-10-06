@@ -4,18 +4,12 @@ import json
 
 url = '{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}'
 @if(count($route['cleanBodyParameters']))
-payload = {
-@foreach($route['cleanBodyParameters'] as $parameter => $value)
-    '{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
-@endif
-@endforeach
-
-}
+payload = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
 @endif
 @if(count($route['cleanQueryParameters']))
 params = {
 @foreach($route['cleanQueryParameters'] as $parameter => $value)
-	'{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
+  '{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
 @endif
 @endforeach
 
@@ -23,7 +17,7 @@ params = {
 @endif
 headers = {
 @foreach($route['headers'] as $header => $value)
-	'{{$header}}': '{{$value}}'@if(!($loop->last)),
+  '{{$header}}': '{{$value}}'@if(!($loop->last)),
 @endif
 @endforeach
 

@@ -72,8 +72,10 @@ class TestController extends Controller
      * @bodyParam room_id string The id of the room.
      * @bodyParam forever boolean Whether to ban the user forever. Example: false
      * @bodyParam another_one number Just need something here.
-     * @bodyParam yet_another_param object required
-     * @bodyParam even_more_param array
+     * @bodyParam yet_another_param object required Some object params.
+     * @bodyParam yet_another_param.name string required Subkey in the object param.
+     * @bodyParam even_more_param array Some array params.
+     * @bodyParam even_more_param.* float Subkey in the array param.
      * @bodyParam book.name string
      * @bodyParam book.author_id integer
      * @bodyParam book[pages_count] integer
@@ -165,13 +167,23 @@ class TestController extends Controller
         ];
     }
 
-    public function echoesUrlPathParameters($param)
+    /**
+     * @group Other😎
+     *
+     * @urlParam param required Example: 4
+     * @urlParam param2
+     * @urlParam param4 No-example.
+     *
+     * @queryParam something
+     */
+    public function echoesUrlParameters($param, $param2, $param3 = null, $param4 = null)
     {
-        return [
-            'param' => $param,
-        ];
+        return compact('param', 'param2', 'param3', 'param4');
     }
 
+    /**
+     * @urlparam $id Example: 3
+     */
     public function shouldFetchRouteResponseWithEchoedSettings($id)
     {
         return [
