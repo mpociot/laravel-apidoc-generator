@@ -1,5 +1,6 @@
 ```bash
-curl -X {{$route['methods'][0]}} {{$route['methods'][0] == 'GET' ? '-G ' : ''}}"{{ rtrim($baseUrl, '/')}}/{{ ltrim($route['boundUri'], '/') }}@if(count($route['cleanQueryParameters']))?@foreach($route['cleanQueryParameters'] as $parameter => $value)
+curl -X {{$route['methods'][0]}} \
+    {{$route['methods'][0] == 'GET' ? '-G ' : ''}}"{{ rtrim($baseUrl, '/')}}/{{ ltrim($route['boundUri'], '/') }}@if(count($route['cleanQueryParameters']))?@foreach($route['cleanQueryParameters'] as $parameter => $value)
 {{ urlencode($parameter) }}={{ urlencode($value) }}@if(!$loop->last)&@endif
 @endforeach
 @endif" @if(count($route['headers']))\

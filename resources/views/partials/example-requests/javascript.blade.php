@@ -1,13 +1,16 @@
 ```javascript
-const url = new URL("{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}");
+const url = new URL(
+    "{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}"
+);
 @if(count($route['cleanQueryParameters']))
 
-    let params = {
-    @foreach($route['cleanQueryParameters'] as $parameter => $value)
-        "{{ $parameter }}": "{{ $value }}",
-    @endforeach
-    };
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+let params = {
+@foreach($route['cleanQueryParameters'] as $parameter => $value)
+    "{{ $parameter }}": "{{ $value }}",
+@endforeach
+};
+Object.keys(params)
+    .forEach(key => url.searchParams.append(key, params[key]));
 @endif
 
 let headers = {
@@ -20,8 +23,8 @@ let headers = {
 @if(!array_key_exists('Content-Type', $route['headers']))
     "Content-Type": "application/json",
 @endif
-}
-@if(count($route['bodyParameters']))
+};
+@if(count($route['cleanBodyParameters']))
 
 let body = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
 @endif
