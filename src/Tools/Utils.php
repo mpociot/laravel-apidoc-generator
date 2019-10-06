@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
@@ -54,12 +53,12 @@ class Utils
     public static function replaceUrlParameterPlaceholdersWithValues(string $uri, array $urlParameters)
     {
         $matches = preg_match_all('/{.+?}/i', $uri, $parameterPaths);
-        if (!$matches) {
+        if (! $matches) {
             return $uri;
         }
 
         foreach ($parameterPaths[0] as $parameterPath) {
-            $key = trim($parameterPath, "{?}");
+            $key = trim($parameterPath, '{?}');
             if (isset($urlParameters[$key])) {
                 $example = $urlParameters[$key];
                 $uri = str_replace($parameterPath, $example, $uri);
@@ -89,7 +88,7 @@ class Utils
 
     public static function deleteDirectoryAndContents($dir)
     {
-        $adapter = new Local(realpath(__DIR__ . '/../../'));
+        $adapter = new Local(realpath(__DIR__.'/../../'));
         $fs = new Filesystem($adapter);
         $fs->deleteDir($dir);
     }
@@ -99,11 +98,12 @@ class Utils
         $output = var_export($value, true);
         // Padding with x spaces so they align
         $split = explode("\n", $output);
-        $result = "";
-        $padWith = str_repeat(" ", $indentationLevel);
+        $result = '';
+        $padWith = str_repeat(' ', $indentationLevel);
         foreach ($split as $index => $line) {
-            $result .= ($index == 0 ? "" : "\n$padWith") . $line;
+            $result .= ($index == 0 ? '' : "\n$padWith").$line;
         }
+
         return $result;
     }
 }
