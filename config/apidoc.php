@@ -120,20 +120,6 @@ return [
                     'methods' => ['GET'],
 
                     /*
-                     * For URLs which have parameters (/users/{user}, /orders/{id?}),
-                     * specify what values the parameters should be replaced with.
-                     * Note that you must specify the full parameter,
-                     * including curly brackets and question marks if any.
-                     *
-                     * You may also specify the preceding path, to allow for variations,
-                     * for instance 'users/{id}' => 1 and 'apps/{id}' => 'htTviP'.
-                     * However, there must only be one parameter per path.
-                     */
-                    'bindings' => [
-                        // '{user}' => 1,
-                    ],
-
-                    /*
                      * Laravel config variables which should be set for the API call.
                      * This is a good place to ensure that notifications, emails
                      * and other external services are not triggered
@@ -183,11 +169,14 @@ return [
         'metadata' => [
             \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
         ],
-        'bodyParameters' => [
-            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+        'urlParameters' => [
+            \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
             \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+        ],
+        'bodyParameters' => [
+            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
             \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,

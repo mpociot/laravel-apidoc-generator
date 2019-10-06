@@ -26,9 +26,7 @@ class GetFromQueryParamTag extends Strategy
                 continue;
             }
 
-            $parameterClassName = version_compare(phpversion(), '7.1.0', '<')
-                ? $paramType->__toString()
-                : $paramType->getName();
+            $parameterClassName = $paramType->getName();
 
             try {
                 $parameterClass = new ReflectionClass($parameterClassName);
@@ -40,7 +38,7 @@ class GetFromQueryParamTag extends Strategy
             if (class_exists(LaravelFormRequest::class) && $parameterClass->isSubclassOf(LaravelFormRequest::class)
                 || class_exists(DingoFormRequest::class) && $parameterClass->isSubclassOf(DingoFormRequest::class)) {
                 $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
-                $queryParametersFromDocBlock = $this->getqueryParametersFromDocBlock($formRequestDocBlock->getTags());
+                $queryParametersFromDocBlock = $this->getQueryParametersFromDocBlock($formRequestDocBlock->getTags());
 
                 if (count($queryParametersFromDocBlock)) {
                     return $queryParametersFromDocBlock;
@@ -50,7 +48,7 @@ class GetFromQueryParamTag extends Strategy
 
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
 
-        return $this->getqueryParametersFromDocBlock($methodDocBlock->getTags());
+        return $this->getQueryParametersFromDocBlock($methodDocBlock->getTags());
     }
 
     private function getQueryParametersFromDocBlock($tags)
@@ -60,6 +58,11 @@ class GetFromQueryParamTag extends Strategy
                 return $tag instanceof Tag && $tag->getName() === 'queryParam';
             })
             ->mapWithKeys(function ($tag) {
+                // Format:
+                // @queryParam <name> <"required" (optional)> <description>
+                // Examples:
+                // @queryParam text string required The text.
+                // @queryParam user_id The ID of the user.
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
