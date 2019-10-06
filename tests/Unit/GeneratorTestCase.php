@@ -1,4 +1,6 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
@@ -99,52 +101,52 @@ abstract class GeneratorTestCase extends TestCase
                 'required' => true,
                 'description' => 'Some object params.',
             ],
-            "yet_another_param.name" => [
-                "type" => "string",
-                "description" => "Subkey in the object param.",
-                "required" => true,
+            'yet_another_param.name' => [
+                'type' => 'string',
+                'description' => 'Subkey in the object param.',
+                'required' => true,
             ],
             'even_more_param' => [
                 'type' => 'array',
                 'required' => false,
                 'description' => 'Some array params.',
             ],
-            "even_more_param.*" => [
-                "type" => "float",
-                "description" => "Subkey in the array param.",
-                "required" => false,
+            'even_more_param.*' => [
+                'type' => 'float',
+                'description' => 'Subkey in the array param.',
+                'required' => false,
             ],
-            "book.name" => [
-                "type" => "string",
-                "description" => "",
-                "required" => false,
+            'book.name' => [
+                'type' => 'string',
+                'description' => '',
+                'required' => false,
             ],
-            "book.author_id" => [
-                "type" => "integer",
-                "description" => "",
-                "required" => false,
+            'book.author_id' => [
+                'type' => 'integer',
+                'description' => '',
+                'required' => false,
             ],
-            "book[pages_count]" => [
-                "type" => "integer",
-                "description" => "",
-                "required" => false,
+            'book[pages_count]' => [
+                'type' => 'integer',
+                'description' => '',
+                'required' => false,
             ],
-            "ids.*" => [
-                "type" => "integer",
-                "description" => "",
-                "required" => false,
+            'ids.*' => [
+                'type' => 'integer',
+                'description' => '',
+                'required' => false,
             ],
-            "users.*.first_name" => [
-                "type" => "string",
-                "description" => "The first name of the user.",
-                "required" => false,
-                "value" => "John",
+            'users.*.first_name' => [
+                'type' => 'string',
+                'description' => 'The first name of the user.',
+                'required' => false,
+                'value' => 'John',
             ],
-            "users.*.last_name" => [
-                "type" => "string",
-                "description" => "The last name of the user.",
-                "required" => false,
-                "value" => "Doe",
+            'users.*.last_name' => [
+                'type' => 'string',
+                'description' => 'The last name of the user.',
+                'required' => false,
+                'value' => 'Doe',
             ],
         ], $bodyParameters);
     }
@@ -514,7 +516,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -533,7 +535,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -635,7 +637,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_response_file_tag()
     {
         // copy file to storage
-        $filePath = __DIR__ . '/../Fixtures/response_test.json';
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
         copy($filePath, storage_path('response_test.json'));
 
@@ -660,7 +662,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_add_or_replace_key_value_pair_in_response_file()
     {
         // copy file to storage
-        $filePath = __DIR__ . '/../Fixtures/response_test.json';
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
         copy($filePath, storage_path('response_test.json'));
 
@@ -685,10 +687,10 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_multiple_response_file_tags_with_status_codes()
     {
         // copy file to storage
-        $successFilePath = __DIR__ . '/../Fixtures/response_test.json';
+        $successFilePath = __DIR__.'/../Fixtures/response_test.json';
         $successFixtureFileJson = file_get_contents($successFilePath);
         copy($successFilePath, storage_path('response_test.json'));
-        $errorFilePath = __DIR__ . '/../Fixtures/response_error_test.json';
+        $errorFilePath = __DIR__.'/../Fixtures/response_error_test.json';
         $errorFixtureFileJson = file_get_contents($errorFilePath);
         copy($errorFilePath, storage_path('response_error_test.json'));
 
