@@ -48,9 +48,10 @@ class UserController extends Controller
 ![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
 ## Specifying request parameters
-To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
+To specify a list of valid parameters your API route accepts, use the `@urlParam`, `@bodyParam` and `@queryParam` annotations.
+- The `@urlParam` annotation is used for describing parameters in your URl. For instance, in a Laravel Route like this: "/users/{id}/{lang?}", you would use this annotation to describe the `id` and `lang` parameters. It takes the name of the parameter, an optional "required" label, and then its description.
+- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description.
 - The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description. 
-- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description,
 
 Examples:
 
