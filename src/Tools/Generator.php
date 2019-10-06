@@ -74,7 +74,6 @@ class Generator
         $parsedRoute['bodyParameters'] = $bodyParameters;
         $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
-
         $responses = $this->fetchResponses($controller, $method, $route, $rulesToApply, $parsedRoute);
         $parsedRoute['response'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
@@ -98,6 +97,7 @@ class Generator
 
         return $this->iterateThroughStrategies('metadata', $context, [$route, $controller, $method, $rulesToApply]);
     }
+
     protected function fetchUrlParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
         return $this->iterateThroughStrategies('urlParameters', $context, [$route, $controller, $method, $rulesToApply]);
@@ -112,7 +112,6 @@ class Generator
     {
         return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
-
 
     protected function fetchResponses(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
