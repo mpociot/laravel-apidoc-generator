@@ -47,13 +47,13 @@
 `{{$method}} {{$route['uri']}}`
 
 @endforeach
-@if(count($route['bodyParameters']))
-#### Body Parameters
+@if(count($route['urlParameters']))
+#### URL Parameters
 
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-@foreach($route['bodyParameters'] as $attribute => $parameter)
-    {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+@foreach($route['urlParameters'] as $attribute => $parameter)
+    {{$attribute}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
 @endforeach
 @endif
 @if(count($route['queryParameters']))
@@ -64,6 +64,14 @@ Parameter | Status | Description
 @foreach($route['queryParameters'] as $attribute => $parameter)
     {{$attribute}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
 @endforeach
+@endif
+@if(count($route['bodyParameters']))
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+@foreach($route['bodyParameters'] as $attribute => $parameter)
+    {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
+    @endforeach
 @endif
 
 <!-- END_{{$route['id']}} -->

@@ -29,17 +29,20 @@ Welcome to the generated API reference.
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/users" \
+curl -X GET \
+    -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users");
+const url = new URL(
+    "http://localhost/api/users"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "GET",
@@ -70,17 +73,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/users/create" \
+curl -X GET \
+    -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users/create");
+const url = new URL(
+    "http://localhost/api/users/create"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "GET",

@@ -188,7 +188,6 @@ class TestController extends Controller
     {
         return [
             '{id}' => $id,
-            'APP_ENV' => getenv('APP_ENV'),
             'header' => request()->header('header'),
             'queryParam' => request()->query('queryParam'),
             'bodyParam' => request()->get('bodyParam'),

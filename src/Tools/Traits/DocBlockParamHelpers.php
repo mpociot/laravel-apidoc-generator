@@ -33,8 +33,8 @@ trait DocBlockParamHelpers
     protected function parseParamDescription(string $description, string $type)
     {
         $example = null;
-        if (preg_match('/(.*)\s+Example:\s*(.+)\s*/', $description, $content)) {
-            $description = $content[1];
+        if (preg_match('/(.*)\bExample:\s*(.+)\s*/', $description, $content)) {
+            $description = trim($content[1]);
 
             // examples are parsed as strings by default, we need to cast them properly
             $example = $this->castToType($content[2], $type);

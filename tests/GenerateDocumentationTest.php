@@ -163,12 +163,13 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function generated_markdown_file_is_correct()
     {
-        RouteFacade::get('/api/withDescription', TestController::class.'@withEndpointDescription');
+        RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
         RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
         RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
         RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
         RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
+        RouteFacade::get('/api/echoesUrlParameters/{param}-{param2}/{param3?}', [TestController::class, 'echoesUrlParameters']);
 
         // We want to have the same values for params each time
         config(['apidoc.faker_seed' => 1234]);

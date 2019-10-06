@@ -57,17 +57,22 @@ class Generator
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? ($rulesToApply['response_calls']['bindings'] ?? [])),
         ];
         $metadata = $this->fetchMetadata($controller, $method, $route, $rulesToApply, $parsedRoute);
         $parsedRoute['metadata'] = $metadata;
-        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
-        $parsedRoute['bodyParameters'] = $bodyParameters;
-        $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
+
+        $urlParameters = $this->fetchUrlParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $parsedRoute['urlParameters'] = $urlParameters;
+        $parsedRoute['cleanUrlParameters'] = $this->cleanParams($urlParameters);
+        $parsedRoute['boundUri'] = Utils::getFullUrl($route, $parsedRoute['cleanUrlParameters']);
 
         $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
         $parsedRoute['queryParameters'] = $queryParameters;
         $parsedRoute['cleanQueryParameters'] = $this->cleanParams($queryParameters);
+
+        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $parsedRoute['bodyParameters'] = $bodyParameters;
+        $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
         $responses = $this->fetchResponses($controller, $method, $route, $rulesToApply, $parsedRoute);
         $parsedRoute['response'] = $responses;
@@ -93,14 +98,19 @@ class Generator
         return $this->iterateThroughStrategies('metadata', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchUrlParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
-        return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
+        return $this->iterateThroughStrategies('urlParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
     protected function fetchQueryParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
         return $this->iterateThroughStrategies('queryParameters', $context, [$route, $controller, $method, $rulesToApply]);
+    }
+
+    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    {
+        return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
     protected function fetchResponses(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
@@ -124,11 +134,14 @@ class Generator
             'metadata' => [
                 \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
             ],
-            'bodyParameters' => [
-                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            'urlParameters' => [
+                \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
             ],
             'queryParameters' => [
                 \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            ],
+            'bodyParameters' => [
+                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responses' => [
                 \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,

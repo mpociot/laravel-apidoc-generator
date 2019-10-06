@@ -40,7 +40,8 @@ class ResponseCalls extends Strategy
         // Mix in parsed parameters with manually specified parameters.
         $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['body'] ?? []);
         $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['query'] ?? []);
-        $request = $this->prepareRequest($route, $rulesToApply, $bodyParameters, $queryParameters);
+        $urlParameters = $context['cleanUrlParameters'];
+        $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters);
 
         try {
             $response = $this->makeApiCall($request);
@@ -80,9 +81,9 @@ class ResponseCalls extends Strategy
      *
      * @return Request
      */
-    protected function prepareRequest(Route $route, array $rulesToApply, array $bodyParams, array $queryParams)
+    protected function prepareRequest(Route $route, array $rulesToApply, array $urlParams, array $bodyParams, array $queryParams)
     {
-        $uri = Utils::getFullUrl($route, $rulesToApply['bindings'] ?? []);
+        $uri = Utils::getFullUrl($route, $urlParams);
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
         $cookies = isset($rulesToApply['cookies']) ? $rulesToApply['cookies'] : [];

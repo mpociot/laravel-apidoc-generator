@@ -118,8 +118,20 @@
                                     "enabled": true
                                 },
                                 {
+                                    "key": "yet_another_param.name",
+                                    "value": "consequatur",
+                                    "type": "text",
+                                    "enabled": true
+                                },
+                                {
                                     "key": "even_more_param",
                                     "value": [],
+                                    "type": "text",
+                                    "enabled": true
+                                },
+                                {
+                                    "key": "even_more_param.*",
+                                    "value": 11613.31890586,
                                     "type": "text",
                                     "enabled": true
                                 },

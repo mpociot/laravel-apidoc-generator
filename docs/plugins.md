@@ -56,11 +56,14 @@ The last thing to do is to register the strategy. Strategies are registered in a
         'metadata' => [
             \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
         ],
-        'bodyParameters' => [
-            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+        'urlParameters' => [
+            \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
             \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+        ],
+        'bodyParameters' => [
+            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
             \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
@@ -109,9 +112,11 @@ public function __invoke(Route $route, \ReflectionClass $controller, \Reflection
 }
 ```
 
+> Note: If you would like a parameter (body or query) to be included in the documentation but excluded from examples, set its `value` property to `null`.
+
 The strategy class also has access to the current apidoc configuration via its `config` property. For instance, you can retrieve the default group with `$this->config->get('default_group')`.
 
-Yopu are also provided with the instance pproperty `stage`, which is set to the name of the currently executing stage.
+You are also provided with the instance pproperty `stage`, which is set to the name of the currently executing stage.
 
 
 ## Utilities
