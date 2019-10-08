@@ -5,9 +5,9 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Illuminate\Support\Arr;
-use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
+use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
@@ -60,9 +60,9 @@ abstract class GeneratorTestCase extends TestCase
         $factory->define(TestUser::class, function () {
             return [
                 'id' => 4,
-                'first_name' => "Tested",
-                'last_name' => "Again",
-                'email' => "a@b.com",
+                'first_name' => 'Tested',
+                'last_name' => 'Again',
+                'email' => 'a@b.com',
             ];
         });
         $this->generator = new Generator(new DocumentationConfig($this->config));
@@ -395,7 +395,7 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/withEloquentApiResource', 'withEloquentApiResource');
 
         $config = $this->config;
-        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,];
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
         $generator = new Generator(new DocumentationConfig($config));
         $parsed = $this->generator->processRoute($route);
 
@@ -407,8 +407,8 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertArraySubset([
             'id' => 4,
-            'name' => "Tested Again",
-            'email' => "a@b.com",
+            'name' => 'Tested Again',
+            'email' => 'a@b.com',
         ], json_decode($response['content'], true));
     }
 
@@ -418,7 +418,7 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/withEloquentApiResourceCollection', 'withEloquentApiResourceCollection');
 
         $config = $this->config;
-        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,];
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
         $generator = new Generator(new DocumentationConfig($config));
         $parsed = $this->generator->processRoute($route);
 
@@ -432,13 +432,13 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertIsArray($content);
         $this->assertArraySubset([
             'id' => 4,
-            'name' => "Tested Again",
-            'email' => "a@b.com",
+            'name' => 'Tested Again',
+            'email' => 'a@b.com',
         ], $content[0]);
         $this->assertArraySubset([
             'id' => 4,
-            'name' => "Tested Again",
-            'email' => "a@b.com",
+            'name' => 'Tested Again',
+            'email' => 'a@b.com',
         ], $content[1]);
     }
 
@@ -448,7 +448,7 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/withEloquentApiResourceCollectionClass', 'withEloquentApiResourceCollectionClass');
 
         $config = $this->config;
-        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,];
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
         $generator = new Generator(new DocumentationConfig($config));
         $parsed = $this->generator->processRoute($route);
 
@@ -461,20 +461,20 @@ abstract class GeneratorTestCase extends TestCase
         $content = json_decode($response['content'], true);
         $this->assertIsArray($content);
         $this->assertArraySubset([
-                "data" => [
+                'data' => [
                     [
                         'id' => 4,
-                        'name' => "Tested Again",
-                        'email' => "a@b.com",
+                        'name' => 'Tested Again',
+                        'email' => 'a@b.com',
                     ],
                     [
                         'id' => 4,
-                        'name' => "Tested Again",
-                        'email' => "a@b.com",
+                        'name' => 'Tested Again',
+                        'email' => 'a@b.com',
                     ],
                 ],
-                "links" => [
-                    "self" => "link-value",
+                'links' => [
+                    'self' => 'link-value',
                 ],
         ], $content);
     }
@@ -617,7 +617,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -636,7 +636,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -738,7 +738,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_response_file_tag()
     {
         // copy file to storage
-        $filePath = __DIR__ . '/../Fixtures/response_test.json';
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
         copy($filePath, storage_path('response_test.json'));
 
@@ -763,7 +763,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_add_or_replace_key_value_pair_in_response_file()
     {
         // copy file to storage
-        $filePath = __DIR__ . '/../Fixtures/response_test.json';
+        $filePath = __DIR__.'/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
         copy($filePath, storage_path('response_test.json'));
 
@@ -788,10 +788,10 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_multiple_response_file_tags_with_status_codes()
     {
         // copy file to storage
-        $successFilePath = __DIR__ . '/../Fixtures/response_test.json';
+        $successFilePath = __DIR__.'/../Fixtures/response_test.json';
         $successFixtureFileJson = file_get_contents($successFilePath);
         copy($successFilePath, storage_path('response_test.json'));
-        $errorFilePath = __DIR__ . '/../Fixtures/response_error_test.json';
+        $errorFilePath = __DIR__.'/../Fixtures/response_error_test.json';
         $errorFixtureFileJson = file_get_contents($errorFilePath);
         copy($errorFilePath, storage_path('response_error_test.json'));
 
