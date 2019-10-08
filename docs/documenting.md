@@ -189,6 +189,43 @@ public function show($id)
 }
 ```
 
+### @apiResource, @apiResourceCollection, and @apiResourceModel
+If your controller method uses [Eloquent API resources](https://laravel.com/docs/5.8/eloquent-resources), you can use the apiResource annotations to guide the package when generating a sample response. The `@apiResource` tag specifies the name of the resource. Use `@@apiResourceCollection` instead if the route returns a list. This works with both regular `JsonResource` objects and `ResourceCollection` objects.
+ 
+ The `@@apiResourceModel` specifies the Eloquent model to be passed to the resource. The package will attempt to generate an instance of the model for the resource from the Eloquent model factory. If that fails, the package will call `::first()` to retrieve the first model from the database. If that fails, it will create an instance using `new`.
+
+Examples:
+
+```php
+
+/**
+ * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\UserResource
+ * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\User
+ */
+public function listUsers()
+{
+    return UserResource::collection(User::all());
+}
+
+/**
+ * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\UserCollection
+ * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\User
+ */
+public function listMoreUsers()
+{
+    return new UserCollection(User::all());
+}
+
+/**
+ * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\UserResource
+ * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\User
+ */
+public function showUser(User $user)
+{
+    return new UserResource($user);
+}
+```
+
 ### @transformer, @transformerCollection, and @transformerModel
 You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
