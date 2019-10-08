@@ -232,10 +232,97 @@
                     }
                 },
                 {
+                    "name": "http:\/\/localhost\/api\/withEloquentApiResource",
+                    "request": {
+                        "url": "http:\/\/localhost\/api\/withEloquentApiResource",
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "customAuthToken"
+                            },
+                            {
+                                "key": "Custom-Header",
+                                "value": "NotSoCustom"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
                     "name": "http:\/\/localhost\/api\/withMultipleResponseTagsAndStatusCode",
                     "request": {
                         "url": "http:\/\/localhost\/api\/withMultipleResponseTagsAndStatusCode",
                         "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "customAuthToken"
+                            },
+                            {
+                                "key": "Custom-Header",
+                                "value": "NotSoCustom"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Other\ud83d\ude0e",
+            "description": "",
+            "item": [
+                {
+                    "name": "http:\/\/localhost\/api\/withEloquentApiResourceCollectionClass",
+                    "request": {
+                        "url": "http:\/\/localhost\/api\/withEloquentApiResourceCollectionClass",
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "customAuthToken"
+                            },
+                            {
+                                "key": "Custom-Header",
+                                "value": "NotSoCustom"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                },
+                {
+                    "name": "http:\/\/localhost\/api\/echoesUrlParameters\/{param}-{param2}\/{param3?}",
+                    "request": {
+                        "url": "http:\/\/localhost\/api\/echoesUrlParameters\/{param}-{param2}\/{param3?}?something=consequatur",
+                        "method": "GET",
                         "header": [
                             {
                                 "key": "Authorization",
