@@ -107,7 +107,7 @@ class UseTransformerTags extends Strategy
      * @param array $tags
      * @param ReflectionMethod $transformerMethod
      *
-     * @return null|string
+     * @return string
      */
     private function getClassToBeTransformed(array $tags, ReflectionMethod $transformerMethod): string
     {
@@ -127,7 +127,7 @@ class UseTransformerTags extends Strategy
         }
 
         if ($type == null) {
-            throw new Exception("Failed to detect a transformer model. Please specify a model using @transformermodel.");
+            throw new Exception("Failed to detect a transformer model. Please specify a model using @transformerModel.");
         }
 
         return $type;

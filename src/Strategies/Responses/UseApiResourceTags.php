@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -113,9 +114,8 @@ try {
 
     /**
      * @param array $tags
-     * @param ReflectionMethod $apiResourceMethod
      *
-     * @return null|string
+     * @return string
      */
     private function getClassToBeTransformed(array $tags): string
     {
@@ -124,6 +124,10 @@ try {
         }));
 
         $type = $modelTag->getContent();
+
+        if (empty($type)) {
+            throw new Exception("Failed to detect an Eloquent API resource model. Please specify a model using @apiResourceModel.");
+        }
 
         return $type;
     }
