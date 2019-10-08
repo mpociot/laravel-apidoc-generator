@@ -199,7 +199,7 @@ class GenerateDocumentationTest extends TestCase
                 'Custom-Header' => 'NotSoCustom',
             ],
         ]);
-        $this->artisan('apidoc:generate -v');
+        $this->artisan('apidoc:generate');
 
         $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
         $compareMarkdown = __DIR__.'/../public/docs/source/.compare.md';
