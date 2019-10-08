@@ -181,6 +181,7 @@ return [
         'responses' => [
             \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
             \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
+            \Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,
             \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
             \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
         ],

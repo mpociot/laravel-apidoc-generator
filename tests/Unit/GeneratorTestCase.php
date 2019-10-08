@@ -7,6 +7,7 @@ namespace Mpociot\ApiDoc\Tests\Unit;
 use Illuminate\Support\Arr;
 use Orchestra\Testbench\TestCase;
 use Mpociot\ApiDoc\Tools\Generator;
+use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
@@ -32,6 +33,7 @@ abstract class GeneratorTestCase extends TestCase
             'responses' => [
                 \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
                 \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,
                 \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
             ],
@@ -54,6 +56,15 @@ abstract class GeneratorTestCase extends TestCase
     {
         parent::setUp();
 
+        $factory = app(\Illuminate\Database\Eloquent\Factory::class);
+        $factory->define(TestUser::class, function () {
+            return [
+                'id' => 4,
+                'first_name' => 'Tested',
+                'last_name' => 'Again',
+                'email' => 'a@b.com',
+            ];
+        });
         $this->generator = new Generator(new DocumentationConfig($this->config));
     }
 
@@ -376,6 +387,96 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('DELETE', '/delete', 'withEndpointDescription');
         $parsed = $this->generator->processRoute($route);
         $this->assertSame(['DELETE'], $parsed['methods']);
+    }
+
+    /** @test */
+    public function can_parse_apiresource_tags()
+    {
+        $route = $this->createRoute('POST', '/withEloquentApiResource', 'withEloquentApiResource');
+
+        $config = $this->config;
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
+        $generator = new Generator(new DocumentationConfig($config));
+        $parsed = $this->generator->processRoute($route);
+
+        $response = Arr::first($parsed['response']);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+        $this->assertArraySubset([
+            'id' => 4,
+            'name' => 'Tested Again',
+            'email' => 'a@b.com',
+        ], json_decode($response['content'], true));
+    }
+
+    /** @test */
+    public function can_parse_apiresourcecollection_tags()
+    {
+        $route = $this->createRoute('POST', '/withEloquentApiResourceCollection', 'withEloquentApiResourceCollection');
+
+        $config = $this->config;
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
+        $generator = new Generator(new DocumentationConfig($config));
+        $parsed = $this->generator->processRoute($route);
+
+        $response = Arr::first($parsed['response']);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+        $content = json_decode($response['content'], true);
+        $this->assertIsArray($content);
+        $this->assertArraySubset([
+            'id' => 4,
+            'name' => 'Tested Again',
+            'email' => 'a@b.com',
+        ], $content[0]);
+        $this->assertArraySubset([
+            'id' => 4,
+            'name' => 'Tested Again',
+            'email' => 'a@b.com',
+        ], $content[1]);
+    }
+
+    /** @test */
+    public function can_parse_apiresourcecollection_tags_with_collection_class()
+    {
+        $route = $this->createRoute('POST', '/withEloquentApiResourceCollectionClass', 'withEloquentApiResourceCollectionClass');
+
+        $config = $this->config;
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
+        $generator = new Generator(new DocumentationConfig($config));
+        $parsed = $this->generator->processRoute($route);
+
+        $response = Arr::first($parsed['response']);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+        $content = json_decode($response['content'], true);
+        $this->assertIsArray($content);
+        $this->assertArraySubset([
+                'data' => [
+                    [
+                        'id' => 4,
+                        'name' => 'Tested Again',
+                        'email' => 'a@b.com',
+                    ],
+                    [
+                        'id' => 4,
+                        'name' => 'Tested Again',
+                        'email' => 'a@b.com',
+                    ],
+                ],
+                'links' => [
+                    'self' => 'link-value',
+                ],
+        ], $content);
     }
 
     /** @test */

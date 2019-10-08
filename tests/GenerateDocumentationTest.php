@@ -8,6 +8,7 @@ use Mpociot\ApiDoc\Tools\Utils;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
@@ -18,6 +19,21 @@ use Mpociot\ApiDoc\Tests\Fixtures\TestPartialResourceController;
 class GenerateDocumentationTest extends TestCase
 {
     use TestHelpers;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $factory = app(\Illuminate\Database\Eloquent\Factory::class);
+        $factory->define(TestUser::class, function () {
+            return [
+                'id' => 4,
+                'first_name' => 'Tested',
+                'last_name' => 'Again',
+                'email' => 'a@b.com',
+            ];
+        });
+    }
 
     public function tearDown(): void
     {
@@ -168,6 +184,8 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
         RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
         RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
+        RouteFacade::get('/api/withEloquentApiResource', [TestController::class, 'withEloquentApiResource']);
+        RouteFacade::get('/api/withEloquentApiResourceCollectionClass', [TestController::class, 'withEloquentApiResourceCollectionClass']);
         RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
         RouteFacade::get('/api/echoesUrlParameters/{param}-{param2}/{param3?}', [TestController::class, 'echoesUrlParameters']);
 
@@ -214,12 +232,15 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function generated_postman_collection_file_is_correct()
     {
-        RouteFacade::get('/api/withDescription', TestController::class.'@withEndpointDescription');
+        RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
         RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
         RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
         RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
+        RouteFacade::get('/api/withEloquentApiResource', [TestController::class, 'withEloquentApiResource']);
+        RouteFacade::get('/api/withEloquentApiResourceCollectionClass', [TestController::class, 'withEloquentApiResourceCollectionClass']);
         RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
+        RouteFacade::get('/api/echoesUrlParameters/{param}-{param2}/{param3?}', [TestController::class, 'echoesUrlParameters']);
 
         // We want to have the same values for params each time
         config(['apidoc.faker_seed' => 1234]);

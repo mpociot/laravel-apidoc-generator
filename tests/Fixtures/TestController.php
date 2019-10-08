@@ -136,6 +136,37 @@ class TestController extends Controller
         return '';
     }
 
+    /**
+     * @apiResource \Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource
+     * @apiResourceModel \Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     */
+    public function withEloquentApiResource()
+    {
+        return new TestUserApiResource(factory(TestUser::class)->make(['id' => 0]));
+    }
+
+    /**
+     * @group Other😎
+     *
+     * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource
+     * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     */
+    public function withEloquentApiResourceCollection()
+    {
+        return TestUserApiResource::collection(factory(TestUser::class)->make(['id' => 0]));
+    }
+
+    /**
+     * @group Other😎
+     *
+     * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResourceCollection
+     * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     */
+    public function withEloquentApiResourceCollectionClass()
+    {
+        return new TestUserApiResourceCollection(factory(TestUser::class)->make(['id' => 0]));
+    }
+
     public function checkCustomHeaders(Request $request)
     {
         return $request->headers->all();

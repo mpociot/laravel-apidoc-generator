@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [4.0.0] 
+### Added
+- `bindings` replaced by `@urlParam` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/599)
+- Better support for arrays and objects in bodyParams (https://github.com/mpociot/laravel-apidoc-generator/pull/597)
+
 ## [3.17.1] - Thursday, 12 September 2019
 ### Fixed
 - ResponseCalls: Call Lumen application correctly since it does not use HttpKernel (https://github.com/mpociot/laravel-apidoc-generator/pull/585)

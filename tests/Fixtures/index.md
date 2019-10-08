@@ -323,6 +323,56 @@ null
 
 <!-- END_5c08cc4d72b6e5830f6814c64086e197 -->
 
+<!-- START_16ec1c69d4877579438d48a8ad8dc778 -->
+## api/withEloquentApiResource
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/withEloquentApiResource" \
+    -H "Authorization: customAuthToken" \
+    -H "Custom-Header: NotSoCustom"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/withEloquentApiResource"
+);
+
+let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": {
+        "id": 0,
+        "name": "Tested Again",
+        "email": "a@b.com"
+    }
+}
+```
+
+### HTTP Request
+`GET api/withEloquentApiResource`
+
+
+<!-- END_16ec1c69d4877579438d48a8ad8dc778 -->
+
 <!-- START_55f321056bfc0de7269ac70e24eb84be -->
 ## api/withMultipleResponseTagsAndStatusCode
 > Example request:
@@ -383,6 +433,73 @@ fetch(url, {
 
 #Other😎
 
+
+<!-- START_c41db6ac2b427d8c29802195746cd91e -->
+## api/withEloquentApiResourceCollectionClass
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://localhost/api/withEloquentApiResourceCollectionClass" \
+    -H "Authorization: customAuthToken" \
+    -H "Custom-Header: NotSoCustom"
+```
+
+```javascript
+const url = new URL(
+    "http://localhost/api/withEloquentApiResourceCollectionClass"
+);
+
+let headers = {
+    "Authorization": "customAuthToken",
+    "Custom-Header": "NotSoCustom",
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 4,
+            "name": "Tested Again",
+            "email": "a@b.com"
+        },
+        {
+            "id": 4,
+            "name": "Tested Again",
+            "email": "a@b.com"
+        }
+    ],
+    "links": {
+        "self": "link-value"
+    }
+}
+```
+> Example response (500):
+
+```json
+{
+    "message": "Server Error"
+}
+```
+
+### HTTP Request
+`GET api/withEloquentApiResourceCollectionClass`
+
+
+<!-- END_c41db6ac2b427d8c29802195746cd91e -->
 
 <!-- START_33e62c07bc6d7286628b18c0e046ebea -->
 ## api/echoesUrlParameters/{param}-{param2}/{param3?}
