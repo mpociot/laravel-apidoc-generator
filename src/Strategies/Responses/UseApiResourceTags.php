@@ -3,23 +3,21 @@
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
-use League\Fractal\Manager;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
-use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
+use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\Collection;
 use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
  * Parse an Eloquent API resource response from the docblock ( @apiResource || @apiResourcecollection ).
@@ -64,13 +62,13 @@ class UseApiResourceTags extends Strategy
             $model = $this->getClassToBeTransformed($tags);
             $modelInstance = $this->instantiateApiResourceModel($model);
 
-try {
-    $resource = new $apiResourceClass($modelInstance);
-} catch (\Exception $e) {
-    // If it is a ResourceCollection class, it might throw an error
-    // when trying to instantiate with something other than a collection
-    $resource = new $apiResourceClass(collect([$modelInstance]));
-}
+            try {
+                $resource = new $apiResourceClass($modelInstance);
+            } catch (\Exception $e) {
+                // If it is a ResourceCollection class, it might throw an error
+                // when trying to instantiate with something other than a collection
+                $resource = new $apiResourceClass(collect([$modelInstance]));
+            }
             if (strtolower($apiResourceTag->getName()) == 'apiresourcecollection') {
                 // Collections can either use the regular JsonResource class (via `::collection()`,
                 // or a ResourceCollection (via `new`)
@@ -84,7 +82,7 @@ try {
             return [
                 $statusCode => response()
                     ->json($resource->toArray(app(Request::class)))
-                    ->getContent()
+                    ->getContent(),
             ];
         } catch (\Exception $e) {
             echo 'Exception thrown when fetching Eloquent API resource response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
@@ -93,6 +91,7 @@ try {
             } else {
                 echo "Run this again with the --verbose flag to see the exception.\n";
             }
+
             return null;
         }
     }
@@ -126,7 +125,7 @@ try {
         $type = $modelTag->getContent();
 
         if (empty($type)) {
-            throw new Exception("Failed to detect an Eloquent API resource model. Please specify a model using @apiResourceModel.");
+            throw new Exception('Failed to detect an Eloquent API resource model. Please specify a model using @apiResourceModel.');
         }
 
         return $type;
@@ -144,7 +143,8 @@ try {
 
             // Factories are usually defined without the leading \ in the class name,
             // but the user might write it that way in a comment. Let's be safe.
-            $type = ltrim($type, "\\");
+            $type = ltrim($type, '\\');
+
             return factory($type)->make();
         } catch (\Exception $e) {
             if (Flags::$shouldBeVerbose) {

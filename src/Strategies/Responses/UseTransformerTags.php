@@ -3,17 +3,17 @@
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
 use League\Fractal\Manager;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
+use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\Collection;
 use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
@@ -75,7 +75,7 @@ class UseTransformerTags extends Strategy
 
             return [
                 $statusCode => response($fractal->createData($resource)->toJson())
-                    ->getContent()
+                    ->getContent(),
             ];
         } catch (\Exception $e) {
             echo 'Exception thrown when fetching transformer response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
@@ -84,6 +84,7 @@ class UseTransformerTags extends Strategy
             } else {
                 echo "Run this again with the --verbose flag to see the exception.\n";
             }
+
             return null;
         }
     }
@@ -127,7 +128,7 @@ class UseTransformerTags extends Strategy
         }
 
         if ($type == null) {
-            throw new Exception("Failed to detect a transformer model. Please specify a model using @transformerModel.");
+            throw new Exception('Failed to detect a transformer model. Please specify a model using @transformerModel.');
         }
 
         return $type;
@@ -145,7 +146,8 @@ class UseTransformerTags extends Strategy
 
             // Factories are usually defined without the leading \ in the class name,
             // but the user might write it that way in a comment. Let's be safe.
-            $type = ltrim($type, "\\");
+            $type = ltrim($type, '\\');
+
             return factory($type)->make();
         } catch (\Exception $e) {
             if (Flags::$shouldBeVerbose) {

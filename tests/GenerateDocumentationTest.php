@@ -2,13 +2,13 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use ReflectionException;
 use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Tools\Utils;
 use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
+use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
@@ -24,14 +24,13 @@ class GenerateDocumentationTest extends TestCase
     {
         parent::setUp();
 
-
         $factory = app(\Illuminate\Database\Eloquent\Factory::class);
         $factory->define(TestUser::class, function () {
             return [
                 'id' => 4,
-                'first_name' => "Tested",
-                'last_name' => "Again",
-                'email' => "a@b.com",
+                'first_name' => 'Tested',
+                'last_name' => 'Again',
+                'email' => 'a@b.com',
             ];
         });
     }
@@ -232,7 +231,8 @@ class GenerateDocumentationTest extends TestCase
 
     /** @test */
     public function generated_postman_collection_file_is_correct()
-    {        RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
+    {
+        RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
         RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
         RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
         RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
