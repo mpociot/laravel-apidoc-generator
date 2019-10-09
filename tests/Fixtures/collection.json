@@ -28,6 +28,10 @@
                             {
                                 "key": "Accept",
                                 "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
@@ -55,6 +59,10 @@
                             {
                                 "key": "Accept",
                                 "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
@@ -81,6 +89,10 @@
                             },
                             {
                                 "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
                                 "value": "application\/json"
                             }
                         ],
@@ -194,6 +206,10 @@
                             {
                                 "key": "Accept",
                                 "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
@@ -220,6 +236,10 @@
                             },
                             {
                                 "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
                                 "value": "application\/json"
                             }
                         ],
@@ -248,6 +268,10 @@
                             {
                                 "key": "Accept",
                                 "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
@@ -274,6 +298,10 @@
                             },
                             {
                                 "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
                                 "value": "application\/json"
                             }
                         ],
@@ -308,6 +336,10 @@
                             {
                                 "key": "Accept",
                                 "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
@@ -334,6 +366,10 @@
                             },
                             {
                                 "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
                                 "value": "application\/json"
                             }
                         ],

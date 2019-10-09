@@ -37,7 +37,7 @@ class GenerateDocumentationTest extends TestCase
 
     public function tearDown(): void
     {
-        Utils::deleteDirectoryAndContents('/public/docs');
+        //      Utils::deleteDirectoryAndContents('/public/docs');
     }
 
     /**
@@ -196,6 +196,8 @@ class GenerateDocumentationTest extends TestCase
             'apidoc.routes.0.apply.headers' => [
                 'Authorization' => 'customAuthToken',
                 'Custom-Header' => 'NotSoCustom',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ],
         ]);
         $this->artisan('apidoc:generate');
@@ -249,6 +251,8 @@ class GenerateDocumentationTest extends TestCase
             'apidoc.routes.0.apply.headers' => [
                 'Authorization' => 'customAuthToken',
                 'Custom-Header' => 'NotSoCustom',
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
             ],
         ]);
 

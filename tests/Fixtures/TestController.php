@@ -153,7 +153,9 @@ class TestController extends Controller
      */
     public function withEloquentApiResourceCollection()
     {
-        return TestUserApiResource::collection(factory(TestUser::class)->make(['id' => 0]));
+        return TestUserApiResource::collection(
+            collect([factory(TestUser::class)->make(['id' => 0])])
+        );
     }
 
     /**
@@ -164,7 +166,9 @@ class TestController extends Controller
      */
     public function withEloquentApiResourceCollectionClass()
     {
-        return new TestUserApiResourceCollection(factory(TestUser::class)->make(['id' => 0]));
+        return new TestUserApiResourceCollection(
+            collect([factory(TestUser::class)->make(['id' => 0])])
+        );
     }
 
     public function checkCustomHeaders(Request $request)

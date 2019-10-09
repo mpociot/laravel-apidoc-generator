@@ -103,6 +103,8 @@ return [
                  * Specify headers to be added to the example requests
                  */
                 'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
                     // 'Authorization' => 'Bearer {token}',
                     // 'Api-Version' => 'v2',
                 ],
@@ -132,15 +134,6 @@ return [
                     ],
 
                     /*
-                     * Headers which should be sent with the API call.
-                     */
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
-                        // 'key' => 'value',
-                    ],
-
-                    /*
                      * Cookies which should be sent with the API call.
                      */
                     'cookies' => [
@@ -150,14 +143,14 @@ return [
                     /*
                      * Query parameters which should be sent with the API call.
                      */
-                    'query' => [
+                    'queryParams' => [
                         // 'key' => 'value',
                     ],
 
                     /*
                      * Body parameters which should be sent with the API call.
                      */
-                    'body' => [
+                    'bodyParams' => [
                         // 'key' => 'value',
                     ],
                 ],

@@ -113,6 +113,7 @@ class GenerateDocumentation extends Command
         $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) use ($settings) {
             return $routeGroup->map(function ($route) use ($settings) {
                 if (count($route['cleanBodyParameters']) && ! isset($route['headers']['Content-Type'])) {
+                    // Set content type if the user forgot to set it
                     $route['headers']['Content-Type'] = 'application/json';
                 }
                 $route['output'] = (string) view('apidoc::partials.route')
@@ -230,7 +231,7 @@ class GenerateDocumentation extends Command
             $route = $routeItem['route'];
             /** @var Route $route */
             if ($this->isValidRoute($route) && $this->isRouteVisibleForDocumentation($route->getAction())) {
-                $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply']);
+                $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply'] ?? []);
                 $this->info('Processed route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));
             } else {
                 $this->warn('Skipping route: ['.implode(',', $generator->getMethods($route)).'] '.$generator->getUri($route));

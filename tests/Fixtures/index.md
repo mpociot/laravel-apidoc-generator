@@ -35,7 +35,9 @@ It can also be multiple lines long.
 curl -X GET \
     -G "http://localhost/api/withDescription" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -46,8 +48,8 @@ const url = new URL(
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -79,7 +81,9 @@ null
 curl -X GET \
     -G "http://localhost/api/withResponseTag" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -90,8 +94,8 @@ const url = new URL(
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -133,6 +137,7 @@ curl -X GET \
     -H "Authorization: customAuthToken" \
     -H "Custom-Header: NotSoCustom" \
     -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
     -d '{"user_id":9,"room_id":"consequatur","forever":false,"another_one":11613.31890586,"yet_another_param":{"name":"consequatur"},"even_more_param":[11613.31890586],"book":{"name":"consequatur","author_id":17,"pages_count":17},"ids":[17],"users":[{"first_name":"John","last_name":"Doe"}]}'
 
 ```
@@ -223,7 +228,9 @@ Parameter | Type | Status | Description
 curl -X GET \
     -G "http://localhost/api/withQueryParameters?location_id=consequatur&user_id=me&page=4&filters=consequatur&url_encoded=%2B+%5B%5D%26%3D" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -244,8 +251,8 @@ Object.keys(params)
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -287,7 +294,9 @@ Parameter | Status | Description
 curl -X GET \
     -G "http://localhost/api/withAuthTag" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -298,8 +307,8 @@ const url = new URL(
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -331,7 +340,9 @@ null
 curl -X GET \
     -G "http://localhost/api/withEloquentApiResource" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -342,8 +353,8 @@ const url = new URL(
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -381,7 +392,9 @@ fetch(url, {
 curl -X POST \
     "http://localhost/api/withMultipleResponseTagsAndStatusCode" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -392,8 +405,8 @@ const url = new URL(
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -442,7 +455,9 @@ fetch(url, {
 curl -X GET \
     -G "http://localhost/api/withEloquentApiResourceCollectionClass" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -453,8 +468,8 @@ const url = new URL(
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
@@ -472,12 +487,7 @@ fetch(url, {
 {
     "data": [
         {
-            "id": 4,
-            "name": "Tested Again",
-            "email": "a@b.com"
-        },
-        {
-            "id": 4,
+            "id": 0,
             "name": "Tested Again",
             "email": "a@b.com"
         }
@@ -485,13 +495,6 @@ fetch(url, {
     "links": {
         "self": "link-value"
     }
-}
-```
-> Example response (500):
-
-```json
-{
-    "message": "Server Error"
 }
 ```
 
@@ -509,7 +512,9 @@ fetch(url, {
 curl -X GET \
     -G "http://localhost/api/echoesUrlParameters/4-consequatur/?something=consequatur" \
     -H "Authorization: customAuthToken" \
-    -H "Custom-Header: NotSoCustom"
+    -H "Custom-Header: NotSoCustom" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
 ```
 
 ```javascript
@@ -526,8 +531,8 @@ Object.keys(params)
 let headers = {
     "Authorization": "customAuthToken",
     "Custom-Header": "NotSoCustom",
-    "Accept": "application/json",
     "Content-Type": "application/json",
+    "Accept": "application/json",
 };
 
 fetch(url, {
