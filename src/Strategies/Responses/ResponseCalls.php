@@ -38,8 +38,8 @@ class ResponseCalls extends Strategy
         $this->configureEnvironment($rulesToApply);
 
         // Mix in parsed parameters with manually specified parameters.
-        $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['body'] ?? []);
-        $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['query'] ?? []);
+        $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['bodyParams'] ?? []);
+        $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['queryParams'] ?? []);
         $urlParameters = $context['cleanUrlParameters'];
         $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters, $routeRules['headers'] ?? []);
 

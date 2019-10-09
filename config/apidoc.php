@@ -143,14 +143,14 @@ return [
                     /*
                      * Query parameters which should be sent with the API call.
                      */
-                    'query' => [
+                    'queryParams' => [
                         // 'key' => 'value',
                     ],
 
                     /*
                      * Body parameters which should be sent with the API call.
                      */
-                    'body' => [
+                    'bodyParams' => [
                         // 'key' => 'value',
                     ],
                 ],
