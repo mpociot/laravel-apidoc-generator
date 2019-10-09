@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Exception;
+use Illuminate\Http\Response;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
@@ -79,10 +80,15 @@ class UseApiResourceTags extends Strategy
                     : $apiResourceClass::collection(collect($models));
             }
 
+            /** @var Response $response */
+            $response = response()->json(
+                $resource->toArray(app(Request::class))
+            );
             return [
-                $statusCode => response()
-                    ->json($resource->toArray(app(Request::class)))
-                    ->getContent(),
+                [
+                    'status' => $statusCode ?: $response->getStatusCode(),
+                    'content' => $response->getContent(),
+                ],
             ];
         } catch (\Exception $e) {
             echo 'Exception thrown when fetching Eloquent API resource response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
@@ -105,7 +111,7 @@ class UseApiResourceTags extends Strategy
     {
         $content = $tag->getContent();
         preg_match('/^(\d{3})?\s?([\s\S]*)$/', $content, $result);
-        $status = $result[1] ?: 200;
+        $status = $result[1] ?: 0;
         $apiResourceClass = $result[2];
 
         return [$status, $apiResourceClass];

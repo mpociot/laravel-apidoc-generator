@@ -142,9 +142,27 @@ Each strategy class must implement the __invoke method with the parameters as de
 - In the `bodyParameters` and `queryParameters` stages, you can return an array with arbitrary keys. These keys will serve as the names of your parameters. Array keys can be indicated with Laravel's dot notation. The value of each key should be an array with the following keys:
 
 ```
-'type', // Only used in bodyParameters
+'type', // Only valid in bodyParameters
 'description', 
 'required', // boolean
 'value', // An example value for the parameter
 ```
-- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each key in the array should be a HTTP status code, and each value should be a string containing the response.
+- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each item in the array should be an array representing the response with a `status` key containing the HTTP status code, and a `content` key a string containing the response. For example:
+
+```php
+
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
+    {
+        return [
+            [
+                'content' => "Haha",
+                'status' => 201
+            ],
+            [
+                'content' => "Nope",
+                'status' => 404
+            ],
+        ]
+    }
+```
+Responses are _additive_. This means all the responses returned from each stage are added together.

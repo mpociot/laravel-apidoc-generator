@@ -889,32 +889,6 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
     }
 
-    /** @test */
-    public function combines_responses_from_different_strategies()
-    {
-        $route = $this->createRoute('GET', '/api/indexResource', 'index', true, TestResourceController::class);
-        $rules = [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'response_calls' => [
-                'methods' => ['*'],
-            ],
-        ];
-
-        $parsed = $this->generator->processRoute($route, $rules);
-
-        $this->assertTrue(is_array($parsed));
-        $this->assertArrayHasKey('showresponse', $parsed);
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertSame(1, count($parsed['response']));
-        $this->assertTrue(is_array($parsed['response'][0]));
-        $this->assertEquals(200, $parsed['response'][0]['status']);
-        $this->assertArraySubset([
-            'index_resource' => true,
-        ], json_decode($parsed['response'][0]['content'], true));
-    }
-
     abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
 
     abstract public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
