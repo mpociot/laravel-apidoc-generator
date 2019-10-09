@@ -61,7 +61,6 @@ class UseResponseTag extends Strategy
             return ['content' => $content, 'status' => (int) $status];
         }, $responseTags);
 
-        // Convert responses to [200 => 'response', 401 => 'response']
         return $responses;
     }
 }

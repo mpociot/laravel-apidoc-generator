@@ -66,12 +66,12 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
         $parsed = $generator->processRoute($route);
 
         $this->assertTrue($parsed['showresponse']);
-        $this->assertCount(2, $parsed['response']);
-        $first = array_shift($parsed['response']);
+        $this->assertCount(2, $parsed['responses']);
+        $first = array_shift($parsed['responses']);
         $this->assertTrue(is_array($first));
         $this->assertEquals(200, $first['status']);
         $this->assertEquals('dummy', $first['content']);
-        $second = array_shift($parsed['response']);
+        $second = array_shift($parsed['responses']);
         $this->assertTrue(is_array($second));
         $this->assertEquals(400, $second['status']);
         $this->assertEquals('dummy2', $second['content']);

@@ -75,7 +75,7 @@ class Generator
         $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
         $responses = $this->fetchResponses($controller, $method, $route, $routeRules, $parsedRoute);
-        $parsedRoute['response'] = $responses;
+        $parsedRoute['responses'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
 
         $parsedRoute['headers'] = $routeRules['headers'] ?? [];

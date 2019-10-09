@@ -17,8 +17,7 @@
 @endforeach
 
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))
-@if(is_array($route['response']))
-@foreach($route['response'] as $response)
+@foreach($route['responses'] as $response)
 > Example response ({{$response['status']}}):
 
 ```json
@@ -29,17 +28,6 @@
 @endif
 ```
 @endforeach
-@else
-> Example response:
-
-```json
-@if(is_object($route['response']) || is_array($route['response']))
-{!! json_encode($route['response'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
-@else
-{!! json_encode(json_decode($route['response']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
-@endif
-```
-@endif
 @endif
 
 ### HTTP Request
