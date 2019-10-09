@@ -103,6 +103,8 @@ return [
                  * Specify headers to be added to the example requests
                  */
                 'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
                     // 'Authorization' => 'Bearer {token}',
                     // 'Api-Version' => 'v2',
                 ],
@@ -129,15 +131,6 @@ return [
                         'app.env' => 'documentation',
                         'app.debug' => false,
                         // 'service.key' => 'value',
-                    ],
-
-                    /*
-                     * Headers which should be sent with the API call.
-                     */
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'Accept' => 'application/json',
-                        // 'key' => 'value',
                     ],
 
                     /*

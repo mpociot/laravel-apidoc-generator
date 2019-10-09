@@ -647,12 +647,12 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/shouldFetchRouteResponse', 'shouldFetchRouteResponse', true);
 
         $rules = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ],
             'response_calls' => [
                 'methods' => ['*'],
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                ],
             ],
         ];
         $parsed = $this->generator->processRoute($route, $rules);
@@ -849,13 +849,13 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('PUT', '/echo/{id}', 'shouldFetchRouteResponseWithEchoedSettings', true);
 
         $rules = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'header' => 'value',
+            ],
             'response_calls' => [
                 'methods' => ['*'],
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'header' => 'value',
-                ],
                 'query' => [
                     'queryParam' => 'queryValue',
                 ],
@@ -894,11 +894,11 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/api/indexResource', 'index', true, TestResourceController::class);
         $rules = [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
             'response_calls' => [
                 'methods' => ['*'],
-                'headers' => [
-                    'Accept' => 'application/json',
-                ],
             ],
         ];
 

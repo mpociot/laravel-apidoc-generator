@@ -41,7 +41,7 @@ class ResponseCalls extends Strategy
         $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['body'] ?? []);
         $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['query'] ?? []);
         $urlParameters = $context['cleanUrlParameters'];
-        $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters);
+        $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters, $routeRules['headers'] ?? []);
 
         try {
             $response = $this->makeApiCall($request);
@@ -81,14 +81,15 @@ class ResponseCalls extends Strategy
      *
      * @return Request
      */
-    protected function prepareRequest(Route $route, array $rulesToApply, array $urlParams, array $bodyParams, array $queryParams)
+    protected function prepareRequest(Route $route, array $rulesToApply, array $urlParams, array $bodyParams, array $queryParams, array $headers)
     {
         $uri = Utils::getFullUrl($route, $urlParams);
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
         $cookies = isset($rulesToApply['cookies']) ? $rulesToApply['cookies'] : [];
-        $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($rulesToApply['headers'] ?? []));
-        $request = $this->addHeaders($request, $route, $rulesToApply['headers'] ?? []);
+        $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($headers));
+        // Doing it again to catch any ones we didn't transform properly.
+        $request = $this->addHeaders($request, $route, $headers);
 
         $request = $this->addQueryParameters($request, $queryParams);
         $request = $this->addBodyParameters($request, $bodyParams);

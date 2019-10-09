@@ -43,11 +43,11 @@ class Generator
 
     /**
      * @param \Illuminate\Routing\Route $route
-     * @param array $rulesToApply Rules to apply when generating documentation for this route
+     * @param array $routeRules Rules to apply when generating documentation for this route
      *
      * @return array
      */
-    public function processRoute(Route $route, array $rulesToApply = [])
+    public function processRoute(Route $route, array $routeRules = [])
     {
         list($controllerName, $methodName) = Utils::getRouteClassAndMethodNames($route->getAction());
         $controller = new ReflectionClass($controllerName);
@@ -58,27 +58,27 @@ class Generator
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
         ];
-        $metadata = $this->fetchMetadata($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $metadata = $this->fetchMetadata($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['metadata'] = $metadata;
 
-        $urlParameters = $this->fetchUrlParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $urlParameters = $this->fetchUrlParameters($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['urlParameters'] = $urlParameters;
         $parsedRoute['cleanUrlParameters'] = $this->cleanParams($urlParameters);
         $parsedRoute['boundUri'] = Utils::getFullUrl($route, $parsedRoute['cleanUrlParameters']);
 
-        $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['queryParameters'] = $queryParameters;
         $parsedRoute['cleanQueryParameters'] = $this->cleanParams($queryParameters);
 
-        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['bodyParameters'] = $bodyParameters;
         $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
-        $responses = $this->fetchResponses($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $responses = $this->fetchResponses($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['response'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
 
-        $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
+        $parsedRoute['headers'] = $routeRules['headers'] ?? [];
 
         $parsedRoute += $metadata;
 
