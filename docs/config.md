@@ -214,7 +214,7 @@ These values support wildcards and paths, so you can have `'exclude' => ['users/
 After defining the routes in `match` (and `include` or `exclude`), `apply` is where you specify the settings to be applied to those routes when generating documentation. There are a bunch of settings you can tweak here:
 
 #### `headers`
-Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documenation. Headers are specified as key => value strings.
+Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documenation. They will also be included in ["response calls"](documenting.html#generating-responses-automatically). Headers are specified as key => value strings.
 
 #### `response_calls`
 These are the settings that will be applied when making ["response calls"](documenting.html#generating-responses-automatically). See the linked section for details.
