@@ -856,10 +856,10 @@ abstract class GeneratorTestCase extends TestCase
             ],
             'response_calls' => [
                 'methods' => ['*'],
-                'query' => [
+                'queryParams' => [
                     'queryParam' => 'queryValue',
                 ],
-                'body' => [
+                'bodyParams' => [
                     'bodyParam' => 'bodyValue',
                 ],
             ],
