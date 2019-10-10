@@ -61,11 +61,6 @@ fetch(url, {
 ```
 
 
-> Example response:
-
-```json
-null
-```
 
 ### HTTP Request
 `GET api/withDescription`
@@ -191,11 +186,6 @@ fetch(url, {
 ```
 
 
-> Example response:
-
-```json
-null
-```
 
 ### HTTP Request
 `GET api/withBodyParameters`
@@ -264,11 +254,6 @@ fetch(url, {
 ```
 
 
-> Example response:
-
-```json
-null
-```
 
 ### HTTP Request
 `GET api/withQueryParameters`
@@ -320,11 +305,6 @@ fetch(url, {
 ```
 
 
-> Example response:
-
-```json
-null
-```
 
 ### HTTP Request
 `GET api/withAuthTag`
@@ -370,11 +350,9 @@ fetch(url, {
 
 ```json
 {
-    "data": {
-        "id": 0,
-        "name": "Tested Again",
-        "email": "a@b.com"
-    }
+    "id": 4,
+    "name": "Tested Again",
+    "email": "a@b.com"
 }
 ```
 
@@ -487,7 +465,12 @@ fetch(url, {
 {
     "data": [
         {
-            "id": 0,
+            "id": 4,
+            "name": "Tested Again",
+            "email": "a@b.com"
+        },
+        {
+            "id": 4,
             "name": "Tested Again",
             "email": "a@b.com"
         }

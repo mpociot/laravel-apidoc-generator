@@ -4,6 +4,7 @@ namespace Mpociot\ApiDoc\Tests\Fixtures;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Mpociot\ApiDoc\Tests\Unit\GeneratorTestCase;
 
 /**
  * @group Group A
@@ -258,6 +259,8 @@ class TestController extends Controller
      */
     public function withResponseTag()
     {
+        GeneratorTestCase::$globalValue = rand();
+
         return '';
     }
 

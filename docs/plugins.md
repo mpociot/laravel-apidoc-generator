@@ -4,6 +4,7 @@ You can use plugins to alter how the Generator fetches data about your routes. F
 ## The stages of route processing
 Route processing is performed in four stages:
 - metadata (this covers route `title`, route `description`, route `groupName`, route `groupDescription`, and authentication status (`authenticated`))
+- urlParameters
 - bodyParameters
 - queryParameters
 - responses
@@ -12,7 +13,7 @@ For each stage, the Generator attempts the specified strategies to fetch data. T
 
 There are a number of strategies inccluded with the package, so you don't have to set up anything to get it working.
 
-> Note: The included ResponseCalls strategy is designed to stop if a response has already been gotten from any other strategy.
+> Note: The included ResponseCalls strategy is designed to stop if a response with a 2xx status code has already been gotten via any other strategy.
 
 ## Strategies
 To create a strategy, create a class that extends `\Mpociot\ApiDoc\Strategies\Strategy`.
@@ -142,9 +143,28 @@ Each strategy class must implement the __invoke method with the parameters as de
 - In the `bodyParameters` and `queryParameters` stages, you can return an array with arbitrary keys. These keys will serve as the names of your parameters. Array keys can be indicated with Laravel's dot notation. The value of each key should be an array with the following keys:
 
 ```
-'type', // Only used in bodyParameters
+'type', // Only valid in bodyParameters
 'description', 
 'required', // boolean
 'value', // An example value for the parameter
 ```
-- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each key in the array should be a HTTP status code, and each value should be a string containing the response.
+- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each item in the array should be an array representing the response with a `status` key containing the HTTP status code, and a `content` key a string containing the response. For example:
+
+```php
+
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
+    {
+        return [
+            [
+                'content' => "Haha",
+                'status' => 201
+            ],
+            [
+                'content' => "Nope",
+                'status' => 404
+            ],
+        ]
+    }
+```
+
+Responses are _additive_. This means all the responses returned from each stage are added to the `responses` array. But note that the `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.

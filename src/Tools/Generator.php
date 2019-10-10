@@ -75,12 +75,10 @@ class Generator
         $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
         $responses = $this->fetchResponses($controller, $method, $route, $routeRules, $parsedRoute);
-        $parsedRoute['response'] = $responses;
+        $parsedRoute['responses'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
 
         $parsedRoute['headers'] = $routeRules['headers'] ?? [];
-
-        $parsedRoute += $metadata;
 
         return $parsedRoute;
     }
@@ -117,12 +115,9 @@ class Generator
     {
         $responses = $this->iterateThroughStrategies('responses', $context, [$route, $controller, $method, $rulesToApply]);
         if (count($responses)) {
-            return collect($responses)->map(function (string $response, int $status) {
-                return [
-                    'status' => $status ?: 200,
-                    'content' => $response,
-                ];
-            })->values()->toArray();
+            return array_filter($responses, function ($response) {
+                return $response['content'] != null;
+            });
         }
 
         return null;
@@ -157,10 +152,16 @@ class Generator
         $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
             $strategy = new $strategyClass($stage, $this->config);
-            $arguments[] = $context;
-            $results = $strategy(...$arguments);
+            $strategyArgs = $arguments;
+            $strategyArgs[] = $context;
+            $results = $strategy(...$strategyArgs);
             if (! is_null($results)) {
                 foreach ($results as $index => $item) {
+                    if ($stage == 'responses') {
+                        // Responses are additive
+                        $context[$stage][] = $item;
+                        continue;
+                    }
                     // Using a for loop rather than array_merge or +=
                     // so it does not renumber numeric keys
                     // and also allows values to be overwritten

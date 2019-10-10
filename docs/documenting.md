@@ -318,3 +318,5 @@ If you don't specify an example response using any of the above means, this pack
 - You can set Laravel config variables. This is useful so you can prevent external services like notifications from being triggered. By default the `app.env` is set to 'documentation'. You can add more variables in the `config` key.
 
 - By default, the package will generate dummy values for your documented body and query parameters and send in the request. If you specified example values using `@bodyParam` or `@queryParam`, those will be used instead. You can configure additional parameters or overwrite the existing ones for the request in the `queryParams`, and `bodyParams` sections.
+
+- The `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.

@@ -58,10 +58,9 @@ class UseResponseTag extends Strategy
             $status = $result[1] ?: 200;
             $content = $result[2] ?: '{}';
 
-            return [$content, (int) $status];
+            return ['content' => $content, 'status' => (int) $status];
         }, $responseTags);
 
-        // Convert responses to [200 => 'response', 401 => 'response']
-        return collect($responses)->pluck('0', '1')->toArray();
+        return $responses;
     }
 }

@@ -58,7 +58,7 @@ class CollectionWriter
                         $mode = $route['methods'][0] === 'PUT' ? 'urlencoded' : 'formdata';
 
                         return [
-                            'name' => $route['title'] != '' ? $route['title'] : url($route['uri']),
+                            'name' => $route['metadata']['title'] != '' ? $route['metadata']['title'] : url($route['uri']),
                             'request' => [
                                 'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
                                     ? ''
@@ -88,7 +88,7 @@ class CollectionWriter
                                         ];
                                     })->values()->toArray(),
                                 ],
-                                'description' => $route['description'],
+                                'description' => $route['metadata']['description'],
                                 'response' => [],
                             ],
                         ];

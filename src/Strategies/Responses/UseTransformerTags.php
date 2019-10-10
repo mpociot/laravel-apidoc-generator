@@ -73,9 +73,13 @@ class UseTransformerTags extends Strategy
                     new $transformer)
                 : new Item($modelInstance, new $transformer);
 
+            $response = response($fractal->createData($resource)->toJson());
+
             return [
-                $statusCode => response($fractal->createData($resource)->toJson())
-                    ->getContent(),
+                [
+                    'status' => $statusCode ?: $response->getStatusCode(),
+                    'content' => $response->getContent(),
+                ],
             ];
         } catch (\Exception $e) {
             echo 'Exception thrown when fetching transformer response for ['.implode(',', $route->methods)."] {$route->uri}.\n";

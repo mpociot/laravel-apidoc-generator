@@ -60,10 +60,9 @@ class UseResponseFileTag extends Strategy
             $json = ! empty($result[3]) ? str_replace("'", '"', $result[3]) : '{}';
             $merged = array_merge(json_decode($content, true), json_decode($json, true));
 
-            return [json_encode($merged), (int) $status];
+            return ['content' => json_encode($merged), 'status' => (int) $status];
         }, $responseFileTags);
 
-        // Convert responses to [200 => 'response', 401 => 'response']
-        return collect($responses)->pluck('0', '1')->toArray();
+        return $responses;
     }
 }
