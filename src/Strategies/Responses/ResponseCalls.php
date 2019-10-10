@@ -47,9 +47,9 @@ class ResponseCalls extends Strategy
             $response = $this->makeApiCall($request);
             $response = [
                 [
-                'status' => $response->getStatusCode(),
-                'content' => $response->getContent()
-            ]
+                    'status' => $response->getStatusCode(),
+                    'content' => $response->getContent(),
+                ],
             ];
         } catch (\Exception $e) {
             echo 'Exception thrown during response call for ['.implode(',', $route->methods)."] {$route->uri}.\n";

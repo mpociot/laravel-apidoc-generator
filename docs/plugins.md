@@ -4,6 +4,7 @@ You can use plugins to alter how the Generator fetches data about your routes. F
 ## The stages of route processing
 Route processing is performed in four stages:
 - metadata (this covers route `title`, route `description`, route `groupName`, route `groupDescription`, and authentication status (`authenticated`))
+- urlParameters
 - bodyParameters
 - queryParameters
 - responses
@@ -12,7 +13,7 @@ For each stage, the Generator attempts the specified strategies to fetch data. T
 
 There are a number of strategies inccluded with the package, so you don't have to set up anything to get it working.
 
-> Note: The included ResponseCalls strategy is designed to stop if a response has already been gotten from any other strategy.
+> Note: The included ResponseCalls strategy is designed to stop if a response with a 2xx status code has already been gotten via any other strategy.
 
 ## Strategies
 To create a strategy, create a class that extends `\Mpociot\ApiDoc\Strategies\Strategy`.
