@@ -260,6 +260,7 @@ class TestController extends Controller
     public function withResponseTag()
     {
         GeneratorTestCase::$globalValue = rand();
+
         return '';
     }
 

@@ -3,11 +3,11 @@
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
 use Exception;
-use Illuminate\Http\Response;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
@@ -84,6 +84,7 @@ class UseApiResourceTags extends Strategy
             $response = response()->json(
                 $resource->toArray(app(Request::class))
             );
+
             return [
                 [
                     'status' => $statusCode ?: $response->getStatusCode(),

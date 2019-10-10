@@ -157,7 +157,7 @@ class Generator
             $results = $strategy(...$strategyArgs);
             if (! is_null($results)) {
                 foreach ($results as $index => $item) {
-                    if ($stage == "responses") {
+                    if ($stage == 'responses') {
                         // Responses are additive
                         $context[$stage][] = $item;
                         continue;
