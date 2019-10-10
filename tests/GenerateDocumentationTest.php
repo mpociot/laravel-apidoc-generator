@@ -37,7 +37,7 @@ class GenerateDocumentationTest extends TestCase
 
     public function tearDown(): void
     {
-        //      Utils::deleteDirectoryAndContents('/public/docs');
+             Utils::deleteDirectoryAndContents('/public/docs');
     }
 
     /**

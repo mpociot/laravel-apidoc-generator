@@ -39,8 +39,9 @@ abstract class GeneratorTestCase extends TestCase
             ],
         ],
         'default_group' => 'general',
-
     ];
+
+    public static $globalValue = null;
 
     protected function getPackageProviders($app)
     {
@@ -670,6 +671,52 @@ abstract class GeneratorTestCase extends TestCase
             'weight' => '1 kg',
             'delicious' => true,
         ], json_decode($response['content'], true));
+    }
+
+    /** @test */
+    public function does_not_make_response_call_if_success_response_already_gotten()
+    {
+        $route = $this->createRoute('POST', '/withResponseTag', 'withResponseTag', true);
+
+        $rules = [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ],
+            'response_calls' => [
+                'methods' => ['*'],
+            ],
+        ];
+        $config = [
+            'strategies' => [
+                'responses' => [
+                    \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
+                    \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+                ],
+            ],
+        ];
+        $generator = new Generator(new DocumentationConfig($config));
+        $parsed = $generator->processRoute($route, $rules);
+
+        $this->assertCount(1, $parsed['responses']);
+        $response = Arr::first($parsed['responses']);
+
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+        $this->assertArraySubset([
+            'id' => 4,
+            'name' => 'banana',
+            'color' => 'red',
+            'weight' => '1 kg',
+            'delicious' => true,
+            'responseTag' => true,
+        ], json_decode($response['content'], true));
+
+        // This may probably not be the best way to test this, but 🤷‍♀️
+        $this->assertNull(static::$globalValue);
     }
 
     /** @test */

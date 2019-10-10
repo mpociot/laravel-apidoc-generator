@@ -165,4 +165,5 @@ Each strategy class must implement the __invoke method with the parameters as de
         ]
     }
 ```
-Responses are _additive_. This means all the responses returned from each stage are added together.
+
+Responses are _additive_. This means all the responses returned from each stage are added to the `responses` array. But note that the `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.

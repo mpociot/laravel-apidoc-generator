@@ -117,7 +117,9 @@ class Generator
     {
         $responses = $this->iterateThroughStrategies('responses', $context, [$route, $controller, $method, $rulesToApply]);
         if (count($responses)) {
-            return $responses;
+            return array_filter($responses, function ($response) {
+                return $response['content'] != null;
+            });
         }
 
         return null;
@@ -152,8 +154,9 @@ class Generator
         $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
             $strategy = new $strategyClass($stage, $this->config);
-            $arguments[] = $context;
-            $results = $strategy(...$arguments);
+            $strategyArgs = $arguments;
+            $strategyArgs[] = $context;
+            $results = $strategy(...$strategyArgs);
             if (! is_null($results)) {
                 foreach ($results as $index => $item) {
                     if ($stage == "responses") {

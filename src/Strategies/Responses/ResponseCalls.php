@@ -313,15 +313,18 @@ class ResponseCalls extends Strategy
      *
      * @return bool
      */
-    private function shouldMakeApiCall(Route $route, array $rulesToApply, array $context): bool
+    protected function shouldMakeApiCall(Route $route, array $rulesToApply, array $context): bool
     {
         $allowedMethods = $rulesToApply['methods'] ?? [];
         if (empty($allowedMethods)) {
             return false;
         }
 
-        if (! empty($context['responses'])) {
-            // Don't attempt a response call if there are already responses
+        // Don't attempt a response call if there are already successful responses
+        $successResponses = collect($context['responses'])->filter(function ($response) {
+            return ((string) $response['status'])[0] == '2';
+        })->count();
+        if ($successResponses) {
             return false;
         }
 
