@@ -80,8 +80,6 @@ class Generator
 
         $parsedRoute['headers'] = $routeRules['headers'] ?? [];
 
-        $parsedRoute += $metadata;
-
         return $parsedRoute;
     }
 

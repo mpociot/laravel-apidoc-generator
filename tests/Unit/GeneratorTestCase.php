@@ -24,11 +24,14 @@ abstract class GeneratorTestCase extends TestCase
             'metadata' => [
                 \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
             ],
-            'bodyParameters' => [
-                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            'urlParameters' => [
+                \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
             ],
             'queryParameters' => [
                 \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            ],
+            'bodyParameters' => [
+                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responses' => [
                 \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
@@ -75,8 +78,8 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('GET', '/api/test', 'withEndpointDescription');
         $parsed = $this->generator->processRoute($route);
 
-        $this->assertSame('Example title.', $parsed['title']);
-        $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
+        $this->assertSame('Example title.', $parsed['metadata']['title']);
+        $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['metadata']['description']);
     }
 
     /** @test */
@@ -326,7 +329,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_route_group()
     {
         $route = $this->createRoute('GET', '/api/test', 'dummy');
-        $routeGroup = $this->generator->processRoute($route)['groupName'];
+        $routeGroup = $this->generator->processRoute($route)['metadata']['groupName'];
 
         $this->assertSame('Group A', $routeGroup);
     }
@@ -336,37 +339,37 @@ abstract class GeneratorTestCase extends TestCase
     {
         $route = $this->createRoute('GET', '/group/1', 'withGroupOverride');
         $parsedRoute = $this->generator->processRoute($route);
-        $this->assertSame('Group B', $parsedRoute['groupName']);
-        $this->assertSame('', $parsedRoute['groupDescription']);
+        $this->assertSame('Group B', $parsedRoute['metadata']['groupName']);
+        $this->assertSame('', $parsedRoute['metadata']['groupDescription']);
 
         $route = $this->createRoute('GET', '/group/2', 'withGroupOverride2');
         $parsedRoute = $this->generator->processRoute($route);
-        $this->assertSame('Group B', $parsedRoute['groupName']);
-        $this->assertSame('', $parsedRoute['groupDescription']);
-        $this->assertSame('This is also in Group B. No route description. Route title before gropp.', $parsedRoute['title']);
+        $this->assertSame('Group B', $parsedRoute['metadata']['groupName']);
+        $this->assertSame('', $parsedRoute['metadata']['groupDescription']);
+        $this->assertSame('This is also in Group B. No route description. Route title before gropp.', $parsedRoute['metadata']['title']);
 
         $route = $this->createRoute('GET', '/group/3', 'withGroupOverride3');
         $parsedRoute = $this->generator->processRoute($route);
-        $this->assertSame('Group B', $parsedRoute['groupName']);
-        $this->assertSame('', $parsedRoute['groupDescription']);
-        $this->assertSame('This is also in Group B. Route title after group.', $parsedRoute['title']);
+        $this->assertSame('Group B', $parsedRoute['metadata']['groupName']);
+        $this->assertSame('', $parsedRoute['metadata']['groupDescription']);
+        $this->assertSame('This is also in Group B. Route title after group.', $parsedRoute['metadata']['title']);
 
         $route = $this->createRoute('GET', '/group/4', 'withGroupOverride4');
         $parsedRoute = $this->generator->processRoute($route);
-        $this->assertSame('Group C', $parsedRoute['groupName']);
-        $this->assertSame('Group description after group.', $parsedRoute['groupDescription']);
-        $this->assertSame('This is in Group C. Route title before group.', $parsedRoute['title']);
+        $this->assertSame('Group C', $parsedRoute['metadata']['groupName']);
+        $this->assertSame('Group description after group.', $parsedRoute['metadata']['groupDescription']);
+        $this->assertSame('This is in Group C. Route title before group.', $parsedRoute['metadata']['title']);
     }
 
     /** @test */
     public function can_parse_auth_tags()
     {
         $route = $this->createRoute('GET', '/api/test', 'withAuthenticatedTag');
-        $authenticated = $this->generator->processRoute($route)['authenticated'];
+        $authenticated = $this->generator->processRoute($route)['metadata']['authenticated'];
         $this->assertTrue($authenticated);
 
         $route = $this->createRoute('GET', '/api/test', 'dummy');
-        $authenticated = $this->generator->processRoute($route)['authenticated'];
+        $authenticated = $this->generator->processRoute($route)['metadata']['authenticated'];
         $this->assertFalse($authenticated);
     }
 
@@ -932,8 +935,8 @@ abstract class GeneratorTestCase extends TestCase
 
         $parsed = $this->generator->processRoute($route);
 
-        $this->assertSame('Example title.', $parsed['title']);
-        $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['description']);
+        $this->assertSame('Example title.', $parsed['metadata']['title']);
+        $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['metadata']['description']);
     }
 
     abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
