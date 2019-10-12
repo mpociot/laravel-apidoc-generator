@@ -100,36 +100,28 @@ class GenerateDocumentation extends Command
     private function writeMarkdown($parsedRoutes)
     {
         $outputPath = $this->docConfig->get('output');
-        $targetFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'index.md';
-        $compareFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'.compare.md';
-        $prependFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'prepend.md';
-        $appendFile = $outputPath.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR.'append.md';
+        $isStatic = $this->docConfig->get('type') === 'static';
 
+        $sourceOutputPath = "resources/docs";
+        $targetFile = $sourceOutputPath.'/source/index.md';
+        $compareFile = $sourceOutputPath.'/source/.compare.md';
+        $prependFile = $sourceOutputPath.'/source/prepend.md';
+        $appendFile = $sourceOutputPath.'/source/append.md';
+
+        // TODO for laravel, replace with {{ route("apidoc.collection") }}
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', ltrim($outputPath, 'public/'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection());
 
         $settings = ['languages' => $this->docConfig->get('example_languages')];
-        $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) use ($settings) {
-            return $routeGroup->map(function ($route) use ($settings) {
-                if (count($route['cleanBodyParameters']) && ! isset($route['headers']['Content-Type'])) {
-                    // Set content type if the user forgot to set it
-                    $route['headers']['Content-Type'] = 'application/json';
-                }
-                $route['output'] = (string) view('apidoc::partials.route')
-                    ->with('route', $route)
-                    ->with('settings', $settings)
-                    ->with('baseUrl', $this->baseUrl)
-                    ->render();
-
-                return $route;
-            });
-        });
+        // Generate Markdown for each route
+        $parsedRouteOutput = $this->generateMarkdownOutputForEachRoute($parsedRoutes, $settings);
 
         $frontmatter = view('apidoc::partials.frontmatter')
             ->with('settings', $settings);
         /*
-         * In case the target file already exists, we should check if the documentation was modified
+         * If the target file already exists,
+         * we check if the documentation was modified
          * and skip the modified parts of the routes.
          */
         if (file_exists($targetFile) && file_exists($compareFile)) {
@@ -176,8 +168,8 @@ class GenerateDocumentation extends Command
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection())
             ->with('parsedRoutes', $parsedRouteOutput);
 
-        if (! is_dir($outputPath)) {
-            $documentarian->create($outputPath);
+        if (! is_dir($sourceOutputPath)) {
+            $documentarian->create($sourceOutputPath);
         }
 
         // Write output file
@@ -200,21 +192,32 @@ class GenerateDocumentation extends Command
 
         $this->info('Generating API HTML code');
 
-        $documentarian->generate($outputPath);
+        $documentarian->generate($sourceOutputPath);
+        // Move index.html, css/style.css and js/all.js to public/docs
 
-        $this->info('Wrote HTML documentation to: '.$outputPath.'/index.html');
+        if ($isStatic) {
+            if (!is_dir($outputPath)) {
+                mkdir($outputPath, 0777, true);
+                mkdir("{$outputPath}/css");
+                mkdir("{$outputPath}/js");
+            }
+            copy("{$sourceOutputPath}/index.html", "{$outputPath}/index.html");
+            copy("{$sourceOutputPath}/css/style.css", "{$outputPath}/css/style.css");
+            copy("{$sourceOutputPath}/js/all.js", "{$outputPath}/js/all.js");
+        }
+
+        $this->info("Wrote HTML documentation to: {$outputPath}/index.html");
 
         if ($this->shouldGeneratePostmanCollection()) {
             $this->info('Generating Postman collection');
 
-            file_put_contents($outputPath.DIRECTORY_SEPARATOR.'collection.json', $this->generatePostmanCollection($parsedRoutes));
+            file_put_contents("{$outputPath}/collection.json", $this->generatePostmanCollection($parsedRoutes));
         }
 
         if ($logo = $this->docConfig->get('logo')) {
-            copy(
-                $logo,
-                $outputPath.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png'
-            );
+            if ($isStatic) {
+                copy($logo, "{$outputPath}/images/logo.png");
+            }
         }
     }
 
@@ -310,4 +313,24 @@ class GenerateDocumentation extends Command
     {
         return $this->docConfig->get('postman.enabled', is_bool($this->docConfig->get('postman')) ? $this->docConfig->get('postman') : false);
     }
+
+    protected function generateMarkdownOutputForEachRoute(Collection $parsedRoutes, array $settings): Collection
+    {
+        $parsedRouteOutput = $parsedRoutes->map(function ($routeGroup) use ($settings) {
+            return $routeGroup->map(function ($route) use ($settings) {
+                if (count($route['cleanBodyParameters']) && !isset($route['headers']['Content-Type'])) {
+                    // Set content type if the user forgot to set it
+                    $route['headers']['Content-Type'] = 'application/json';
+                }
+                $route['output'] = (string)view('apidoc::partials.route')
+                    ->with('route', $route)
+                    ->with('settings', $settings)
+                    ->with('baseUrl', $this->baseUrl)
+                    ->render();
+
+                return $route;
+            });
+        });
+        return $parsedRouteOutput;
+}
 }

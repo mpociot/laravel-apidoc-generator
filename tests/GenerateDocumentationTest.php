@@ -38,6 +38,7 @@ class GenerateDocumentationTest extends TestCase
     public function tearDown(): void
     {
         Utils::deleteDirectoryAndContents('/public/docs');
+        Utils::deleteDirectoryAndContents('/resources/docs');
     }
 
     /**
@@ -128,7 +129,7 @@ class GenerateDocumentationTest extends TestCase
         $this->artisan('apidoc:generate');
 
         $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
-        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
@@ -156,7 +157,7 @@ class GenerateDocumentationTest extends TestCase
         $this->artisan('apidoc:generate');
 
         $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
-        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
 
         if (version_compare(App::version(), '5.6', '<')) {
@@ -172,7 +173,7 @@ class GenerateDocumentationTest extends TestCase
         $this->artisan('apidoc:generate');
 
         $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
-        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
@@ -202,8 +203,8 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
-        $compareMarkdown = __DIR__.'/../public/docs/source/.compare.md';
+        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
+        $compareMarkdown = __DIR__.'/../resources/docs/source/.compare.md';
         $fixtureMarkdown = __DIR__.'/Fixtures/index.md';
 
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
@@ -221,12 +222,12 @@ class GenerateDocumentationTest extends TestCase
 
         $prependMarkdown = __DIR__.'/Fixtures/prepend.md';
         $appendMarkdown = __DIR__.'/Fixtures/append.md';
-        copy($prependMarkdown, __DIR__.'/../public/docs/source/prepend.md');
-        copy($appendMarkdown, __DIR__.'/../public/docs/source/append.md');
+        copy($prependMarkdown, __DIR__.'/../resources/docs/source/prepend.md');
+        copy($appendMarkdown, __DIR__.'/../resources/docs/source/append.md');
 
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = __DIR__.'/../public/docs/source/index.md';
+        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
         $this->assertContainsIgnoringWhitespace($this->getFileContents($prependMarkdown), $this->getFileContents($generatedMarkdown));
         $this->assertContainsIgnoringWhitespace($this->getFileContents($appendMarkdown), $this->getFileContents($generatedMarkdown));
     }
@@ -380,7 +381,7 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = $this->getFileContents(__DIR__.'/../public/docs/source/index.md');
+        $generatedMarkdown = $this->getFileContents(__DIR__.'/../resources/docs/source/index.md');
         $this->assertContainsIgnoringWhitespace('"Authorization": "customAuthToken","Custom-Header":"NotSoCustom"', $generatedMarkdown);
     }
 
@@ -392,7 +393,7 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
         $this->assertContains('Лорем ипсум долор сит амет', $generatedMarkdown);
     }
 
@@ -406,7 +407,7 @@ class GenerateDocumentationTest extends TestCase
 
         config(['apidoc.routes.0.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
-        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
 
         $firstGroup1Occurrence = strpos($generatedMarkdown, '#1. Group 1');
         $firstGroup2Occurrence = strpos($generatedMarkdown, '#2. Group 2');
@@ -437,7 +438,7 @@ class GenerateDocumentationTest extends TestCase
         }
 
         $this->assertNull($thrownException);
-        $generatedMarkdown = file_get_contents(__DIR__.'/../public/docs/source/index.md');
+        $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
         $this->assertContains('Group A', $generatedMarkdown);
         $this->assertContains('Group B', $generatedMarkdown);
     }

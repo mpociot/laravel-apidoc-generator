@@ -1,12 +1,21 @@
 <?php
 
 return [
+    /**
+     * The type of documentation output to generate.
+     * - "static" will generate a static HTMl page in the /public/docs folder,
+     * - "laravel" will generate the documentation as Blade files,
+     * so you can add routing and authentication
+     */
+    'type' => 'static',
 
     /*
      * The output path for the generated documentation.
      * This path should be relative to the root of your application.
      */
-    'output' => 'public/docs',
+    'output' => 'public/docs', // index.html, js, css, images, collection.json
+    // source => resources/docs/source
+    // laravel => resources/views/apidoc.blade.php, collection.json
 
     /*
      * The router to be used (Laravel or Dingo).
