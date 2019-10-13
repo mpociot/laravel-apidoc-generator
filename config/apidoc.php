@@ -10,14 +10,6 @@ return [
     'type' => 'static',
 
     /*
-     * The output path for the generated documentation.
-     * This path should be relative to the root of your application.
-     */
-    'output' => 'public/docs', // index.html, js, css, images, collection.json
-    // source => resources/docs/source
-    // laravel => resources/views/apidoc.blade.php, collection.json
-
-    /*
      * The router to be used (Laravel or Dingo).
      */
     'router' => 'laravel',
@@ -169,23 +161,23 @@ return [
 
     'strategies' => [
         'metadata' => [
-            \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
         ],
         'urlParameters' => [
-            \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
-            \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
         ],
         'bodyParameters' => [
-            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
-            \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
-            \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
         ],
     ],
 
