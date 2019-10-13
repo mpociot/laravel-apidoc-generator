@@ -1,7 +1,9 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace Mpociot\ApiDoc\Extracting;
 
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
@@ -127,23 +129,23 @@ class Generator
     {
         $defaultStrategies = [
             'metadata' => [
-                \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
             ],
             'urlParameters' => [
-                \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
             ],
             'queryParameters' => [
-                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
             ],
             'bodyParameters' => [
-                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responses' => [
-                \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
-                \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
             ],
         ];
 

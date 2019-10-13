@@ -136,16 +136,8 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function can_parse_partial_resource_routes()
     {
-        if (version_compare(App::version(), '5.6', '<')) {
-            RouteFacade::resource('/api/users', TestResourceController::class, [
-                'only' => [
-                    'index', 'create',
-                ],
-            ]);
-        } else {
             RouteFacade::resource('/api/users', TestResourceController::class)
                 ->only(['index', 'create']);
-        }
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         config([
@@ -160,16 +152,9 @@ class GenerateDocumentationTest extends TestCase
         $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
 
-        if (version_compare(App::version(), '5.6', '<')) {
-            RouteFacade::apiResource('/api/users', TestResourceController::class, [
-                'only' => [
-                    'index', 'create',
-                ],
-            ]);
-        } else {
             RouteFacade::apiResource('/api/users', TestResourceController::class)
                 ->only(['index', 'create']);
-        }
+
         $this->artisan('apidoc:generate');
 
         $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
@@ -191,6 +176,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/echoesUrlParameters/{param}-{param2}/{param3?}', [TestController::class, 'echoesUrlParameters']);
 
         // We want to have the same values for params each time
+        config(['apidoc.type' => 'static']);
         config(['apidoc.faker_seed' => 1234]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         config([

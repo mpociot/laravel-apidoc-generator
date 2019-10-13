@@ -1,29 +1,27 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Responses;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use League\Fractal\Manager;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
+use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\Collection;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 
 /**
- * Parse an Eloquent API resource response from the docblock ( @apiResource || @apiResourcecollection ).
+ * Parse a transformer response from the docblock ( @transformer || @transformercollection ).
  */
-class UseApiResourceTags extends Strategy
+class UseTransformerTags extends Strategy
 {
     /**
      * @param Route $route
@@ -42,7 +40,7 @@ class UseApiResourceTags extends Strategy
         /** @var DocBlock $methodDocBlock */
         $methodDocBlock = $docBlocks['method'];
 
-        return $this->getApiResourceResponse($methodDocBlock->getTags(), $route);
+        return $this->getTransformerResponse($methodDocBlock->getTags(), $route);
     }
 
     /**
@@ -52,39 +50,30 @@ class UseApiResourceTags extends Strategy
      *
      * @return array|null
      */
-    protected function getApiResourceResponse(array $tags, Route $route)
+    protected function getTransformerResponse(array $tags, Route $route)
     {
         try {
-            if (empty($apiResourceTag = $this->getApiResourceTag($tags))) {
+            if (empty($transformerTag = $this->getTransformerTag($tags))) {
                 return null;
             }
 
-            list($statusCode, $apiResourceClass) = $this->getStatusCodeAndApiResourceClass($apiResourceTag);
-            $model = $this->getClassToBeTransformed($tags);
-            $modelInstance = $this->instantiateApiResourceModel($model);
+            list($statusCode, $transformer) = $this->getStatusCodeAndTransformerClass($transformerTag);
+            $model = $this->getClassToBeTransformed($tags, (new ReflectionClass($transformer))->getMethod('transform'));
+            $modelInstance = $this->instantiateTransformerModel($model);
 
-            try {
-                $resource = new $apiResourceClass($modelInstance);
-            } catch (\Exception $e) {
-                // If it is a ResourceCollection class, it might throw an error
-                // when trying to instantiate with something other than a collection
-                $resource = new $apiResourceClass(collect([$modelInstance]));
-            }
-            if (strtolower($apiResourceTag->getName()) == 'apiresourcecollection') {
-                // Collections can either use the regular JsonResource class (via `::collection()`,
-                // or a ResourceCollection (via `new`)
-                // See https://laravel.com/docs/5.8/eloquent-resources
-                $models = [$modelInstance, $this->instantiateApiResourceModel($model)];
-                $resource = $resource instanceof ResourceCollection
-                    ? new $apiResourceClass(collect($models))
-                    : $apiResourceClass::collection(collect($models));
+            $fractal = new Manager();
+
+            if (! is_null(config('apidoc.fractal.serializer'))) {
+                $fractal->setSerializer(app(config('apidoc.fractal.serializer')));
             }
 
-            /** @var Response $response */
-            $response = response()->json(
-                $resource->toArray(app(Request::class))
-            );
+            $resource = (strtolower($transformerTag->getName()) == 'transformercollection')
+                ? new Collection(
+                    [$modelInstance, $this->instantiateTransformerModel($model)],
+                    new $transformer)
+                : new Item($modelInstance, new $transformer);
 
+            $response = response($fractal->createData($resource)->toJson());
             return [
                 [
                     'status' => $statusCode ?: $response->getStatusCode(),
@@ -92,7 +81,7 @@ class UseApiResourceTags extends Strategy
                 ],
             ];
         } catch (\Exception $e) {
-            echo 'Exception thrown when fetching Eloquent API resource response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
+            echo 'Exception thrown when fetching transformer response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
                 Utils::dumpException($e);
             } else {
@@ -108,31 +97,41 @@ class UseApiResourceTags extends Strategy
      *
      * @return array
      */
-    private function getStatusCodeAndApiResourceClass($tag): array
+    private function getStatusCodeAndTransformerClass($tag): array
     {
         $content = $tag->getContent();
         preg_match('/^(\d{3})?\s?([\s\S]*)$/', $content, $result);
-        $status = $result[1] ?: 0;
-        $apiResourceClass = $result[2];
+        $status = $result[1] ?: 200;
+        $transformerClass = $result[2];
 
-        return [$status, $apiResourceClass];
+        return [$status, $transformerClass];
     }
 
     /**
      * @param array $tags
+     * @param ReflectionMethod $transformerMethod
      *
      * @return string
      */
-    private function getClassToBeTransformed(array $tags): string
+    private function getClassToBeTransformed(array $tags, ReflectionMethod $transformerMethod): string
     {
         $modelTag = Arr::first(array_filter($tags, function ($tag) {
-            return ($tag instanceof Tag) && strtolower($tag->getName()) == 'apiresourcemodel';
+            return ($tag instanceof Tag) && strtolower($tag->getName()) == 'transformermodel';
         }));
 
-        $type = $modelTag->getContent();
+        $type = null;
+        if ($modelTag) {
+            $type = $modelTag->getContent();
+        } else {
+            $parameter = Arr::first($transformerMethod->getParameters());
+            if ($parameter->hasType() && ! $parameter->getType()->isBuiltin() && class_exists((string) $parameter->getType())) {
+                // Ladies and gentlemen, we have a type!
+                $type = (string) $parameter->getType();
+            }
+        }
 
-        if (empty($type)) {
-            throw new Exception('Failed to detect an Eloquent API resource model. Please specify a model using @apiResourceModel.');
+        if ($type == null) {
+            throw new Exception('Failed to detect a transformer model. Please specify a model using @transformerModel.');
         }
 
         return $type;
@@ -143,10 +142,10 @@ class UseApiResourceTags extends Strategy
      *
      * @return Model|object
      */
-    protected function instantiateApiResourceModel(string $type)
+    protected function instantiateTransformerModel(string $type)
     {
         try {
-            // Try Eloquent model factory
+            // try Eloquent model factory
 
             // Factories are usually defined without the leading \ in the class name,
             // but the user might write it that way in a comment. Let's be safe.
@@ -183,14 +182,14 @@ class UseApiResourceTags extends Strategy
      *
      * @return Tag|null
      */
-    private function getApiResourceTag(array $tags)
+    private function getTransformerTag(array $tags)
     {
-        $apiResourceTags = array_values(
+        $transformerTags = array_values(
             array_filter($tags, function ($tag) {
-                return ($tag instanceof Tag) && in_array(strtolower($tag->getName()), ['apiresource', 'apiresourcecollection']);
+                return ($tag instanceof Tag) && in_array(strtolower($tag->getName()), ['transformer', 'transformercollection']);
             })
         );
 
-        return Arr::first($apiResourceTags);
+        return Arr::first($transformerTags);
     }
 }

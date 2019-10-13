@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Responses;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 
 /**
  * Get a response from the docblock ( @response ).

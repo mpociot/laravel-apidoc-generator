@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\ApiDoc\Postman;
+namespace Mpociot\ApiDoc\Writing;
 
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 
-class CollectionWriter
+class PostmanCollectionWriter
 {
     /**
      * @var Collection
@@ -32,20 +32,15 @@ class CollectionWriter
 
     public function getCollection()
     {
-        try {
-            URL::forceRootUrl($this->baseUrl);
-            if (Str::startsWith($this->baseUrl, 'https://')) {
-                URL::forceScheme('https');
-            }
-        } catch (\Error $e) {
-            echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
-            echo "You should probably double check URLs in your generated Postman collection.\n";
+        URL::forceRootUrl($this->baseUrl);
+        if (Str::startsWith($this->baseUrl, 'https://')) {
+            URL::forceScheme('https');
         }
 
         $collection = [
             'variables' => [],
             'info' => [
-                'name' => config('apidoc.postman.name') ?: config('app.name').' API',
+                'name' => config('apidoc.postman.name') ?: config('app.name') . ' API',
                 '_postman_id' => Uuid::uuid4()->toString(),
                 'description' => config('apidoc.postman.description') ?: '',
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
@@ -60,11 +55,11 @@ class CollectionWriter
                         return [
                             'name' => $route['metadata']['title'] != '' ? $route['metadata']['title'] : url($route['uri']),
                             'request' => [
-                                'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
-                                    ? ''
-                                    : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
-                                        return urlencode($key).'='.urlencode($parameter['value'] ?? '');
-                                    })->all()))),
+                                'url' => url($route['uri']) . (collect($route['queryParameters'])->isEmpty()
+                                        ? ''
+                                        : ('?' . implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
+                                                return urlencode($key) . '=' . urlencode($parameter['value'] ?? '');
+                                            })->all()))),
                                 'method' => $route['methods'][0],
                                 'header' => collect($route['headers'])
                                     ->union([

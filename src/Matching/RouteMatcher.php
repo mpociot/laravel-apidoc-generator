@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace Mpociot\ApiDoc\Matching;
 
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
@@ -9,23 +9,36 @@ use Illuminate\Support\Facades\Route as RouteFacade;
 
 class RouteMatcher
 {
-    public function getDingoRoutesToBeDocumented(array $routeRules)
+    /**
+     * @var string
+     */
+    protected $router;
+
+    /**
+     * @var array
+     */
+    protected $routeRules;
+
+
+    public function __construct(array $routeRules = [], string $router = "laravel")
     {
-        return $this->getRoutesToBeDocumented($routeRules, true);
+        $this->router = $router;
+        $this->routeRules = $routeRules;
     }
 
-    public function getLaravelRoutesToBeDocumented(array $routeRules)
+    public function getRoutes()
     {
-        return $this->getRoutesToBeDocumented($routeRules);
+        $usingDingoRouter = strtolower($this->router) == 'dingo';
+        return $this->getRoutesToBeDocumented($this->routeRules, $usingDingoRouter);
     }
 
-    public function getRoutesToBeDocumented(array $routeRules, bool $usingDingoRouter = false)
+    protected function getRoutesToBeDocumented(array $routeRules, bool $usingDingoRouter = false)
     {
+        $allRoutes = $this->getAllRoutes($usingDingoRouter);
         $matchedRoutes = [];
 
         foreach ($routeRules as $routeRule) {
             $includes = $routeRule['include'] ?? [];
-            $allRoutes = $this->getAllRoutes($usingDingoRouter, $routeRule['match']['versions'] ?? []);
 
             foreach ($allRoutes as $route) {
                 if (is_array($route)) {
@@ -49,10 +62,7 @@ class RouteMatcher
         return $matchedRoutes;
     }
 
-    // TODO we should cache the results of this, for Laravel routes at least,
-    // to improve performance, since this method gets called
-    // for each ruleset in the config file. Not a high priority, though.
-    private function getAllRoutes(bool $usingDingoRouter, array $versions = [])
+    private function getAllRoutes(bool $usingDingoRouter)
     {
         if (! $usingDingoRouter) {
             return RouteFacade::getRoutes();
@@ -82,6 +92,9 @@ class RouteMatcher
     private function shouldExcludeRoute(Route $route, array $routeRule)
     {
         $excludes = $routeRule['exclude'] ?? [];
+
+        // Exclude this package's routes
+        $excludes[] = 'apidoc';
 
         // Exclude Laravel Telescope routes
         if (class_exists("Laravel\Telescope\Telescope")) {
