@@ -12,7 +12,7 @@ If you're using `laravel` type, you can call `\Mpociot\ApiDoc\ApiDoc::routes()` 
 ```php
 \Mpociot\ApiDoc\ApiDoc::routes("/apidoc")->middleware("auth.basic");
 ```
-> Note: There is currently a known issue with usin `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
+> Note: There is currently a known issue with using `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
 
 You may, of course, set up your own routing instead of using the `routes()` helper.
 
