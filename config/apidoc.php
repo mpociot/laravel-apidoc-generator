@@ -4,8 +4,8 @@ return [
     /**
      * The type of documentation output to generate.
      * - "static" will generate a static HTMl page in the /public/docs folder,
-     * - "laravel" will generate the documentation as Blade files,
-     * so you can add routing and authentication
+     * - "laravel" will generate the documentation as a Blade view,
+     * so you can add routing and authentication.
      */
     'type' => 'static',
 
@@ -22,6 +22,9 @@ return [
 
     /*
      * Generate a Postman collection in addition to HTML docs.
+     * For 'static' docs, the collection will be generated to public/docs/collection.json.
+     * For 'laravel' docs, it will be generated to storage/app/apidoc/collection.json.
+     * The `ApiDoc::routes()` helper will add routes for both the HTML and the Postman collection.
      */
     'postman' => [
         /*
