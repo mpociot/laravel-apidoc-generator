@@ -74,6 +74,7 @@ class UseTransformerTags extends Strategy
                 : new Item($modelInstance, new $transformer);
 
             $response = response($fractal->createData($resource)->toJson());
+
             return [
                 [
                     'status' => $statusCode ?: $response->getStatusCode(),
