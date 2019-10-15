@@ -40,7 +40,7 @@ class PostmanCollectionWriter
         $collection = [
             'variables' => [],
             'info' => [
-                'name' => config('apidoc.postman.name') ?: config('app.name') . ' API',
+                'name' => config('apidoc.postman.name') ?: config('app.name').' API',
                 '_postman_id' => Uuid::uuid4()->toString(),
                 'description' => config('apidoc.postman.description') ?: '',
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
@@ -55,11 +55,11 @@ class PostmanCollectionWriter
                         return [
                             'name' => $route['metadata']['title'] != '' ? $route['metadata']['title'] : url($route['uri']),
                             'request' => [
-                                'url' => url($route['uri']) . (collect($route['queryParameters'])->isEmpty()
+                                'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
                                         ? ''
-                                        : ('?' . implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
-                                                return urlencode($key) . '=' . urlencode($parameter['value'] ?? '');
-                                            })->all()))),
+                                        : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
+                                            return urlencode($key).'='.urlencode($parameter['value'] ?? '');
+                                        })->all()))),
                                 'method' => $route['methods'][0],
                                 'header' => collect($route['headers'])
                                     ->union([

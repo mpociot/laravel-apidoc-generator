@@ -9,8 +9,8 @@ use Illuminate\Console\Command;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
-use Mpociot\ApiDoc\Writing\Writer;
 use Illuminate\Support\Collection;
+use Mpociot\ApiDoc\Writing\Writer;
 use Illuminate\Support\Facades\URL;
 use Mpociot\ApiDoc\Extracting\Generator;
 use Mpociot\ApiDoc\Matching\RouteMatcher;
@@ -70,7 +70,6 @@ class GenerateDocumentation extends Command
 
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
-
 
         $groupedRoutes = collect($parsedRoutes)
             ->groupBy('metadata.groupName')
@@ -155,5 +154,4 @@ class GenerateDocumentation extends Command
 
         return true;
     }
-
 }
