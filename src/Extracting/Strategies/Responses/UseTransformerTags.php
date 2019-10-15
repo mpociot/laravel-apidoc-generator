@@ -15,8 +15,8 @@ use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\Collection;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 /**
  * Parse a transformer response from the docblock ( @transformer || @transformercollection ).
@@ -74,6 +74,7 @@ class UseTransformerTags extends Strategy
                 : new Item($modelInstance, new $transformer);
 
             $response = response($fractal->createData($resource)->toJson());
+
             return [
                 [
                     'status' => $statusCode ?: $response->getStatusCode(),

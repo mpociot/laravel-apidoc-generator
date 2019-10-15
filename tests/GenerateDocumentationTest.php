@@ -136,7 +136,7 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function can_parse_partial_resource_routes()
     {
-            RouteFacade::resource('/api/users', TestResourceController::class)
+        RouteFacade::resource('/api/users', TestResourceController::class)
                 ->only(['index', 'create']);
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
@@ -152,7 +152,7 @@ class GenerateDocumentationTest extends TestCase
         $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
 
-            RouteFacade::apiResource('/api/users', TestResourceController::class)
+        RouteFacade::apiResource('/api/users', TestResourceController::class)
                 ->only(['index', 'create']);
 
         $this->artisan('apidoc:generate');

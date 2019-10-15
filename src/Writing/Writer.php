@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Mpociot\ApiDoc\Writing;
-
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -68,8 +66,8 @@ class Writer
         // go in resources/views/apidoc/ and storage/app/apidoc/ respectively.
         $isStatic = $this->config->get('type') === 'static';
 
-        $sourceOutputPath = "resources/docs";
-        $outputPath = $isStatic ? "public/docs" : "resources/views/apidoc";
+        $sourceOutputPath = 'resources/docs';
+        $outputPath = $isStatic ? 'public/docs' : 'resources/views/apidoc';
 
         $this->writeMarkdownAndSourceFiles($this->routes, $sourceOutputPath);
 
@@ -85,8 +83,8 @@ class Writer
      */
     public function writeMarkdownAndSourceFiles(Collection $parsedRoutes, string $sourceOutputPath)
     {
-        $targetFile = $sourceOutputPath . '/source/index.md';
-        $compareFile = $sourceOutputPath . '/source/.compare.md';
+        $targetFile = $sourceOutputPath.'/source/index.md';
+        $compareFile = $sourceOutputPath.'/source/.compare.md';
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', 'docs')
@@ -110,14 +108,14 @@ class Writer
 
             $parsedRouteOutput->transform(function (Collection $routeGroup) use ($generatedDocumentation, $compareDocumentation) {
                 return $routeGroup->transform(function (array $route) use ($generatedDocumentation, $compareDocumentation) {
-                    if (preg_match('/<!-- START_' . $route['id'] . ' -->(.*)<!-- END_' . $route['id'] . ' -->/is', $generatedDocumentation, $existingRouteDoc)) {
-                        $routeDocumentationChanged = (preg_match('/<!-- START_' . $route['id'] . ' -->(.*)<!-- END_' . $route['id'] . ' -->/is', $compareDocumentation, $lastDocWeGeneratedForThisRoute) && $lastDocWeGeneratedForThisRoute[1] !== $existingRouteDoc[1]);
+                    if (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $generatedDocumentation, $existingRouteDoc)) {
+                        $routeDocumentationChanged = (preg_match('/<!-- START_'.$route['id'].' -->(.*)<!-- END_'.$route['id'].' -->/is', $compareDocumentation, $lastDocWeGeneratedForThisRoute) && $lastDocWeGeneratedForThisRoute[1] !== $existingRouteDoc[1]);
                         if ($routeDocumentationChanged === false || $this->forceIt) {
                             if ($routeDocumentationChanged) {
-                                $this->output->warn('Discarded manual changes for route [' . implode(',', $route['methods']) . '] ' . $route['uri']);
+                                $this->output->warn('Discarded manual changes for route ['.implode(',', $route['methods']).'] '.$route['uri']);
                             }
                         } else {
-                            $this->output->warn('Skipping modified route [' . implode(',', $route['methods']) . '] ' . $route['uri']);
+                            $this->output->warn('Skipping modified route ['.implode(',', $route['methods']).'] '.$route['uri']);
                             $route['modified_output'] = $existingRouteDoc[0];
                         }
                     }
@@ -140,9 +138,9 @@ class Writer
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection)
             ->with('parsedRoutes', $parsedRouteOutput);
 
-        $this->output->info('Writing index.md and source files to: ' . $sourceOutputPath);
+        $this->output->info('Writing index.md and source files to: '.$sourceOutputPath);
 
-        if (!is_dir($sourceOutputPath)) {
+        if (! is_dir($sourceOutputPath)) {
             $documentarian = new Documentarian();
             $documentarian->create($sourceOutputPath);
         }
@@ -163,14 +161,14 @@ class Writer
 
         file_put_contents($compareFile, $compareMarkdown);
 
-        $this->output->info('Wrote index.md and source files to: ' . $sourceOutputPath);
+        $this->output->info('Wrote index.md and source files to: '.$sourceOutputPath);
     }
 
     public function generateMarkdownOutputForEachRoute(Collection $parsedRoutes, array $settings): Collection
     {
         $parsedRouteOutput = $parsedRoutes->map(function (Collection $routeGroup) use ($settings) {
             return $routeGroup->map(function (array $route) use ($settings) {
-                if (count($route['cleanBodyParameters']) && !isset($route['headers']['Content-Type'])) {
+                if (count($route['cleanBodyParameters']) && ! isset($route['headers']['Content-Type'])) {
                     // Set content type if the user forgot to set it
                     $route['headers']['Content-Type'] = 'application/json';
                 }
@@ -183,6 +181,7 @@ class Writer
                 return $route;
             });
         });
+
         return $parsedRouteOutput;
     }
 
@@ -225,11 +224,12 @@ class Writer
      */
     protected function getMarkdownToPrepend(string $sourceOutputPath): string
     {
-        $prependFile = $sourceOutputPath . '/source/prepend.md';
+        $prependFile = $sourceOutputPath.'/source/prepend.md';
         $prependFileContents = file_exists($prependFile)
-            ? file_get_contents($prependFile) . "\n" : '';
+            ? file_get_contents($prependFile)."\n" : '';
+
         return $prependFileContents;
-}
+    }
 
     /**
      * @param string $sourceOutputPath
@@ -238,16 +238,17 @@ class Writer
      */
     protected function getMarkdownToAppend(string $sourceOutputPath): string
     {
-        $appendFile = $sourceOutputPath . '/source/append.md';
+        $appendFile = $sourceOutputPath.'/source/append.md';
         $appendFileContents = file_exists($appendFile)
-            ? "\n" . file_get_contents($appendFile) : '';
+            ? "\n".file_get_contents($appendFile) : '';
+
         return $appendFileContents;
-}
+    }
 
     protected function copyAssetsFromSourceFolderToPublicFolder(string $sourceOutputPath, bool $isStatic = true): void
     {
-        $publicPath = "public/docs";
-        if (!is_dir($publicPath)) {
+        $publicPath = 'public/docs';
+        if (! is_dir($publicPath)) {
             mkdir($publicPath, 0777, true);
             mkdir("{$publicPath}/css");
             mkdir("{$publicPath}/js");
@@ -270,7 +271,7 @@ class Writer
             rename("{$sourceOutputPath}/index.html", "{$outputPath}/index.html");
         } else {
             // Move output to resources/views
-            if (!is_dir($outputPath)) {
+            if (! is_dir($outputPath)) {
                 mkdir($outputPath);
             }
             rename("{$sourceOutputPath}/index.html", "$outputPath/index.blade.php");
