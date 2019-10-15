@@ -1,21 +1,21 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\BodyParameters;
+namespace Mpociot\ApiDoc\Extracting\Strategies\BodyParameters;
 
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Dingo\Api\Http\FormRequest as DingoFormRequest;
-use Mpociot\ApiDoc\Tools\Traits\DocBlockParamHelpers;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
 class GetFromBodyParamTag extends Strategy
 {
-    use DocBlockParamHelpers;
+    use ParamHelpers;
 
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
@@ -45,6 +45,7 @@ class GetFromBodyParamTag extends Strategy
             }
         }
 
+        /** @var DocBlock $methodDocBlock */
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
 
         return $this->getBodyParametersFromDocBlock($methodDocBlock->getTags());
@@ -56,7 +57,7 @@ class GetFromBodyParamTag extends Strategy
             ->filter(function ($tag) {
                 return $tag instanceof Tag && $tag->getName() === 'bodyParam';
             })
-            ->mapWithKeys(function ($tag) {
+            ->mapWithKeys(function (Tag $tag) {
                 // Format:
                 // @bodyParam <name> <type> <"required" (optional)> <description>
                 // Examples:
@@ -81,7 +82,7 @@ class GetFromBodyParamTag extends Strategy
 
                 $type = $this->normalizeParameterType($type);
                 list($description, $example) = $this->parseParamDescription($description, $type);
-                $value = is_null($example) && ! $this->shouldExcludeExample($tag)
+                $value = is_null($example) && ! $this->shouldExcludeExample($tag->getContent())
                     ? $this->generateDummyValue($type)
                     : $example;
 

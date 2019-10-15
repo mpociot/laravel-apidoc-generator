@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Responses;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Exception;
 use ReflectionClass;
@@ -15,9 +15,9 @@ use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\Collection;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**

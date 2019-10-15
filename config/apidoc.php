@@ -1,12 +1,13 @@
 <?php
 
 return [
-
     /*
-     * The output path for the generated documentation.
-     * This path should be relative to the root of your application.
+     * The type of documentation output to generate.
+     * - "static" will generate a static HTMl page in the /public/docs folder,
+     * - "laravel" will generate the documentation as a Blade view,
+     * so you can add routing and authentication.
      */
-    'output' => 'public/docs',
+    'type' => 'static',
 
     /*
      * The router to be used (Laravel or Dingo).
@@ -21,6 +22,9 @@ return [
 
     /*
      * Generate a Postman collection in addition to HTML docs.
+     * For 'static' docs, the collection will be generated to public/docs/collection.json.
+     * For 'laravel' docs, it will be generated to storage/app/apidoc/collection.json.
+     * The `ApiDoc::routes()` helper will add routes for both the HTML and the Postman collection.
      */
     'postman' => [
         /*
@@ -160,23 +164,23 @@ return [
 
     'strategies' => [
         'metadata' => [
-            \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
         ],
         'urlParameters' => [
-            \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
-            \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
         ],
         'bodyParameters' => [
-            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
-            \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
-            \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
         ],
     ],
 

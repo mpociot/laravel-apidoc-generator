@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\QueryParameters;
+namespace Mpociot\ApiDoc\Extracting\Strategies\QueryParameters;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -8,15 +8,15 @@ use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Dingo\Api\Http\FormRequest as DingoFormRequest;
-use Mpociot\ApiDoc\Tools\Traits\DocBlockParamHelpers;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
 class GetFromQueryParamTag extends Strategy
 {
-    use DocBlockParamHelpers;
+    use ParamHelpers;
 
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
@@ -46,6 +46,7 @@ class GetFromQueryParamTag extends Strategy
             }
         }
 
+        /** @var DocBlock $methodDocBlock */
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
 
         return $this->getQueryParametersFromDocBlock($methodDocBlock->getTags());
@@ -57,7 +58,7 @@ class GetFromQueryParamTag extends Strategy
             ->filter(function ($tag) {
                 return $tag instanceof Tag && $tag->getName() === 'queryParam';
             })
-            ->mapWithKeys(function ($tag) {
+            ->mapWithKeys(function (Tag $tag) {
                 // Format:
                 // @queryParam <name> <"required" (optional)> <description>
                 // Examples:
@@ -81,7 +82,7 @@ class GetFromQueryParamTag extends Strategy
                 }
 
                 list($description, $value) = $this->parseParamDescription($description, 'string');
-                if (is_null($value) && ! $this->shouldExcludeExample($tag)) {
+                if (is_null($value) && ! $this->shouldExcludeExample($tag->getContent())) {
                     $value = Str::contains($description, ['number', 'count', 'page'])
                         ? $this->generateDummyValue('integer')
                         : $this->generateDummyValue('string');

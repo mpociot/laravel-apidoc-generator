@@ -5,16 +5,16 @@ namespace Mpociot\ApiDoc\Tests\Unit;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\Generator;
-use Mpociot\ApiDoc\Strategies\Strategy;
+use Mpociot\ApiDoc\Extracting\Generator;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
 {
     /**
-     * @var \Mpociot\ApiDoc\Tools\Generator
+     * @var \Mpociot\ApiDoc\Extracting\Generator
      */
     protected $generator;
 
@@ -98,8 +98,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
             'description' => 'dummy',
             'authenticated' => false,
         ];
-        $this->assertArraySubset($expectedMetadata, $parsed['metadata']); // Forwards-compatibility
-        $this->assertArraySubset($expectedMetadata, $parsed); // Backwards-compatibility
+        $this->assertArraySubset($expectedMetadata, $parsed['metadata']);
     }
 
     /** @test */
@@ -121,8 +120,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
             'description' => 'dummy',
             'authenticated' => false,
         ];
-        $this->assertArraySubset($expectedMetadata, $parsed['metadata']); // Forwards-compatibility
-        $this->assertArraySubset($expectedMetadata, $parsed); // Backwards-compatibility
+        $this->assertArraySubset($expectedMetadata, $parsed['metadata']);
     }
 
     /** @test */
@@ -144,8 +142,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
             'description' => 'dummy',
             'authenticated' => false,
         ];
-        $this->assertArraySubset($expectedMetadata, $parsed['metadata']); // Forwards-compatibility
-        $this->assertArraySubset($expectedMetadata, $parsed); // Backwards-compatibility
+        $this->assertArraySubset($expectedMetadata, $parsed['metadata']);
     }
 
     public function dataResources()

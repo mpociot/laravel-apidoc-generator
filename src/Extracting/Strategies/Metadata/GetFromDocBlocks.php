@@ -1,14 +1,14 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Metadata;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Metadata;
 
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 class GetFromDocBlocks extends Strategy
 {

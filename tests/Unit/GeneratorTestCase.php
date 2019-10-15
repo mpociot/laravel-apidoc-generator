@@ -6,7 +6,7 @@ namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Illuminate\Support\Arr;
 use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Tools\Generator;
+use Mpociot\ApiDoc\Extracting\Generator;
 use Mpociot\ApiDoc\Tests\Fixtures\TestUser;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
@@ -15,29 +15,29 @@ use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 abstract class GeneratorTestCase extends TestCase
 {
     /**
-     * @var \Mpociot\ApiDoc\Tools\Generator
+     * @var \Mpociot\ApiDoc\Extracting\Generator
      */
     protected $generator;
     private $config = [
         'strategies' => [
             'metadata' => [
-                \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
             ],
             'urlParameters' => [
-                \Mpociot\ApiDoc\Strategies\UrlParameters\GetFromUrlParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
             ],
             'queryParameters' => [
-                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
             ],
             'bodyParameters' => [
-                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responses' => [
-                \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
-                \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
             ],
         ],
         'default_group' => 'general',
@@ -398,7 +398,7 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/withEloquentApiResource', 'withEloquentApiResource');
 
         $config = $this->config;
-        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class];
         $generator = new Generator(new DocumentationConfig($config));
         $parsed = $this->generator->processRoute($route);
 
@@ -421,7 +421,7 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/withEloquentApiResourceCollection', 'withEloquentApiResourceCollection');
 
         $config = $this->config;
-        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class];
         $generator = new Generator(new DocumentationConfig($config));
         $parsed = $this->generator->processRoute($route);
 
@@ -451,7 +451,7 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('POST', '/withEloquentApiResourceCollectionClass', 'withEloquentApiResourceCollectionClass');
 
         $config = $this->config;
-        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Strategies\Responses\UseApiResourceTags::class];
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class];
         $generator = new Generator(new DocumentationConfig($config));
         $parsed = $this->generator->processRoute($route);
 
@@ -692,8 +692,8 @@ abstract class GeneratorTestCase extends TestCase
         $config = [
             'strategies' => [
                 'responses' => [
-                    \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-                    \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+                    \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+                    \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
                 ],
             ],
         ];

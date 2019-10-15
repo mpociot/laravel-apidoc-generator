@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Responses;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Exception;
 use ReflectionClass;
@@ -15,8 +15,8 @@ use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\Collection;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 /**
  * Parse a transformer response from the docblock ( @transformer || @transformercollection ).

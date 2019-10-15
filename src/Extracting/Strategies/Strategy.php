@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies;
+namespace Mpociot\ApiDoc\Extracting\Strategies;
 
 use ReflectionClass;
 use ReflectionMethod;

@@ -1,11 +1,17 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace Mpociot\ApiDoc\Extracting;
 
 use ReflectionClass;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 
+/**
+ * Class RouteDocBlocker
+ * Utility class to help with retrieving doc blocks from route classes and methods.
+ * Also caches them so repeated access is faster.
+ */
 class RouteDocBlocker
 {
     protected static $docBlocks = [];

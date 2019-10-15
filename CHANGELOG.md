@@ -15,8 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.0] 
 ### Added
+- Support for Eloquent API resources (https://github.com/mpociot/laravel-apidoc-generator/pull/601)
 - `bindings` replaced by `@urlParam` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/599)
 - Better support for arrays and objects in bodyParams (https://github.com/mpociot/laravel-apidoc-generator/pull/597)
+
+### Modified
+- Made ResponseCalls strategy only execute if no successful responses exist. (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
+- Hide null responses in examples. (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
+- Made `responses` stage additive (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
+- Renamed `query` and `body` in `response_calls` config to `queryParams` and `bodyParams` (https://github.com/mpociot/laravel-apidoc-generator/pull/603)
+
+### Removed
+- Removed `apply.response_calls.headers` in favour of `apply.headers` (https://github.com/mpociot/laravel-apidoc-generator/pull/603)
+- Removed bindings in response_calls (https://github.com/mpociot/laravel-apidoc-generator/pull/599)
 
 ## [3.17.1] - Thursday, 12 September 2019
 ### Fixed
