@@ -8,10 +8,10 @@ use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
-use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
-use Dingo\Api\Http\FormRequest as DingoFormRequest;
 use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Dingo\Api\Http\FormRequest as DingoFormRequest;
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
 class GetFromUrlParamTag extends Strategy

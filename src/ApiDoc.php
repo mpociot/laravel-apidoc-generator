@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ApiDoc
 {
-    public static function routes($path = "/doc")
+    public static function routes($path = '/doc')
     {
         return Route::get("$path{format?}", function (?string $format = null) {
-            if ($format == ".json") {
-
+            if ($format == '.json') {
                 return response(
                     Storage::disk('local')->get('apidoc/collection.json'),
                     200,
@@ -20,7 +19,7 @@ class ApiDoc
                 );
             }
 
-            return view("apidoc.index");
+            return view('apidoc.index');
         })->name('apidoc');
     }
 }
