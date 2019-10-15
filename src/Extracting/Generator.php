@@ -2,13 +2,13 @@
 
 namespace Mpociot\ApiDoc\Extracting;
 
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\Utils;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 
 class Generator
 {

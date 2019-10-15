@@ -2,9 +2,9 @@
 
 namespace Mpociot\ApiDoc\Extracting;
 
-use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 
 /**

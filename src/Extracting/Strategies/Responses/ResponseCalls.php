@@ -9,8 +9,8 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 /**
  * Make a call to the route and retrieve its response.

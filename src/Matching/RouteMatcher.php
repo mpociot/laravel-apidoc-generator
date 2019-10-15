@@ -20,7 +20,7 @@ class RouteMatcher
     protected $routeRules;
 
 
-    public function __construct(array $routeRules = [], string $router = "laravel")
+    public function __construct(array $routeRules = [], string $router = 'laravel')
     {
         $this->router = $router;
         $this->routeRules = $routeRules;
@@ -29,6 +29,7 @@ class RouteMatcher
     public function getRoutes()
     {
         $usingDingoRouter = strtolower($this->router) == 'dingo';
+
         return $this->getRoutesToBeDocumented($this->routeRules, $usingDingoRouter);
     }
 

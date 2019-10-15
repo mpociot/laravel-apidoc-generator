@@ -71,7 +71,6 @@ class GenerateDocumentation extends Command
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
 
-
         $groupedRoutes = collect($parsedRoutes)
             ->groupBy('metadata.groupName')
             ->sortBy(static function ($group) {

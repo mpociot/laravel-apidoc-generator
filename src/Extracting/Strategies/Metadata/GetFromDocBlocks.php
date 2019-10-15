@@ -7,8 +7,8 @@ use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 class GetFromDocBlocks extends Strategy
 {
