@@ -19,7 +19,6 @@ class RouteMatcher
      */
     protected $routeRules;
 
-
     public function __construct(array $routeRules = [], string $router = 'laravel')
     {
         $this->router = $router;

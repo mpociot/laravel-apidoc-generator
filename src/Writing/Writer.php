@@ -140,7 +140,7 @@ class Writer
 
         $this->output->info('Writing index.md and source files to: '.$sourceOutputPath);
 
-        if (!is_dir($sourceOutputPath)) {
+        if (! is_dir($sourceOutputPath)) {
             $documentarian = new Documentarian();
             $documentarian->create($sourceOutputPath);
         }
@@ -229,7 +229,7 @@ class Writer
             ? file_get_contents($prependFile)."\n" : '';
 
         return $prependFileContents;
-}
+    }
 
     /**
      * @param string $sourceOutputPath
@@ -243,7 +243,7 @@ class Writer
             ? "\n".file_get_contents($appendFile) : '';
 
         return $appendFileContents;
-}
+    }
 
     protected function copyAssetsFromSourceFolderToPublicFolder(string $sourceOutputPath, bool $isStatic = true): void
     {

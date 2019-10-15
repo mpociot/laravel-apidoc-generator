@@ -14,7 +14,9 @@ use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use Illuminate\Database\Eloquent\Model;
+use League\Fractal\Resource\Collection;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
