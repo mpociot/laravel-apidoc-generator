@@ -57,6 +57,9 @@
             "providers": [
                 "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
             ]
-       }
+        },
+        "branch-alias": {
+            "dev-v4": "4.x-dev"
+        }
     }
 }
