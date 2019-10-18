@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.0.0] 
 ### Added
+- Support for non-static docs, changed source files locations (https://github.com/mpociot/laravel-apidoc-generator/pull/608)
 - Support for Eloquent API resources (https://github.com/mpociot/laravel-apidoc-generator/pull/601)
 - `bindings` replaced by `@urlParam` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/599)
 - Better support for arrays and objects in bodyParams (https://github.com/mpociot/laravel-apidoc-generator/pull/597)

@@ -32,7 +32,7 @@ php artisan apidoc:rebuild
 ```
 
 ## Automatically add markdown to the beginning or end of the documentation
- If you wish to automatically add the same content to the docs every time you generate (for instance, an introduction, a disclaimer or an authenticatino guide), you can add a `prepend.md` and/or `append.md` file to the `source` folder in the `output` directory, and they will be added to the generated documentation. 
+ If you wish to automatically add the same content to the docs every time you generate (for instance, an introduction, a disclaimer or an authenticatino guide), you can add a `prepend.md` and/or `append.md` file to the `source` folder in the source output directory (`resources/docs/source`), and they will be added to the generated documentation. 
  
  The contents of `prepend.md` will be added after the front matter and info text, while the contents of `append.md` will be added at the end of the document.
  

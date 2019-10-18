@@ -7,6 +7,8 @@ This is the type of documentation output to generate.
 - `static` will generate a static HTMl page in the `public/docs` folder, so anyone can visit your documentation page by going to {yourapp.domain}/docs.
 - `laravel` will generate the documentation as a Blade view within the `resources/views/apidoc` folder, so you can add routing and authentication.
 
+> In both instances, the source markdown file will be generated in `resources/docs/source`.
+
 If you're using `laravel` type, you can call `\Mpociot\ApiDoc\ApiDoc::routes()` from your routes file (usually `routes/web.php`). This method will create a `/doc` route for your documentation, along with a `/doc.json` variant that will return the Postman collection, if you have that enabled. This method returns the route, so you can call additional methods to customise it (by adding middleware, for instance). You can also pass in the path you'd like to use instead.
 
 ```php
