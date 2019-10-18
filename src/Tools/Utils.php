@@ -5,6 +5,7 @@ namespace Mpociot\ApiDoc\Tools;
 use Illuminate\Routing\Route;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use Symfony\Component\VarExporter\VarExporter;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -95,7 +96,7 @@ class Utils
 
     public static function printPhpValue($value, $indentationLevel = 0)
     {
-        $output = var_export($value, true);
+        $output = VarExporter::export($value);
         // Padding with x spaces so they align
         $split = explode("\n", $output);
         $result = '';
