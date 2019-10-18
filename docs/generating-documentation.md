@@ -58,6 +58,8 @@ php artisan apidoc:rebuild
 
 - Generate your documentation 
 
+To customise existing language templates you can perform the `vendor:publish` command above, then modify the blade templates in `resources/` as necessary.
+
 ## Further modification
 
 This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarian guide](http://marcelpociot.de/documentarian/installation).
