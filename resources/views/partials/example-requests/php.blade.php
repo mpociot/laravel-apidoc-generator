@@ -2,7 +2,7 @@
 
 $client = new \GuzzleHttp\Client();
 $response = $client->{{ strtolower($route['methods'][0]) }}(
-  "{{ rtrim($baseUrl, '/') . '/' . ltrim($route['boundUri'], '/') }}",
+  '{{ rtrim($baseUrl, '/') . '/' . ltrim($route['boundUri'], '/') }}',
   [
 @if(!empty($route['headers']))
     'headers' => {!! \Mpociot\ApiDoc\Tools\Utils::printPhpValue($route['headers'], 4) !!},
@@ -10,7 +10,7 @@ $response = $client->{{ strtolower($route['methods'][0]) }}(
 @if(!empty($route['cleanQueryParameters']))
     'query' => [
 @foreach($route['cleanQueryParameters'] as $parameter => $value)
-      "{{$parameter}}" => "{{$value}}",
+      '{{$parameter}}' => '{{$value}}',
 @endforeach
     ],
 @endif
