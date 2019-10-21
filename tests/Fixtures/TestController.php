@@ -138,6 +138,14 @@ class TestController extends Controller
     }
 
     /**
+     * @unauthenticated
+     */
+    public function withUnauthenticatedTag()
+    {
+        return '';
+    }
+
+    /**
      * @apiResource \Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource
      * @apiResourceModel \Mpociot\ApiDoc\Tests\Fixtures\TestUser
      */

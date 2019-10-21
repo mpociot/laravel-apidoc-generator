@@ -149,7 +149,12 @@ public function createPost(MyRequest $request)
 ```
 
 ## Indicating authentication status
-You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A "Requires authentication" badge will be added to that route in the generated documentation.
+You can use the `@authenticated` annotation on a method to indicate if the endpoint is authenticated. A
+"Requires authentication" badge will be added to that route in the generated documentation.
+
+You can also enable authentication for your API documentation by default by setting `'default_authentication' => true`
+in your config file. Individual endpoints can have authentication disabled individually by using the
+`@unauthenticated` annotation in this case.
 
 ## Providing an example response
 You can provide an example response for a route. This will be displayed in the examples section. There are several ways of doing this.

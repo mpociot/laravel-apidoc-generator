@@ -202,6 +202,12 @@ return [
     'default_group' => 'general',
 
     /*
+     * Whether authentication is required for your API endpoints by default. Note that if you enable
+     * this you can still opt out for individual methods by adding @unauthenticated to your docblock.
+     */
+    'default_authenticated' => false,
+
+    /*
      * Example requests for each endpoint will be shown in each of these languages.
      * Supported options are: bash, javascript, php, python
      * You can add a language of your own, but you must publish the package's views

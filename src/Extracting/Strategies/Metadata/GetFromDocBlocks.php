@@ -32,10 +32,20 @@ class GetFromDocBlocks extends Strategy
     /**
      * @param array $tags Tags in the method doc block
      *
-     * @return bool
+     * @return bool Whether authentication is required
      */
     protected function getAuthStatusFromDocBlock(array $tags)
     {
+        if ($this->config->get('default_authenticated', false)) {
+            // If global default is that all endpoints require authentication, allow @unauthenticated to negate tis
+            $unAuthTag = collect($tags)
+                ->first(function ($tag) {
+                    return $tag instanceof Tag && strtolower($tag->getName()) === 'unauthenticated';
+                });
+
+            return ! $unAuthTag;
+        }
+
         $authTag = collect($tags)
             ->first(function ($tag) {
                 return $tag instanceof Tag && strtolower($tag->getName()) === 'authenticated';

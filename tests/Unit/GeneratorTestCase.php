@@ -41,6 +41,7 @@ abstract class GeneratorTestCase extends TestCase
             ],
         ],
         'default_group' => 'general',
+        'default_authenticated' => false,
     ];
 
     public static $globalValue = null;
@@ -370,6 +371,31 @@ abstract class GeneratorTestCase extends TestCase
         $route = $this->createRoute('GET', '/api/test', 'dummy');
         $authenticated = $this->generator->processRoute($route)['metadata']['authenticated'];
         $this->assertFalse($authenticated);
+    }
+
+    /**
+     * @test
+     * @dataProvider unauthenticatedProvider
+     */
+    public function can_parse_unauthenticed_tags_when_global_authenticated_is_enabled($method, $setting, $expected)
+    {
+        $route = $this->createRoute('GET', '/api/test', $method);
+
+        $config = $this->config;
+        $config['default_authenticated'] = $setting;
+        $generator = new Generator(new DocumentationConfig($config));
+
+        $authenticated = $generator->processRoute($route)['metadata']['authenticated'];
+        $this->assertSame($expected, $authenticated);
+    }
+
+    public function unauthenticatedProvider()
+    {
+        return [
+            'authenticated default' => ['dummy', true, true],
+            'authenticated default with unauthenticated opt out' => ['withUnauthenticatedTag', true, false],
+            'unauthenticated tag ignored without default authenticated' => ['withUnauthenticatedTag', false, false],
+        ];
     }
 
     /** @test */

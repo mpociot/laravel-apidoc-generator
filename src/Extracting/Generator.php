@@ -92,7 +92,7 @@ class Generator
             'groupDescription' => '',
             'title' => '',
             'description' => '',
-            'authenticated' => false,
+            'authenticated' => $this->config->get('default_authenticated', false),
         ];
 
         return $this->iterateThroughStrategies('metadata', $context, [$route, $controller, $method, $rulesToApply]);
