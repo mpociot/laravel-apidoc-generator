@@ -33,10 +33,10 @@ abstract class GeneratorTestCase extends TestCase
                 \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responses' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
-                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
             ],
         ],
