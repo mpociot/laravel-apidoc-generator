@@ -80,7 +80,8 @@ class Generator
         $parsedRoute['responses'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
 
-        $parsedRoute['headers'] = $routeRules['headers'] ?? [];
+        $requestHeaders = $this->fetchRequestHeaders($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['headers'] = $requestHeaders;
 
         return $parsedRoute;
     }
@@ -125,6 +126,13 @@ class Generator
         return null;
     }
 
+    protected function fetchRequestHeaders(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    {
+        $headers = $this->iterateThroughStrategies('requestHeaders', $context, [$route, $controller, $method, $rulesToApply]);
+
+        return array_filter($headers);
+    }
+
     protected function iterateThroughStrategies(string $stage, array $context, array $arguments)
     {
         $defaultStrategies = [
@@ -146,6 +154,9 @@ class Generator
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
+            ],
+            'requestHeaders' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
             ],
         ];
 

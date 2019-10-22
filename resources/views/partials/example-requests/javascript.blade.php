@@ -13,6 +13,7 @@ Object.keys(params)
     .forEach(key => url.searchParams.append(key, params[key]));
 @endif
 
+@if(!empty($route['headers']))
 let headers = {
 @foreach($route['headers'] as $header => $value)
     "{{$header}}": "{{$value}}",
@@ -24,6 +25,7 @@ let headers = {
     "Content-Type": "application/json",
 @endif
 };
+@endif
 @if(count($route['cleanBodyParameters']))
 
 let body = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
@@ -31,7 +33,9 @@ let body = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
 
 fetch(url, {
     method: "{{$route['methods'][0]}}",
+@if(count($route['headers']))
     headers: headers,
+@endif
 @if(count($route['bodyParameters']))
     body: body
 @endif

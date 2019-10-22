@@ -39,6 +39,9 @@ abstract class GeneratorTestCase extends TestCase
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
             ],
+            'requestHeaders' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            ],
         ],
         'default_group' => 'general',
     ];
