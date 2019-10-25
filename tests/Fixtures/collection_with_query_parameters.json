@@ -27,8 +27,8 @@
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": []
+                            "mode": "raw",
+                            "raw": "[]"
                         },
                         "description": "",
                         "response": []
