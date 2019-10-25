@@ -50,7 +50,7 @@ class PostmanCollectionWriter
                     'name' => $groupName,
                     'description' => '',
                     'item' => $routes->map(function ($route) {
-                        $mode = "raw";
+                        $mode = 'raw';
 
                         return [
                             'name' => $route['metadata']['title'] != '' ? $route['metadata']['title'] : url($route['uri']),
@@ -74,7 +74,7 @@ class PostmanCollectionWriter
                                     ->values()->all(),
                                 'body' => [
                                     'mode' => $mode,
-                                    $mode => json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT)
+                                    $mode => json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT),
                                 ],
                                 'description' => $route['metadata']['description'],
                                 'response' => [],
