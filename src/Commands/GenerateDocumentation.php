@@ -98,12 +98,11 @@ class GenerateDocumentation extends Command
         foreach ($routes as $routeItem) {
             $route = $routeItem['route'];
             /** @var Route $route */
-
             $messageFormat = '%s route: [%s] %s';
             $routeMethods = implode(',', $generator->getMethods($route));
             $routePath = $generator->getUri($route);
 
-            if (!$this->isValidRoute($route) || !$this->isRouteVisibleForDocumentation($route->getAction())) {
+            if (! $this->isValidRoute($route) || ! $this->isRouteVisibleForDocumentation($route->getAction())) {
                 $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath));
                 continue;
             }
@@ -112,7 +111,7 @@ class GenerateDocumentation extends Command
                 $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply'] ?? []);
                 $this->info(sprintf($messageFormat, 'Processed', $routeMethods, $routePath));
             } catch (\Exception $exception) {
-                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath) . ' - ' . $exception->getMessage());
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).' - '.$exception->getMessage());
             }
         }
 

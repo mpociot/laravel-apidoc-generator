@@ -57,8 +57,8 @@ class UseResponseFileTag extends Strategy
             preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $relativeFilePath = trim($result[2]);
             $filePath = storage_path($relativeFilePath);
-            if (!file_exists($filePath)) {
-                throw new \Exception('@responseFile ' . $relativeFilePath . ' does not exist');
+            if (! file_exists($filePath)) {
+                throw new \Exception('@responseFile '.$relativeFilePath.' does not exist');
             }
             $status = $result[1] ?: 200;
             $content = $result[2] ? file_get_contents($filePath, true) : '{}';
