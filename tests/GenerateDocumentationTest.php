@@ -235,7 +235,7 @@ class GenerateDocumentationTest extends TestCase
     {
         RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
         RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
-        RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        RouteFacade::post('/api/withBodyParameters', TestController::class.'@withBodyParameters');
         RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
         RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
         RouteFacade::get('/api/withEloquentApiResource', [TestController::class, 'withEloquentApiResource']);
@@ -261,7 +261,7 @@ class GenerateDocumentationTest extends TestCase
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection.json'), true);
-        $this->assertEquals($generatedCollection, $fixtureCollection);
+        $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
@@ -292,8 +292,8 @@ class GenerateDocumentationTest extends TestCase
         $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_updated_url.json'), true);
-        $this->assertEquals($generatedCollection, $fixtureCollection);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_custom_url.json'), true);
+        $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
@@ -310,7 +310,7 @@ class GenerateDocumentationTest extends TestCase
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_secure_url.json'), true);
-        $this->assertEquals($generatedCollection, $fixtureCollection);
+        $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
@@ -330,7 +330,7 @@ class GenerateDocumentationTest extends TestCase
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_custom_headers.json'), true);
-        $this->assertEquals($generatedCollection, $fixtureCollection);
+        $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
@@ -346,7 +346,7 @@ class GenerateDocumentationTest extends TestCase
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_query_parameters.json'), true);
-        $this->assertEquals($generatedCollection, $fixtureCollection);
+        $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
@@ -362,7 +362,7 @@ class GenerateDocumentationTest extends TestCase
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
         $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_body_parameters.json'), true);
-        $this->assertEquals($generatedCollection, $fixtureCollection);
+        $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */

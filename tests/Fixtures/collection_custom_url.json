@@ -27,8 +27,8 @@
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": []
+                            "mode": "raw",
+                            "raw": "[]"
                         },
                         "description": "This will be the long description.\nIt can also be multiple lines long.",
                         "response": []
@@ -50,8 +50,8 @@
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": []
+                            "mode": "raw",
+                            "raw": "[]"
                         },
                         "description": "",
                         "response": []
