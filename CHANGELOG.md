@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Better support for arrays and objects in bodyParams (https://github.com/mpociot/laravel-apidoc-generator/pull/597)
 
 ### Modified
+- Postman collection now have the body as `raw` instead of `formdata`. (https://github.com/mpociot/laravel-apidoc-generator/pull/627)
+- Nonexistent `@responseFile` annotations now show a warning and skip the route (https://github.com/mpociot/laravel-apidoc-generator/pull/620)
+- Use symfony/var-exporter to export PHP arrays, ensuring short array syntax (https://github.com/mpociot/laravel-apidoc-generator/pull/615)
+- Use single quotes in PHP example template (https://github.com/mpociot/laravel-apidoc-generator/pull/612)
+- Transformer annotations are now given priority over all other response strategies (https://github.com/mpociot/laravel-apidoc-generator/pull/620)
 - Made ResponseCalls strategy only execute if no successful responses exist. (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
 - Hide null responses in examples. (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
 - Made `responses` stage additive (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
