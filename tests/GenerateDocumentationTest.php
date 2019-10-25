@@ -292,7 +292,7 @@ class GenerateDocumentationTest extends TestCase
         $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_custom_url.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_custom_url.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
