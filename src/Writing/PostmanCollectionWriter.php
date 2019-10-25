@@ -74,7 +74,7 @@ class PostmanCollectionWriter
                                     ->values()->all(),
                                 'body' => [
                                     'mode' => $mode,
-                                    $mode => json_encode($route['cleanBodyParameters'])
+                                    $mode => json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT)
                                 ],
                                 'description' => $route['metadata']['description'],
                                 'response' => [],
