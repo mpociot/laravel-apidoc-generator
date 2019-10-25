@@ -358,4 +358,12 @@ class TestController extends Controller
     {
         return '';
     }
+
+    /**
+     * @responseFile i-do-not-exist.json
+     */
+    public function withNonExistentResponseFile()
+    {
+        return '';
+    }
 }

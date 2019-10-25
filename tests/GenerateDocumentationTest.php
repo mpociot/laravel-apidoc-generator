@@ -115,6 +115,18 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
+    public function can_skip_non_existent_response_files()
+    {
+        RouteFacade::get('/api/non-existent', TestController::class.'@withNonExistentResponseFile');
+
+        config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
+        $output = $this->artisan('apidoc:generate');
+
+        $this->assertContains('Skipping route: [GET] api/non-existent', $output);
+        $this->assertContains('@responseFile i-do-not-exist.json does not exist', $output);
+    }
+
+    /** @test */
     public function can_parse_resource_routes()
     {
         RouteFacade::resource('/api/users', TestResourceController::class);
