@@ -193,20 +193,20 @@ fetch(url, {
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    user_id | integer |  required  | The id of the user.
-        room_id | string |  optional  | The id of the room.
-        forever | boolean |  optional  | Whether to ban the user forever.
-        another_one | number |  optional  | Just need something here.
-        yet_another_param | object |  required  | Some object params.
-        yet_another_param.name | string |  required  | Subkey in the object param.
-        even_more_param | array |  optional  | Some array params.
-        even_more_param.* | float |  optional  | Subkey in the array param.
-        book.name | string |  optional  | 
-        book.author_id | integer |  optional  | 
-        book[pages_count] | integer |  optional  | 
-        ids.* | integer |  optional  | 
-        users.*.first_name | string |  optional  | The first name of the user.
-        users.*.last_name | string |  optional  | The last name of the user.
+    `user_id` | integer |  required  | The id of the user.
+        `room_id` | string |  optional  | The id of the room.
+        `forever` | boolean |  optional  | Whether to ban the user forever.
+        `another_one` | number |  optional  | Just need something here.
+        `yet_another_param` | object |  required  | Some object params.
+        `yet_another_param.name` | string |  required  | Subkey in the object param.
+        `even_more_param` | array |  optional  | Some array params.
+        `even_more_param.*` | float |  optional  | Subkey in the array param.
+        `book.name` | string |  optional  | 
+        `book.author_id` | integer |  optional  | 
+        `book[pages_count]` | integer |  optional  | 
+        `ids.*` | integer |  optional  | 
+        `users.*.first_name` | string |  optional  | The first name of the user.
+        `users.*.last_name` | string |  optional  | The last name of the user.
     
 <!-- END_a25cb3b490fa579d7d77b386bbb7ec03 -->
 
@@ -262,11 +262,11 @@ fetch(url, {
 
 Parameter | Status | Description
 --------- | ------- | ------- | -----------
-    location_id |  required  | The id of the location.
-    user_id |  required  | The id of the user.
-    page |  required  | The page number.
-    filters |  optional  | The filters.
-    url_encoded |  optional  | Used for testing that URL parameters will be URL-encoded where needed.
+    `location_id` |  required  | The id of the location.
+    `user_id` |  required  | The id of the user.
+    `page` |  required  | The page number.
+    `filters` |  optional  | The filters.
+    `url_encoded` |  optional  | Used for testing that URL parameters will be URL-encoded where needed.
 
 <!-- END_5c545aa7f913d84b23ac4cfefc1de659 -->
 
@@ -545,14 +545,14 @@ fetch(url, {
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    param |  required  | 
-    param2 |  optional  | 
-    param4 |  optional  | 
+    `param` |  required  | 
+    `param2` |  optional  | 
+    `param4` |  optional  | 
 #### Query Parameters
 
 Parameter | Status | Description
 --------- | ------- | ------- | -----------
-    something |  optional  | 
+    `something` |  optional  | 
 
 <!-- END_33e62c07bc6d7286628b18c0e046ebea -->
 
