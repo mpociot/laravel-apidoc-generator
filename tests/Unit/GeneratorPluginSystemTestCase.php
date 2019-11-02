@@ -2,14 +2,14 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Extracting\Generator;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use ReflectionClass;
 use ReflectionMethod;
-use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Extracting\Generator;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
 {

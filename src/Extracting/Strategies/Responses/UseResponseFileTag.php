@@ -3,10 +3,10 @@
 namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Illuminate\Routing\Route;
-use Mpociot\Reflection\DocBlock;
-use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Mpociot\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock\Tag;
 
 /**
  * Get a response from from a file in the docblock ( @responseFile ).

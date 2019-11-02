@@ -2,10 +2,10 @@
 
 namespace Mpociot\ApiDoc\Extracting;
 
-use ReflectionClass;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
+use ReflectionClass;
 
 /**
  * Class RouteDocBlocker

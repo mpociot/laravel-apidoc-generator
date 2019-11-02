@@ -2,16 +2,16 @@
 
 namespace Mpociot\ApiDoc\Extracting\Strategies\BodyParameters;
 
-use ReflectionClass;
-use ReflectionMethod;
+use Dingo\Api\Http\FormRequest as DingoFormRequest;
+use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 use Illuminate\Routing\Route;
-use Mpociot\Reflection\DocBlock;
-use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Extracting\ParamHelpers;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
-use Dingo\Api\Http\FormRequest as DingoFormRequest;
-use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
+use Mpociot\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock\Tag;
+use ReflectionClass;
+use ReflectionMethod;
 
 class GetFromBodyParamTag extends Strategy
 {

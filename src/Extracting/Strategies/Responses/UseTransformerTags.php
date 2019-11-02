@@ -3,20 +3,20 @@
 namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Exception;
-use ReflectionClass;
-use ReflectionMethod;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use League\Fractal\Manager;
-use Illuminate\Routing\Route;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
-use League\Fractal\Resource\Item;
 use Mpociot\Reflection\DocBlock\Tag;
-use Illuminate\Database\Eloquent\Model;
-use League\Fractal\Resource\Collection;
-use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Parse a transformer response from the docblock ( @transformer || @transformercollection ).
