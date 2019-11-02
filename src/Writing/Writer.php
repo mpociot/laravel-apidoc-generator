@@ -5,8 +5,8 @@ namespace Mpociot\ApiDoc\Writing;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Mpociot\Documentarian\Documentarian;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\Documentarian\Documentarian;
 
 class Writer
 {

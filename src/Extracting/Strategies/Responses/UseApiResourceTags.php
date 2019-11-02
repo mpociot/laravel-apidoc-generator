@@ -3,22 +3,22 @@
 namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Exception;
-use ReflectionClass;
-use ReflectionMethod;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Arr;
+use League\Fractal\Resource\Collection;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Illuminate\Database\Eloquent\Model;
-use League\Fractal\Resource\Collection;
-use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Parse an Eloquent API resource response from the docblock ( @apiResource || @apiResourcecollection ).

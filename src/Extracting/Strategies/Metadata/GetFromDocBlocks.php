@@ -2,13 +2,13 @@
 
 namespace Mpociot\ApiDoc\Extracting\Strategies\Metadata;
 
-use ReflectionClass;
-use ReflectionMethod;
 use Illuminate\Routing\Route;
-use Mpociot\Reflection\DocBlock;
-use Mpociot\Reflection\DocBlock\Tag;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Mpociot\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock\Tag;
+use ReflectionClass;
+use ReflectionMethod;
 
 class GetFromDocBlocks extends Strategy
 {

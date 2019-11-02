@@ -2,19 +2,19 @@
 
 namespace Mpociot\ApiDoc\Commands;
 
-use ReflectionClass;
-use ReflectionException;
-use Illuminate\Routing\Route;
 use Illuminate\Console\Command;
-use Mpociot\ApiDoc\Tools\Flags;
-use Mpociot\ApiDoc\Tools\Utils;
-use Mpociot\Reflection\DocBlock;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
-use Mpociot\ApiDoc\Writing\Writer;
 use Illuminate\Support\Facades\URL;
 use Mpociot\ApiDoc\Extracting\Generator;
 use Mpociot\ApiDoc\Matching\RouteMatcher;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Tools\Flags;
+use Mpociot\ApiDoc\Tools\Utils;
+use Mpociot\ApiDoc\Writing\Writer;
+use Mpociot\Reflection\DocBlock;
+use ReflectionClass;
+use ReflectionException;
 
 class GenerateDocumentation extends Command
 {

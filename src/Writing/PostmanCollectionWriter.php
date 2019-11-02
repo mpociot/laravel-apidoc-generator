@@ -2,10 +2,10 @@
 
 namespace Mpociot\ApiDoc\Writing;
 
-use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class PostmanCollectionWriter
 {
