@@ -72,6 +72,9 @@ class Generator
         $parsedRoute['queryParameters'] = $queryParameters;
         $parsedRoute['cleanQueryParameters'] = $this->cleanParams($queryParameters);
 
+        $headers = $this->fetchRequestHeaders($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['headers'] = $headers;
+
         $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['bodyParameters'] = $bodyParameters;
         $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
@@ -79,9 +82,6 @@ class Generator
         $responses = $this->fetchResponses($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['responses'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
-
-        $requestHeaders = $this->fetchRequestHeaders($controller, $method, $route, $routeRules, $parsedRoute);
-        $parsedRoute['headers'] = $requestHeaders;
 
         return $parsedRoute;
     }
@@ -128,7 +128,7 @@ class Generator
 
     protected function fetchRequestHeaders(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
-        $headers = $this->iterateThroughStrategies('requestHeaders', $context, [$route, $controller, $method, $rulesToApply]);
+        $headers = $this->iterateThroughStrategies('headers', $context, [$route, $controller, $method, $rulesToApply]);
 
         return array_filter($headers);
     }
@@ -145,6 +145,9 @@ class Generator
             'queryParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
             ],
+            'headers' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            ],
             'bodyParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
@@ -154,9 +157,6 @@ class Generator
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
-            ],
-            'requestHeaders' => [
-                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
             ],
         ];
 

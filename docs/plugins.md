@@ -5,10 +5,10 @@ You can use plugins to alter how the Generator fetches data about your routes. F
 Route processing is performed in six stages:
 - metadata (this covers route `title`, route `description`, route `groupName`, route `groupDescription`, and authentication status (`authenticated`))
 - urlParameters
-- bodyParameters
 - queryParameters
+- headers (headers to be added to example request and response calls)
+- bodyParameters
 - responses
-- requestHeaeers
 
 For each stage, the Generator attempts the specified strategies to fetch data. The Generator will call of the strategies configured, progressively combining their results together before to produce the final output of that stage.
 
@@ -64,6 +64,9 @@ The last thing to do is to register the strategy. Strategies are registered in a
         'queryParameters' => [
             \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
         ],
+        'headers' => [
+            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+        ],
         'bodyParameters' => [
             \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
@@ -73,9 +76,6 @@ The last thing to do is to register the strategy. Strategies are registered in a
             \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
             \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
             \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
-        ],
-        'requestHeaders' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
         ],
     ],
 ...
@@ -173,4 +173,4 @@ Each strategy class must implement the __invoke method with the parameters as de
 
 Responses are _additive_. This means all the responses returned from each stage are added to the `responses` array. But note that the `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.
 
-- In the `requestHeaders` stage, you can return an array of headers. You may also negate existing headers by providing `false` as the header value.
+- In the `headers` stage, you can return an array of headers. You may also negate existing headers by providing `false` as the header value.

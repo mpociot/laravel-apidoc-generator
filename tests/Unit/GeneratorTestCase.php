@@ -29,6 +29,9 @@ abstract class GeneratorTestCase extends TestCase
             'queryParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
             ],
+            'headers' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            ],
             'bodyParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
@@ -38,9 +41,6 @@ abstract class GeneratorTestCase extends TestCase
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
-            ],
-            'requestHeaders' => [
-                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
             ],
         ],
         'default_group' => 'general',

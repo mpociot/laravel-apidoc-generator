@@ -41,7 +41,7 @@ class ResponseCalls extends Strategy
         $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['bodyParams'] ?? []);
         $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['queryParams'] ?? []);
         $urlParameters = $context['cleanUrlParameters'];
-        $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters, $routeRules['headers'] ?? []);
+        $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters, $context['headers'] ?? []);
 
         try {
             $response = $this->makeApiCall($request);
