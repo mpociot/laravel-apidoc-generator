@@ -15,6 +15,7 @@ params = {
 
 }
 @endif
+@if(!empty($route['headers']))
 headers = {
 @foreach($route['headers'] as $header => $value)
   '{{$header}}': '{{$value}}'@if(!($loop->last)),
@@ -22,6 +23,7 @@ headers = {
 @endforeach
 
 }
-response = requests.request('{{$route['methods'][0]}}', url, headers=headers{{ count($route['cleanBodyParameters']) ? ', json=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
+@endif
+response = requests.request('{{$route['methods'][0]}}', url{{ count($route['headers']) ?', headers=headers' : '' }}{{ count($route['cleanBodyParameters']) ? ', json=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
 response.json()
 ```

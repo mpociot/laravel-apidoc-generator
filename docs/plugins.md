@@ -2,16 +2,17 @@
 You can use plugins to alter how the Generator fetches data about your routes. For instance, suppose all your routes have a body parameter `organizationId`, and you don't want to annotate this with `@queryParam` on each method. You can create a plugin that adds this to all your body parameters. Let's see how to do this.
 
 ## The stages of route processing
-Route processing is performed in four stages:
+Route processing is performed in six stages:
 - metadata (this covers route `title`, route `description`, route `groupName`, route `groupDescription`, and authentication status (`authenticated`))
 - urlParameters
 - bodyParameters
 - queryParameters
 - responses
+- requestHeaeers
 
 For each stage, the Generator attempts the specified strategies to fetch data. The Generator will call of the strategies configured, progressively combining their results together before to produce the final output of that stage.
 
-There are a number of strategies inccluded with the package, so you don't have to set up anything to get it working.
+There are a number of strategies included with the package, so you don't have to set up anything to get it working.
 
 > Note: The included ResponseCalls strategy is designed to stop if a response with a 2xx status code has already been gotten via any other strategy.
 
@@ -72,6 +73,9 @@ The last thing to do is to register the strategy. Strategies are registered in a
             \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
             \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
             \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
+        ],
+        'requestHeaders' => [
+            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
         ],
     ],
 ...
@@ -168,3 +172,5 @@ Each strategy class must implement the __invoke method with the parameters as de
 ```
 
 Responses are _additive_. This means all the responses returned from each stage are added to the `responses` array. But note that the `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.
+
+- In the `requestHeaders` stage, you can return an array of headers. You may also negate existing headers by providing `false` as the header value.

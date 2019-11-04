@@ -172,7 +172,10 @@ class Writer
                     // Set content type if the user forgot to set it
                     $route['headers']['Content-Type'] = 'application/json';
                 }
+
+                $hasRequestOptions = !empty($route['headers']) || !empty($route['cleanQueryParameters']) || !empty($route['cleanBodyParameters']);
                 $route['output'] = (string) view('apidoc::partials.route')
+                    ->with('hasRequestOptions', $hasRequestOptions)
                     ->with('route', $route)
                     ->with('settings', $settings)
                     ->with('baseUrl', $this->baseUrl)
