@@ -173,7 +173,7 @@ class Writer
                     $route['headers']['Content-Type'] = 'application/json';
                 }
 
-                $hasRequestOptions = !empty($route['headers']) || !empty($route['cleanQueryParameters']) || !empty($route['cleanBodyParameters']);
+                $hasRequestOptions = ! empty($route['headers']) || ! empty($route['cleanQueryParameters']) || ! empty($route['cleanBodyParameters']);
                 $route['output'] = (string) view('apidoc::partials.route')
                     ->with('hasRequestOptions', $hasRequestOptions)
                     ->with('route', $route)
