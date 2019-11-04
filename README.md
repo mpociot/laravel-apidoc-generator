@@ -44,7 +44,7 @@ $app->configure('apidoc');
 ```
 
 ## Documentation
-Check out the documentation at [ReadTheDocs](http://laravel-apidoc-generator.rftd.io/en/v4).
+Check out the documentation at [ReadTheDocs](http://laravel-apidoc-generator.rtfd.io/en/v4). Don't forget to check out the [migration guide](https://laravel-apidoc-generator.rtfd.io/en/v4/migrating.html) if you're coming from v3 to v4.
 
 ### License
 
