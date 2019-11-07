@@ -2,11 +2,11 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use ReflectionClass;
-use ReflectionMethod;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Routing\Route;
+use ReflectionClass;
+use ReflectionMethod;
 
 class Generator
 {

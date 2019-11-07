@@ -3,8 +3,8 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Dingo\Api\Routing\Router;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 
 class DingoGeneratorTest extends GeneratorTestCase
 {

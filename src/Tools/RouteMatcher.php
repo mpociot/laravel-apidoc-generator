@@ -2,10 +2,10 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use Illuminate\Support\Str;
-use Illuminate\Routing\Route;
 use Dingo\Api\Routing\RouteCollection;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Illuminate\Support\Str;
 
 class RouteMatcher
 {

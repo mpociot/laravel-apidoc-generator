@@ -2,10 +2,10 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use Illuminate\Support\Str;
 use Illuminate\Routing\Route;
-use League\Flysystem\Filesystem;
+use Illuminate\Support\Str;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 

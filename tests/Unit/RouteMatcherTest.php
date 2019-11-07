@@ -2,11 +2,11 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
-use Illuminate\Support\Str;
 use Dingo\Api\Routing\Router;
-use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Tools\RouteMatcher;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Illuminate\Support\Str;
+use Mpociot\ApiDoc\Tools\RouteMatcher;
+use Orchestra\Testbench\TestCase;
 
 class RouteMatcherTest extends TestCase
 {

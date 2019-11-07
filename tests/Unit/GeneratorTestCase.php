@@ -3,12 +3,12 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Illuminate\Support\Arr;
-use Orchestra\Testbench\TestCase;
-use Mpociot\ApiDoc\Tools\Generator;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Tools\Generator;
+use Orchestra\Testbench\TestCase;
 
 abstract class GeneratorTestCase extends TestCase
 {
