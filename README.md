@@ -12,7 +12,7 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 [![StyleCI](https://styleci.io/repos/57999295/shield?style=flat)](https://styleci.io/repos/57999295)
 
 ## Installation
-PHP 7.2 and Laravel 5.7 or higher are required.
+PHP 7.2 and Laravel/Lumen 5.7 or higher are required.
 
 > If your application does not meet these requirements, you can check out the 3.x branch for older releases.
 
@@ -44,7 +44,7 @@ $app->configure('apidoc');
 ```
 
 ## Documentation
-Check out the documentation at [ReadTheDocs](http://laravel-apidoc-generator.rtfd.io/en/v4). Don't forget to check out the [migration guide](https://laravel-apidoc-generator.rtfd.io/en/v4/migrating.html) if you're coming from v3 to v4.
+Check out the documentation at [ReadTheDocs](http://laravel-apidoc-generator.rtfd.io/). Don't forget to check out the [migration guide](https://laravel-apidoc-generator.rtfd.io/en/latest/migrating.html) if you're coming from v3 to v4.
 
 ### License
 
