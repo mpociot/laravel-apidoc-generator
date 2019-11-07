@@ -81,9 +81,7 @@ class UseApiResourceTags extends Strategy
             }
 
             /** @var Response $response */
-            $response = response()->json(
-                $resource->toArray(app(Request::class))
-            );
+            $response = $resource->toResponse(app(Request::class));
 
             return [
                 [
