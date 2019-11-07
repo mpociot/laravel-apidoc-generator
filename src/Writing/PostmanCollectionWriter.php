@@ -1,13 +1,13 @@
 <?php
 
-namespace Mpociot\ApiDoc\Postman;
+namespace Mpociot\ApiDoc\Writing;
 
-use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
-class CollectionWriter
+class PostmanCollectionWriter
 {
     /**
      * @var Collection
@@ -32,14 +32,9 @@ class CollectionWriter
 
     public function getCollection()
     {
-        try {
-            URL::forceRootUrl($this->baseUrl);
-            if (Str::startsWith($this->baseUrl, 'https://')) {
-                URL::forceScheme('https');
-            }
-        } catch (\Error $e) {
-            echo "Warning: Couldn't force base url as your version of Lumen doesn't have the forceRootUrl method.\n";
-            echo "You should probably double check URLs in your generated Postman collection.\n";
+        URL::forceRootUrl($this->baseUrl);
+        if (Str::startsWith($this->baseUrl, 'https://')) {
+            URL::forceScheme('https');
         }
 
         $collection = [
@@ -55,16 +50,16 @@ class CollectionWriter
                     'name' => $groupName,
                     'description' => '',
                     'item' => $routes->map(function ($route) {
-                        $mode = $route['methods'][0] === 'PUT' ? 'urlencoded' : 'formdata';
+                        $mode = 'raw';
 
                         return [
-                            'name' => $route['title'] != '' ? $route['title'] : url($route['uri']),
+                            'name' => $route['metadata']['title'] != '' ? $route['metadata']['title'] : url($route['uri']),
                             'request' => [
                                 'url' => url($route['uri']).(collect($route['queryParameters'])->isEmpty()
-                                    ? ''
-                                    : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
-                                        return urlencode($key).'='.urlencode($parameter['value'] ?? '');
-                                    })->all()))),
+                                        ? ''
+                                        : ('?'.implode('&', collect($route['queryParameters'])->map(function ($parameter, $key) {
+                                            return urlencode($key).'='.urlencode($parameter['value'] ?? '');
+                                        })->all()))),
                                 'method' => $route['methods'][0],
                                 'header' => collect($route['headers'])
                                     ->union([
@@ -79,16 +74,9 @@ class CollectionWriter
                                     ->values()->all(),
                                 'body' => [
                                     'mode' => $mode,
-                                    $mode => collect($route['bodyParameters'])->map(function ($parameter, $key) {
-                                        return [
-                                            'key' => $key,
-                                            'value' => $parameter['value'] ?? '',
-                                            'type' => 'text',
-                                            'enabled' => true,
-                                        ];
-                                    })->values()->toArray(),
+                                    $mode => json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT),
                                 ],
-                                'description' => $route['description'],
+                                'description' => $route['metadata']['description'],
                                 'response' => [],
                             ],
                         ];
@@ -97,6 +85,6 @@ class CollectionWriter
             })->values()->toArray(),
         ];
 
-        return json_encode($collection);
+        return json_encode($collection, JSON_PRETTY_PRINT);
     }
 }

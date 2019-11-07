@@ -2,20 +2,22 @@
 You can use plugins to alter how the Generator fetches data about your routes. For instance, suppose all your routes have a body parameter `organizationId`, and you don't want to annotate this with `@queryParam` on each method. You can create a plugin that adds this to all your body parameters. Let's see how to do this.
 
 ## The stages of route processing
-Route processing is performed in four stages:
+Route processing is performed in six stages:
 - metadata (this covers route `title`, route `description`, route `groupName`, route `groupDescription`, and authentication status (`authenticated`))
-- bodyParameters
+- urlParameters
 - queryParameters
+- headers (headers to be added to example request and response calls)
+- bodyParameters
 - responses
 
 For each stage, the Generator attempts the specified strategies to fetch data. The Generator will call of the strategies configured, progressively combining their results together before to produce the final output of that stage.
 
-There are a number of strategies inccluded with the package, so you don't have to set up anything to get it working.
+There are a number of strategies included with the package, so you don't have to set up anything to get it working.
 
-> Note: The included ResponseCalls strategy is designed to stop if a response has already been gotten from any other strategy.
+> Note: The included ResponseCalls strategy is designed to stop if a response with a 2xx status code has already been gotten via any other strategy.
 
 ## Strategies
-To create a strategy, create a class that extends `\Mpociot\ApiDoc\Strategies\Strategy`.
+To create a strategy, create a class that extends `\Mpociot\ApiDoc\Extracting\Strategies\Strategy`.
 
 The `__invoke` method of the strategy is where you perform your actions and return data. It receives the following arguments:
 - the route (instance of `\Illuminate\Routing\Route`)
@@ -30,7 +32,7 @@ The `__invoke` method of the strategy is where you perform your actions and retu
 <?php
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Strategies\Strategy;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 
 class AddOrganizationIdBodyParameter extends Strategy
 {
@@ -54,19 +56,26 @@ The last thing to do is to register the strategy. Strategies are registered in a
 ...
     'strategies' => [
         'metadata' => [
-            \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
         ],
-        'bodyParameters' => [
-            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+        'urlParameters' => [
+            \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
-            \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
+        ],
+        'headers' => [
+            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+        ],
+        'bodyParameters' => [
+            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
-            \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
-            \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
-            \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
         ],
     ],
 ...
@@ -77,7 +86,7 @@ You can add, replace or remove strategies from here. In our case, we're adding o
 ```php
 
         'bodyParameters' => [
-            \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             AddOrganizationIdBodyParameter::class,
         ],
 ```
@@ -109,17 +118,19 @@ public function __invoke(Route $route, \ReflectionClass $controller, \Reflection
 }
 ```
 
+> Note: If you would like a parameter (body or query) to be included in the documentation but excluded from examples, set its `value` property to `null`.
+
 The strategy class also has access to the current apidoc configuration via its `config` property. For instance, you can retrieve the default group with `$this->config->get('default_group')`.
 
-Yopu are also provided with the instance pproperty `stage`, which is set to the name of the currently executing stage.
+You are also provided with the instance pproperty `stage`, which is set to the name of the currently executing stage.
 
 
 ## Utilities
 You have access to a number of tools when developing strategies. They include:
 
-- The `RouteDocBlocker` class (in the `\Mpociot\ApiDoc\Tools` namespace) has a single public static method, `getDocBlocksFromRoute(Route $route)`. It allows you to retrieve the docblocks for a given route. It returns an array of with two keys: `method` and `class` containing the docblocks for the method and controller handling the route respectively. Both are instances of `\Mpociot\Reflection\DocBlock`.
+- The `RouteDocBlocker` class (in the `\Mpociot\ApiDoc\Extracting` namespace) has a single public static method, `getDocBlocksFromRoute(Route $route)`. It allows you to retrieve the docblocks for a given route. It returns an array of with two keys: `method` and `class` containing the docblocks for the method and controller handling the route respectively. Both are instances of `\Mpociot\Reflection\DocBlock`.
 
-- The `ParamsHelper` trait (in the `\Mpociot\ApiDoc\Tools` namespace) can be included in your strategies. It contains a number of useful methods for working with parameters, including type casting and generating dummy values.
+- The `ParamsHelper` trait (in the `\Mpociot\ApiDoc\Extracting` namespace) can be included in your strategies. It contains a number of useful methods for working with parameters, including type casting and generating dummy values.
 
 ## API
 Each strategy class must implement the __invoke method with the parameters as described above. This method must return the needed data for the intended stage, or `null` to indicate failure.
@@ -136,9 +147,30 @@ Each strategy class must implement the __invoke method with the parameters as de
 - In the `bodyParameters` and `queryParameters` stages, you can return an array with arbitrary keys. These keys will serve as the names of your parameters. Array keys can be indicated with Laravel's dot notation. The value of each key should be an array with the following keys:
 
 ```
-'type', // Only used in bodyParameters
+'type', // Only valid in bodyParameters
 'description', 
 'required', // boolean
 'value', // An example value for the parameter
 ```
-- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each key in the array should be a HTTP status code, and each value should be a string containing the response.
+- In the `responses` stage, your strategy should return an array containing the responses for different status codes. Each item in the array should be an array representing the response with a `status` key containing the HTTP status code, and a `content` key a string containing the response. For example:
+
+```php
+
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
+    {
+        return [
+            [
+                'content' => "Haha",
+                'status' => 201
+            ],
+            [
+                'content' => "Nope",
+                'status' => 404
+            ],
+        ]
+    }
+```
+
+Responses are _additive_. This means all the responses returned from each stage are added to the `responses` array. But note that the `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.
+
+- In the `headers` stage, you can return an array of headers. You may also negate existing headers by providing `false` as the header value.

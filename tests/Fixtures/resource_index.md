@@ -29,17 +29,20 @@ Welcome to the generated API reference.
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/users" \
+curl -X GET \
+    -G "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users");
+const url = new URL(
+    "http://localhost/api/users"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "GET",
@@ -70,17 +73,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/users/create" \
+curl -X GET \
+    -G "http://localhost/api/users/create" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users/create");
+const url = new URL(
+    "http://localhost/api/users/create"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "GET",
@@ -111,17 +117,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X POST "http://localhost/api/users" \
+curl -X POST \
+    "http://localhost/api/users" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users");
+const url = new URL(
+    "http://localhost/api/users"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "POST",
@@ -145,17 +154,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/users/1" \
+curl -X GET \
+    -G "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users/1");
+const url = new URL(
+    "http://localhost/api/users/1"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "GET",
@@ -186,17 +198,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X GET -G "http://localhost/api/users/1/edit" \
+curl -X GET \
+    -G "http://localhost/api/users/1/edit" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users/1/edit");
+const url = new URL(
+    "http://localhost/api/users/1/edit"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "GET",
@@ -227,17 +242,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X PUT "http://localhost/api/users/1" \
+curl -X PUT \
+    "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users/1");
+const url = new URL(
+    "http://localhost/api/users/1"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "PUT",
@@ -263,17 +281,20 @@ fetch(url, {
 > Example request:
 
 ```bash
-curl -X DELETE "http://localhost/api/users/1" \
+curl -X DELETE \
+    "http://localhost/api/users/1" \
     -H "Accept: application/json"
 ```
 
 ```javascript
-const url = new URL("http://localhost/api/users/1");
+const url = new URL(
+    "http://localhost/api/users/1"
+);
 
 let headers = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-}
+};
 
 fetch(url, {
     method: "DELETE",

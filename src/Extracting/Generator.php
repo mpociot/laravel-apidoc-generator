@@ -1,12 +1,14 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace Mpociot\ApiDoc\Extracting;
 
-use ReflectionClass;
-use ReflectionMethod;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use Mpociot\ApiDoc\Tools\Utils;
+use ReflectionClass;
+use ReflectionMethod;
 
 class Generator
 {
@@ -43,11 +45,11 @@ class Generator
 
     /**
      * @param \Illuminate\Routing\Route $route
-     * @param array $rulesToApply Rules to apply when generating documentation for this route
+     * @param array $routeRules Rules to apply when generating documentation for this route
      *
      * @return array
      */
-    public function processRoute(Route $route, array $rulesToApply = [])
+    public function processRoute(Route $route, array $routeRules = [])
     {
         list($controllerName, $methodName) = Utils::getRouteClassAndMethodNames($route->getAction());
         $controller = new ReflectionClass($controllerName);
@@ -57,25 +59,29 @@ class Generator
             'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
-            'boundUri' => Utils::getFullUrl($route, $rulesToApply['bindings'] ?? ($rulesToApply['response_calls']['bindings'] ?? [])),
         ];
-        $metadata = $this->fetchMetadata($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $metadata = $this->fetchMetadata($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['metadata'] = $metadata;
-        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
-        $parsedRoute['bodyParameters'] = $bodyParameters;
-        $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
-        $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $rulesToApply, $parsedRoute);
+        $urlParameters = $this->fetchUrlParameters($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['urlParameters'] = $urlParameters;
+        $parsedRoute['cleanUrlParameters'] = $this->cleanParams($urlParameters);
+        $parsedRoute['boundUri'] = Utils::getFullUrl($route, $parsedRoute['cleanUrlParameters']);
+
+        $queryParameters = $this->fetchQueryParameters($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['queryParameters'] = $queryParameters;
         $parsedRoute['cleanQueryParameters'] = $this->cleanParams($queryParameters);
 
-        $responses = $this->fetchResponses($controller, $method, $route, $rulesToApply, $parsedRoute);
-        $parsedRoute['response'] = $responses;
+        $headers = $this->fetchRequestHeaders($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['headers'] = $headers;
+
+        $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['bodyParameters'] = $bodyParameters;
+        $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
+
+        $responses = $this->fetchResponses($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['responses'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
-
-        $parsedRoute['headers'] = $rulesToApply['headers'] ?? [];
-
-        $parsedRoute += $metadata;
 
         return $parsedRoute;
     }
@@ -93,9 +99,9 @@ class Generator
         return $this->iterateThroughStrategies('metadata', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchUrlParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
-        return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
+        return $this->iterateThroughStrategies('urlParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
     protected function fetchQueryParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
@@ -103,38 +109,54 @@ class Generator
         return $this->iterateThroughStrategies('queryParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
+    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    {
+        return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
+    }
+
     protected function fetchResponses(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
         $responses = $this->iterateThroughStrategies('responses', $context, [$route, $controller, $method, $rulesToApply]);
         if (count($responses)) {
-            return collect($responses)->map(function (string $response, int $status) {
-                return [
-                    'status' => $status ?: 200,
-                    'content' => $response,
-                ];
-            })->values()->toArray();
+            return array_filter($responses, function ($response) {
+                return $response['content'] != null;
+            });
         }
 
         return null;
+    }
+
+    protected function fetchRequestHeaders(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    {
+        $headers = $this->iterateThroughStrategies('headers', $context, [$route, $controller, $method, $rulesToApply]);
+
+        return array_filter($headers);
     }
 
     protected function iterateThroughStrategies(string $stage, array $context, array $arguments)
     {
         $defaultStrategies = [
             'metadata' => [
-                \Mpociot\ApiDoc\Strategies\Metadata\GetFromDocBlocks::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
             ],
-            'bodyParameters' => [
-                \Mpociot\ApiDoc\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            'urlParameters' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
             ],
             'queryParameters' => [
-                \Mpociot\ApiDoc\Strategies\QueryParameters\GetFromQueryParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            ],
+            'headers' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            ],
+            'bodyParameters' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responses' => [
-                \Mpociot\ApiDoc\Strategies\Responses\UseResponseTag::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseResponseFileTag::class,
-                \Mpociot\ApiDoc\Strategies\Responses\UseTransformerTags::class,
-                \Mpociot\ApiDoc\Strategies\Responses\ResponseCalls::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
             ],
         ];
 
@@ -143,10 +165,16 @@ class Generator
         $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
             $strategy = new $strategyClass($stage, $this->config);
-            $arguments[] = $context;
-            $results = $strategy(...$arguments);
+            $strategyArgs = $arguments;
+            $strategyArgs[] = $context;
+            $results = $strategy(...$strategyArgs);
             if (! is_null($results)) {
                 foreach ($results as $index => $item) {
+                    if ($stage == 'responses') {
+                        // Responses are additive
+                        $context[$stage][] = $item;
+                        continue;
+                    }
                     // Using a for loop rather than array_merge or +=
                     // so it does not renumber numeric keys
                     // and also allows values to be overwritten

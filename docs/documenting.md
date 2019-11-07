@@ -48,19 +48,31 @@ class UserController extends Controller
 ![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
 
 ## Specifying request parameters
-To specify a list of valid parameters your API route accepts, use the `@bodyParam` and `@queryParam` annotations.
+To specify a list of valid parameters your API route accepts, use the `@urlParam`, `@bodyParam` and `@queryParam` annotations.
+- The `@urlParam` annotation is used for describing parameters in your URl. For instance, in a Laravel route with this URL: "/post/{id}/{lang?}", you would use this annotation to describe the `id` and `lang` parameters. It takes the name of the parameter, an optional "required" label, and then its description.
+- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description.
 - The `@bodyParam` annotation takes the name of the parameter, its type, an optional "required" label, and then its description. 
-- The `@queryParam` annotation takes the name of the parameter, an optional "required" label, and then its description,
 
 Examples:
 
 ```php
 /**
- * @bodyParam title string required The title of the post.
- * @bodyParam body string required The title of the post.
- * @bodyParam type string The type of post to create. Defaults to 'textophonious'.
- * @bodyParam author_id int the ID of the author
- * @bodyParam thumbnail image This is required if the post type is 'imagelicious'.
+ * @urlParam id required The ID of the post.
+ * @urlParam lang The language.
+ * @bodyParam user_id int required The id of the user. Example: 9
+ * @bodyParam room_id string The id of the room.
+ * @bodyParam forever boolean Whether to ban the user forever. Example: false
+ * @bodyParam another_one number Just need something here.
+ * @bodyParam yet_another_param object required Some object params.
+ * @bodyParam yet_another_param.name string required Subkey in the object param.
+ * @bodyParam even_more_param array Some array params.
+ * @bodyParam even_more_param.* float Subkey in the array param.
+ * @bodyParam book.name string
+ * @bodyParam book.author_id integer
+ * @bodyParam book[pages_count] integer
+ * @bodyParam ids.* integer
+ * @bodyParam users.*.first_name string The first name of the user. Example: John
+ * @bodyParam users.*.last_name string The last name of the user. Example: Doe
  */
 public function createPost()
 {
@@ -82,7 +94,9 @@ They will be included in the generated documentation text and example requests.
 
 **Result:**
 
-![](body_params.png)
+![](body_params_1.png)
+
+![](body_params_2.png)
 
 ### Example parameters
 For each parameter in your request, this package will generate a random value to be used in the example requests. If you'd like to specify an example value, you can do so by adding `Example: your-example` to the end of your description. For instance:
@@ -175,6 +189,43 @@ public function show($id)
 }
 ```
 
+### @apiResource, @apiResourceCollection, and @apiResourceModel
+If your controller method uses [Eloquent API resources](https://laravel.com/docs/5.8/eloquent-resources), you can use the apiResource annotations to guide the package when generating a sample response. The `@apiResource` tag specifies the name of the resource. Use `@apiResourceCollection` instead if the route returns a list. This works with both regular `JsonResource` objects and `ResourceCollection` objects.
+ 
+ The `@apiResourceModel` specifies the Eloquent model to be passed to the resource. The package will attempt to generate an instance of the model for the resource from the Eloquent model factory. If that fails, the package will call `::first()` to retrieve the first model from the database. If that fails, it will create an instance using `new`.
+
+Examples:
+
+```php
+
+/**
+ * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\UserResource
+ * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\User
+ */
+public function listUsers()
+{
+    return UserResource::collection(User::all());
+}
+
+/**
+ * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\UserCollection
+ * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\User
+ */
+public function listMoreUsers()
+{
+    return new UserCollection(User::all());
+}
+
+/**
+ * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\UserResource
+ * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\User
+ */
+public function showUser(User $user)
+{
+    return new UserResource($user);
+}
+```
+
 ### @transformer, @transformerCollection, and @transformerModel
 You can define the transformer that is used for the result of the route using the `@transformer` tag (or `@transformerCollection` if the route returns a list). The package will attempt to generate an instance of the model to be transformed using the following steps, stopping at the first successful one:
 
@@ -264,8 +315,8 @@ If you don't specify an example response using any of the above means, this pack
 
 - By default, response calls are only made for GET routes, but you can configure this. Set the `methods` key to an array of methods or '*' to mean all methods. Leave it as an empty array to turn off response calls for that route group.
 
-- Parameters in URLs (example: `/users/{user}`, `/orders/{id?}`) will be replaced with '1' by default. You can configure this, however. Put the parameter names (including curly braces and question marks) as the keys and their replacements as the values in the `bindings` key. You may also specify the preceding path, to allow for variations; for instance, you can set `['users/{id}' => 1, 'apps/{id}' => 'htTviP']`. However, there must only be one parameter per path (ie `users/{name}/{id}` is invalid).
-
 - You can set Laravel config variables. This is useful so you can prevent external services like notifications from being triggered. By default the `app.env` is set to 'documentation'. You can add more variables in the `config` key.
 
-- By default, the package will generate dummy values for your documented body and query parameters and send in the request. (If you specified example values using `@bodyParam` or `@queryParam`, those will be used instead.) You can configure what headers and additional query and parameters should be sent when making the request (the `headers`, `query`, and `body` keys respectively).
+- By default, the package will generate dummy values for your documented body and query parameters and send in the request. If you specified example values using `@bodyParam` or `@queryParam`, those will be used instead. You can configure additional parameters or overwrite the existing ones for the request in the `queryParams`, and `bodyParams` sections.
+
+- The `ResponseCalls` strategy will only attempt to fetch a response if there are no responses with a status code of 2xx already.

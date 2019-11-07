@@ -2,19 +2,19 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Extracting\Generator;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
+use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use ReflectionClass;
 use ReflectionMethod;
-use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\Generator;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 
 class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
 {
     /**
-     * @var \Mpociot\ApiDoc\Tools\Generator
+     * @var \Mpociot\ApiDoc\Extracting\Generator
      */
     protected $generator;
 
@@ -66,12 +66,12 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
         $parsed = $generator->processRoute($route);
 
         $this->assertTrue($parsed['showresponse']);
-        $this->assertCount(2, $parsed['response']);
-        $first = array_shift($parsed['response']);
+        $this->assertCount(2, $parsed['responses']);
+        $first = array_shift($parsed['responses']);
         $this->assertTrue(is_array($first));
         $this->assertEquals(200, $first['status']);
         $this->assertEquals('dummy', $first['content']);
-        $second = array_shift($parsed['response']);
+        $second = array_shift($parsed['responses']);
         $this->assertTrue(is_array($second));
         $this->assertEquals(400, $second['status']);
         $this->assertEquals('dummy2', $second['content']);
@@ -98,8 +98,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
             'description' => 'dummy',
             'authenticated' => false,
         ];
-        $this->assertArraySubset($expectedMetadata, $parsed['metadata']); // Forwards-compatibility
-        $this->assertArraySubset($expectedMetadata, $parsed); // Backwards-compatibility
+        $this->assertArraySubset($expectedMetadata, $parsed['metadata']);
     }
 
     /** @test */
@@ -121,29 +120,12 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
             'description' => 'dummy',
             'authenticated' => false,
         ];
-        $this->assertArraySubset($expectedMetadata, $parsed['metadata']); // Forwards-compatibility
-        $this->assertArraySubset($expectedMetadata, $parsed); // Backwards-compatibility
+        $this->assertArraySubset($expectedMetadata, $parsed['metadata']);
     }
 
     /** @test */
-    public function overwrites_results_from_previous_strategies_in_same_stage()
+    public function overwrites_metadat_from_previous_strategies_in_same_stage()
     {
-        $config = [
-            'strategies' => [
-                'responses' => [DummyResponseStrategy200::class, StillDummyResponseStrategyAlso200::class],
-            ],
-        ];
-        $route = $this->createRoute('GET', '/api/test', 'dummy', true, TestController::class);
-        $generator = new Generator(new DocumentationConfig($config));
-        $parsed = $generator->processRoute($route);
-
-        $this->assertTrue($parsed['showresponse']);
-        $this->assertCount(1, $parsed['response']);
-        $first = array_shift($parsed['response']);
-        $this->assertTrue(is_array($first));
-        $this->assertEquals(200, $first['status']);
-        $this->assertEquals('stilldummy', $first['content']);
-
         $config = [
             'strategies' => [
                 'metadata' => [NotDummyMetadataStrategy::class, PartialDummyMetadataStrategy1::class],
@@ -160,8 +142,7 @@ class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
             'description' => 'dummy',
             'authenticated' => false,
         ];
-        $this->assertArraySubset($expectedMetadata, $parsed['metadata']); // Forwards-compatibility
-        $this->assertArraySubset($expectedMetadata, $parsed); // Backwards-compatibility
+        $this->assertArraySubset($expectedMetadata, $parsed['metadata']);
     }
 
     public function dataResources()
@@ -241,15 +222,7 @@ class DummyResponseStrategy200 extends Strategy
 {
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return [200 => 'dummy'];
-    }
-}
-
-class StillDummyResponseStrategyAlso200 extends Strategy
-{
-    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
-    {
-        return [200 => 'stilldummy'];
+        return [['status' => 200, 'content' => 'dummy']];
     }
 }
 
@@ -257,6 +230,6 @@ class DummyResponseStrategy400 extends Strategy
 {
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
-        return [400 => 'dummy2'];
+        return [['status' => 400, 'content' => 'dummy2']];
     }
 }

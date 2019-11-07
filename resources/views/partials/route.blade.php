@@ -1,12 +1,12 @@
 <!-- START_{{$route['id']}} -->
-@if($route['title'] != '')## {{ $route['title']}}
+@if($route['metadata']['title'] != '')## {{ $route['metadata']['title']}}
 @else## {{$route['uri']}}@endif
-@if($route['authenticated'])
+@if($route['metadata']['authenticated'])
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>@endif
-@if($route['description'])
+@if($route['metadata']['description'])
 
-{!! $route['description'] !!}
+{!! $route['metadata']['description'] !!}
 @endif
 
 > Example request:
@@ -17,8 +17,7 @@
 @endforeach
 
 @if(in_array('GET',$route['methods']) || (isset($route['showresponse']) && $route['showresponse']))
-@if(is_array($route['response']))
-@foreach($route['response'] as $response)
+@foreach($route['responses'] as $response)
 > Example response ({{$response['status']}}):
 
 ```json
@@ -29,17 +28,6 @@
 @endif
 ```
 @endforeach
-@else
-> Example response:
-
-```json
-@if(is_object($route['response']) || is_array($route['response']))
-{!! json_encode($route['response'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
-@else
-{!! json_encode(json_decode($route['response']), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
-@endif
-```
-@endif
 @endif
 
 ### HTTP Request
@@ -47,13 +35,13 @@
 `{{$method}} {{$route['uri']}}`
 
 @endforeach
-@if(count($route['bodyParameters']))
-#### Body Parameters
+@if(count($route['urlParameters']))
+#### URL Parameters
 
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-@foreach($route['bodyParameters'] as $attribute => $parameter)
-    {{$attribute}} | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+@foreach($route['urlParameters'] as $attribute => $parameter)
+    `{{$attribute}}` | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
 @endforeach
 @endif
 @if(count($route['queryParameters']))
@@ -62,8 +50,16 @@ Parameter | Type | Status | Description
 Parameter | Status | Description
 --------- | ------- | ------- | -----------
 @foreach($route['queryParameters'] as $attribute => $parameter)
-    {{$attribute}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
+    `{{$attribute}}` | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
 @endforeach
+@endif
+@if(count($route['bodyParameters']))
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+@foreach($route['bodyParameters'] as $attribute => $parameter)
+    `{{$attribute}}` | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
+    @endforeach
 @endif
 
 <!-- END_{{$route['id']}} -->

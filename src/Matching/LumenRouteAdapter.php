@@ -1,11 +1,13 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace Mpociot\ApiDoc\Matching;
 
 use Illuminate\Routing\Route;
 
 /**
  * Class LumenRouteAdapter.
+ * Lumen routes don't extend from Laravel routes,
+ * so we need this class to convert a Lmen route to a Laravel one.
  */
 class LumenRouteAdapter extends Route
 {

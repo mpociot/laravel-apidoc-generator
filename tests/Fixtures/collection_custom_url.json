@@ -18,13 +18,17 @@
                         "method": "GET",
                         "header": [
                             {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
                                 "key": "Accept",
-                                "value": "application/json"
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": []
+                            "mode": "raw",
+                            "raw": "[]"
                         },
                         "description": "This will be the long description.\nIt can also be multiple lines long.",
                         "response": []
@@ -37,13 +41,17 @@
                         "method": "POST",
                         "header": [
                             {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
                                 "key": "Accept",
-                                "value": "application/json"
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": []
+                            "mode": "raw",
+                            "raw": "[]"
                         },
                         "description": "",
                         "response": []

@@ -1,16 +1,16 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Responses;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Dingo\Api\Dispatcher;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Str;
+use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\Traits\ParamHelpers;
 
 /**
  * Make a call to the route and retrieve its response.
@@ -38,13 +38,19 @@ class ResponseCalls extends Strategy
         $this->configureEnvironment($rulesToApply);
 
         // Mix in parsed parameters with manually specified parameters.
-        $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['body'] ?? []);
-        $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['query'] ?? []);
-        $request = $this->prepareRequest($route, $rulesToApply, $bodyParameters, $queryParameters);
+        $bodyParameters = array_merge($context['cleanBodyParameters'], $rulesToApply['bodyParams'] ?? []);
+        $queryParameters = array_merge($context['cleanQueryParameters'], $rulesToApply['queryParams'] ?? []);
+        $urlParameters = $context['cleanUrlParameters'];
+        $request = $this->prepareRequest($route, $rulesToApply, $urlParameters, $bodyParameters, $queryParameters, $context['headers'] ?? []);
 
         try {
             $response = $this->makeApiCall($request);
-            $response = [$response->getStatusCode() => $response->getContent()];
+            $response = [
+                [
+                    'status' => $response->getStatusCode(),
+                    'content' => $response->getContent(),
+                ],
+            ];
         } catch (\Exception $e) {
             echo 'Exception thrown during response call for ['.implode(',', $route->methods)."] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
@@ -80,14 +86,15 @@ class ResponseCalls extends Strategy
      *
      * @return Request
      */
-    protected function prepareRequest(Route $route, array $rulesToApply, array $bodyParams, array $queryParams)
+    protected function prepareRequest(Route $route, array $rulesToApply, array $urlParams, array $bodyParams, array $queryParams, array $headers)
     {
-        $uri = Utils::getFullUrl($route, $rulesToApply['bindings'] ?? []);
+        $uri = Utils::getFullUrl($route, $urlParams);
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
         $cookies = isset($rulesToApply['cookies']) ? $rulesToApply['cookies'] : [];
-        $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($rulesToApply['headers'] ?? []));
-        $request = $this->addHeaders($request, $route, $rulesToApply['headers'] ?? []);
+        $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($headers));
+        // Doing it again to catch any ones we didn't transform properly.
+        $request = $this->addHeaders($request, $route, $headers);
 
         $request = $this->addQueryParameters($request, $queryParams);
         $request = $this->addBodyParameters($request, $bodyParams);
@@ -306,15 +313,18 @@ class ResponseCalls extends Strategy
      *
      * @return bool
      */
-    private function shouldMakeApiCall(Route $route, array $rulesToApply, array $context): bool
+    protected function shouldMakeApiCall(Route $route, array $rulesToApply, array $context): bool
     {
         $allowedMethods = $rulesToApply['methods'] ?? [];
         if (empty($allowedMethods)) {
             return false;
         }
 
-        if (! empty($context['responses'])) {
-            // Don't attempt a response call if there are already responses
+        // Don't attempt a response call if there are already successful responses
+        $successResponses = collect($context['responses'])->filter(function ($response) {
+            return ((string) $response['status'])[0] == '2';
+        })->count();
+        if ($successResponses) {
             return false;
         }
 

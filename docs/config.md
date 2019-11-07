@@ -2,8 +2,21 @@
 
 Before you can generate your documentation, you'll need to configure a few things in your `config/apidoc.php`. If you aren't sure what an option does, it's best to leave it set to the default. If you don't have this config file, see the [installation instructions](index.html#installation).
 
-## `output`
-This is the file path where the generated documentation will be written to. Note that the documentation is generated as static HTML and CSS assets, so the route is accessed directly, and not via the Laravel routing mechanism. This path should be relative to the root of your application. Default: **public/docs**
+## `type`
+This is the type of documentation output to generate.
+- `static` will generate a static HTMl page in the `public/docs` folder, so anyone can visit your documentation page by going to {yourapp.domain}/docs.
+- `laravel` will generate the documentation as a Blade view within the `resources/views/apidoc` folder, so you can add routing and authentication.
+
+> In both instances, the source markdown file will be generated in `resources/docs/source`.
+
+If you're using `laravel` type, you can call `\Mpociot\ApiDoc\ApiDoc::routes()` from your routes file (usually `routes/web.php`). This method will create a `/doc` route for your documentation, along with a `/doc.json` variant that will return the Postman collection, if you have that enabled. This method returns the route, so you can call additional methods to customise it (by adding middleware, for instance). You can also pass in the path you'd like to use instead.
+
+```php
+\Mpociot\ApiDoc\ApiDoc::routes("/apidoc")->middleware("auth.basic");
+```
+> Note: There is currently a known issue with using `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
+
+You may, of course, set up your own routing instead of using the `routes()` helper.
 
 ## `router`
 The router to use when processing your routes (can be Laravel or Dingo. Defaults to **Laravel**)
@@ -13,6 +26,8 @@ The base URL to be used in examples and the Postman collection. By default, this
 
 ## `postman`
 This package can automatically generate a Postman collection for your routes, along with the documentation. This section is where you can configure (or disable) that.
+- For `static` docs (see [type](#type)), the collection will be created in `public/docs/collection.json`, so it can be accessed by visiting {yourapp.domain}/docs/colllection.json.
+- For `laravel` docs, the collection will be generated to `storage/app/apidoc/collection.json`. The `ApiDoc::routes()` helper will add a `/docs.json` endpoint to fetch it..
 
 ### `enabled`
 Whether or not to generate a Postman API collection. Default: **true**
@@ -214,7 +229,7 @@ These values support wildcards and paths, so you can have `'exclude' => ['users/
 After defining the routes in `match` (and `include` or `exclude`), `apply` is where you specify the settings to be applied to those routes when generating documentation. There are a bunch of settings you can tweak here:
 
 #### `headers`
-Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documenation. Headers are specified as key => value strings.
+Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documenation. They will also be included in ["response calls"](documenting.html#generating-responses-automatically). Headers are specified as key => value strings.
 
 #### `response_calls`
 These are the settings that will be applied when making ["response calls"](documenting.html#generating-responses-automatically). See the linked section for details.

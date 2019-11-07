@@ -4,30 +4,26 @@ import json
 
 url = '{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}'
 @if(count($route['cleanBodyParameters']))
-payload = {
-@foreach($route['cleanBodyParameters'] as $parameter => $value)
-    '{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
-@endif
-@endforeach
-
-}
+payload = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
 @endif
 @if(count($route['cleanQueryParameters']))
 params = {
 @foreach($route['cleanQueryParameters'] as $parameter => $value)
-	'{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
+  '{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
 @endif
 @endforeach
 
 }
 @endif
+@if(!empty($route['headers']))
 headers = {
 @foreach($route['headers'] as $header => $value)
-	'{{$header}}': '{{$value}}'@if(!($loop->last)),
+  '{{$header}}': '{{$value}}'@if(!($loop->last)),
 @endif
 @endforeach
 
 }
-response = requests.request('{{$route['methods'][0]}}', url, headers=headers{{ count($route['cleanBodyParameters']) ? ', json=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
+@endif
+response = requests.request('{{$route['methods'][0]}}', url{{ count($route['headers']) ?', headers=headers' : '' }}{{ count($route['cleanBodyParameters']) ? ', json=payload' : '' }}{{ count($route['cleanQueryParameters']) ? ', params=params' : ''}})
 response.json()
 ```

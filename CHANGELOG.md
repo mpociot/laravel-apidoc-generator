@@ -13,6 +13,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [4.0.0] 
+### Added
+- Added `headers` stage (https://github.com/mpociot/laravel-apidoc-generator/pull/624)
+- Support for non-static docs, changed source files locations (https://github.com/mpociot/laravel-apidoc-generator/pull/608)
+- Support for Eloquent API resources (https://github.com/mpociot/laravel-apidoc-generator/pull/601)
+- `bindings` replaced by `@urlParam` annotation (https://github.com/mpociot/laravel-apidoc-generator/pull/599)
+- Better support for arrays and objects in bodyParams (https://github.com/mpociot/laravel-apidoc-generator/pull/597)
+
+### Modified
+- Postman collection now have the body as `raw` instead of `formdata`. (https://github.com/mpociot/laravel-apidoc-generator/pull/627)
+- Nonexistent `@responseFile` annotations now show a warning and skip the route (https://github.com/mpociot/laravel-apidoc-generator/pull/620)
+- Use symfony/var-exporter to export PHP arrays, ensuring short array syntax (https://github.com/mpociot/laravel-apidoc-generator/pull/615)
+- Use single quotes in PHP example template (https://github.com/mpociot/laravel-apidoc-generator/pull/612)
+- Transformer annotations are now given priority over all other response strategies (https://github.com/mpociot/laravel-apidoc-generator/pull/620)
+- Made ResponseCalls strategy only execute if no successful responses exist. (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
+- Hide null responses in examples. (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
+- Made `responses` stage additive (https://github.com/mpociot/laravel-apidoc-generator/pull/605)
+- Renamed `query` and `body` in `response_calls` config to `queryParams` and `bodyParams` (https://github.com/mpociot/laravel-apidoc-generator/pull/603)
+
+### Removed
+- Removed `apply.response_calls.headers` in favour of `apply.headers` (https://github.com/mpociot/laravel-apidoc-generator/pull/603)
+- Removed bindings in response_calls (https://github.com/mpociot/laravel-apidoc-generator/pull/599)
+
 ## [3.17.1] - Thursday, 12 September 2019
 ### Fixed
 - ResponseCalls: Call Lumen application correctly since it does not use HttpKernel (https://github.com/mpociot/laravel-apidoc-generator/pull/585)

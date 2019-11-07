@@ -3,9 +3,9 @@
 namespace Mpociot\ApiDoc\Tests\Unit;
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 
 class LaravelGeneratorTest extends GeneratorTestCase
 {

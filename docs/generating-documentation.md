@@ -32,7 +32,7 @@ php artisan apidoc:rebuild
 ```
 
 ## Automatically add markdown to the beginning or end of the documentation
- If you wish to automatically add the same content to the docs every time you generate (for instance, an introduction, a disclaimer or an authenticatino guide), you can add a `prepend.md` and/or `append.md` file to the `source` folder in the `output` directory, and they will be added to the generated documentation. 
+ If you wish to automatically add the same content to the docs every time you generate (for instance, an introduction, a disclaimer or an authenticatino guide), you can add a `prepend.md` and/or `append.md` file to the `source` folder in the source output directory (`resources/docs/source`), and they will be added to the generated documentation. 
  
  The contents of `prepend.md` will be added after the front matter and info text, while the contents of `append.md` will be added at the end of the document.
  
@@ -48,15 +48,17 @@ php artisan apidoc:rebuild
  This will copy the views files to `\resources\views\vendor\apidoc`.
  
  - Next, create a file called {language-name}.blade.php (for example, ruby.blade.php) in the partials/example-requests directory. You can then write Markdown with Blade templating that describes how the example request for the language should be rendered. You have the `$route` variable available to you. This variable is an array with the following keys:
-    - `methods`: an array of the HTTP methods for that route
-    - `boundUri`: the complete URL for the route, with any url parameters replaced (/users/{id} -> /users/1)
-    - `headers`: key-value array of headers to be sent with route (according to your configuration)
-    - `cleanQueryParameters`: key-value array of query parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
-    - `cleanBodyParameters`: key-value array of body parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
+- `methods`: an array of the HTTP methods for that route
+- `boundUri`: the complete URL for the route, with any url parameters replaced (/users/{id} -> /users/1)
+- `headers`: key-value array of headers to be sent with route (according to your configuration)
+- `cleanQueryParameters`: key-value array of query parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
+- `cleanBodyParameters`: key-value array of body parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
 
 - Add the language to the `example_languages` array in the package config.
 
 - Generate your documentation 
+
+To customise existing language templates you can perform the `vendor:publish` command above, then modify the blade templates in `resources/` as necessary.
 
 ## Further modification
 

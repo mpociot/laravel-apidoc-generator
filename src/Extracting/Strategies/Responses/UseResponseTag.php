@@ -1,12 +1,12 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\Responses;
+namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
 
 /**
  * Get a response from the docblock ( @response ).
@@ -58,10 +58,9 @@ class UseResponseTag extends Strategy
             $status = $result[1] ?: 200;
             $content = $result[2] ?: '{}';
 
-            return [$content, (int) $status];
+            return ['content' => $content, 'status' => (int) $status];
         }, $responseTags);
 
-        // Convert responses to [200 => 'response', 401 => 'response']
-        return collect($responses)->pluck('0', '1')->toArray();
+        return $responses;
     }
 }

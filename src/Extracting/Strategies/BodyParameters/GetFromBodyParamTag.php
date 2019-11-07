@@ -1,21 +1,21 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\BodyParameters;
+namespace Mpociot\ApiDoc\Extracting\Strategies\BodyParameters;
 
-use ReflectionClass;
-use ReflectionMethod;
+use Dingo\Api\Http\FormRequest as DingoFormRequest;
+use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 use Illuminate\Routing\Route;
+use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
-use Dingo\Api\Http\FormRequest as DingoFormRequest;
-use Mpociot\ApiDoc\Tools\Traits\DocBlockParamHelpers;
-use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
+use ReflectionClass;
+use ReflectionMethod;
 
 class GetFromBodyParamTag extends Strategy
 {
-    use DocBlockParamHelpers;
+    use ParamHelpers;
 
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
@@ -25,9 +25,7 @@ class GetFromBodyParamTag extends Strategy
                 continue;
             }
 
-            $parameterClassName = version_compare(phpversion(), '7.1.0', '<')
-                ? $paramType->__toString()
-                : $paramType->getName();
+            $parameterClassName = $paramType->getName();
 
             try {
                 $parameterClass = new ReflectionClass($parameterClassName);
@@ -47,6 +45,7 @@ class GetFromBodyParamTag extends Strategy
             }
         }
 
+        /** @var DocBlock $methodDocBlock */
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
 
         return $this->getBodyParametersFromDocBlock($methodDocBlock->getTags());
@@ -58,7 +57,12 @@ class GetFromBodyParamTag extends Strategy
             ->filter(function ($tag) {
                 return $tag instanceof Tag && $tag->getName() === 'bodyParam';
             })
-            ->mapWithKeys(function ($tag) {
+            ->mapWithKeys(function (Tag $tag) {
+                // Format:
+                // @bodyParam <name> <type> <"required" (optional)> <description>
+                // Examples:
+                // @bodyParam text string required The text.
+                // @bodyParam user_id integer The ID of the user.
                 preg_match('/(.+?)\s+(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
@@ -78,7 +82,7 @@ class GetFromBodyParamTag extends Strategy
 
                 $type = $this->normalizeParameterType($type);
                 list($description, $example) = $this->parseParamDescription($description, $type);
-                $value = is_null($example) && ! $this->shouldExcludeExample($tag)
+                $value = is_null($example) && ! $this->shouldExcludeExample($tag->getContent())
                     ? $this->generateDummyValue($type)
                     : $example;
 

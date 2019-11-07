@@ -18,86 +18,17 @@
                         "method": "GET",
                         "header": [
                             {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
                                 "key": "Accept",
-                                "value": "application/json"
+                                "value": "application\/json"
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": [
-                                {
-                                    "key": "user_id",
-                                    "value": 9,
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "room_id",
-                                    "value": "consequatur",
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "forever",
-                                    "value": false,
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "another_one",
-                                    "value": 11613.31890586,
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "yet_another_param",
-                                    "value": [],
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "even_more_param",
-                                    "value": [],
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "book.name",
-                                    "value": "consequatur",
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "book.author_id",
-                                    "value": 17,
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "book[pages_count]",
-                                    "value": 17,
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "ids.*",
-                                    "value": 17,
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "users.*.first_name",
-                                    "value": "John",
-                                    "type": "text",
-                                    "enabled": true
-                                },
-                                {
-                                    "key": "users.*.last_name",
-                                    "value": "Doe",
-                                    "type": "text",
-                                    "enabled": true
-                                }
-                            ]
+                            "mode": "raw",
+                            "raw": "{\n    \"user_id\": 9,\n    \"room_id\": \"consequatur\",\n    \"forever\": false,\n    \"another_one\": 11613.31890586,\n    \"yet_another_param\": {\n        \"name\": \"consequatur\"\n    },\n    \"even_more_param\": [\n        11613.31890586\n    ],\n    \"book\": {\n        \"name\": \"consequatur\",\n        \"author_id\": 17,\n        \"pages_count\": 17\n    },\n    \"ids\": [\n        17\n    ],\n    \"users\": [\n        {\n            \"first_name\": \"John\",\n            \"last_name\": \"Doe\"\n        }\n    ]\n}"
                         },
                         "description": "",
                         "response": []

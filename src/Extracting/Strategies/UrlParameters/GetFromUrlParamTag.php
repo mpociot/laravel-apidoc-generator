@@ -1,22 +1,22 @@
 <?php
 
-namespace Mpociot\ApiDoc\Strategies\QueryParameters;
+namespace Mpociot\ApiDoc\Extracting\Strategies\UrlParameters;
 
-use ReflectionClass;
-use ReflectionMethod;
-use Illuminate\Support\Str;
+use Dingo\Api\Http\FormRequest as DingoFormRequest;
+use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Str;
+use Mpociot\ApiDoc\Extracting\ParamHelpers;
+use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
+use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
-use Mpociot\ApiDoc\Strategies\Strategy;
-use Mpociot\ApiDoc\Tools\RouteDocBlocker;
-use Dingo\Api\Http\FormRequest as DingoFormRequest;
-use Mpociot\ApiDoc\Tools\Traits\DocBlockParamHelpers;
-use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
+use ReflectionClass;
+use ReflectionMethod;
 
-class GetFromQueryParamTag extends Strategy
+class GetFromUrlParamTag extends Strategy
 {
-    use DocBlockParamHelpers;
+    use ParamHelpers;
 
     public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
     {
@@ -26,9 +26,7 @@ class GetFromQueryParamTag extends Strategy
                 continue;
             }
 
-            $parameterClassName = version_compare(phpversion(), '7.1.0', '<')
-                ? $paramType->__toString()
-                : $paramType->getName();
+            $parameterClassName = $paramType->getName();
 
             try {
                 $parameterClass = new ReflectionClass($parameterClassName);
@@ -36,11 +34,11 @@ class GetFromQueryParamTag extends Strategy
                 continue;
             }
 
-            // If there's a FormRequest, we check there for @queryParam tags.
+            // If there's a FormRequest, we check there for @urlParam tags.
             if (class_exists(LaravelFormRequest::class) && $parameterClass->isSubclassOf(LaravelFormRequest::class)
                 || class_exists(DingoFormRequest::class) && $parameterClass->isSubclassOf(DingoFormRequest::class)) {
                 $formRequestDocBlock = new DocBlock($parameterClass->getDocComment());
-                $queryParametersFromDocBlock = $this->getqueryParametersFromDocBlock($formRequestDocBlock->getTags());
+                $queryParametersFromDocBlock = $this->getUrlParametersFromDocBlock($formRequestDocBlock->getTags());
 
                 if (count($queryParametersFromDocBlock)) {
                     return $queryParametersFromDocBlock;
@@ -48,18 +46,24 @@ class GetFromQueryParamTag extends Strategy
             }
         }
 
+        /** @var DocBlock $methodDocBlock */
         $methodDocBlock = RouteDocBlocker::getDocBlocksFromRoute($route)['method'];
 
-        return $this->getqueryParametersFromDocBlock($methodDocBlock->getTags());
+        return $this->getUrlParametersFromDocBlock($methodDocBlock->getTags());
     }
 
-    private function getQueryParametersFromDocBlock($tags)
+    private function getUrlParametersFromDocBlock($tags)
     {
         $parameters = collect($tags)
             ->filter(function ($tag) {
-                return $tag instanceof Tag && $tag->getName() === 'queryParam';
+                return $tag instanceof Tag && $tag->getName() === 'urlParam';
             })
-            ->mapWithKeys(function ($tag) {
+            ->mapWithKeys(function (Tag $tag) {
+                // Format:
+                // @urlParam <name> <"required" (optional)> <description>
+                // Examples:
+                // @urlParam id string required The id of the post.
+                // @urlParam user_id The ID of the user.
                 preg_match('/(.+?)\s+(required\s+)?(.*)/', $tag->getContent(), $content);
                 $content = preg_replace('/\s?No-example.?/', '', $content);
                 if (empty($content)) {
@@ -78,7 +82,7 @@ class GetFromQueryParamTag extends Strategy
                 }
 
                 list($description, $value) = $this->parseParamDescription($description, 'string');
-                if (is_null($value) && ! $this->shouldExcludeExample($tag)) {
+                if (is_null($value) && ! $this->shouldExcludeExample($tag->getContent())) {
                     $value = Str::contains($description, ['number', 'count', 'page'])
                         ? $this->generateDummyValue('integer')
                         : $this->generateDummyValue('string');
