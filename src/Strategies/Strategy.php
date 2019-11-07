@@ -2,10 +2,10 @@
 
 namespace Mpociot\ApiDoc\Strategies;
 
-use ReflectionClass;
-use ReflectionMethod;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use ReflectionClass;
+use ReflectionMethod;
 
 abstract class Strategy
 {

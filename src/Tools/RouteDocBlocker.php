@@ -2,9 +2,9 @@
 
 namespace Mpociot\ApiDoc\Tools;
 
-use ReflectionClass;
 use Illuminate\Routing\Route;
 use Mpociot\Reflection\DocBlock;
+use ReflectionClass;
 
 class RouteDocBlocker
 {

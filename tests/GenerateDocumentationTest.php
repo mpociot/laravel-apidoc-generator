@@ -2,18 +2,18 @@
 
 namespace Mpociot\ApiDoc\Tests;
 
-use ReflectionException;
-use Illuminate\Support\Str;
-use Mpociot\ApiDoc\Tools\Utils;
-use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-use Mpociot\ApiDoc\Tests\Fixtures\TestController;
-use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Illuminate\Support\Facades\Route as RouteFacade;
+use Illuminate\Support\Str;
+use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
+use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestGroupController;
-use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
 use Mpociot\ApiDoc\Tests\Fixtures\TestPartialResourceController;
+use Mpociot\ApiDoc\Tests\Fixtures\TestResourceController;
+use Mpociot\ApiDoc\Tools\Utils;
+use Orchestra\Testbench\TestCase;
+use ReflectionException;
 
 class GenerateDocumentationTest extends TestCase
 {

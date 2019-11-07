@@ -2,18 +2,18 @@
 
 namespace Mpociot\ApiDoc\Strategies\Responses;
 
-use ReflectionClass;
-use ReflectionMethod;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use League\Fractal\Manager;
-use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\Flags;
-use Mpociot\Reflection\DocBlock;
-use League\Fractal\Resource\Item;
-use Mpociot\Reflection\DocBlock\Tag;
 use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use Mpociot\ApiDoc\Strategies\Strategy;
+use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
+use Mpociot\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock\Tag;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Parse a transformer response from the docblock ( @transformer || @transformercollection ).

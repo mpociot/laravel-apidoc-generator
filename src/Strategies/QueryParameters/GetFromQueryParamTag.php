@@ -2,17 +2,17 @@
 
 namespace Mpociot\ApiDoc\Strategies\QueryParameters;
 
-use ReflectionClass;
-use ReflectionMethod;
-use Illuminate\Support\Str;
+use Dingo\Api\Http\FormRequest as DingoFormRequest;
+use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 use Illuminate\Routing\Route;
-use Mpociot\Reflection\DocBlock;
-use Mpociot\Reflection\DocBlock\Tag;
+use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\RouteDocBlocker;
-use Dingo\Api\Http\FormRequest as DingoFormRequest;
 use Mpociot\ApiDoc\Tools\Traits\DocBlockParamHelpers;
-use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
+use Mpociot\Reflection\DocBlock;
+use Mpociot\Reflection\DocBlock\Tag;
+use ReflectionClass;
+use ReflectionMethod;
 
 class GetFromQueryParamTag extends Strategy
 {
