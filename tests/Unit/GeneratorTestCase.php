@@ -412,9 +412,11 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertTrue(is_array($response));
         $this->assertEquals(200, $response['status']);
         $this->assertArraySubset([
-            'id' => 4,
-            'name' => 'Tested Again',
-            'email' => 'a@b.com',
+            'data' => [
+                'id' => 4,
+                'name' => 'Tested Again',
+                'email' => 'a@b.com',
+            ],
         ], json_decode($response['content'], true));
     }
 
@@ -440,12 +442,12 @@ abstract class GeneratorTestCase extends TestCase
             'id' => 4,
             'name' => 'Tested Again',
             'email' => 'a@b.com',
-        ], $content[0]);
+        ], $content['data'][0]);
         $this->assertArraySubset([
             'id' => 4,
             'name' => 'Tested Again',
             'email' => 'a@b.com',
-        ], $content[1]);
+        ], $content['data'][1]);
     }
 
     /** @test */
