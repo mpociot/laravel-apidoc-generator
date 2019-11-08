@@ -350,9 +350,11 @@ fetch(url, {
 
 ```json
 {
-    "id": 4,
-    "name": "Tested Again",
-    "email": "a@b.com"
+    "data": {
+        "id": 4,
+        "name": "Tested Again",
+        "email": "a@b.com"
+    }
 }
 ```
 
