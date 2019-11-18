@@ -5,7 +5,6 @@ namespace Mpociot\ApiDoc\Commands;
 use Illuminate\Console\Command;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Writing\Writer;
-use Mpociot\Documentarian\Documentarian;
 
 class RebuildDocumentation extends Command
 {
