@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [4.0.1] - Monday, 16 November 2019
+### Fixed
+- Update rebuild command to work with new docs locations (https://github.com/mpociot/laravel-apidoc-generator/pull/646)
+
 ## [4.0.0] - Thursday, 7 November 2019
 ### Added
 - Added `headers` stage (https://github.com/mpociot/laravel-apidoc-generator/pull/624)
