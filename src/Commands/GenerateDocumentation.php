@@ -78,12 +78,11 @@ class GenerateDocumentation extends Command
                 return $group->first()['metadata']['groupName'];
             }, SORT_NATURAL);
         $writer = new Writer(
-            $groupedRoutes,
-            $this->option('force'),
             $this,
-            $this->docConfig
+            $this->docConfig,
+            $this->option('force')
         );
-        $writer->writeDocs();
+        $writer->writeDocs($groupedRoutes);
     }
 
     /**
