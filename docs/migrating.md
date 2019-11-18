@@ -8,6 +8,10 @@ Note: This isn't meant to be an exhaustive guide to the changes in v4. Please se
 ## Configuration 
 - Rename your old config file (for instance to `apidoc.old.php`). Publish the new config file via `php artisan vendor:publish --provider="Mpociot\ApiDoc\ApiDocGeneratorServiceProvider" --tag=apidoc-config`. Then copy over any changes you've made in the old one and delete it when you're done.
 
+- Remove the `output` key. Source files now go to `resources/docs/source` and generated docs go to either `public/docs/` or `resources/views/apidoc`.
+
+- Make sure the `type` value is set appropriately. See [the docs](config.html#type). 
+
 - Remove the `bindings` section. It has been superseded by the `@urlParam` annotation, which works similarly to the existing `@queryParam` annotation. See [the docs](documenting.html#specifying-request-parameters)
 
 - Remove the `response_calls.bindings` section. Use the `Example: ` feature of `@urlParam` to specify the value you want to be used in response calls.

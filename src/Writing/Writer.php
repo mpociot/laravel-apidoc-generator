@@ -11,11 +11,6 @@ use Mpociot\Documentarian\Documentarian;
 class Writer
 {
     /**
-     * @var Collection
-     */
-    protected $routes;
-
-    /**
      * @var Command
      */
     protected $output;
@@ -45,9 +40,23 @@ class Writer
      */
     private $documentarian;
 
-    public function __construct(Collection $routes, bool $forceIt, Command $output, DocumentationConfig $config = null)
+    /**
+     * @var bool
+     */
+    private $isStatic;
+
+    /**
+     * @var string
+     */
+    private $sourceOutputPath;
+
+    /**
+     * @var string
+     */
+    private $outputPath;
+
+    public function __construct(Command $output, DocumentationConfig $config = null, bool $forceIt = false)
     {
-        $this->routes = $routes;
         // If no config is injected, pull from global
         $this->config = $config ?: new DocumentationConfig(config('apidoc'));
         $this->baseUrl = $this->config->get('base_url') ?? config('app.url');
@@ -55,25 +64,24 @@ class Writer
         $this->output = $output;
         $this->shouldGeneratePostmanCollection = $this->config->get('postman.enabled', false);
         $this->documentarian = new Documentarian();
+        $this->isStatic = $this->config->get('type') === 'static';
+        $this->sourceOutputPath = 'resources/docs';
+        $this->outputPath = $this->isStatic ? 'public/docs' : 'resources/views/apidoc';
     }
 
-    public function writeDocs()
+    public function writeDocs(Collection $routes)
     {
         // The source files (index.md, js/, css/, and images/) always go in resources/docs/source.
         // The static assets (js/, css/, and images/) always go in public/docs/.
         // For 'static' docs, the output files (index.html, collection.json) go in public/docs/.
         // For 'laravel' docs, the output files (index.blade.php, collection.json)
         // go in resources/views/apidoc/ and storage/app/apidoc/ respectively.
-        $isStatic = $this->config->get('type') === 'static';
 
-        $sourceOutputPath = 'resources/docs';
-        $outputPath = $isStatic ? 'public/docs' : 'resources/views/apidoc';
+        $this->writeMarkdownAndSourceFiles($routes);
 
-        $this->writeMarkdownAndSourceFiles($this->routes, $sourceOutputPath);
+        $this->writeHtmlDocs();
 
-        $this->writeHtmlDocs($sourceOutputPath, $outputPath, $isStatic);
-
-        $this->writePostmanCollection($this->routes, $outputPath, $isStatic);
+        $this->writePostmanCollection($routes);
     }
 
     /**
@@ -81,10 +89,10 @@ class Writer
      *
      * @return void
      */
-    public function writeMarkdownAndSourceFiles(Collection $parsedRoutes, string $sourceOutputPath)
+    public function writeMarkdownAndSourceFiles(Collection $parsedRoutes)
     {
-        $targetFile = $sourceOutputPath.'/source/index.md';
-        $compareFile = $sourceOutputPath.'/source/.compare.md';
+        $targetFile = $this->sourceOutputPath.'/source/index.md';
+        $compareFile = $this->sourceOutputPath.'/source/.compare.md';
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', 'docs')
@@ -125,8 +133,8 @@ class Writer
             });
         }
 
-        $prependFileContents = $this->getMarkdownToPrepend($sourceOutputPath);
-        $appendFileContents = $this->getMarkdownToAppend($sourceOutputPath);
+        $prependFileContents = $this->getMarkdownToPrepend();
+        $appendFileContents = $this->getMarkdownToAppend();
 
         $markdown = view('apidoc::documentarian')
             ->with('writeCompareFile', false)
@@ -138,11 +146,11 @@ class Writer
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection)
             ->with('parsedRoutes', $parsedRouteOutput);
 
-        $this->output->info('Writing index.md and source files to: '.$sourceOutputPath);
+        $this->output->info('Writing index.md and source files to: '.$this->sourceOutputPath);
 
-        if (! is_dir($sourceOutputPath)) {
+        if (! is_dir($this->sourceOutputPath)) {
             $documentarian = new Documentarian();
-            $documentarian->create($sourceOutputPath);
+            $documentarian->create($this->sourceOutputPath);
         }
 
         // Write output file
@@ -161,7 +169,7 @@ class Writer
 
         file_put_contents($compareFile, $compareMarkdown);
 
-        $this->output->info('Wrote index.md and source files to: '.$sourceOutputPath);
+        $this->output->info('Wrote index.md and source files to: '.$this->sourceOutputPath);
     }
 
     public function generateMarkdownOutputForEachRoute(Collection $parsedRoutes, array $settings): Collection
@@ -188,14 +196,14 @@ class Writer
         return $parsedRouteOutput;
     }
 
-    protected function writePostmanCollection(Collection $parsedRoutes, string $outputPath, bool $isStatic): void
+    protected function writePostmanCollection(Collection $parsedRoutes): void
     {
         if ($this->shouldGeneratePostmanCollection) {
             $this->output->info('Generating Postman collection');
 
             $collection = $this->generatePostmanCollection($parsedRoutes);
-            if ($isStatic) {
-                $collectionPath = "{$outputPath}/collection.json";
+            if ($this->isStatic) {
+                $collectionPath = "{$this->outputPath}/collection.json";
                 file_put_contents($collectionPath, $collection);
             } else {
                 Storage::disk('local')->put('apidoc/collection.json', $collection);
@@ -220,35 +228,25 @@ class Writer
         return $writer->getCollection();
     }
 
-    /**
-     * @param string $sourceOutputPath
-     *
-     * @return string
-     */
-    protected function getMarkdownToPrepend(string $sourceOutputPath): string
+    protected function getMarkdownToPrepend(): string
     {
-        $prependFile = $sourceOutputPath.'/source/prepend.md';
+        $prependFile = $this->sourceOutputPath.'/source/prepend.md';
         $prependFileContents = file_exists($prependFile)
             ? file_get_contents($prependFile)."\n" : '';
 
         return $prependFileContents;
     }
 
-    /**
-     * @param string $sourceOutputPath
-     *
-     * @return string
-     */
-    protected function getMarkdownToAppend(string $sourceOutputPath): string
+    protected function getMarkdownToAppend(): string
     {
-        $appendFile = $sourceOutputPath.'/source/append.md';
+        $appendFile = $this->sourceOutputPath.'/source/append.md';
         $appendFileContents = file_exists($appendFile)
             ? "\n".file_get_contents($appendFile) : '';
 
         return $appendFileContents;
     }
 
-    protected function copyAssetsFromSourceFolderToPublicFolder(string $sourceOutputPath, bool $isStatic = true): void
+    protected function copyAssetsFromSourceFolderToPublicFolder(): void
     {
         $publicPath = 'public/docs';
         if (! is_dir($publicPath)) {
@@ -256,54 +254,49 @@ class Writer
             mkdir("{$publicPath}/css");
             mkdir("{$publicPath}/js");
         }
-        copy("{$sourceOutputPath}/js/all.js", "{$publicPath}/js/all.js");
-        rcopy("{$sourceOutputPath}/images", "{$publicPath}/images");
-        rcopy("{$sourceOutputPath}/css", "{$publicPath}/css");
+        copy("{$this->sourceOutputPath}/js/all.js", "{$publicPath}/js/all.js");
+        rcopy("{$this->sourceOutputPath}/images", "{$publicPath}/images");
+        rcopy("{$this->sourceOutputPath}/css", "{$publicPath}/css");
 
         if ($logo = $this->config->get('logo')) {
-            if ($isStatic) {
+            if ($this->isStatic) {
                 copy($logo, "{$publicPath}/images/logo.png");
             }
         }
     }
 
-    protected function moveOutputFromSourceFolderToTargetFolder(string $sourceOutputPath, string $outputPath, bool $isStatic): void
+    protected function moveOutputFromSourceFolderToTargetFolder(): void
     {
-        if ($isStatic) {
+        if ($this->isStatic) {
             // Move output (index.html, css/style.css and js/all.js) to public/docs
-            rename("{$sourceOutputPath}/index.html", "{$outputPath}/index.html");
+            rename("{$this->sourceOutputPath}/index.html", "{$this->outputPath}/index.html");
         } else {
             // Move output to resources/views
-            if (! is_dir($outputPath)) {
-                mkdir($outputPath);
+            if (! is_dir($this->outputPath)) {
+                mkdir($this->outputPath);
             }
-            rename("{$sourceOutputPath}/index.html", "$outputPath/index.blade.php");
-            $contents = file_get_contents("$outputPath/index.blade.php");
+            rename("{$this->sourceOutputPath}/index.html", "$this->outputPath/index.blade.php");
+            $contents = file_get_contents("$this->outputPath/index.blade.php");
             //
             $contents = str_replace('href="css/style.css"', 'href="/docs/css/style.css"', $contents);
             $contents = str_replace('src="js/all.js"', 'src="/docs/js/all.js"', $contents);
             $contents = str_replace('src="images/', 'src="/docs/images/', $contents);
             $contents = preg_replace('#href="http://.+?/docs/collection.json"#', 'href="{{ route("apidoc", ["format" => ".json"]) }}"', $contents);
-            file_put_contents("$outputPath/index.blade.php", $contents);
+            file_put_contents("$this->outputPath/index.blade.php", $contents);
         }
     }
 
-    /**
-     * @param string $sourceOutputPath
-     * @param string $outputPath
-     * @param bool $isStatic
-     */
-    protected function writeHtmlDocs(string $sourceOutputPath, string $outputPath, bool $isStatic): void
+    public function writeHtmlDocs(): void
     {
         $this->output->info('Generating API HTML code');
 
-        $this->documentarian->generate($sourceOutputPath);
+        $this->documentarian->generate($this->sourceOutputPath);
 
         // Move assets to public folder
-        $this->copyAssetsFromSourceFolderToPublicFolder($sourceOutputPath, $isStatic);
+        $this->copyAssetsFromSourceFolderToPublicFolder();
 
-        $this->moveOutputFromSourceFolderToTargetFolder($sourceOutputPath, $outputPath, $isStatic);
+        $this->moveOutputFromSourceFolderToTargetFolder();
 
-        $this->output->info("Wrote HTML documentation to: {$outputPath}");
+        $this->output->info("Wrote HTML documentation to: {$this->outputPath}");
     }
 }
