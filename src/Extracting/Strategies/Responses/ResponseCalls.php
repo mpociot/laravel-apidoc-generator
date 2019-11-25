@@ -92,7 +92,15 @@ class ResponseCalls extends Strategy
         $routeMethods = $this->getMethods($route);
         $method = array_shift($routeMethods);
         $cookies = isset($rulesToApply['cookies']) ? $rulesToApply['cookies'] : [];
-        $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($headers));
+
+        // Note that we initialise the request with the bodyPatams here
+        // and later still add them to the ParameterBag (`addBodyParameters`)
+        // The first is so the body params get added to the request content
+        // (where Laravel reads body from)
+        // The second is so they get added to the request bag
+        // (where Symfony usually reads from and Laravel sometimes does)
+        // Adding to both ensures consistency
+        $request = Request::create($uri, $method, [], $cookies, [], $this->transformHeadersToServerVars($headers), json_encode($bodyParams));
         // Doing it again to catch any ones we didn't transform properly.
         $request = $this->addHeaders($request, $route, $headers);
 
