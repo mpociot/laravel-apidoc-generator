@@ -123,7 +123,7 @@ class Generator
             });
         }
 
-        return null;
+        return [];
     }
 
     protected function fetchRequestHeaders(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
