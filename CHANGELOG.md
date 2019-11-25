@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [4.0.2] - Monday, 25 November 2019
+### Fixed
+- Fixed missing body parameters in response calls (https://github.com/mpociot/laravel-apidoc-generator/commit/5d9371c14391485630941c718d7f168afd540126)
+- Add slashes to header values in bash templates to escape special chars (https://github.com/mpociot/laravel-apidoc-generator/commit/e693d746b1c1daf342c28e53daa8f7b34ce9da2b)
+- Fixed iteration over null bug - set responses to empty array (https://github.com/mpociot/laravel-apidoc-generator/commit/a24b1e14b17ade8fb4aa1534448904e1075b004c)
+
 ## [4.0.1] - Monday, 16 November 2019
 ### Fixed
 - Update rebuild command to work with new docs locations (https://github.com/mpociot/laravel-apidoc-generator/pull/646)
