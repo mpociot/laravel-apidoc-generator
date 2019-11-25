@@ -5,7 +5,7 @@ curl -X {{$route['methods'][0]}} \
 @endforeach
 @endif" @if(count($route['headers']))\
 @foreach($route['headers'] as $header => $value)
-    -H "{{$header}}: {{$value}}"@if(! ($loop->last) || ($loop->last && count($route['bodyParameters']))) \
+    -H "{{$header}}: {{ addslashes($value) }}"@if(! ($loop->last) || ($loop->last && count($route['bodyParameters']))) \
 @endif
 @endforeach
 @endif
