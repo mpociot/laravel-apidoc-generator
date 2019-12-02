@@ -209,11 +209,11 @@ class Generator
             return ! is_null($details['value']);
         });
 
-        foreach ($params as $paramName => $details) {
-            $this->generateConcreteSampleForArrayKeys(
-                $paramName, $details['value'], $values
-            );
-        }
+        // foreach ($params as $paramName => $details) {
+        //     $this->generateConcreteSampleForArrayKeys(
+        //         $paramName, $details['value'], $values
+        //     );
+        // }
 
         return $values;
     }
