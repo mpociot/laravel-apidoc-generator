@@ -60,6 +60,9 @@ class GenerateDocumentation extends Command
      */
     public function handle()
     {
+        // in order to avoid PHP memory limit error
+        ini_set('memory_limit','512M');
+
         // Using a global static variable here, so fuck off if you don't like it.
         // Also, the --verbose option is included with all Artisan commands.
         Flags::$shouldBeVerbose = $this->option('verbose');
