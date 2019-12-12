@@ -5,6 +5,8 @@ namespace Mpociot\ApiDoc;
 use Illuminate\Support\ServiceProvider;
 use Mpociot\ApiDoc\Commands\GenerateDocumentation;
 use Mpociot\ApiDoc\Commands\RebuildDocumentation;
+use Mpociot\ApiDoc\Matching\RouteMatcher;
+use Mpociot\ApiDoc\Matching\RouteMatcherInterface;
 
 class ApiDocGeneratorServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,9 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
                 RebuildDocumentation::class,
             ]);
         }
+
+        // Bind the route matcher implementation
+        $this->app->bind(RouteMatcherInterface::class, $this->app['config']['apidoc']['routeMatcher']);
     }
 
     /**
@@ -42,6 +47,5 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 }
