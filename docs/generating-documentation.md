@@ -60,6 +60,14 @@ php artisan apidoc:rebuild
 
 To customise existing language templates you can perform the `vendor:publish` command above, then modify the blade templates in `resources/` as necessary.
 
+## Memory Limitations
+
+Generating docs for large APIs can be memory intensive. If you run into memory limits, consider running PHP with command line flags to increase memory limit or update your CLI php.ini file:
+
+```
+php -d memory_limit=1G artisan apidoc:generate
+```
+
 ## Further modification
 
 This package uses [Documentarian](https://github.com/mpociot/documentarian) to generate the API documentation. If you want to modify the CSS files of your documentation, or simply want to learn more about what is possible, take a look at the [Documentarian guide](http://marcelpociot.de/documentarian/installation).
