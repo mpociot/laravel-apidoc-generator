@@ -15,6 +15,14 @@ return [
     'router' => 'laravel',
 
     /*
+     * URL prefix for Laravel routes.
+     */
+
+    'url_prefix' => '/doc',
+
+    'middleware' => [],
+
+    /*
      * The base URL to be used in examples and the Postman collection.
      * By default, this will be the value of config('app.url').
      */

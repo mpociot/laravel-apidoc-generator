@@ -15,17 +15,19 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views/', 'apidoc');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/', 'apidoc');
 
         $this->publishes([
-            __DIR__.'/../resources/views' => app()->basePath().'/resources/views/vendor/apidoc',
+            __DIR__ . '/../resources/views' => app()->basePath() . '/resources/views/vendor/apidoc',
         ], 'apidoc-views');
 
         $this->publishes([
-            __DIR__.'/../config/apidoc.php' => app()->basePath().'/config/apidoc.php',
+            __DIR__ . '/../config/apidoc.php' => app()->basePath() . '/config/apidoc.php',
         ], 'apidoc-config');
 
-        $this->mergeConfigFrom(__DIR__.'/../config/apidoc.php', 'apidoc');
+        $this->mergeConfigFrom(__DIR__ . '/../config/apidoc.php', 'apidoc');
+
+        $this->bootRoutes();
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -43,5 +45,14 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    protected function bootRoutes()
+    {
+        if ($this->app['config']->get('apidoc.type', 'static') == 'laravel') {
+            $this->loadRoutesFrom(
+                __DIR__ . '/../routes/laravel.php'
+            );
+        }
     }
 }

@@ -9,11 +9,8 @@ This is the type of documentation output to generate.
 
 > In both instances, the source markdown file will be generated in `resources/docs/source`.
 
-If you're using `laravel` type, you can call `\Mpociot\ApiDoc\ApiDoc::routes()` from your routes file (usually `routes/web.php`). This method will create a `/doc` route for your documentation, along with a `/doc.json` variant that will return the Postman collection, if you have that enabled. This method returns the route, so you can call additional methods to customise it (by adding middleware, for instance). You can also pass in the path you'd like to use instead.
+If you're using `laravel` type, the routes will be automatically loaded. By default, routes are displayed along the `/doc` path for documentanion and `/doc.json` variant for the Postman collection. You can also specify middlewares for the routes in `middleware` parameter in `config/apidoc.php` file.
 
-```php
-\Mpociot\ApiDoc\ApiDoc::routes("/apidoc")->middleware("auth.basic");
-```
 > Note: There is currently a known issue with using `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
 
 You may, of course, set up your own routing instead of using the `routes()` helper.
