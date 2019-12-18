@@ -15,10 +15,16 @@ return [
     'router' => 'laravel',
 
     /*
-     * URL prefix for Laravel routes.
+     * URL prefix of routes for your documentation.
+     *
+     * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
      */
 
     'url_prefix' => '/doc',
+
+    /*
+     * Setting up middleware for Laravel routes.
+     */
 
     'middleware' => [],
 
