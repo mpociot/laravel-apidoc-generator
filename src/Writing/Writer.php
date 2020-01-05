@@ -259,9 +259,7 @@ class Writer
         rcopy("{$this->sourceOutputPath}/css", "{$publicPath}/css");
 
         if ($logo = $this->config->get('logo')) {
-            if ($this->isStatic) {
-                copy($logo, "{$publicPath}/images/logo.png");
-            }
+            copy($logo, "{$publicPath}/images/logo.png");
         }
     }
 
