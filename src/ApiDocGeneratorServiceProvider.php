@@ -49,7 +49,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
 
     protected function bootRoutes()
     {
-        if ($this->app['config']->get('apidoc.type', 'static') == 'laravel') {
+        if (config('apidoc.type', 'static') == 'laravel') {
             $this->loadRoutesFrom(
                 __DIR__.'/../routes/laravel.php'
             );
