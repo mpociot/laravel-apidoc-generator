@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+
+## [4.1.0] - Monday, 6 January 2019
+### Added
+- RouteMatcher to use can now be specified by user (https://github.com/mpociot/laravel-apidoc-generator/pull/657)
+
+### Fixed
+- Also copy custom logo for non-static docs (https://github.com/mpociot/laravel-apidoc-generator/commit/720f9c9e9b2443bcfb474b959febaf6cf5c3f004)
+
 ## [4.0.2] - Monday, 25 November 2019
 ### Fixed
 - Fixed missing body parameters in response calls (https://github.com/mpociot/laravel-apidoc-generator/commit/5d9371c14391485630941c718d7f168afd540126)
