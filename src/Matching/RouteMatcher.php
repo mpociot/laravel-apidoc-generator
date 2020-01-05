@@ -6,35 +6,21 @@ use Dingo\Api\Routing\RouteCollection;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Illuminate\Support\Str;
+use Mpociot\ApiDoc\Matching\RouteMatcher\Match;
 
-class RouteMatcher
+class RouteMatcher implements RouteMatcherInterface
 {
-    /**
-     * @var string
-     */
-    protected $router;
-
-    /**
-     * @var array
-     */
-    protected $routeRules;
-
-    public function __construct(array $routeRules = [], string $router = 'laravel')
+    public function getRoutes(array $routeRules = [], string $router = 'laravel')
     {
-        $this->router = $router;
-        $this->routeRules = $routeRules;
+        $usingDingoRouter = strtolower($router) == 'dingo';
+
+        return $this->getRoutesToBeDocumented($routeRules, $usingDingoRouter);
     }
 
-    public function getRoutes()
-    {
-        $usingDingoRouter = strtolower($this->router) == 'dingo';
-
-        return $this->getRoutesToBeDocumented($this->routeRules, $usingDingoRouter);
-    }
-
-    protected function getRoutesToBeDocumented(array $routeRules, bool $usingDingoRouter = false)
+    private function getRoutesToBeDocumented(array $routeRules, bool $usingDingoRouter = false)
     {
         $allRoutes = $this->getAllRoutes($usingDingoRouter);
+
         $matchedRoutes = [];
 
         foreach ($routeRules as $routeRule) {
@@ -50,11 +36,7 @@ class RouteMatcher
                 }
 
                 if ($this->shouldIncludeRoute($route, $routeRule, $includes, $usingDingoRouter)) {
-                    $matchedRoutes[] = [
-                        'route' => $route,
-                        'apply' => $routeRule['apply'] ?? [],
-                    ];
-                    continue;
+                    $matchedRoutes[] = new Match($route, $routeRule['apply'] ?? []);
                 }
             }
         }

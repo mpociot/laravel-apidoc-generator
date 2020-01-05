@@ -242,4 +242,11 @@ return [
      *
      */
     'faker_seed' => null,
+
+    /*
+     * If you would like to customize how routes are matched beyond the route configuration you may
+     * declare your own implementation of RouteMatcherInterface
+     *
+     */
+    'routeMatcher' => \Mpociot\ApiDoc\Matching\RouteMatcher::class,
 ];

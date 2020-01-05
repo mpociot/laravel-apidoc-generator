@@ -23,26 +23,26 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['prefixes'] = ['*'];
 
         $routeRules[0]['match']['domains'] = ['*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(12, $routes);
 
         $routeRules[0]['match']['domains'] = ['domain1.*', 'domain2.*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(12, $routes);
 
         $routeRules[0]['match']['domains'] = ['domain1.*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
             $this->assertContains('domain1', $route['route']->getDomain());
         }
 
         $routeRules[0]['match']['domains'] = ['domain2.*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
             $this->assertContains('domain2', $route['route']->getDomain());
@@ -56,26 +56,26 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['prefixes'] = ['*'];
 
         $routeRules[0]['match']['domains'] = ['*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(12, $routes);
 
         $routeRules[0]['match']['domains'] = ['domain1.*', 'domain2.*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(12, $routes);
 
         $routeRules[0]['match']['domains'] = ['domain1.*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
             $this->assertContains('domain1', $route['route']->getDomain());
         }
 
         $routeRules[0]['match']['domains'] = ['domain2.*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
             $this->assertContains('domain2', $route['route']->getDomain());
@@ -88,26 +88,26 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['domains'] = ['*'];
 
         $routeRules[0]['match']['prefixes'] = ['*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(12, $routes);
 
         $routeRules[0]['match']['prefixes'] = ['prefix1/*', 'prefix2/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(8, $routes);
 
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
             $this->assertTrue(Str::is('prefix1/*', $route['route']->uri()));
         }
 
         $routeRules[0]['match']['prefixes'] = ['prefix2/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
             $this->assertTrue(Str::is('prefix2/*', $route['route']->uri()));
@@ -121,26 +121,26 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['domains'] = ['*'];
 
         $routeRules[0]['match']['prefixes'] = ['*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(12, $routes);
 
         $routeRules[0]['match']['prefixes'] = ['prefix1/*', 'prefix2/*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(8, $routes);
 
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
             $this->assertTrue(Str::is('prefix1/*', $route['route']->uri()));
         }
 
         $routeRules[0]['match']['prefixes'] = ['prefix2/*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(4, $routes);
         foreach ($routes as $route) {
             $this->assertTrue(Str::is('prefix2/*', $route['route']->uri()));
@@ -154,8 +154,8 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['versions'] = ['v2'];
         $routeRules[0]['match']['domains'] = ['*'];
         $routeRules[0]['match']['prefixes'] = ['*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
             $this->assertNotEmpty(array_intersect($route['route']->versions(), ['v2']));
@@ -164,8 +164,8 @@ class RouteMatcherTest extends TestCase
         $routeRules[0]['match']['versions'] = ['v1', 'v2'];
         $routeRules[0]['match']['domains'] = ['*'];
         $routeRules[0]['match']['prefixes'] = ['*'];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(18, $routes);
     }
 
@@ -177,8 +177,8 @@ class RouteMatcherTest extends TestCase
 
         $routeRules[0]['match']['domains'] = ['domain1.*'];
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
             return $route['route']->getName() === $mustInclude;
         });
@@ -200,8 +200,8 @@ class RouteMatcherTest extends TestCase
                 'include' => [$mustInclude],
             ],
         ];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
             return $route['route']->getName() === $mustInclude;
         });
@@ -217,8 +217,8 @@ class RouteMatcherTest extends TestCase
 
         $routeRules[0]['match']['domains'] = ['domain1.*'];
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
             return in_array($route['route']->getName(), $mustInclude);
         });
@@ -241,8 +241,8 @@ class RouteMatcherTest extends TestCase
                 'include' => [$includePattern],
             ],
         ];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
             return in_array($route['route']->getName(), $mustInclude);
         });
@@ -257,8 +257,8 @@ class RouteMatcherTest extends TestCase
 
         $routeRules[0]['match']['domains'] = ['domain1.*'];
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
             return $route['route']->getName() === $mustNotInclude;
         });
@@ -280,8 +280,8 @@ class RouteMatcherTest extends TestCase
                 'exclude' => [$mustNotInclude],
             ],
         ];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
             return $route['route']->getName() === $mustNotInclude;
         });
@@ -297,8 +297,8 @@ class RouteMatcherTest extends TestCase
 
         $routeRules[0]['match']['domains'] = ['domain1.*'];
         $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
             return in_array($route['route']->getName(), $mustNotInclude);
         });
@@ -321,8 +321,8 @@ class RouteMatcherTest extends TestCase
                 'exclude' => [$excludePattern],
             ],
         ];
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $oddRuleOut = collect($routes)->filter(function ($route) use ($mustNotInclude) {
             return in_array($route['route']->getName(), $mustNotInclude);
         });
@@ -348,8 +348,8 @@ class RouteMatcherTest extends TestCase
             ],
         ];
 
-        $matcher = new RouteMatcher($routeRules);
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules);
         $this->assertCount(4, $routes);
 
         $routes = collect($routes);
@@ -386,8 +386,8 @@ class RouteMatcherTest extends TestCase
             ],
         ];
 
-        $matcher = new RouteMatcher($routeRules, 'dingo');
-        $routes = $matcher->getRoutes();
+        $matcher = new RouteMatcher();
+        $routes = $matcher->getRoutes($routeRules, 'dingo');
         $this->assertCount(18, $routes);
 
         $routes = collect($routes);

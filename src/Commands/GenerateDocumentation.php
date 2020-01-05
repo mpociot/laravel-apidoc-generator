@@ -7,7 +7,8 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Mpociot\ApiDoc\Extracting\Generator;
-use Mpociot\ApiDoc\Matching\RouteMatcher;
+use Mpociot\ApiDoc\Matching\RouteMatcher\Match;
+use Mpociot\ApiDoc\Matching\RouteMatcherInterface;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tools\Flags;
 use Mpociot\ApiDoc\Tools\Utils;
@@ -44,8 +45,15 @@ class GenerateDocumentation extends Command
      */
     private $baseUrl;
 
-    public function __construct()
+    /**
+     * @var RouteMatcherInterface
+     */
+    private $routeMatcher;
+
+    public function __construct(RouteMatcherInterface $routeMatcher)
     {
+        $this->routeMatcher = $routeMatcher;
+
         parent::__construct();
     }
 
@@ -65,8 +73,7 @@ class GenerateDocumentation extends Command
 
         URL::forceRootUrl($this->baseUrl);
 
-        $routeMatcher = new RouteMatcher($this->docConfig->get('routes'), $this->docConfig->get('router'));
-        $routes = $routeMatcher->getRoutes();
+        $routes = $this->routeMatcher->getRoutes($this->docConfig->get('routes'), $this->docConfig->get('router'));
 
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
@@ -87,7 +94,7 @@ class GenerateDocumentation extends Command
 
     /**
      * @param \Mpociot\ApiDoc\Extracting\Generator $generator
-     * @param array $routes
+     * @param Match[] $routes
      *
      * @return array
      */
@@ -95,7 +102,7 @@ class GenerateDocumentation extends Command
     {
         $parsedRoutes = [];
         foreach ($routes as $routeItem) {
-            $route = $routeItem['route'];
+            $route = $routeItem->getRoute();
             /** @var Route $route */
             $messageFormat = '%s route: [%s] %s';
             $routeMethods = implode(',', $generator->getMethods($route));
@@ -107,7 +114,7 @@ class GenerateDocumentation extends Command
             }
 
             try {
-                $parsedRoutes[] = $generator->processRoute($route, $routeItem['apply'] ?? []);
+                $parsedRoutes[] = $generator->processRoute($route, $routeItem->getRules());
                 $this->info(sprintf($messageFormat, 'Processed', $routeMethods, $routePath));
             } catch (\Exception $exception) {
                 $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).' - '.$exception->getMessage());
