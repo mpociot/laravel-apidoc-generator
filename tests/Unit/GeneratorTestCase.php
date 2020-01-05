@@ -469,21 +469,21 @@ abstract class GeneratorTestCase extends TestCase
         $content = json_decode($response['content'], true);
         $this->assertIsArray($content);
         $this->assertArraySubset([
-                'data' => [
-                    [
-                        'id' => 4,
-                        'name' => 'Tested Again',
-                        'email' => 'a@b.com',
-                    ],
-                    [
-                        'id' => 4,
-                        'name' => 'Tested Again',
-                        'email' => 'a@b.com',
-                    ],
+            'data' => [
+                [
+                    'id' => 4,
+                    'name' => 'Tested Again',
+                    'email' => 'a@b.com',
                 ],
-                'links' => [
-                    'self' => 'link-value',
+                [
+                    'id' => 4,
+                    'name' => 'Tested Again',
+                    'email' => 'a@b.com',
                 ],
+            ],
+            'links' => [
+                'self' => 'link-value',
+            ],
         ], $content);
     }
 
