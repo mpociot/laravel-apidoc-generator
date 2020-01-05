@@ -54,6 +54,9 @@ For each endpoint, an example request is shown in each of the languages specifie
  
 ##  `faker_seed`
 When generating example requests, this package uses fzanninoto/faker to generate random values. If you would like the package to generate the same example values for parameters on each run, set this to any number (eg. 1234). (Note: alternatively, you can set example values for parameters when [documenting them.](documenting.html#specifying-request-parameters))
+
+## `routeMatcher`
+The route matcher class provides the algorithm that determines what routes should be documented. The default matcher used is the included `\Mpociot\ApiDoc\Matching\RouteMatcher::class`, and you can provide your own custom implementation if you wish to programmatically change the algorithm. The provided matcher must be an instance of the `RouteMatcherInterface`.
        
 ## `fractal`
 This section only applies if you're using [Transformers]() for your API, and documenting responses with `@transformer` and `@transformerCollection`. Here, you configure how responses are transformed.
