@@ -61,8 +61,7 @@ class PostmanCollectionWriter
             })->values()->toArray(),
         ];
 
-
-        if (!empty($this->auth)) {
+        if (! empty($this->auth)) {
             $collection['auth'] = $this->auth;
         }
 
@@ -74,6 +73,7 @@ class PostmanCollectionWriter
         $mode = 'raw';
 
         $method = $route['methods'][0];
+
         return [
             'name' => $route['metadata']['title'] != '' ? $route['metadata']['title'] : $route['uri'],
             'request' => [
@@ -96,7 +96,7 @@ class PostmanCollectionWriter
 
         // Exclude authentication headers if they're handled by Postman auth
         $authHeader = $this->getAuthHeader();
-        if (!empty($authHeader)) {
+        if (! empty($authHeader)) {
             $headers = $headers->except($authHeader);
         }
 
@@ -116,8 +116,8 @@ class PostmanCollectionWriter
 
     protected function makeUrlData($route)
     {
-        [$urlParams, $queryParams] = collect($route['urlParameters'])->partition(function($_, $key) use ($route) {
-            return Str::contains($route['uri'], '{' . $key . '}');
+        [$urlParams, $queryParams] = collect($route['urlParameters'])->partition(function ($_, $key) use ($route) {
+            return Str::contains($route['uri'], '{'.$key.'}');
         });
 
         /** @var Collection $queryParams */
@@ -126,7 +126,7 @@ class PostmanCollectionWriter
             'host' => $this->baseUrl,
             // Substitute laravel/symfony query params ({example}) to Postman style, prefixed with a colon
             'path' => preg_replace_callback('/\/{(\w+)\??}(?=\/|$)/', function ($matches) {
-                return '/:' . $matches[1];
+                return '/:'.$matches[1];
             }, $route['uri']),
             'query' => $queryParams->union($route['queryParameters'])->map(function ($parameter, $key) {
                 return [
@@ -134,7 +134,7 @@ class PostmanCollectionWriter
                     'value' => $parameter['value'],
                     'description' => $parameter['description'],
                     // Default query params to disabled if they aren't required and have empty values
-                    'disabled' => !$parameter['required'] && empty($parameter['value']),
+                    'disabled' => ! $parameter['required'] && empty($parameter['value']),
                 ];
             })->values()->toArray(),
         ];
@@ -160,7 +160,7 @@ class PostmanCollectionWriter
     protected function getAuthHeader()
     {
         $auth = $this->auth;
-        if (empty($auth) || !is_string($auth['type'] ?? null)) {
+        if (empty($auth) || ! is_string($auth['type'] ?? null)) {
             return null;
         }
 

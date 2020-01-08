@@ -217,7 +217,7 @@ class PostmanCollectionWriterTest extends TestCase
                 'description' => 'A not required param with a null value',
                 'required' => false,
                 'value' => null,
-            ]
+            ],
         ];
 
         $collection = $this->fakeCollection([$fakeRoute]);
@@ -265,12 +265,12 @@ class PostmanCollectionWriterTest extends TestCase
     {
         yield [
             ['type' => 'bearer', 'bearer' => ['token' => 'Test']],
-            ['Authorization' => 'Bearer Test']
+            ['Authorization' => 'Bearer Test'],
         ];
 
         yield [
             ['type' => 'apikey', 'apikey' => ['value' => 'Test', 'key' => 'X-Authorization']],
-            ['X-Authorization' => 'Test']
+            ['X-Authorization' => 'Test'],
         ];
     }
 
@@ -280,7 +280,7 @@ class PostmanCollectionWriterTest extends TestCase
             'auth' => ['type' => 'apikey', 'apikey' => [
                 'value' => 'Test',
                 'key' => 'X-Authorization',
-                'in' => 'notheader'
+                'in' => 'notheader',
             ]],
         ]);
 
@@ -292,9 +292,8 @@ class PostmanCollectionWriterTest extends TestCase
 
         $this->assertContains([
             'key' => 'X-Authorization',
-            'value' => 'Test'
+            'value' => 'Test',
         ], data_get($collection, 'item.0.item.0.request.header'));
-
     }
 
     protected function fakeRoute($path, $title = '')
