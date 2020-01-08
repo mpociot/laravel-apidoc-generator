@@ -275,8 +275,8 @@ class GenerateDocumentationTest extends TestCase
         $this->artisan('apidoc:generate');
 
         $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
-        $endpointUrl = $generatedCollection->item[0]->item[0]->request->url;
-        $this->assertTrue(Str::startsWith($endpointUrl, $domain));
+        $endpointUrl = $generatedCollection->item[0]->item[0]->request->url->host;
+        $this->assertTrue(Str::startsWith($endpointUrl, 'somedomain.test'));
     }
 
     /** @test */

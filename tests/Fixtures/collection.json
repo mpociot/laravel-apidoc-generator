@@ -14,7 +14,12 @@
                 {
                     "name": "Example title.",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withDescription",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withDescription",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -43,9 +48,14 @@
                     }
                 },
                 {
-                    "name": "http:\/\/localhost\/api\/withResponseTag",
+                    "name": "api\/withResponseTag",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withResponseTag",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withResponseTag",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -76,7 +86,12 @@
                 {
                     "name": "Endpoint with body parameters.",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withBodyParameters",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withBodyParameters",
+                            "query": []
+                        },
                         "method": "POST",
                         "header": [
                             {
@@ -105,9 +120,45 @@
                     }
                 },
                 {
-                    "name": "http:\/\/localhost\/api\/withQueryParameters",
+                    "name": "api\/withQueryParameters",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withQueryParameters?location_id=consequatur&user_id=me&page=4&filters=consequatur&url_encoded=%2B+%5B%5D%26%3D",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withQueryParameters",
+                            "query": [
+                                {
+                                    "key": "location_id",
+                                    "value": "consequatur",
+                                    "description": "The id of the location.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "me",
+                                    "description": "The id of the user.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "4",
+                                    "description": "The page number.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "filters",
+                                    "value": "consequatur",
+                                    "description": "The filters.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "url_encoded",
+                                    "value": "%2B+%5B%5D%26%3D",
+                                    "description": "Used for testing that URL parameters will be URL-encoded where needed.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -136,9 +187,14 @@
                     }
                 },
                 {
-                    "name": "http:\/\/localhost\/api\/withAuthTag",
+                    "name": "api\/withAuthTag",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withAuthTag",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withAuthTag",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -167,9 +223,14 @@
                     }
                 },
                 {
-                    "name": "http:\/\/localhost\/api\/withEloquentApiResource",
+                    "name": "api\/withEloquentApiResource",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withEloquentApiResource",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withEloquentApiResource",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -198,9 +259,14 @@
                     }
                 },
                 {
-                    "name": "http:\/\/localhost\/api\/withMultipleResponseTagsAndStatusCode",
+                    "name": "api\/withMultipleResponseTagsAndStatusCode",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withMultipleResponseTagsAndStatusCode",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withMultipleResponseTagsAndStatusCode",
+                            "query": []
+                        },
                         "method": "POST",
                         "header": [
                             {
@@ -235,9 +301,14 @@
             "description": "",
             "item": [
                 {
-                    "name": "http:\/\/localhost\/api\/withEloquentApiResourceCollectionClass",
+                    "name": "api\/withEloquentApiResourceCollectionClass",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withEloquentApiResourceCollectionClass",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withEloquentApiResourceCollectionClass",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -266,9 +337,41 @@
                     }
                 },
                 {
-                    "name": "http:\/\/localhost\/api\/echoesUrlParameters\/{param}-{param2}\/{param3?}",
+                    "name": "api\/echoesUrlParameters\/{param}-{param2}\/{param3?}",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/echoesUrlParameters\/{param}-{param2}\/{param3?}?something=consequatur",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/echoesUrlParameters\/{param}-{param2}\/:param3",
+                            "query": [
+                                {
+                                    "key": "param4",
+                                    "value": "",
+                                    "description": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "something",
+                                    "value": "consequatur",
+                                    "description": "",
+                                    "disabled": false
+                                }
+                            ],
+                            "variable": [
+                                {
+                                    "id": "param",
+                                    "key": "param",
+                                    "value": "4",
+                                    "description": ""
+                                },
+                                {
+                                    "id": "param2",
+                                    "key": "param2",
+                                    "value": "consequatur",
+                                    "description": ""
+                                }
+                            ]
+                        },
                         "method": "GET",
                         "header": [
                             {

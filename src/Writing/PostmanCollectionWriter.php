@@ -131,7 +131,7 @@ class PostmanCollectionWriter
             'query' => $queryParams->union($route['queryParameters'])->map(function ($parameter, $key) {
                 return [
                     'key' => $key,
-                    'value' => $parameter['value'],
+                    'value' => urlencode($parameter['value']),
                     'description' => $parameter['description'],
                     // Default query params to disabled if they aren't required and have empty values
                     'disabled' => ! $parameter['required'] && empty($parameter['value']),
@@ -149,7 +149,7 @@ class PostmanCollectionWriter
             return [
                 'id' => $key,
                 'key' => $key,
-                'value' => $parameter['value'],
+                'value' => urlencode($parameter['value']),
                 'description' => $parameter['description'],
             ];
         })->values()->toArray();

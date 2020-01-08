@@ -173,7 +173,7 @@ class PostmanCollectionWriterTest extends TestCase
         $this->assertCount(1, $variableData);
         $this->assertSame([
             'key' => 'limit',
-            'value' => 5,
+            'value' => '5',
             'description' => 'A fake limit for my fake endpoint',
             'disabled' => false,
         ], $variableData[0]);
@@ -198,7 +198,7 @@ class PostmanCollectionWriterTest extends TestCase
         $this->assertCount(1, $variableData);
         $this->assertSame([
             'key' => 'limit',
-            'value' => 5,
+            'value' => '5',
             'description' => 'A fake limit for my fake endpoint',
             'disabled' => false,
         ], $variableData[0]);
