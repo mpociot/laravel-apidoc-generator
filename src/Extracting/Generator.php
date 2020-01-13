@@ -47,6 +47,8 @@ class Generator
      * @param \Illuminate\Routing\Route $route
      * @param array $routeRules Rules to apply when generating documentation for this route
      *
+     * @throws \ReflectionException
+     *
      * @return array
      */
     public function processRoute(Route $route, array $routeRules = [])
