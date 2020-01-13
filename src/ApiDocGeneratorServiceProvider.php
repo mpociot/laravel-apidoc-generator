@@ -2,7 +2,6 @@
 
 namespace Mpociot\ApiDoc;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Mpociot\ApiDoc\Commands\GenerateDocumentation;
 use Mpociot\ApiDoc\Commands\RebuildDocumentation;
@@ -48,9 +47,15 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
         //
     }
 
+    /**
+     * Initializing routes in the application.
+     */
     protected function bootRoutes()
     {
-        if (config('apidoc.type', 'static') == 'laravel' && ! Route::has('apidoc')) {
+        if (
+            config('apidoc.type', 'static') === 'laravel' &&
+            config('apidoc.routes.laravel.autoload', false)
+        ) {
             $this->loadRoutesFrom(
                 __DIR__ . '/../routes/laravel.php'
             );

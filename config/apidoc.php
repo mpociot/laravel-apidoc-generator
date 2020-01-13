@@ -56,6 +56,14 @@ return [
 
             'laravel' => [
                 /*
+                 * Autoload routes for the app.
+                 *
+                 * Default, false.
+                 */
+
+                'autoload' => false,
+
+                /*
                  * URL prefix of routes for your documentation.
                  *
                  * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
