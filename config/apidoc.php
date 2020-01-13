@@ -15,20 +15,6 @@ return [
     'router' => 'laravel',
 
     /*
-     * URL prefix of routes for your documentation.
-     *
-     * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
-     */
-
-    'url_prefix' => '/doc',
-
-    /*
-     * Setting up middleware for Laravel routes.
-     */
-
-    'middleware' => [],
-
-    /*
      * The base URL to be used in examples and the Postman collection.
      * By default, this will be the value of config('app.url').
      */
@@ -64,6 +50,26 @@ return [
      */
     'routes' => [
         [
+            /*
+             * Group of settings for managing routes in Laravel Framework.
+             */
+
+            'laravel' => [
+                /*
+                 * URL prefix of routes for your documentation.
+                 *
+                 * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
+                 */
+
+                'url_prefix' => '/doc',
+
+                /*
+                 * Setting up middleware for Laravel routes.
+                 */
+
+                'middleware' => [],
+            ],
+
             /*
              * Specify conditions to determine what routes will be parsed in this group.
              * A route must fulfill ALL conditions to pass.
