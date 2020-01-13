@@ -57,7 +57,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
             config('apidoc.routes.laravel.autoload', false)
         ) {
             $this->loadRoutesFrom(
-                __DIR__ . '/../routes/laravel.php'
+                __DIR__.'/../routes/laravel.php'
             );
         }
     }
