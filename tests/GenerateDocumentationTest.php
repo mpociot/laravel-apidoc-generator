@@ -65,8 +65,8 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertContains('Skipping route: [GET] api/closure', $output);
-        $this->assertContains('Processed route: [GET] api/test', $output);
+        $this->assertStringContainsString('Skipping route: [GET] api/closure', $output);
+        $this->assertStringContainsString('Processed route: [GET] api/test', $output);
     }
 
     /** @test */
@@ -85,8 +85,8 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.versions' => ['v1']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertContains('Skipping route: [GET] closure', $output);
-        $this->assertContains('Processed route: [GET] test', $output);
+        $this->assertStringContainsString('Skipping route: [GET] closure', $output);
+        $this->assertStringContainsString('Processed route: [GET] test', $output);
     }
 
     /** @test */
@@ -97,8 +97,8 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertNotContains('Skipping route: [GET] api/array/test', $output);
-        $this->assertContains('Processed route: [GET] api/array/test', $output);
+        $this->assertStringNotContainsString('Skipping route: [GET] api/array/test', $output);
+        $this->assertStringContainsString('Processed route: [GET] api/array/test', $output);
     }
 
     /** @test */
@@ -110,8 +110,8 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertContains('Skipping route: [GET] api/skip', $output);
-        $this->assertContains('Processed route: [GET] api/test', $output);
+        $this->assertStringContainsString('Skipping route: [GET] api/skip', $output);
+        $this->assertStringContainsString('Processed route: [GET] api/test', $output);
     }
 
     /** @test */
@@ -122,8 +122,8 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertContains('Skipping route: [GET] api/non-existent', $output);
-        $this->assertContains('@responseFile i-do-not-exist.json does not exist', $output);
+        $this->assertStringContainsString('Skipping route: [GET] api/non-existent', $output);
+        $this->assertStringContainsString('@responseFile i-do-not-exist.json does not exist', $output);
     }
 
     /** @test */
@@ -392,7 +392,7 @@ class GenerateDocumentationTest extends TestCase
         $this->artisan('apidoc:generate');
 
         $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
-        $this->assertContains('Лорем ипсум долор сит амет', $generatedMarkdown);
+        $this->assertStringContainsString('Лорем ипсум долор сит амет', $generatedMarkdown);
     }
 
     /** @test */
@@ -437,7 +437,7 @@ class GenerateDocumentationTest extends TestCase
 
         $this->assertNull($thrownException);
         $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
-        $this->assertContains('Group A', $generatedMarkdown);
-        $this->assertContains('Group B', $generatedMarkdown);
+        $this->assertStringContainsString('Group A', $generatedMarkdown);
+        $this->assertStringContainsString('Group B', $generatedMarkdown);
     }
 }

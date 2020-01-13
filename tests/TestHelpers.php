@@ -48,6 +48,6 @@ trait TestHelpers
     {
         $haystack = preg_replace('/\s/', '', $haystack);
         $needle = preg_replace('/\s/', '', $needle);
-        $this->assertContains($needle, $haystack);
+        $this->assertStringContainsString($needle, $haystack);
     }
 }

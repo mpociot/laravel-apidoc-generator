@@ -37,7 +37,7 @@ class RouteMatcherTest extends TestCase
         $routes = $matcher->getRoutes();
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
-            $this->assertContains('domain1', $route['route']->getDomain());
+            $this->assertStringContainsString('domain1', $route['route']->getDomain());
         }
 
         $routeRules[0]['match']['domains'] = ['domain2.*'];
@@ -45,7 +45,7 @@ class RouteMatcherTest extends TestCase
         $routes = $matcher->getRoutes();
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
-            $this->assertContains('domain2', $route['route']->getDomain());
+            $this->assertStringContainsString('domain2', $route['route']->getDomain());
         }
     }
 
@@ -70,7 +70,7 @@ class RouteMatcherTest extends TestCase
         $routes = $matcher->getRoutes();
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
-            $this->assertContains('domain1', $route['route']->getDomain());
+            $this->assertStringContainsString('domain1', $route['route']->getDomain());
         }
 
         $routeRules[0]['match']['domains'] = ['domain2.*'];
@@ -78,7 +78,7 @@ class RouteMatcherTest extends TestCase
         $routes = $matcher->getRoutes();
         $this->assertCount(6, $routes);
         foreach ($routes as $route) {
-            $this->assertContains('domain2', $route['route']->getDomain());
+            $this->assertStringContainsString('domain2', $route['route']->getDomain());
         }
     }
 

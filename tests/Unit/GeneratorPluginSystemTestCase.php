@@ -2,6 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Extracting\Generator;
@@ -13,6 +14,8 @@ use ReflectionMethod;
 
 class GeneratorPluginSystemTestCase extends LaravelGeneratorTest
 {
+    use ArraySubsetAsserts;
+
     /**
      * @var \Mpociot\ApiDoc\Extracting\Generator
      */

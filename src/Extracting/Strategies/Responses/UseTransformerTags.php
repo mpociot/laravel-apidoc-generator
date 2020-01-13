@@ -125,9 +125,9 @@ class UseTransformerTags extends Strategy
             $type = $modelTag->getContent();
         } else {
             $parameter = Arr::first($transformerMethod->getParameters());
-            if ($parameter->hasType() && ! $parameter->getType()->isBuiltin() && class_exists((string) $parameter->getType())) {
+            if ($parameter->hasType() && ! $parameter->getType()->isBuiltin() && class_exists($parameter->getType()->getName())) {
                 // Ladies and gentlemen, we have a type!
-                $type = (string) $parameter->getType();
+                $type = $parameter->getType()->getName();
             }
         }
 

@@ -4,6 +4,7 @@
 
 namespace Mpociot\ApiDoc\Tests\Unit;
 
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Illuminate\Support\Arr;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Extracting\Generator;
@@ -14,6 +15,8 @@ use Orchestra\Testbench\TestCase;
 
 abstract class GeneratorTestCase extends TestCase
 {
+    use ArraySubsetAsserts;
+
     /**
      * @var \Mpociot\ApiDoc\Extracting\Generator
      */
