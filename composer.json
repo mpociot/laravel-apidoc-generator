@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
+        "ext-json": "*",
         "fzaninotto/faker": "^1.8",
         "illuminate/console": "^5.7|^6.0|^7.0",
         "illuminate/routing": "^5.7|^6.0|^7.0",
@@ -63,5 +64,9 @@
         "branch-alias": {
             "dev-v4": "4.x-dev"
         }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }
