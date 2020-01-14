@@ -116,6 +116,8 @@ class PostmanCollectionWriter
 
     protected function makeUrlData($route)
     {
+        // URL Parameters are collected by the `UrlParameters` strategies, but only make sense if they're in the route
+        // definition. Filter out any URL parameters that don't appear in the URL, and assume they're query params.
         [$urlParams, $queryParams] = collect($route['urlParameters'])->partition(function ($_, $key) use ($route) {
             return Str::contains($route['uri'], '{'.$key.'}');
         });

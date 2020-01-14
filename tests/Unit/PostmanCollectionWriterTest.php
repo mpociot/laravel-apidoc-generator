@@ -68,12 +68,12 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testEndpointIsParsed()
     {
-        $route = $this->fakeRoute('some/path');
+        $route = $this->createMockRouteData('some/path');
 
         // Ensure method is set correctly for assertion later
         $route['methods'] = ['GET'];
 
-        $collection = $this->fakeCollection([$route], 'Group');
+        $collection = $this->createMockRouteGroup([$route], 'Group');
 
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
@@ -95,7 +95,7 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testHttpsProtocolIsDetected()
     {
-        $collection = $this->fakeCollection([$this->fakeRoute('fake')]);
+        $collection = $this->createMockRouteGroup([$this->createMockRouteData('fake')]);
         $writer = new PostmanCollectionWriter($collection, 'https://fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -104,11 +104,11 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testHeadersArePulledFromRoute()
     {
-        $route = $this->fakeRoute('some/path');
+        $route = $this->createMockRouteData('some/path');
 
         $route['headers'] = ['X-Fake' => 'Test'];
 
-        $collection = $this->fakeCollection([$route], 'Group');
+        $collection = $this->createMockRouteGroup([$route], 'Group');
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -120,7 +120,7 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testUrlParametersAreConverted()
     {
-        $collection = $this->fakeCollection([$this->fakeRoute('fake/{param}')]);
+        $collection = $this->createMockRouteGroup([$this->createMockRouteData('fake/{param}')]);
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -131,7 +131,7 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testUrlParamsResolveTheirDocumentation()
     {
-        $fakeRoute = $this->fakeRoute('fake/{param}');
+        $fakeRoute = $this->createMockRouteData('fake/{param}');
 
         $fakeRoute['urlParameters'] = ['param' => [
             'description' => 'A test description for the test param',
@@ -139,7 +139,7 @@ class PostmanCollectionWriterTest extends TestCase
             'value' => 'foobar',
         ]];
 
-        $collection = $this->fakeCollection([$fakeRoute]);
+        $collection = $this->createMockRouteGroup([$fakeRoute]);
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -156,7 +156,7 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testQueryParametersAreDocumented()
     {
-        $fakeRoute = $this->fakeRoute('fake/path');
+        $fakeRoute = $this->createMockRouteData('fake/path');
 
         $fakeRoute['queryParameters'] = ['limit' => [
             'description' => 'A fake limit for my fake endpoint',
@@ -164,7 +164,7 @@ class PostmanCollectionWriterTest extends TestCase
             'value' => 5,
         ]];
 
-        $collection = $this->fakeCollection([$fakeRoute]);
+        $collection = $this->createMockRouteGroup([$fakeRoute]);
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -181,7 +181,7 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testUrlParametersAreResolvedAsQueryParametersIfMissingFromPath()
     {
-        $fakeRoute = $this->fakeRoute('fake/path');
+        $fakeRoute = $this->createMockRouteData('fake/path');
 
         $fakeRoute['urlParameters'] = ['limit' => [
             'description' => 'A fake limit for my fake endpoint',
@@ -189,7 +189,7 @@ class PostmanCollectionWriterTest extends TestCase
             'value' => 5,
         ]];
 
-        $collection = $this->fakeCollection([$fakeRoute]);
+        $collection = $this->createMockRouteGroup([$fakeRoute]);
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -206,7 +206,7 @@ class PostmanCollectionWriterTest extends TestCase
 
     public function testQueryParametersAreDisabledWithNoValueWhenNotRequired()
     {
-        $fakeRoute = $this->fakeRoute('fake/path');
+        $fakeRoute = $this->createMockRouteData('fake/path');
         $fakeRoute['urlParameters'] = [
             'required' => [
                 'description' => 'A required param with a null value',
@@ -220,7 +220,7 @@ class PostmanCollectionWriterTest extends TestCase
             ],
         ];
 
-        $collection = $this->fakeCollection([$fakeRoute]);
+        $collection = $this->createMockRouteGroup([$fakeRoute]);
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -250,9 +250,9 @@ class PostmanCollectionWriterTest extends TestCase
             'auth' => $authConfig,
         ]);
 
-        $route = $this->fakeRoute('some/path');
+        $route = $this->createMockRouteData('some/path');
         $route['headers'] = $expectedRemovedHeaders;
-        $collection = $this->fakeCollection([$route], 'Group');
+        $collection = $this->createMockRouteGroup([$route], 'Group');
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -284,9 +284,9 @@ class PostmanCollectionWriterTest extends TestCase
             ]],
         ]);
 
-        $route = $this->fakeRoute('some/path');
+        $route = $this->createMockRouteData('some/path');
         $route['headers'] = ['X-Authorization' => 'Test'];
-        $collection = $this->fakeCollection([$route], 'Group');
+        $collection = $this->createMockRouteGroup([$route], 'Group');
         $writer = new PostmanCollectionWriter($collection, 'fake.localhost');
         $collection = json_decode($writer->getCollection(), true);
 
@@ -296,7 +296,7 @@ class PostmanCollectionWriterTest extends TestCase
         ], data_get($collection, 'item.0.item.0.request.header'));
     }
 
-    protected function fakeRoute($path, $title = '')
+    protected function createMockRouteData($path, $title = '')
     {
         return [
             'uri' => $path,
@@ -312,7 +312,7 @@ class PostmanCollectionWriterTest extends TestCase
         ];
     }
 
-    protected function fakeCollection(array $routes, $groupName = 'Group')
+    protected function createMockRouteGroup(array $routes, $groupName = 'Group')
     {
         return collect([$groupName => collect($routes)]);
     }
