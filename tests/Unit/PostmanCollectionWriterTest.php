@@ -179,7 +179,7 @@ class PostmanCollectionWriterTest extends TestCase
         ], $variableData[0]);
     }
 
-    public function testUrlParametersAreResolvedAsQueryParametersIfMissingFromPath()
+    public function testUrlParametersAreNotIncludedIfMissingFromPath()
     {
         $fakeRoute = $this->createMockRouteData('fake/path');
 
@@ -195,19 +195,13 @@ class PostmanCollectionWriterTest extends TestCase
 
         $variableData = data_get($collection, 'item.0.item.0.request.url.query');
 
-        $this->assertCount(1, $variableData);
-        $this->assertSame([
-            'key' => 'limit',
-            'value' => '5',
-            'description' => 'A fake limit for my fake endpoint',
-            'disabled' => false,
-        ], $variableData[0]);
+        $this->assertCount(0, $variableData);
     }
 
     public function testQueryParametersAreDisabledWithNoValueWhenNotRequired()
     {
         $fakeRoute = $this->createMockRouteData('fake/path');
-        $fakeRoute['urlParameters'] = [
+        $fakeRoute['queryParameters'] = [
             'required' => [
                 'description' => 'A required param with a null value',
                 'required' => true,

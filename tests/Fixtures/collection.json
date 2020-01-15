@@ -345,12 +345,6 @@
                             "path": "api\/echoesUrlParameters\/{param}-{param2}\/:param3",
                             "query": [
                                 {
-                                    "key": "param4",
-                                    "value": "",
-                                    "description": "",
-                                    "disabled": true
-                                },
-                                {
                                     "key": "something",
                                     "value": "consequatur",
                                     "description": "",
