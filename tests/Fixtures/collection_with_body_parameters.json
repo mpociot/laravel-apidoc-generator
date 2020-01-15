@@ -14,7 +14,12 @@
                 {
                     "name": "Endpoint with body parameters.",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withBodyParameters",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withBodyParameters",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {

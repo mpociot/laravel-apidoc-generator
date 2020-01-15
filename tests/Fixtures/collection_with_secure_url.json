@@ -14,7 +14,12 @@
                 {
                     "name": "Example title.",
                     "request": {
-                        "url": "https:\/\/yourapp.app\/api\/test",
+                        "url": {
+                            "protocol": "https",
+                            "host": "yourapp.app",
+                            "path": "api/test",
+                            "query": []
+                        },
                         "method": "GET",
                         "header": [
                             {
@@ -35,9 +40,14 @@
                     }
                 },
                 {
-                    "name": "https:\/\/yourapp.app\/api\/responseTag",
+                    "name": "api\/responseTag",
                     "request": {
-                        "url": "https:\/\/yourapp.app\/api\/responseTag",
+                        "url": {
+                            "protocol": "https",
+                            "host": "yourapp.app",
+                            "path": "api/responseTag",
+                            "query": []
+                        },
                         "method": "POST",
                         "header": [
                             {

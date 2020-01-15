@@ -223,7 +223,11 @@ class Writer
      */
     public function generatePostmanCollection(Collection $routes)
     {
-        $writer = new PostmanCollectionWriter($routes, $this->baseUrl);
+        /** @var PostmanCollectionWriter $writer */
+        $writer = app()->makeWith(
+            PostmanCollectionWriter::class,
+            ['routeGroups' => $routes, 'baseUrl' => $this->baseUrl]
+        );
 
         return $writer->getCollection();
     }

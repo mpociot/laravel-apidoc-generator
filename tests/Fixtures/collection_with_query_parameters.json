@@ -12,9 +12,45 @@
             "description": "",
             "item": [
                 {
-                    "name": "http:\/\/localhost\/api\/withQueryParameters",
+                    "name": "api\/withQueryParameters",
                     "request": {
-                        "url": "http:\/\/localhost\/api\/withQueryParameters?location_id=consequatur&user_id=me&page=4&filters=consequatur&url_encoded=%2B+%5B%5D%26%3D",
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost",
+                            "path": "api\/withQueryParameters",
+                            "query": [
+                                {
+                                    "key": "location_id",
+                                    "value": "consequatur",
+                                    "description": "The id of the location.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "me",
+                                    "description": "The id of the user.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "4",
+                                    "description": "The page number.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "filters",
+                                    "value": "consequatur",
+                                    "description": "The filters.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "url_encoded",
+                                    "value": "%2B+%5B%5D%26%3D",
+                                    "description": "Used for testing that URL parameters will be URL-encoded where needed.",
+                                    "disabled": false
+                                }
+                            ]
+                        },
                         "method": "GET",
                         "header": [
                             {
