@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
+## [4.2.0] - January 2020
+### Added
+- New Postman collection generation features (https://github.com/mpociot/laravel-apidoc-generator/pull/666):
+  - Properly handle url parameters using the `:param` syntax (opposed to the Laravel-esque `{param}` syntax)
+  - Allow configuring the auth section of Postman collection config
+  - Add some documentation that was available but not exported in the Postman collection (for URL params and query params)
+
 ## [4.1.0] - Monday, 6 January 2019
 ### Added
 - RouteMatcher to use can now be specified by user (https://github.com/mpociot/laravel-apidoc-generator/pull/657)
