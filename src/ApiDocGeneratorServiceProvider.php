@@ -54,7 +54,7 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
     {
         if (
             config('apidoc.type', 'static') === 'laravel' &&
-            config('apidoc.routes.laravel.autoload', false)
+            config('apidoc.laravel.autoload', false)
         ) {
             $this->loadRoutesFrom(
                 __DIR__.'/../routes/laravel.php'

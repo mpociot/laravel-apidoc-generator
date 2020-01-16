@@ -44,40 +44,36 @@ return [
     ],
 
     /*
+     * Group of settings for managing routes in Laravel Framework.
+     */
+    'laravel' => [
+        /*
+         * Autoload routes for the app.
+         *
+         * Default, false.
+         */
+        'autoload' => false,
+
+        /*
+         * URL prefix of routes for your documentation.
+         *
+         * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
+         */
+        'url_prefix' => '/doc',
+
+        /*
+         * Setting up middleware for Laravel routes.
+         */
+        'middleware' => [],
+    ],
+
+    /*
      * The routes for which documentation should be generated.
      * Each group contains rules defining which routes should be included ('match', 'include' and 'exclude' sections)
      * and rules which should be applied to them ('apply' section).
      */
     'routes' => [
         [
-            /*
-             * Group of settings for managing routes in Laravel Framework.
-             */
-
-            'laravel' => [
-                /*
-                 * Autoload routes for the app.
-                 *
-                 * Default, false.
-                 */
-
-                'autoload' => false,
-
-                /*
-                 * URL prefix of routes for your documentation.
-                 *
-                 * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
-                 */
-
-                'url_prefix' => '/doc',
-
-                /*
-                 * Setting up middleware for Laravel routes.
-                 */
-
-                'middleware' => [],
-            ],
-
             /*
              * Specify conditions to determine what routes will be parsed in this group.
              * A route must fulfill ALL conditions to pass.

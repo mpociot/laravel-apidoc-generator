@@ -31,6 +31,6 @@ class ApiDoc
      */
     protected static function middleware()
     {
-        return config('apidoc.routes.laravel.middleware', []);
+        return config('apidoc.laravel.middleware', []);
     }
 }

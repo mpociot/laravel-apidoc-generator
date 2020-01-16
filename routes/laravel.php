@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-$prefix = config('apidoc.routes.laravel.url_prefix', '/doc');
-$middleware = config('apidoc.routes.laravel.middleware', []);
+$prefix = config('apidoc.laravel.url_prefix', '/doc');
+$middleware = config('apidoc.laravel.middleware', []);
 
 Route::prefix($prefix)
     ->namespace('\Mpociot\ApiDoc\Http')
