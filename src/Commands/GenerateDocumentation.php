@@ -46,23 +46,13 @@ class GenerateDocumentation extends Command
     private $baseUrl;
 
     /**
-     * @var RouteMatcherInterface
-     */
-    private $routeMatcher;
-
-    public function __construct(RouteMatcherInterface $routeMatcher)
-    {
-        $this->routeMatcher = $routeMatcher;
-
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
+     *
+     * @param RouteMatcherInterface $routeMatcher
      *
      * @return void
      */
-    public function handle()
+    public function handle(RouteMatcherInterface $routeMatcher)
     {
         // Using a global static variable here, so fuck off if you don't like it.
         // Also, the --verbose option is included with all Artisan commands.
@@ -73,7 +63,7 @@ class GenerateDocumentation extends Command
 
         URL::forceRootUrl($this->baseUrl);
 
-        $routes = $this->routeMatcher->getRoutes($this->docConfig->get('routes'), $this->docConfig->get('router'));
+        $routes = $routeMatcher->getRoutes($this->docConfig->get('routes'), $this->docConfig->get('router'));
 
         $generator = new Generator($this->docConfig);
         $parsedRoutes = $this->processRoutes($generator, $routes);
