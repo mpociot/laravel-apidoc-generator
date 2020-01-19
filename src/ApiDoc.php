@@ -19,7 +19,7 @@ class ApiDoc
             ->namespace('\Mpociot\ApiDoc\Http')
             ->middleware(static::middleware())
             ->group(function () {
-                Route::get('/', 'Controller@blade')->name('apidoc');
+                Route::get('/', 'Controller@html')->name('apidoc');
                 Route::get('.json', 'Controller@json')->name('apidoc.json');
             });
     }
