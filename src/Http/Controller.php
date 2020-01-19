@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Controller
 {
-    public function blade()
+    public function html()
     {
         return view('apidoc.index');
     }
