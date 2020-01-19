@@ -19,6 +19,7 @@ matrix:
       env: SETUP=lowest
     - php: 7.4
       env: SETUP=lint
+      name: "Lint code"
 
 cache:
   directories:
