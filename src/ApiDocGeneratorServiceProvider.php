@@ -28,6 +28,8 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/../config/apidoc.php', 'apidoc');
 
+        $this->bootRoutes();
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 GenerateDocumentation::class,
@@ -46,5 +48,20 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
      */
     public function register()
     {
+    }
+
+    /**
+     * Initializing routes in the application.
+     */
+    protected function bootRoutes()
+    {
+        if (
+            config('apidoc.type', 'static') === 'laravel' &&
+            config('apidoc.laravel.autoload', false)
+        ) {
+            $this->loadRoutesFrom(
+                __DIR__.'/../routes/laravel.php'
+            );
+        }
     }
 }

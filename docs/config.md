@@ -9,14 +9,21 @@ This is the type of documentation output to generate.
 
 > In both instances, the source markdown file will be generated in `resources/docs/source`.
 
-If you're using `laravel` type, you can call `\Mpociot\ApiDoc\ApiDoc::routes()` from your routes file (usually `routes/web.php`). This method will create a `/doc` route for your documentation, along with a `/doc.json` variant that will return the Postman collection, if you have that enabled. This method returns the route, so you can call additional methods to customise it (by adding middleware, for instance). You can also pass in the path you'd like to use instead.
+## `laravel`
+If you're using `laravel` type output, this package can automatically set up an endpoint for you to view your generated docs. You can configure this here.
 
-```php
-\Mpociot\ApiDoc\ApiDoc::routes("/apidoc")->middleware("auth.basic");
-```
+### `autoload`
+Set this to `true` if you want the documentation endpoint to be automatically set up for you. Default: `false` (*note that this will change in the next major release*)
+
+You may, of course, use your own routing instead of using `autoload`.
+
+### `docs_url`
+The path for the HTMl documentation endpoint (if `autoload` is true). Your Postman collection (if you have that enabled) will be at this path + '.json' (eg `/doc.json`). Default: `/doc`
+
 > Note: There is currently a known issue with using `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
 
-You may, of course, set up your own routing instead of using the `routes()` helper.
+### `middleware`
+Here, you can specify middleware to be attached to the documentation endpoint (if `autoload` is true).
 
 ## `router`
 The router to use when processing your routes (can be Laravel or Dingo. Defaults to **Laravel**)

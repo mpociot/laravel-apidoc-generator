@@ -3,23 +3,34 @@
 namespace Mpociot\ApiDoc;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
 class ApiDoc
 {
+    /**
+     * Binds the ApiDoc routes into the controller.
+     *
+     * @deprecated Use autoload routes instead (`config/apidoc.php`: `routes > laravel > autoload`).
+     *
+     * @param string $path
+     */
     public static function routes($path = '/doc')
     {
-        return Route::get("$path{format?}", function (?string $format = null) {
-            if ($format == '.json') {
-                return response(
-                    Storage::disk('local')->get('apidoc/collection.json'),
-                    200,
-                    ['Content-type' => 'application/json']
+        Route::prefix($path)
+            ->namespace('\Mpociot\ApiDoc\Http')
+            ->middleware(static::middleware())
+            ->group(function () {
+                Route::get('/', 'Controller@html')->name('apidoc');
+                Route::get('.json', 'Controller@json')->name('apidoc.json');
+            });
+    }
 
-                );
-            }
-
-            return view('apidoc.index');
-        })->name('apidoc');
+    /**
+     * Get the middlewares for Laravel routes.
+     *
+     * @return array
+     */
+    protected static function middleware()
+    {
+        return config('apidoc.laravel.middleware', []);
     }
 }
