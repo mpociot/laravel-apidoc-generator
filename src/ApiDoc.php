@@ -9,7 +9,7 @@ class ApiDoc
     /**
      * Binds the ApiDoc routes into the controller.
      *
-     * @deprecated Use autoload routes instead (`config/apidoc.php`: `routes > laravel > autoload`).
+     * @deprecated Use autoload routes instead (`config/apidoc.php`: `laravel > autoload`).
      *
      * @param string $path
      */

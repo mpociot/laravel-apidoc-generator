@@ -18,7 +18,7 @@ Set this to `true` if you want the documentation endpoint to be automatically se
 You may, of course, use your own routing instead of using `autoload`.
 
 ### `docs_url`
-The path for the HTMl documentation endpoint (if `autoload` is true). Your Postman collection (if you have that enabled) will be at this path + '.json' (eg `/doc.json`). Default: `/doc`
+The path for the documentation endpoint (if `autoload` is true). Your Postman collection (if you have that enabled) will be at this path + '.json' (eg `/doc.json`). Default: `/doc`
 
 > Note: There is currently a known issue with using `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
 
