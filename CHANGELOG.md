@@ -14,12 +14,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 
-## [4.2.0] - January 2020
+## [4.2.0] - Sunday, 19 January 2020
 ### Added
 - New Postman collection generation features (https://github.com/mpociot/laravel-apidoc-generator/pull/666):
   - Properly handle url parameters using the `:param` syntax (opposed to the Laravel-esque `{param}` syntax)
   - Allow configuring the auth section of Postman collection config
   - Add some documentation that was available but not exported in the Postman collection (for URL params and query params)
+
+### Changed
+- The package can now create a documentation endpoint automatically for `laravel`-type routes. This also allows users to install the package on dev-only enviornments but have their routes available in others, without writing custom routing code. (https://github.com/mpociot/laravel-apidoc-generator/pull/659)
+
+### Fixed
+- Error when installing due to DI not working properly on constructor (https://github.com/mpociot/laravel-apidoc-generator/pull/672)
 
 ## [4.1.0] - Monday, 6 January 2019
 ### Added
