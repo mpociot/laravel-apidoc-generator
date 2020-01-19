@@ -8,6 +8,29 @@ return [
      * so you can add routing and authentication.
      */
     'type' => 'static',
+    
+    /*
+     * Settings for `laravel` type output.
+     */
+    'laravel' => [
+        /*
+         * Whether to automatically create a docs endpoint for you to view your generated docs.
+         * If this is false, you can still set up routing manually.
+         */
+        'autoload' => false,
+
+        /*
+         * URL path to use for the docs endpoint (if `autoload` is true).
+         *
+         * By default, `/doc` opens the HTML page, and `/doc.json` downloads the Postman collection.
+         */
+        'docs_url' => '/doc',
+
+        /*
+         * Middleware to attach to the docs endpoint (if `autoload` is true).
+         */
+        'middleware' => [],
+    ],
 
     /*
      * The router to be used (Laravel or Dingo).
@@ -41,30 +64,6 @@ return [
          * The description for the exported Postman collection.
          */
         'description' => null,
-    ],
-
-    /*
-     * Group of settings for managing routes in Laravel Framework.
-     */
-    'laravel' => [
-        /*
-         * Autoload routes for the app.
-         *
-         * Default, false.
-         */
-        'autoload' => false,
-
-        /*
-         * URL prefix of routes for your documentation.
-         *
-         * By default, `/doc` opens the blade, and `/doc.json` returns the Postman collection.
-         */
-        'url_prefix' => '/doc',
-
-        /*
-         * Setting up middleware for Laravel routes.
-         */
-        'middleware' => [],
     ],
 
     /*
