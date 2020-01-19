@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-$prefix = config('apidoc.laravel.url_prefix', '/doc');
+$prefix = config('apidoc.laravel.docs_url', '/doc');
 $middleware = config('apidoc.laravel.middleware', []);
 
 Route::prefix($prefix)
