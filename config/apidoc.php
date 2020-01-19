@@ -8,7 +8,7 @@ return [
      * so you can add routing and authentication.
      */
     'type' => 'static',
-    
+
     /*
      * Settings for `laravel` type output.
      */
