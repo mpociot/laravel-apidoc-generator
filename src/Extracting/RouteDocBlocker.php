@@ -20,6 +20,7 @@ class RouteDocBlocker
      * @param Route $route
      *
      * @throws \ReflectionException
+     * @throws \Exception
      *
      * @return array<string, DocBlock> Method and class docblocks
      */

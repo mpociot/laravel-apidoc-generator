@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Extracting;
 
 use Faker\Factory;
+use stdClass;
 
 trait ParamHelpers
 {
@@ -32,7 +33,7 @@ trait ParamHelpers
                 return [];
             },
             'object' => function () {
-                return new \stdClass;
+                return new stdClass;
             },
         ];
 

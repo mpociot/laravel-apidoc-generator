@@ -47,11 +47,13 @@ class Generator
      * @param \Illuminate\Routing\Route $route
      * @param array $routeRules Rules to apply when generating documentation for this route
      *
+     * @throws \ReflectionException
+     *
      * @return array
      */
     public function processRoute(Route $route, array $routeRules = [])
     {
-        list($controllerName, $methodName) = Utils::getRouteClassAndMethodNames($route->getAction());
+        [$controllerName, $methodName] = Utils::getRouteClassAndMethodNames($route->getAction());
         $controller = new ReflectionClass($controllerName);
         $method = $controller->getMethod($methodName);
 

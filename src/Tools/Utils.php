@@ -94,6 +94,14 @@ class Utils
         $fs->deleteDir($dir);
     }
 
+    /**
+     * @param mixed $value
+     * @param int $indentationLevel
+     *
+     * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
+     *
+     * @return string
+     */
     public static function printPhpValue($value, $indentationLevel = 0)
     {
         $output = VarExporter::export($value);

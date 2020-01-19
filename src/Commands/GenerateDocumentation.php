@@ -86,6 +86,8 @@ class GenerateDocumentation extends Command
      * @param \Mpociot\ApiDoc\Extracting\Generator $generator
      * @param Match[] $routes
      *
+     * @throws \ReflectionException
+     *
      * @return array
      */
     private function processRoutes(Generator $generator, array $routes)
