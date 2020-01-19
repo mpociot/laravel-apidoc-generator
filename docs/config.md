@@ -9,11 +9,21 @@ This is the type of documentation output to generate.
 
 > In both instances, the source markdown file will be generated in `resources/docs/source`.
 
-If you're using `laravel` type, the routes will be automatically loaded. By default, routes are displayed along the `/doc` path for documentanion and `/doc.json` variant for the Postman collection. You can also specify middlewares for the routes in `middleware` parameter in `config/apidoc.php` file.
+## `laravel`
+If you're using `laravel` type output, this package can automatically set up an endpoint for you to view your generated docs. You can configure this here.
+
+### `autoload`
+Set this to `true` if you want the documentation endpoint to be automatically set up for you. Default: `false` (*note that this will change in the next major release*)
+
+You may, of course, use your own routing instead of using `autoload`.
+
+### `docs_url`
+The path for the HTMl documentation endpoint (if `autoload` is true). Your Postman collection (if you have that enabled) will be at this path + '.json' (eg `/doc.json`). Default: `/doc`
 
 > Note: There is currently a known issue with using `/docs` as the path for `laravel` docs. You should not use it, as it conflicts with the folder structure in the `public` folder and may confuse the webserver.
 
-You may, of course, set up your own routing instead of using the `routes()` helper.
+### `middleware`
+Here, you can specify middleware to be attached to the documentation endpoint (if `autoload` is true).
 
 ## `router`
 The router to use when processing your routes (can be Laravel or Dingo. Defaults to **Laravel**)
