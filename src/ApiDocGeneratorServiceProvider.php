@@ -42,15 +42,6 @@ class ApiDocGeneratorServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the API doc commands.
-     *
-     * @return void
-     */
-    public function register()
-    {
-    }
-
-    /**
      * Initializing routes in the application.
      */
     protected function bootRoutes()
