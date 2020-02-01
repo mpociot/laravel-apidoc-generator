@@ -229,6 +229,15 @@ return [
     'logo' => false,
 
     /*
+     * Custom View Identifier for `info` section.
+     * if is set, this view will be rendered in the generation process instead
+     * of the default view (apidoc::partial.info)
+     *
+     * it should be a valid laravel view identifier.
+     * For example: 'doc.info' (source path: resources/views/doc/info.blade.php)
+     */
+    'info_view' => '',
+    /*
      * Name for the group of routes which do not have a @group set.
      */
     'default_group' => 'general',
