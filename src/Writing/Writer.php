@@ -94,7 +94,7 @@ class Writer
         $targetFile = $this->sourceOutputPath.'/source/index.md';
         $compareFile = $this->sourceOutputPath.'/source/.compare.md';
 
-        $infoText = view($this->config->get('info_view', 'apidoc::partials.info'))
+        $infoText = view($this->config->get('info_view') ?: 'apidoc::partials.info')
             ->with('outputPath', 'docs')
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection);
 
