@@ -61,8 +61,6 @@ class UseApiResourceTags extends Strategy {
             }
             $factoryStates = $this->getApiResourceStates($tags);
 
-
-
             list($statusCode, $apiResourceClass) = $this->getStatusCodeAndApiResourceClass($apiResourceTag);
             $model         = $this->getClassToBeTransformed($tags);
             $modelInstance = $this->instantiateApiResourceModel($model, $factoryStates);
@@ -78,7 +76,10 @@ class UseApiResourceTags extends Strategy {
                 // Collections can either use the regular JsonResource class (via `::collection()`,
                 // or a ResourceCollection (via `new`)
                 // See https://laravel.com/docs/5.8/eloquent-resources
-                $models   = [$modelInstance, $this->instantiateApiResourceModel($model, $factoryStates)];
+                $models   = [
+                    $modelInstance,
+                    $this->instantiateApiResourceModel($model, $factoryStates)
+                ];
                 $resource = $resource instanceof ResourceCollection
                     ? new $apiResourceClass(collect($models))
                     : $apiResourceClass::collection(collect($models));
@@ -166,19 +167,32 @@ class UseApiResourceTags extends Strategy {
      * @return Model|object
      */
     protected function instantiateApiResourceModel(string $type, $states = []) {
+        $useTransactions = config('apidoc.use_transactions', FALSE);
         try {
+            if ($useTransactions) {
+                \DB::beginTransaction();
+            }
             // Try Eloquent model factory
 
             // Factories are usually defined without the leading \ in the class name,
             // but the user might write it that way in a comment. Let's be safe.
             $type = ltrim($type, '\\');
 
-            if($states !== []){
-                return factory($type)->states($states)->make();
+            if ($states !== []) {
+                $model = factory($type)->states($states)->make();
+            } else {
+
+                $model = factory($type)->make();
+            }
+            if ($useTransactions) {
+                \DB::rollBack();
             }
 
-            return factory($type)->make();
+            return $model;
         } catch (\Exception $e) {
+            if ($useTransactions) {
+                \DB::rollBack();
+            }
             if (Flags::$shouldBeVerbose) {
                 echo "Eloquent model factory failed to instantiate {$type}; trying to fetch from database.\n";
             }
@@ -204,21 +218,18 @@ class UseApiResourceTags extends Strategy {
     }
 
     private function getApiResourceStates(array $tags) {
-        $tagz = collect($tags);
-        $tag = $tagz->filter(function(Tag $tag){
+        $tag = collect($tags)->filter(function (Tag $tag) {
             return strtolower($tag->getName()) === 'apiresourcestate';
         })->first();
 
-        if(!$tag)return [];
-        return explode(',', $tag->getContent());
-//        $apiResourceTags = array_values(
-//            array_filter($tags,
-//                function ($tag) {
-//                    return ($tag instanceof Tag) && in_array(strtolower($tag->getName()),
-//                                                             ['apiresourcestate']);
-//                })
-//        );
-//
-//        return explode(',', Arr::first($apiResourceTags));
+        if (!$tag) {
+            return [];
+        }
+
+        return collect(explode(',', $tag->getContent()))->transform(function ($item) {
+            return trim($item);
+        })->filter(function ($item) {
+            return strlen($item) > 0;
+        })->toArray();
     }
 }
