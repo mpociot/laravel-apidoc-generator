@@ -193,6 +193,8 @@ public function show($id)
 If your controller method uses [Eloquent API resources](https://laravel.com/docs/5.8/eloquent-resources), you can use the apiResource annotations to guide the package when generating a sample response. The `@apiResource` tag specifies the name of the resource. Use `@apiResourceCollection` instead if the route returns a list. This works with both regular `JsonResource` objects and `ResourceCollection` objects.
  
  The `@apiResourceModel` specifies the Eloquent model to be passed to the resource. The package will attempt to generate an instance of the model for the resource from the Eloquent model factory. If that fails, the package will call `::first()` to retrieve the first model from the database. If that fails, it will create an instance using `new`.
+ 
+ The `@apiResourceState` specifies a comma delimited list of states to be passed to the Model Factory.
 
 Examples:
 

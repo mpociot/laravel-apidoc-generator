@@ -147,6 +147,16 @@ class TestController extends Controller
     }
 
     /**
+     * @apiResource \Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource
+     * @apiResourceModel \Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     * @apiResourceState test
+     */
+    public function withEloquentApiResourceState()
+    {
+        return new TestUserApiResource(factory(TestUser::class)->make(['id' => 0]));
+    }
+
+    /**
      * @group Other😎
      *
      * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource

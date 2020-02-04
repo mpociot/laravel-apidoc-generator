@@ -5,12 +5,10 @@ namespace Mpociot\ApiDoc\Extracting\Strategies\Responses;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
-use League\Fractal\Resource\Collection;
 use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
 use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\ApiDoc\Tools\Flags;
@@ -23,21 +21,25 @@ use ReflectionMethod;
 /**
  * Parse an Eloquent API resource response from the docblock ( @apiResource || @apiResourcecollection ).
  */
-class UseApiResourceTags extends Strategy
-{
+class UseApiResourceTags extends Strategy {
+
     /**
-     * @param Route $route
-     * @param ReflectionClass $controller
-     * @param ReflectionMethod $method
-     * @param array $rulesToApply
-     * @param array $context
-     *
-     * @throws \Exception
+     * @param  Route             $route
+     * @param  ReflectionClass   $controller
+     * @param  ReflectionMethod  $method
+     * @param  array             $rulesToApply
+     * @param  array             $context
      *
      * @return array|null
+     * @throws \Exception
      */
-    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $rulesToApply, array $context = [])
-    {
+    public function __invoke(
+        Route $route,
+        \ReflectionClass $controller,
+        \ReflectionMethod $method,
+        array $rulesToApply,
+        array $context = []
+    ) {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
         $methodDocBlock = $docBlocks['method'];
@@ -48,20 +50,22 @@ class UseApiResourceTags extends Strategy
     /**
      * Get a response from the transformer tags.
      *
-     * @param array $tags
+     * @param  array  $tags
      *
      * @return array|null
      */
-    protected function getApiResourceResponse(array $tags, Route $route)
-    {
+    protected function getApiResourceResponse(array $tags, Route $route) {
         try {
             if (empty($apiResourceTag = $this->getApiResourceTag($tags))) {
-                return null;
+                return NULL;
             }
+            $factoryStates = $this->getApiResourceStates($tags);
+
+
 
             list($statusCode, $apiResourceClass) = $this->getStatusCodeAndApiResourceClass($apiResourceTag);
-            $model = $this->getClassToBeTransformed($tags);
-            $modelInstance = $this->instantiateApiResourceModel($model);
+            $model         = $this->getClassToBeTransformed($tags);
+            $modelInstance = $this->instantiateApiResourceModel($model, $factoryStates);
 
             try {
                 $resource = new $apiResourceClass($modelInstance);
@@ -74,7 +78,7 @@ class UseApiResourceTags extends Strategy
                 // Collections can either use the regular JsonResource class (via `::collection()`,
                 // or a ResourceCollection (via `new`)
                 // See https://laravel.com/docs/5.8/eloquent-resources
-                $models = [$modelInstance, $this->instantiateApiResourceModel($model)];
+                $models   = [$modelInstance, $this->instantiateApiResourceModel($model, $factoryStates)];
                 $resource = $resource instanceof ResourceCollection
                     ? new $apiResourceClass(collect($models))
                     : $apiResourceClass::collection(collect($models));
@@ -85,47 +89,67 @@ class UseApiResourceTags extends Strategy
 
             return [
                 [
-                    'status' => $statusCode ?: $response->getStatusCode(),
+                    'status'  => $statusCode ?: $response->getStatusCode(),
                     'content' => $response->getContent(),
                 ],
             ];
         } catch (\Exception $e) {
-            echo 'Exception thrown when fetching Eloquent API resource response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
+            echo 'Exception thrown when fetching Eloquent API resource response for ['.implode(',',
+                                                                                               $route->methods)."] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
                 Utils::dumpException($e);
             } else {
                 echo "Run this again with the --verbose flag to see the exception.\n";
             }
 
-            return null;
+            return NULL;
         }
     }
 
     /**
-     * @param Tag $tag
+     * @param  array  $tags
+     *
+     * @return Tag|null
+     */
+    private function getApiResourceTag(array $tags) {
+        $apiResourceTags = array_values(
+            array_filter($tags,
+                function ($tag) {
+                    return ($tag instanceof Tag) && in_array(strtolower($tag->getName()),
+                                                             [
+                                                                 'apiresource',
+                                                                 'apiresourcecollection'
+                                                             ]);
+                })
+        );
+
+        return Arr::first($apiResourceTags);
+    }
+
+    /**
+     * @param  Tag  $tag
      *
      * @return array
      */
-    private function getStatusCodeAndApiResourceClass($tag): array
-    {
+    private function getStatusCodeAndApiResourceClass($tag): array {
         $content = $tag->getContent();
         preg_match('/^(\d{3})?\s?([\s\S]*)$/', $content, $result);
-        $status = $result[1] ?: 0;
+        $status           = $result[1] ?: 0;
         $apiResourceClass = $result[2];
 
         return [$status, $apiResourceClass];
     }
 
     /**
-     * @param array $tags
+     * @param  array  $tags
      *
      * @return string
      */
-    private function getClassToBeTransformed(array $tags): string
-    {
-        $modelTag = Arr::first(array_filter($tags, function ($tag) {
-            return ($tag instanceof Tag) && strtolower($tag->getName()) == 'apiresourcemodel';
-        }));
+    private function getClassToBeTransformed(array $tags): string {
+        $modelTag = Arr::first(array_filter($tags,
+            function ($tag) {
+                return ($tag instanceof Tag) && strtolower($tag->getName()) == 'apiresourcemodel';
+            }));
 
         $type = $modelTag->getContent();
 
@@ -137,18 +161,21 @@ class UseApiResourceTags extends Strategy
     }
 
     /**
-     * @param string $type
+     * @param  string  $type
      *
      * @return Model|object
      */
-    protected function instantiateApiResourceModel(string $type)
-    {
+    protected function instantiateApiResourceModel(string $type, $states = []) {
         try {
             // Try Eloquent model factory
 
             // Factories are usually defined without the leading \ in the class name,
             // but the user might write it that way in a comment. Let's be safe.
             $type = ltrim($type, '\\');
+
+            if($states !== []){
+                return factory($type)->states($states)->make();
+            }
 
             return factory($type)->make();
         } catch (\Exception $e) {
@@ -176,19 +203,22 @@ class UseApiResourceTags extends Strategy
         return $instance;
     }
 
-    /**
-     * @param array $tags
-     *
-     * @return Tag|null
-     */
-    private function getApiResourceTag(array $tags)
-    {
-        $apiResourceTags = array_values(
-            array_filter($tags, function ($tag) {
-                return ($tag instanceof Tag) && in_array(strtolower($tag->getName()), ['apiresource', 'apiresourcecollection']);
-            })
-        );
+    private function getApiResourceStates(array $tags) {
+        $tagz = collect($tags);
+        $tag = $tagz->filter(function(Tag $tag){
+            return strtolower($tag->getName()) === 'apiresourcestate';
+        })->first();
 
-        return Arr::first($apiResourceTags);
+        if(!$tag)return [];
+        return explode(',', $tag->getContent());
+//        $apiResourceTags = array_values(
+//            array_filter($tags,
+//                function ($tag) {
+//                    return ($tag instanceof Tag) && in_array(strtolower($tag->getName()),
+//                                                             ['apiresourcestate']);
+//                })
+//        );
+//
+//        return explode(',', Arr::first($apiResourceTags));
     }
 }

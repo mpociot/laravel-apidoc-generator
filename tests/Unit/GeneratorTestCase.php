@@ -74,6 +74,15 @@ abstract class GeneratorTestCase extends TestCase
                 'email' => 'a@b.com',
             ];
         });
+
+        $factory->state(TestUser::class, 'test', function () {
+            return [
+                'id' => 5,
+                'first_name' => 'Test',
+                'last_name' => 'State',
+                'email' => 'a@b.com',
+            ];
+        });
         $this->generator = new Generator(new DocumentationConfig($this->config));
     }
 
@@ -421,6 +430,32 @@ abstract class GeneratorTestCase extends TestCase
                 'email' => 'a@b.com',
             ],
         ], json_decode($response['content'], true));
+    }
+
+    /** @test */
+    public function can_parse_apiresource_tags_and_state()
+    {
+        $route = $this->createRoute('POST', '/withEloquentApiResourceState', 'withEloquentApiResourceState');
+
+        $config = $this->config;
+        $config['strategies']['responses'] = [\Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class];
+        $generator = new Generator(new DocumentationConfig($config));
+        $parsed = $this->generator->processRoute($route);
+
+        $response = Arr::first($parsed['responses']);
+        $this->assertTrue(is_array($parsed));
+        $this->assertArrayHasKey('showresponse', $parsed);
+        $this->assertTrue($parsed['showresponse']);
+        $this->assertTrue(is_array($response));
+        $this->assertEquals(200, $response['status']);
+
+        $this->assertArraySubset([
+                                     'data' => [
+                                         'id' => 5,
+                                         'name' => 'Test State',
+                                         'email' => 'a@b.com',
+                                     ],
+                                 ], json_decode($response['content'], true));
     }
 
     /** @test */
