@@ -138,7 +138,7 @@ class GenerateDocumentation extends Command
      * @return bool
      */
     private function isValidRoute(array $routeControllerAndMethod = null)
-    {;
+    {
         if (is_array($routeControllerAndMethod)) {
             $routeControllerAndMethod = implode('@', $routeControllerAndMethod);
         }
@@ -157,7 +157,6 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     *
      * @param array $routeControllerAndMethod
      *
      * @throws ReflectionException
