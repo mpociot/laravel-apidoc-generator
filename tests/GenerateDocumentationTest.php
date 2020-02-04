@@ -90,7 +90,7 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
-    public function console_command_work_with_routes_callable_tuple()
+    public function console_command_works_with_routes_callable_tuple()
     {
         RouteFacade::get('/api/array/test', [TestController::class, 'withEndpointDescription']);
 
