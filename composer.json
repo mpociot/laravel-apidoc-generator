@@ -31,6 +31,7 @@
     "require-dev": {
         "dingo/api": "^2.3.0",
         "dms/phpunit-arraysubset-asserts": "^0.1.0",
+        "laravel/lumen-framework": "^5.7|^6.0|^7.0",
         "league/fractal": "^0.17.0",
         "mockery/mockery": "^1.2.0",
         "orchestra/testbench": "^3.7|^4.0",
