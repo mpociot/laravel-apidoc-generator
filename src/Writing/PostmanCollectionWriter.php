@@ -189,9 +189,10 @@ class PostmanCollectionWriter
             $reflectionMethod = new ReflectionMethod(\Laravel\Lumen\Routing\UrlGenerator::class, 'getRootUrl');
             $reflectionMethod->setAccessible(true);
             $url = app('url');
+
             return $reflectionMethod->invokeArgs($url, ['', $baseUrl]);
-        } else { //Is Laravel
-            return URL::formatRoot('', $baseUrl);
         }
+
+        return URL::formatRoot('', $baseUrl);
     }
 }
