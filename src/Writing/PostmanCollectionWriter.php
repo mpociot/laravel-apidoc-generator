@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use ReflectionMethod;
 
 class PostmanCollectionWriter
 {
@@ -38,7 +39,7 @@ class PostmanCollectionWriter
     {
         $this->routeGroups = $routeGroups;
         $this->protocol = Str::startsWith($baseUrl, 'https') ? 'https' : 'http';
-        $this->baseUrl = URL::formatRoot('', $baseUrl);
+        $this->baseUrl = $this->getBaseUrl($baseUrl);
         $this->auth = config('apidoc.postman.auth');
     }
 
@@ -180,5 +181,18 @@ class PostmanCollectionWriter
             default:
                 return null;
         }
+    }
+
+    protected function getBaseUrl($baseUrl)
+    {
+        if (Str::contains(app()->version(), 'Lumen')) { //Is Lumen
+            $reflectionMethod = new ReflectionMethod(\Laravel\Lumen\Routing\UrlGenerator::class, 'getRootUrl');
+            $reflectionMethod->setAccessible(true);
+            $url = app('url');
+
+            return $reflectionMethod->invokeArgs($url, ['', $baseUrl]);
+        }
+
+        return URL::formatRoot('', $baseUrl);
     }
 }
