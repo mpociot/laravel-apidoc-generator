@@ -5,7 +5,7 @@ namespace Mpociot\ApiDoc\Extracting\Strategies;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use ReflectionClass;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 abstract class Strategy
 {
@@ -28,7 +28,7 @@ abstract class Strategy
     /**
      * @param Route $route
      * @param ReflectionClass $controller
-     * @param ReflectionMethod $method
+     * @param ReflectionFunctionAbstract $method
      * @param array $routeRules Array of rules for the ruleset which this route belongs to.
      * @param array $context Results from the previous stages
      *
@@ -36,5 +36,5 @@ abstract class Strategy
      *
      * @return array
      */
-    abstract public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = []);
+    abstract public function __invoke(Route $route, ReflectionClass $controller, ReflectionFunctionAbstract $method, array $routeRules, array $context = []);
 }

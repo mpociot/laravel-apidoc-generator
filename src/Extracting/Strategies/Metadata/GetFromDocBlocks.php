@@ -8,11 +8,11 @@ use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use ReflectionClass;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 class GetFromDocBlocks extends Strategy
 {
-    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
+    public function __invoke(Route $route, ReflectionClass $controller, ReflectionFunctionAbstract $method, array $routeRules, array $context = [])
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
