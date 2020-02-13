@@ -179,13 +179,15 @@ class UseApiResourceTags extends Strategy {
             $type = ltrim($type, '\\');
 
             if ($states !== []) {
-                $model = factory($type)->states($states)->make();
+                $model = factory($type)->states($states);
             } else {
-
-                $model = factory($type)->make();
+                $model = factory($type);
             }
             if ($useTransactions) {
+            	$model = $model->create();
                 \DB::rollBack();
+            }else{
+            	$model = $model->make();
             }
 
             return $model;
