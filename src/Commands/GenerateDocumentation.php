@@ -100,8 +100,24 @@ class GenerateDocumentation extends Command
             $routeMethods = implode(',', $generator->getMethods($route));
             $routePath = $generator->getUri($route);
 
-            if (! $this->isValidRoute($route) || ! $this->isRouteVisibleForDocumentation($route->getAction())) {
-                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath));
+            if ($this->isClosureRoute($route->getAction())) {
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).': Closure routes are not supported.');
+                continue;
+            }
+
+            $routeControllerAndMethod = Utils::getRouteClassAndMethodNames($route->getAction());
+            if (! $this->isValidRoute($routeControllerAndMethod)) {
+                $this->warn(sprintf($messageFormat, 'Skipping invalid', $routeMethods, $routePath));
+                continue;
+            }
+
+            if (! $this->doesControllerMethodExist($routeControllerAndMethod)) {
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).': Controller method does not exist.');
+                continue;
+            }
+
+            if (! $this->isRouteVisibleForDocumentation($routeControllerAndMethod)) {
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).': @hideFromAPIDocumentation was specified.');
                 continue;
             }
 
@@ -109,7 +125,7 @@ class GenerateDocumentation extends Command
                 $parsedRoutes[] = $generator->processRoute($route, $routeItem->getRules());
                 $this->info(sprintf($messageFormat, 'Processed', $routeMethods, $routePath));
             } catch (\Exception $exception) {
-                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).' - '.$exception->getMessage());
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).'- Exception '.get_class($exception).' encountered : '.$exception->getMessage());
             }
         }
 
@@ -117,35 +133,59 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param Route $route
+     * @param array $routeControllerAndMethod
      *
      * @return bool
      */
-    private function isValidRoute(Route $route)
+    private function isValidRoute(array $routeControllerAndMethod = null)
     {
-        $action = Utils::getRouteClassAndMethodNames($route->getAction());
-        if (is_array($action)) {
-            $action = implode('@', $action);
+        if (is_array($routeControllerAndMethod)) {
+            $routeControllerAndMethod = implode('@', $routeControllerAndMethod);
         }
 
-        return ! is_callable($action) && ! is_null($action);
+        return ! is_callable($routeControllerAndMethod) && ! is_null($routeControllerAndMethod);
     }
 
     /**
-     * @param array $action
+     * @param array $routeAction
+     *
+     * @return bool
+     */
+    private function isClosureRoute(array $routeAction)
+    {
+        return $routeAction['uses'] instanceof \Closure;
+    }
+
+    /**
+     * @param array $routeControllerAndMethod
      *
      * @throws ReflectionException
      *
      * @return bool
      */
-    private function isRouteVisibleForDocumentation(array $action)
+    private function doesControllerMethodExist(array $routeControllerAndMethod)
     {
-        list($class, $method) = Utils::getRouteClassAndMethodNames($action);
+        [$class, $method] = $routeControllerAndMethod;
         $reflection = new ReflectionClass($class);
 
         if (! $reflection->hasMethod($method)) {
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * @param array $routeControllerAndMethod
+     *
+     * @throws ReflectionException
+     *
+     * @return bool
+     */
+    private function isRouteVisibleForDocumentation(array $routeControllerAndMethod)
+    {
+        [$class, $method] = $routeControllerAndMethod;
+        $reflection = new ReflectionClass($class);
 
         $comment = $reflection->getMethod($method)->getDocComment();
 

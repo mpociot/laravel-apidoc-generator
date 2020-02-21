@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [4.2.4] - Saturday, 15 February 2020
+- Shim URL::formatRoot() on Lumen (https://github.com/mpociot/laravel-apidoc-generator/pull/688)
+
+## [4.2.3] - Tuesday, 4 February 2020
+### Changed
+- Made "Skipping route" message more descriptive (https://github.com/mpociot/laravel-apidoc-generator/commit/6f61469a9fa8be30e7812cf622a7832163a08bb8)
+
 ## [4.2.2] - Tuesday, 21 January 2020
 ### Fixed
 - Set a default value for the routematcher when fetching from config (https://github.com/mpociot/laravel-apidoc-generator/pull/677)

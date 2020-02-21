@@ -54,7 +54,7 @@ You can specify a custom logo to be used on the generated documentation. Set the
 If you want to use this, please note that the image size must be 230 x 52.
 
 ## `default_group`
-When [documenting your api](documenting.md), you use `@group` annotations to group API endpoints. Endpoints which do not have a ggroup annotation will be grouped under the `default_group`. Defaults to **"general"**.
+When [documenting your api](documenting.md), you use `@group` annotations to group API endpoints. Endpoints which do not have a group annotation will be grouped under the `default_group`. Defaults to **"general"**.
 
 ## `example_languages`
 For each endpoint, an example request is shown in each of the languages specified in this array. Currently only `bash`, `javascript`, `php` and `python` are supported. You can add your own language, but you must also define the corresponding view (see [Specifying languages for examples](generating-documentation.html#specifying-language-for-examples)). Default: `["bash", "javascript"]` 
@@ -83,7 +83,7 @@ The `routes` section is an array of items, describing what routes in your applic
 
 > Note: This package does not work with Closure-based routes. If you want your route to be captured by this package, you need a controller.
 
-Each item in the `routes` array (a route group) has keys which are explained below. We'll use this sample route definition for a Laravel app to demonstarte them:
+Each item in the `routes` array (a route group) has keys which are explained below. We'll use this sample route definition for a Laravel app to demonstrate them:
 
 ```php
 <?php
@@ -116,7 +116,7 @@ Route::group(['domain' => 'status.acme.co'], function () {
 In this section, you define the rules that will be used to determine what routes in your application fall into this group. There are three kinds of rules defined here (keys in the `match` array):
 
 #### `domains`
-This key takes an array of domain names as its value. Only routes which are defined on the domains specified here will be matched as part of this group. For instance, in our sample routes above, we may wish to apply different settings to documentation based on the domains. For instance, the routes on the `api.acme.co` domain need authentication, while those on the other domains do not. We can searate them into two groups like this:
+This key takes an array of domain names as its value. Only routes which are defined on the domains specified here will be matched as part of this group. For instance, in our sample routes above, we may wish to apply different settings to documentation based on the domains. For instance, the routes on the `api.acme.co` domain need authentication, while those on the other domains do not. We can separate them into two groups like this:
 
 ```php
 <?php
@@ -204,7 +204,7 @@ return [
 The `include` key holds an array of patterns (route names or paths) which should be included in this group, *even if they do not match the rules in the `match` section*.
 The `exclude` key holds an array of patterns (route names or paths) which should be excluded from this group, *even if they match the rules in the `match` section*.
 
-Using our above sample routes, asuming you wanted to place the `users.list` route in the second group (no Authorization header), here's how you could do it:
+Using our above sample routes, assuming you wanted to place the `users.list` route in the second group (no Authorization header), here's how you could do it:
 
 ```php
 <?php
@@ -239,7 +239,7 @@ These values support wildcards and paths, so you can have `'exclude' => ['users/
 After defining the routes in `match` (and `include` or `exclude`), `apply` is where you specify the settings to be applied to those routes when generating documentation. There are a bunch of settings you can tweak here:
 
 #### `headers`
-Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documenation. They will also be included in ["response calls"](documenting.html#generating-responses-automatically). Headers are specified as key => value strings.
+Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documentation. They will also be included in ["response calls"](documenting.html#generating-responses-automatically). Headers are specified as key => value strings.
 
 #### `response_calls`
 These are the settings that will be applied when making ["response calls"](documenting.html#generating-responses-automatically). See the linked section for details.
