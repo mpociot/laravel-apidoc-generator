@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [4.3.0] - Saturday, 22 February 2020
+## 4.3.0 - Saturday, 22 February 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.2.4...4.3.0))
 ### Changed
 - Updated nunomaduro/collision to include v4 (https://github.com/mpociot/laravel-apidoc-generator/pull/699)
 
