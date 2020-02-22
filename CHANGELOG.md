@@ -13,7 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [4.3.0] - Saturday, 22 February 2020
+### Changed
+- Updated nunomaduro/collision to include v4 (https://github.com/mpociot/laravel-apidoc-generator/pull/699)
+
+### Fixed
+- Use correct protocol for Postman collcetion URL (https://github.com/mpociot/laravel-apidoc-generator/pull/697#event-3047246508)
+
 ## [4.2.4] - Saturday, 15 February 2020
+### Fixed
 - Shim URL::formatRoot() on Lumen (https://github.com/mpociot/laravel-apidoc-generator/pull/688)
 
 ## [4.2.3] - Tuesday, 4 February 2020
