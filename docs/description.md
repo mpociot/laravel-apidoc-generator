@@ -1,6 +1,6 @@
 # How This Works
 
-After installing this package and runing the command `php artisan apidoc:generate` in your application, here's what happens:
+After installing this package and running the command `php artisan apidoc:generate` in your application, here's what happens:
 
 - The package fetches all your application's routes.
 - It looks through your [configuration file](config.md) to filter the routes to the ones you actually want to document. For each route, it retrieves the settings you want to apply to it, if any.
