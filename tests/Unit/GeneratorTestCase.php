@@ -628,7 +628,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -647,7 +647,7 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertEquals(200, $response['status']);
         $this->assertSame(
             $response['content'],
-            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},'.
+            '{"data":[{"id":1,"description":"Welcome on this test versions","name":"TestName"},' .
             '{"id":1,"description":"Welcome on this test versions","name":"TestName"}]}'
         );
     }
@@ -795,7 +795,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_response_file_tag()
     {
         // copy file to storage
-        $filePath = __DIR__.'/../Fixtures/response_test.json';
+        $filePath = __DIR__ . '/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
         copy($filePath, storage_path('response_test.json'));
 
@@ -820,7 +820,7 @@ abstract class GeneratorTestCase extends TestCase
     public function can_add_or_replace_key_value_pair_in_response_file()
     {
         // copy file to storage
-        $filePath = __DIR__.'/../Fixtures/response_test.json';
+        $filePath = __DIR__ . '/../Fixtures/response_test.json';
         $fixtureFileJson = file_get_contents($filePath);
         copy($filePath, storage_path('response_test.json'));
 
@@ -845,10 +845,10 @@ abstract class GeneratorTestCase extends TestCase
     public function can_parse_multiple_response_file_tags_with_status_codes()
     {
         // copy file to storage
-        $successFilePath = __DIR__.'/../Fixtures/response_test.json';
+        $successFilePath = __DIR__ . '/../Fixtures/response_test.json';
         $successFixtureFileJson = file_get_contents($successFilePath);
         copy($successFilePath, storage_path('response_test.json'));
-        $errorFilePath = __DIR__.'/../Fixtures/response_error_test.json';
+        $errorFilePath = __DIR__ . '/../Fixtures/response_error_test.json';
         $errorFixtureFileJson = file_get_contents($errorFilePath);
         copy($errorFilePath, storage_path('response_error_test.json'));
 

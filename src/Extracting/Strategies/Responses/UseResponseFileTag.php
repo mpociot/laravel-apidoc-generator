@@ -58,7 +58,7 @@ class UseResponseFileTag extends Strategy
             $relativeFilePath = trim($result[2]);
             $filePath = storage_path($relativeFilePath);
             if (! file_exists($filePath)) {
-                throw new \Exception('@responseFile '.$relativeFilePath.' does not exist');
+                throw new \Exception('@responseFile ' . $relativeFilePath . ' does not exist');
             }
             $status = $result[1] ?: 200;
             $content = $result[2] ? file_get_contents($filePath, true) : '{}';

@@ -60,7 +60,7 @@ class GenerateDocumentationTest extends TestCase
         RouteFacade::get('/api/closure', function () {
             return 'hi';
         });
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
@@ -77,7 +77,7 @@ class GenerateDocumentationTest extends TestCase
             $api->get('/closure', function () {
                 return 'foo';
             });
-            $api->get('/test', TestController::class.'@withEndpointDescription');
+            $api->get('/test', TestController::class . '@withEndpointDescription');
         });
 
         config(['apidoc.router' => 'dingo']);
@@ -104,8 +104,8 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function can_skip_single_routes()
     {
-        RouteFacade::get('/api/skip', TestController::class.'@skip');
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
+        RouteFacade::get('/api/skip', TestController::class . '@skip');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
@@ -117,7 +117,7 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function can_skip_non_existent_response_files()
     {
-        RouteFacade::get('/api/non-existent', TestController::class.'@withNonExistentResponseFile');
+        RouteFacade::get('/api/non-existent', TestController::class . '@withNonExistentResponseFile');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
@@ -140,8 +140,8 @@ class GenerateDocumentationTest extends TestCase
 
         $this->artisan('apidoc:generate');
 
-        $fixtureMarkdown = __DIR__.'/Fixtures/resource_index.md';
-        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
+        $fixtureMarkdown = __DIR__ . '/Fixtures/resource_index.md';
+        $generatedMarkdown = __DIR__ . '/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
@@ -160,8 +160,8 @@ class GenerateDocumentationTest extends TestCase
 
         $this->artisan('apidoc:generate');
 
-        $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
-        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
+        $fixtureMarkdown = __DIR__ . '/Fixtures/partial_resource_index.md';
+        $generatedMarkdown = __DIR__ . '/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
 
         RouteFacade::apiResource('/api/users', TestResourceController::class)
@@ -169,8 +169,8 @@ class GenerateDocumentationTest extends TestCase
 
         $this->artisan('apidoc:generate');
 
-        $fixtureMarkdown = __DIR__.'/Fixtures/partial_resource_index.md';
-        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
+        $fixtureMarkdown = __DIR__ . '/Fixtures/partial_resource_index.md';
+        $generatedMarkdown = __DIR__ . '/../resources/docs/source/index.md';
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
     }
 
@@ -178,10 +178,10 @@ class GenerateDocumentationTest extends TestCase
     public function generated_markdown_file_is_correct()
     {
         RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
-        RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
-        RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
-        RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
-        RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
+        RouteFacade::get('/api/withResponseTag', TestController::class . '@withResponseTag');
+        RouteFacade::get('/api/withBodyParameters', TestController::class . '@withBodyParameters');
+        RouteFacade::get('/api/withQueryParameters', TestController::class . '@withQueryParameters');
+        RouteFacade::get('/api/withAuthTag', TestController::class . '@withAuthenticatedTag');
         RouteFacade::get('/api/withEloquentApiResource', [TestController::class, 'withEloquentApiResource']);
         RouteFacade::get('/api/withEloquentApiResourceCollectionClass', [TestController::class, 'withEloquentApiResourceCollectionClass']);
         RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
@@ -201,9 +201,9 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
-        $compareMarkdown = __DIR__.'/../resources/docs/source/.compare.md';
-        $fixtureMarkdown = __DIR__.'/Fixtures/index.md';
+        $generatedMarkdown = __DIR__ . '/../resources/docs/source/index.md';
+        $compareMarkdown = __DIR__ . '/../resources/docs/source/.compare.md';
+        $fixtureMarkdown = __DIR__ . '/Fixtures/index.md';
 
         $this->assertFilesHaveSameContent($fixtureMarkdown, $generatedMarkdown);
         $this->assertFilesHaveSameContent($fixtureMarkdown, $compareMarkdown);
@@ -212,20 +212,20 @@ class GenerateDocumentationTest extends TestCase
     /** @test */
     public function can_prepend_and_append_data_to_generated_markdown()
     {
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
-        RouteFacade::get('/api/responseTag', TestController::class.'@withResponseTag');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
+        RouteFacade::get('/api/responseTag', TestController::class . '@withResponseTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $prependMarkdown = __DIR__.'/Fixtures/prepend.md';
-        $appendMarkdown = __DIR__.'/Fixtures/append.md';
-        copy($prependMarkdown, __DIR__.'/../resources/docs/source/prepend.md');
-        copy($appendMarkdown, __DIR__.'/../resources/docs/source/append.md');
+        $prependMarkdown = __DIR__ . '/Fixtures/prepend.md';
+        $appendMarkdown = __DIR__ . '/Fixtures/append.md';
+        copy($prependMarkdown, __DIR__ . '/../resources/docs/source/prepend.md');
+        copy($appendMarkdown, __DIR__ . '/../resources/docs/source/append.md');
 
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = __DIR__.'/../resources/docs/source/index.md';
+        $generatedMarkdown = __DIR__ . '/../resources/docs/source/index.md';
         $this->assertContainsIgnoringWhitespace($this->getFileContents($prependMarkdown), $this->getFileContents($generatedMarkdown));
         $this->assertContainsIgnoringWhitespace($this->getFileContents($appendMarkdown), $this->getFileContents($generatedMarkdown));
     }
@@ -234,10 +234,10 @@ class GenerateDocumentationTest extends TestCase
     public function generated_postman_collection_file_is_correct()
     {
         RouteFacade::get('/api/withDescription', [TestController::class, 'withEndpointDescription']);
-        RouteFacade::get('/api/withResponseTag', TestController::class.'@withResponseTag');
-        RouteFacade::post('/api/withBodyParameters', TestController::class.'@withBodyParameters');
-        RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
-        RouteFacade::get('/api/withAuthTag', TestController::class.'@withAuthenticatedTag');
+        RouteFacade::get('/api/withResponseTag', TestController::class . '@withResponseTag');
+        RouteFacade::post('/api/withBodyParameters', TestController::class . '@withBodyParameters');
+        RouteFacade::get('/api/withQueryParameters', TestController::class . '@withQueryParameters');
+        RouteFacade::get('/api/withAuthTag', TestController::class . '@withAuthenticatedTag');
         RouteFacade::get('/api/withEloquentApiResource', [TestController::class, 'withEloquentApiResource']);
         RouteFacade::get('/api/withEloquentApiResourceCollectionClass', [TestController::class, 'withEloquentApiResourceCollectionClass']);
         RouteFacade::post('/api/withMultipleResponseTagsAndStatusCode', [TestController::class, 'withMultipleResponseTagsAndStatusCode']);
@@ -257,10 +257,10 @@ class GenerateDocumentationTest extends TestCase
 
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
@@ -268,13 +268,13 @@ class GenerateDocumentationTest extends TestCase
     public function generated_postman_collection_domain_is_correct()
     {
         $domain = 'http://somedomain.test';
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
 
         config(['apidoc.base_url' => $domain]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'));
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'));
         $endpointUrl = $generatedCollection->item[0]->item[0]->request->url->host;
         $this->assertTrue(Str::startsWith($endpointUrl, 'somedomain.test'));
     }
@@ -283,16 +283,16 @@ class GenerateDocumentationTest extends TestCase
     public function generated_postman_collection_can_have_custom_url()
     {
         Config::set('apidoc.base_url', 'http://yourapp.app');
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
-        RouteFacade::post('/api/responseTag', TestController::class.'@withResponseTag');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
+        RouteFacade::post('/api/responseTag', TestController::class . '@withResponseTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_custom_url.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_custom_url.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
@@ -300,23 +300,23 @@ class GenerateDocumentationTest extends TestCase
     public function generated_postman_collection_can_have_secure_url()
     {
         Config::set('apidoc.base_url', 'https://yourapp.app');
-        RouteFacade::get('/api/test', TestController::class.'@withEndpointDescription');
-        RouteFacade::post('/api/responseTag', TestController::class.'@withResponseTag');
+        RouteFacade::get('/api/test', TestController::class . '@withEndpointDescription');
+        RouteFacade::post('/api/responseTag', TestController::class . '@withResponseTag');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_secure_url.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_with_secure_url.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
     public function generated_postman_collection_can_append_custom_http_headers()
     {
-        RouteFacade::get('/api/headers', TestController::class.'@checkCustomHeaders');
+        RouteFacade::get('/api/headers', TestController::class . '@checkCustomHeaders');
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         config([
             'apidoc.routes.0.apply.headers' => [
@@ -326,49 +326,49 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_custom_headers.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_with_custom_headers.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
     public function generated_postman_collection_can_have_query_parameters()
     {
-        RouteFacade::get('/api/withQueryParameters', TestController::class.'@withQueryParameters');
+        RouteFacade::get('/api/withQueryParameters', TestController::class . '@withQueryParameters');
         // We want to have the same values for params each time
         config(['apidoc.faker_seed' => 1234]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_query_parameters.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_with_query_parameters.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
     public function generated_postman_collection_can_add_body_parameters()
     {
-        RouteFacade::get('/api/withBodyParameters', TestController::class.'@withBodyParameters');
+        RouteFacade::get('/api/withBodyParameters', TestController::class . '@withBodyParameters');
         // We want to have the same values for params each time
         config(['apidoc.faker_seed' => 1234]);
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedCollection = json_decode(file_get_contents(__DIR__.'/../public/docs/collection.json'), true);
+        $generatedCollection = json_decode(file_get_contents(__DIR__ . '/../public/docs/collection.json'), true);
         // The Postman ID varies from call to call; erase it to make the test data reproducible.
         $generatedCollection['info']['_postman_id'] = '';
-        $fixtureCollection = json_decode(file_get_contents(__DIR__.'/Fixtures/collection_with_body_parameters.json'), true);
+        $fixtureCollection = json_decode(file_get_contents(__DIR__ . '/Fixtures/collection_with_body_parameters.json'), true);
         $this->assertEquals($fixtureCollection, $generatedCollection);
     }
 
     /** @test */
     public function can_append_custom_http_headers()
     {
-        RouteFacade::get('/api/headers', TestController::class.'@checkCustomHeaders');
+        RouteFacade::get('/api/headers', TestController::class . '@checkCustomHeaders');
 
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         config([
@@ -379,33 +379,33 @@ class GenerateDocumentationTest extends TestCase
         ]);
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = $this->getFileContents(__DIR__.'/../resources/docs/source/index.md');
+        $generatedMarkdown = $this->getFileContents(__DIR__ . '/../resources/docs/source/index.md');
         $this->assertContainsIgnoringWhitespace('"Authorization": "customAuthToken","Custom-Header":"NotSoCustom"', $generatedMarkdown);
     }
 
     /** @test */
     public function can_parse_utf8_response()
     {
-        RouteFacade::get('/api/utf8', TestController::class.'@withUtf8ResponseTag');
+        RouteFacade::get('/api/utf8', TestController::class . '@withUtf8ResponseTag');
 
         config(['apidoc.routes.0.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
 
-        $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
+        $generatedMarkdown = file_get_contents(__DIR__ . '/../resources/docs/source/index.md');
         $this->assertStringContainsString('Лорем ипсум долор сит амет', $generatedMarkdown);
     }
 
     /** @test */
     public function sorts_group_naturally()
     {
-        RouteFacade::get('/api/action1', TestGroupController::class.'@action1');
-        RouteFacade::get('/api/action1b', TestGroupController::class.'@action1b');
-        RouteFacade::get('/api/action2', TestGroupController::class.'@action2');
-        RouteFacade::get('/api/action10', TestGroupController::class.'@action10');
+        RouteFacade::get('/api/action1', TestGroupController::class . '@action1');
+        RouteFacade::get('/api/action1b', TestGroupController::class . '@action1b');
+        RouteFacade::get('/api/action2', TestGroupController::class . '@action2');
+        RouteFacade::get('/api/action10', TestGroupController::class . '@action10');
 
         config(['apidoc.routes.0.prefixes' => ['api/*']]);
         $this->artisan('apidoc:generate');
-        $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
+        $generatedMarkdown = file_get_contents(__DIR__ . '/../resources/docs/source/index.md');
 
         $firstGroup1Occurrence = strpos($generatedMarkdown, '#1. Group 1');
         $firstGroup2Occurrence = strpos($generatedMarkdown, '#2. Group 2');
@@ -436,7 +436,7 @@ class GenerateDocumentationTest extends TestCase
         }
 
         $this->assertNull($thrownException);
-        $generatedMarkdown = file_get_contents(__DIR__.'/../resources/docs/source/index.md');
+        $generatedMarkdown = file_get_contents(__DIR__ . '/../resources/docs/source/index.md');
         $this->assertStringContainsString('Group A', $generatedMarkdown);
         $this->assertStringContainsString('Group B', $generatedMarkdown);
     }

@@ -52,7 +52,7 @@ class ResponseCalls extends Strategy
                 ],
             ];
         } catch (\Exception $e) {
-            echo 'Exception thrown during response call for ['.implode(',', $route->methods)."] {$route->uri}.\n";
+            echo 'Exception thrown during response call for [' . implode(',', $route->methods) . "] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
                 Utils::dumpException($e);
             } else {
@@ -366,7 +366,7 @@ class ResponseCalls extends Strategy
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
             if (! Str::startsWith($name, $prefix) && $name !== 'CONTENT_TYPE') {
-                $name = $prefix.$name;
+                $name = $prefix . $name;
             }
             $server[$name] = $value;
         }

@@ -72,8 +72,9 @@ class UseTransformerTags extends Strategy
             $resource = (strtolower($transformerTag->getName()) == 'transformercollection')
                 ? new Collection(
                     [$modelInstance, $this->instantiateTransformerModel($model)],
-                    new $transformer)
-                : new Item($modelInstance, new $transformer);
+                    new $transformer()
+                )
+                : new Item($modelInstance, new $transformer());
 
             $response = response($fractal->createData($resource)->toJson());
 
@@ -84,7 +85,7 @@ class UseTransformerTags extends Strategy
                 ],
             ];
         } catch (Exception $e) {
-            echo 'Exception thrown when fetching transformer response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
+            echo 'Exception thrown when fetching transformer response for [' . implode(',', $route->methods) . "] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
                 Utils::dumpException($e);
             } else {
@@ -162,7 +163,7 @@ class UseTransformerTags extends Strategy
                 echo "Eloquent model factory failed to instantiate {$type}; trying to fetch from database.\n";
             }
 
-            $instance = new $type;
+            $instance = new $type();
             if ($instance instanceof IlluminateModel) {
                 try {
                     // we can't use a factory but can try to get one from the database

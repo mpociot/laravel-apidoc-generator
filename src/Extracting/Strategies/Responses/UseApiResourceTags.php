@@ -90,7 +90,7 @@ class UseApiResourceTags extends Strategy
                 ],
             ];
         } catch (\Exception $e) {
-            echo 'Exception thrown when fetching Eloquent API resource response for ['.implode(',', $route->methods)."] {$route->uri}.\n";
+            echo 'Exception thrown when fetching Eloquent API resource response for [' . implode(',', $route->methods) . "] {$route->uri}.\n";
             if (Flags::$shouldBeVerbose) {
                 Utils::dumpException($e);
             } else {
@@ -156,7 +156,7 @@ class UseApiResourceTags extends Strategy
                 echo "Eloquent model factory failed to instantiate {$type}; trying to fetch from database.\n";
             }
 
-            $instance = new $type;
+            $instance = new $type();
             if ($instance instanceof \Illuminate\Database\Eloquent\Model) {
                 try {
                     // we can't use a factory but can try to get one from the database

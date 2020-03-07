@@ -58,7 +58,7 @@ class Generator
         $method = $controller->getMethod($methodName);
 
         $parsedRoute = [
-            'id' => md5($this->getUri($route).':'.implode($this->getMethods($route))),
+            'id' => md5($this->getUri($route) . ':' . implode($this->getMethods($route))),
             'methods' => $this->getMethods($route),
             'uri' => $this->getUri($route),
         ];
@@ -213,7 +213,9 @@ class Generator
 
         foreach ($params as $paramName => $details) {
             $this->generateConcreteSampleForArrayKeys(
-                $paramName, $details['value'], $values
+                $paramName,
+                $details['value'],
+                $values
             );
         }
 

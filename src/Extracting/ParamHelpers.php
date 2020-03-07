@@ -33,7 +33,7 @@ trait ParamHelpers
                 return [];
             },
             'object' => function () {
-                return new stdClass;
+                return new stdClass();
             },
         ];
 
