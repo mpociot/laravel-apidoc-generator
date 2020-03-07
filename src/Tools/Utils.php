@@ -3,7 +3,6 @@
 namespace Mpociot\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
-use Illuminate\Support\Arr;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -90,7 +89,7 @@ class Utils
 
     public static function deleteDirectoryAndContents($dir)
     {
-        $dir = ltrim($dir, "/");
+        $dir = ltrim($dir, '/');
         $adapter = new Local(realpath(__DIR__ . '/../../'));
         $fs = new Filesystem($adapter);
         $fs->deleteDir($dir);
@@ -104,7 +103,7 @@ class Utils
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      *
      */
-    public static function printPhpValue($value, $indentationLevel = 0)
+    public static function printPhpValue($value, int $indentationLevel = 0): string
     {
         $output = VarExporter::export($value);
         // Padding with x spaces so they align
@@ -120,7 +119,7 @@ class Utils
 
     public static function printQueryParamsAsString(array $cleanQueryParams): string
     {
-        $qs = "";
+        $qs = '';
         foreach ($cleanQueryParams as $parameter => $value) {
             $paramName = urlencode($parameter);
 
@@ -129,14 +128,13 @@ class Utils
             } else {
                 if (array_keys($value)[0] === 0) {
                     // List query param (eg filter[]=haha should become "filter[]": "haha")
-                    $qs .= "$paramName" . "[]=" . urlencode($value[0]) . "&";
+                    $qs .= "$paramName" . '[]=' . urlencode($value[0]) . '&';
                 } else {
                     // Hash query param (eg filter[name]=john should become "filter[name]": "john")
                     foreach ($value as $item => $itemValue) {
-                        $qs .= "$paramName" . "[" . urlencode($item) . "]=" . urlencode($itemValue) . "&";
+                        $qs .= "$paramName" . '[' . urlencode($item) . ']=' . urlencode($itemValue) . '&';
                     }
                 }
-
             }
         }
 
@@ -156,23 +154,23 @@ class Utils
         foreach ($cleanQueryParams as $parameter => $value) {
             if (!is_array($value)) {
                 $output .= str_repeat(" ", $spacesIndentation);
-                    $output .= "$quote$parameter$quote$delimiter $quote$value$quote,\n";
+                $output .= "$quote$parameter$quote$delimiter $quote$value$quote,\n";
             } else {
                 if (array_keys($value)[0] === 0) {
                     // List query param (eg filter[]=haha should become "filter[]": "haha")
                     $output .= str_repeat(" ", $spacesIndentation);
-                    $output .= "$quote$parameter"."[]$quote$delimiter $quote$value[0]$quote,\n";
+                    $output .= "$quote$parameter" . "[]$quote$delimiter $quote$value[0]$quote,\n";
                 } else {
                     // Hash query param (eg filter[name]=john should become "filter[name]": "john")
                     foreach ($value as $item => $itemValue) {
                         $output .= str_repeat(" ", $spacesIndentation);
-                        $output .= "$quote$parameter"."[$item]$quote$delimiter $quote$itemValue$quote,\n";
+                        $output .= "$quote$parameter" . "[$item]$quote$delimiter $quote$itemValue$quote,\n";
                     }
                 }
 
             }
         }
 
-        return $output.str_repeat(" ", $closingBraceIndentation)."{$braces[1]}";
+        return $output . str_repeat(" ", $closingBraceIndentation) . "{$braces[1]}";
     }
 }
