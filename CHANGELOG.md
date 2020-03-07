@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## 4.4.0 - Saturday, 7 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.3.1...4.4.0))
+### Fixed
+- Array query params can now be used and render properly (https://github.com/mpociot/laravel-apidoc-generator/pull/700)
+
+## 4.3.1 - Friday, 6 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.3.0...4.3.1))
+### Changed
+- Updated Documentarian dependency for Laravel v7 (https://github.com/mpociot/laravel-apidoc-generator/pull/699)
+
 ## 4.3.0 - Saturday, 22 February 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.2.4...4.3.0))
 ### Changed
 - Updated nunomaduro/collision to include v4 (https://github.com/mpociot/laravel-apidoc-generator/pull/699)
