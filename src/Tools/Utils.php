@@ -166,7 +166,6 @@ class Utils
                         $output .= "$quote$parameter" . "[$item]$quote$delimiter $quote$itemValue$quote,\n";
                     }
                 }
-
             }
         }
 
