@@ -29,7 +29,7 @@ class DingoGeneratorTest extends GeneratorTestCase
         /** @var Router $api */
         $api = app(Router::class);
         $api->version('v1', function (Router $api) use ($class, $controllerMethod, $path, $httpMethod, &$route) {
-            $route = $api->$httpMethod($path, $class."@$controllerMethod");
+            $route = $api->$httpMethod($path, $class . "@$controllerMethod");
         });
 
         return $route;

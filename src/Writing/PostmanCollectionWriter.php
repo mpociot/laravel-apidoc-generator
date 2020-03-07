@@ -48,7 +48,7 @@ class PostmanCollectionWriter
         $collection = [
             'variables' => [],
             'info' => [
-                'name' => config('apidoc.postman.name') ?: config('app.name').' API',
+                'name' => config('apidoc.postman.name') ?: config('app.name') . ' API',
                 '_postman_id' => Uuid::uuid4()->toString(),
                 'description' => config('apidoc.postman.description') ?: '',
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
@@ -120,7 +120,7 @@ class PostmanCollectionWriter
         // URL Parameters are collected by the `UrlParameters` strategies, but only make sense if they're in the route
         // definition. Filter out any URL parameters that don't appear in the URL.
         $urlParams = collect($route['urlParameters'])->filter(function ($_, $key) use ($route) {
-            return Str::contains($route['uri'], '{'.$key.'}');
+            return Str::contains($route['uri'], '{' . $key . '}');
         });
 
         /** @var Collection $queryParams */
@@ -129,7 +129,7 @@ class PostmanCollectionWriter
             'host' => $this->baseUrl,
             // Substitute laravel/symfony query params ({example}) to Postman style, prefixed with a colon
             'path' => preg_replace_callback('/\/{(\w+)\??}(?=\/|$)/', function ($matches) {
-                return '/:'.$matches[1];
+                return '/:' . $matches[1];
             }, $route['uri']),
             'query' => collect($route['queryParameters'])->map(function ($parameter, $key) {
                 return [

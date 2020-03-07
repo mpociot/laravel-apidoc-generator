@@ -190,7 +190,7 @@ class TestController extends Controller
             'id' => (int) $fruit->id,
             'name' => trim($fruit->name),
             'color' => strtolower($fruit->color),
-            'weight' => $fruit->weight.' kg',
+            'weight' => $fruit->weight . ' kg',
             'delicious' => $fruit->delicious,
             'responseCall' => true,
         ];

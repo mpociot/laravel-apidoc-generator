@@ -49,7 +49,7 @@ class Match implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return is_callable([$this, 'get'.ucfirst($offset)]);
+        return is_callable([$this, 'get' . ucfirst($offset)]);
     }
 
     /**
@@ -57,7 +57,7 @@ class Match implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return call_user_func([$this, 'get'.ucfirst($offset)]);
+        return call_user_func([$this, 'get' . ucfirst($offset)]);
     }
 
     /**
