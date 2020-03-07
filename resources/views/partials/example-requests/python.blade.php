@@ -7,13 +7,7 @@ url = '{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}'
 payload = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
 @endif
 @if(count($route['cleanQueryParameters']))
-params = {
-@foreach($route['cleanQueryParameters'] as $parameter => $value)
-  '{{ $parameter }}': '{{ $value }}'@if(!($loop->last)),
-@endif
-@endforeach
-
-}
+params = {!! \Mpociot\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "'", ":", 2, "{}") !!}
 @endif
 @if(!empty($route['headers']))
 headers = {
