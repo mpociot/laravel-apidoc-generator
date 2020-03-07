@@ -148,8 +148,7 @@ class Utils
         int $spacesIndentation = 4,
         string $braces = "{}",
         int $closingBraceIndentation = 0
-    ): string
-    {
+    ): string {
         $output = "{$braces[0]}\n";
         foreach ($cleanQueryParams as $parameter => $value) {
             if (!is_array($value)) {
