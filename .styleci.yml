@@ -1,10 +1,2 @@
-preset: laravel
+preset: psr12
 
-enabled:
-  - phpdoc_order
-  - phpdoc_separation
-  - unalign_double_arrow
-
-disabled:
-  - short_list_syntax
-  - simplified_null_return

@@ -233,7 +233,7 @@ let params = {
     "user_id": "me",
     "page": "4",
     "filters": "consequatur",
-    "url_encoded": "+ []&amp;=",
+    "url_encoded": "+ []&=",
 };
 Object.keys(params)
     .forEach(key => url.searchParams.append(key, params[key]));

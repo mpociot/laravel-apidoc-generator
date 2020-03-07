@@ -54,7 +54,7 @@ class Utils
     public static function replaceUrlParameterPlaceholdersWithValues(string $uri, array $urlParameters)
     {
         $matches = preg_match_all('/{.+?}/i', $uri, $parameterPaths);
-        if (! $matches) {
+        if (!$matches) {
             return $uri;
         }
 
@@ -89,7 +89,8 @@ class Utils
 
     public static function deleteDirectoryAndContents($dir)
     {
-        $adapter = new Local(realpath(__DIR__.'/../../'));
+        $dir = ltrim($dir, '/');
+        $adapter = new Local(realpath(__DIR__ . '/../../'));
         $fs = new Filesystem($adapter);
         $fs->deleteDir($dir);
     }
@@ -98,11 +99,11 @@ class Utils
      * @param mixed $value
      * @param int $indentationLevel
      *
+     * @return string
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      *
-     * @return string
      */
-    public static function printPhpValue($value, $indentationLevel = 0)
+    public static function printPhpValue($value, int $indentationLevel = 0): string
     {
         $output = VarExporter::export($value);
         // Padding with x spaces so they align
@@ -110,9 +111,64 @@ class Utils
         $result = '';
         $padWith = str_repeat(' ', $indentationLevel);
         foreach ($split as $index => $line) {
-            $result .= ($index == 0 ? '' : "\n$padWith").$line;
+            $result .= ($index == 0 ? '' : "\n$padWith") . $line;
         }
 
         return $result;
+    }
+
+    public static function printQueryParamsAsString(array $cleanQueryParams): string
+    {
+        $qs = '';
+        foreach ($cleanQueryParams as $parameter => $value) {
+            $paramName = urlencode($parameter);
+
+            if (!is_array($value)) {
+                $qs .= "$paramName=" . urlencode($value) . "&";
+            } else {
+                if (array_keys($value)[0] === 0) {
+                    // List query param (eg filter[]=haha should become "filter[]": "haha")
+                    $qs .= "$paramName" . '[]=' . urlencode($value[0]) . '&';
+                } else {
+                    // Hash query param (eg filter[name]=john should become "filter[name]": "john")
+                    foreach ($value as $item => $itemValue) {
+                        $qs .= "$paramName" . '[' . urlencode($item) . ']=' . urlencode($itemValue) . '&';
+                    }
+                }
+            }
+        }
+
+        return rtrim($qs, '&');
+    }
+
+    public static function printQueryParamsAsKeyValue(
+        array $cleanQueryParams,
+        string $quote = "\"",
+        string $delimiter = ":",
+        int $spacesIndentation = 4,
+        string $braces = "{}",
+        int $closingBraceIndentation = 0
+    ): string {
+        $output = "{$braces[0]}\n";
+        foreach ($cleanQueryParams as $parameter => $value) {
+            if (!is_array($value)) {
+                $output .= str_repeat(" ", $spacesIndentation);
+                $output .= "$quote$parameter$quote$delimiter $quote$value$quote,\n";
+            } else {
+                if (array_keys($value)[0] === 0) {
+                    // List query param (eg filter[]=haha should become "filter[]": "haha")
+                    $output .= str_repeat(" ", $spacesIndentation);
+                    $output .= "$quote$parameter" . "[]$quote$delimiter $quote$value[0]$quote,\n";
+                } else {
+                    // Hash query param (eg filter[name]=john should become "filter[name]": "john")
+                    foreach ($value as $item => $itemValue) {
+                        $output .= str_repeat(" ", $spacesIndentation);
+                        $output .= "$quote$parameter" . "[$item]$quote$delimiter $quote$itemValue$quote,\n";
+                    }
+                }
+            }
+        }
+
+        return $output . str_repeat(" ", $closingBraceIndentation) . "{$braces[1]}";
     }
 }

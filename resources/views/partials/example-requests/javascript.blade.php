@@ -4,11 +4,7 @@ const url = new URL(
 );
 @if(count($route['cleanQueryParameters']))
 
-let params = {
-@foreach($route['cleanQueryParameters'] as $parameter => $value)
-    "{{ $parameter }}": "{{ $value }}",
-@endforeach
-};
+let params = {!! \Mpociot\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "\"", ":", 4, "{}") !!};
 Object.keys(params)
     .forEach(key => url.searchParams.append(key, params[key]));
 @endif

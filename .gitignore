@@ -13,3 +13,4 @@ docs/_build
 docs/make.bat
 tests/public/docs/
 tests/resources/**
+.phpunit.result.cache

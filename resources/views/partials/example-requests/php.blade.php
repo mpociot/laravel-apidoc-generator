@@ -9,11 +9,7 @@ $response = $client->{{ strtolower($route['methods'][0]) }}(
         'headers' => {!! \Mpociot\ApiDoc\Tools\Utils::printPhpValue($route['headers'], 8) !!},
 @endif
 @if(!empty($route['cleanQueryParameters']))
-        'query' => [
-@foreach($route['cleanQueryParameters'] as $parameter => $value)
-            '{{$parameter}}' => '{{$value}}',
-@endforeach
-        ],
+        'query' => {!! \Mpociot\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "'", "=>", 12, "[]", 8) !!},
 @endif
 @if(!empty($route['cleanBodyParameters']))
         'json' => {!! \Mpociot\ApiDoc\Tools\Utils::printPhpValue($route['cleanBodyParameters'], 8) !!},
