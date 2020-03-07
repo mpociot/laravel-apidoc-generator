@@ -54,7 +54,7 @@ class Utils
     public static function replaceUrlParameterPlaceholdersWithValues(string $uri, array $urlParameters)
     {
         $matches = preg_match_all('/{.+?}/i', $uri, $parameterPaths);
-        if (! $matches) {
+        if (!$matches) {
             return $uri;
         }
 
@@ -89,7 +89,7 @@ class Utils
 
     public static function deleteDirectoryAndContents($dir)
     {
-        $adapter = new Local(realpath(__DIR__.'/../../'));
+        $adapter = new Local(realpath(__DIR__ . '/../../'));
         $fs = new Filesystem($adapter);
         $fs->deleteDir($dir);
     }
@@ -98,9 +98,9 @@ class Utils
      * @param mixed $value
      * @param int $indentationLevel
      *
+     * @return string
      * @throws \Symfony\Component\VarExporter\Exception\ExceptionInterface
      *
-     * @return string
      */
     public static function printPhpValue($value, $indentationLevel = 0)
     {
@@ -110,9 +110,29 @@ class Utils
         $result = '';
         $padWith = str_repeat(' ', $indentationLevel);
         foreach ($split as $index => $line) {
-            $result .= ($index == 0 ? '' : "\n$padWith").$line;
+            $result .= ($index == 0 ? '' : "\n$padWith") . $line;
         }
 
         return $result;
+    }
+
+    public static function printQueryParamsAsString(array $cleanQueryParams)
+    {
+        $qs = "";
+        foreach ($cleanQueryParams as $parameter => $value) {
+            $paramName = urlencode($parameter);
+
+            if (!is_array($value)) {
+                $qs .= "$paramName=" . urlencode($value)."&";
+            } else {
+                // Query param is array - only one level of nesting supported
+                foreach ($value as $item => $itemValue) {
+                    $qs .= "$paramName" . "[" . urlencode($item) . "]=" . urlencode($itemValue)."&";
+                }
+
+            }
+        }
+
+        return rtrim($qs, '&');
     }
 }
