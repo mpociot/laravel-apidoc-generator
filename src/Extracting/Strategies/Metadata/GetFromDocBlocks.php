@@ -21,11 +21,11 @@ class GetFromDocBlocks extends Strategy
         list($routeGroupName, $routeGroupDescription, $routeTitle) = $this->getRouteGroupDescriptionAndTitle($methodDocBlock, $docBlocks['class']);
 
         return [
-                'groupName' => $routeGroupName,
-                'groupDescription' => $routeGroupDescription,
-                'title' => $routeTitle ?: $methodDocBlock->getShortDescription(),
-                'description' => $methodDocBlock->getLongDescription()->getContents(),
-                'authenticated' => $this->getAuthStatusFromDocBlock($methodDocBlock->getTags()),
+            'groupName' => $routeGroupName,
+            'groupDescription' => $routeGroupDescription,
+            'title' => $routeTitle ?: $methodDocBlock->getShortDescription(),
+            'description' => $methodDocBlock->getLongDescription()->getContents(),
+            'authenticated' => $this->getAuthStatusFromDocBlock($methodDocBlock->getTags()),
         ];
     }
 
