@@ -172,6 +172,64 @@ abstract class GeneratorTestCase extends TestCase
     }
 
     /** @test */
+    public function can_parse_body_parameters_as_array()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withBodyParametersAsArray');
+        $generator = $this->generator->processRoute($route);
+        $bodyParameters = $generator['bodyParameters'];
+        $cleanBodyParameters = $generator['cleanBodyParameters'];
+
+        $this->assertArraySubset([
+            '*.first_name' => [
+                'type' => 'string',
+                'description' => 'The first name of the user.',
+                'required' => false,
+                'value' => 'John',
+            ],
+            '*.last_name' => [
+                'type' => 'string',
+                'description' => 'The last name of the user.',
+                'required' => false,
+                'value' => 'Doe',
+            ],
+            '*.contacts.*.first_name' => [
+                'type' => 'string',
+                'description' => 'The first name of the contact.',
+                'required' => false,
+                'value' => 'John',
+            ],
+            '*.contacts.*.last_name' => [
+                'type' => 'string',
+                'description' => 'The last name of the contact.',
+                'required' => false,
+                'value' => 'Doe',
+            ],
+            '*.roles.*' => [
+                'type' => 'string',
+                'description' => 'The name of the role.',
+                'required' => false,
+                'value' => 'Admin',
+            ],
+        ], $bodyParameters);
+
+        $this->assertArraySubset([
+            [
+               'first_name' => 'John',
+               'last_name' => 'Doe',
+               'contacts' => [
+                    [
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                    ]
+                ],
+                'roles' => [
+                    'Admin'
+                ]
+            ]
+        ], $cleanBodyParameters);
+    }
+
+    /** @test */
     public function it_ignores_non_commented_form_request()
     {
         $route = $this->createRoute('GET', '/api/test', 'withNonCommentedFormRequestParameter');

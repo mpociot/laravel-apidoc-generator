@@ -89,6 +89,20 @@ class TestController extends Controller
         return '';
     }
 
+    /**
+     * Endpoint with body parameters as array.
+     *
+     * @bodyParam *.first_name string The first name of the user. Example: John
+     * @bodyParam *.last_name string The last name of the user. Example: Doe
+     * @bodyParam *.contacts.*.first_name string The first name of the contact. Example: John
+     * @bodyParam *.contacts.*.last_name string The last name of the contact. Example: Doe
+     * @bodyParam *.roles.* string The name of the role. Example: Admin
+     */
+    public function withBodyParametersAsArray()
+    {
+        return '';
+    }
+
     public function withFormRequestParameter(TestRequest $request)
     {
         return '';
