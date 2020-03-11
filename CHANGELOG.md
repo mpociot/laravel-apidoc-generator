@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+
+## 4.4.1 - Wednesday, 11 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.0...4.4.1))
+### Added
+- Support for body params as array (https://github.com/mpociot/laravel-apidoc-generator/pull/710)
+
 ## 4.4.0 - Saturday, 7 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.3.1...4.4.0))
 ### Fixed
 - Array query params can now be used and render properly (https://github.com/mpociot/laravel-apidoc-generator/pull/700)
