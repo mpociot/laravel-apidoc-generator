@@ -239,6 +239,6 @@ class Generator
             $paramName = str_replace(['][', '[', ']', '..'], ['.', '.', '', '.*.'], $paramName);
         }
         // Then generate a sample item for the dot notation
-        Arr::set($values, str_replace('.*', '.0', $paramName), $paramExample);
+        Arr::set($values, str_replace(['.*', '*.'], ['.0','0.'], $paramName), $paramExample);
     }
 }
