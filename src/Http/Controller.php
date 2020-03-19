@@ -18,8 +18,6 @@ class Controller
      */
     public function json()
     {
-        return response()->json(
-            Storage::disk('local')->get('apidoc/collection.json')
-        );
+        return response(Storage::disk('local')->get('apidoc/collection.json'));
     }
 }
