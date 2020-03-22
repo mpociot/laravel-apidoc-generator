@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## 4.4.2 - Sunday, 21 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.1...4.4.2))
+### Fixed
+- Fixed double json encode when fetching collection in Laravel type docs (https://github.com/mpociot/laravel-apidoc-generator/pull/713)
+
 
 ## 4.4.1 - Wednesday, 11 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.0...4.4.1))
 ### Added
@@ -31,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated nunomaduro/collision to include v4 (https://github.com/mpociot/laravel-apidoc-generator/pull/699)
 
 ### Fixed
-- Use correct protocol for Postman collcetion URL (https://github.com/mpociot/laravel-apidoc-generator/pull/697#event-3047246508)
+- Use correct protocol for Postman collcetion URL (https://github.com/mpociot/laravel-apidoc-generator/pull/697)
 
 ## [4.2.4] - Saturday, 15 February 2020
 ### Fixed
