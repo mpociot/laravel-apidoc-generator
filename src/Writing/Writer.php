@@ -283,7 +283,7 @@ class Writer
             $contents = str_replace('href="css/style.css"', 'href="/docs/css/style.css"', $contents);
             $contents = str_replace('src="js/all.js"', 'src="/docs/js/all.js"', $contents);
             $contents = str_replace('src="images/', 'src="/docs/images/', $contents);
-            $contents = preg_replace('#href="https?://.+?/docs/collection.json"#', 'href="{{ route("apidoc", ["format" => ".json"]) }}"', $contents);
+            $contents = preg_replace('#href="https?://.+?/docs/collection.json"#', 'href="{{ route("apidoc.json") }}"', $contents);
             file_put_contents("$this->outputPath/index.blade.php", $contents);
         }
     }
