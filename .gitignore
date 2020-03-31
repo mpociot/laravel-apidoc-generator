@@ -1,5 +1,6 @@
 .DS_Store
 composer.lock
+*.composer.lock
 .php_cs.cache
 /vendor/
 public/
