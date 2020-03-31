@@ -25,16 +25,16 @@
         "mpociot/documentarian": "^0.4.0",
         "mpociot/reflection-docblock": "^1.0.1",
         "nunomaduro/collision": "^3.0|^4.0",
-        "ramsey/uuid": "^3.8",
+        "ramsey/uuid": "^3.8|4.0",
         "symfony/var-exporter": "^4.0|^5.0"
     },
     "require-dev": {
-        "dingo/api": "^2.3.0",
+        "dingo/api": "^2.7|^3.0",
         "dms/phpunit-arraysubset-asserts": "^0.1.0",
         "laravel/lumen-framework": "^5.7|^6.0|^7.0",
-        "league/fractal": "^0.17.0",
+        "league/fractal": "^0.19.0",
         "mockery/mockery": "^1.2.0",
-        "orchestra/testbench": "^3.7|^4.0",
+        "orchestra/testbench": "^3.7|^4.0|^5.0",
         "phpstan/phpstan": "^0.11.15",
         "phpunit/phpunit": "^8.0"
     },
