@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## 4.5.0 - Tuesday, 31 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.3...4.5.0))
+### Fixed
+- Fix version constraints preventin installation on some Laravel 7 installations.
+
 ## 4.4.3 - Thursday, 26 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.2...4.4.3))
 ### Fixed
 - Fixed link to Postman connection in docs when Laravel autoload is used (https://github.com/mpociot/laravel-apidoc-generator/pull/714)
