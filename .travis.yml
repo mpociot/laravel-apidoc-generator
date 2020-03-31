@@ -20,6 +20,9 @@ matrix:
     - php: 7.4
       env: SETUP=lint
       name: "Lint code"
+    - php: 7.4
+      env: COMPOSER=dingo.composer.json
+      name: "With Dingo router"
 
 cache:
   directories:
@@ -34,4 +37,4 @@ install:
   - if [[ $SETUP = 'lint' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; travis_retry composer lint; fi
 
 script:
-  - vendor/bin/phpunit
+  - if [[ $SETUP = 'lint' ]]; then exit 0; fi; composer test-ci;

@@ -6,6 +6,9 @@ use Dingo\Api\Routing\Router;
 use Mpociot\ApiDoc\ApiDocGeneratorServiceProvider;
 use Mpociot\ApiDoc\Tests\Fixtures\TestController;
 
+/**
+ * @group dingo
+ */
 class DingoGeneratorTest extends GeneratorTestCase
 {
     protected function getPackageProviders($app)

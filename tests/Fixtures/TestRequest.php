@@ -2,7 +2,7 @@
 
 namespace Mpociot\ApiDoc\Tests\Fixtures;
 
-use Dingo\Api\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @bodyParam user_id int required The id of the user. Example: 9

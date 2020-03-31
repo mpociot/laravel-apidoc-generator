@@ -29,8 +29,8 @@
         "symfony/var-exporter": "^4.0|^5.0"
     },
     "require-dev": {
+        "dingo/api": "^2.7|^3.0",
         "dms/phpunit-arraysubset-asserts": "^0.1.0",
-        "laravel/lumen-framework": "^5.7|^6.0|^7.0",
         "league/fractal": "^0.19.0",
         "mockery/mockery": "^1.2.0",
         "orchestra/testbench": "^3.7|^4.0|^5.0",
@@ -52,8 +52,8 @@
     },
     "scripts": {
         "lint": "phpstan analyse -c ./phpstan.neon src",
-        "test": "phpunit --stop-on-failure --exclude-group dingo",
-        "test-ci": "phpunit --exclude-group dingo"
+        "test": "phpunit --stop-on-failure",
+        "test-ci": "phpunit"
     },
     "extra": {
         "laravel": {
