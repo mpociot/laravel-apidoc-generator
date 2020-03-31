@@ -107,22 +107,6 @@ class RouteMatcherDingoTest extends TestCase
         $this->assertCount(18, $routes);
     }
 
-    public function testWillIncludeRouteIfListedExplicitlyForLaravelRouter()
-    {
-        $this->registerLaravelRoutes();
-        $mustInclude = 'domain1-1';
-        $routeRules[0]['include'] = [$mustInclude];
-
-        $routeRules[0]['match']['domains'] = ['domain1.*'];
-        $routeRules[0]['match']['prefixes'] = ['prefix1/*'];
-        $matcher = new RouteMatcher();
-        $routes = $matcher->getRoutes($routeRules);
-        $oddRuleOut = collect($routes)->filter(function ($route) use ($mustInclude) {
-            return $route['route']->getName() === $mustInclude;
-        });
-        $this->assertCount(1, $oddRuleOut);
-    }
-
     public function testWillIncludeRouteIfListedExplicitlyForDingoRouter()
     {
         $this->registerDingoRoutes();
