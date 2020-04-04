@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## 4.5.1 - Saturday, 4 April 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.5.0...4.5.1))
+### Fixed
+- Fix version constraint...again. (https://github.com/mpociot/laravel-apidoc-generator/pull/725)
+
 ## 4.5.0 - Tuesday, 31 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.3...4.5.0))
 ### Fixed
-- Fix version constraints preventin installation on some Laravel 7 installations.
+- Fix version constraints preventing installation on some Laravel 7 installations.
 
 ## 4.4.3 - Thursday, 26 March 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.4.2...4.4.3))
 ### Fixed
