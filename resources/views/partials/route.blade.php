@@ -61,5 +61,15 @@ Parameter | Type | Status | Description
     `{{$attribute}}` | {{$parameter['type']}} | @if($parameter['required']) required @else optional @endif | {!! $parameter['description'] !!}
     @endforeach
 @endif
+@if(count($route['responseParameters']))
+
+#### Response Parameters
+
+Parameter | Type | Description
+--------- | ------- | ------- | ------- | -----------
+@foreach($route['responseParameters'] as $attribute => $parameter)
+    `{{$attribute}}` | {{$parameter['type']}} | {!! $parameter['description'] !!}
+@endforeach
+@endif
 
 <!-- END_{{$route['id']}} -->

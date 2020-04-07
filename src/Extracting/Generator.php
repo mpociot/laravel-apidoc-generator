@@ -5,6 +5,7 @@ namespace Mpociot\ApiDoc\Extracting;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Mpociot\ApiDoc\Extracting\Strategies\ResponseParameters\GetFromResponseParamTag;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
@@ -81,6 +82,10 @@ class Generator
         $parsedRoute['bodyParameters'] = $bodyParameters;
         $parsedRoute['cleanBodyParameters'] = $this->cleanParams($bodyParameters);
 
+        $responseParameters = $this->fetchResponseParameters($controller, $method, $route, $routeRules, $parsedRoute);
+        $parsedRoute['responseParameters'] = $responseParameters;
+        $parsedRoute['cleanResponseParameters'] = $this->cleanParams($responseParameters);
+
         $responses = $this->fetchResponses($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['responses'] = $responses;
         $parsedRoute['showresponse'] = ! empty($responses);
@@ -114,6 +119,11 @@ class Generator
     protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
     {
         return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
+    }
+
+    protected function fetchResponseParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    {
+        return $this->iterateThroughStrategies('responseParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
     protected function fetchResponses(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
@@ -153,6 +163,9 @@ class Generator
             'bodyParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
+            'responseParameters' => [
+                GetFromResponseParamTag::class
+            ],
             'responses' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
@@ -164,6 +177,7 @@ class Generator
 
         // Use the default strategies for the stage, unless they were explicitly set
         $strategies = $this->config->get("strategies.$stage", $defaultStrategies[$stage]);
+
         $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
             $strategy = new $strategyClass($stage, $this->config);
