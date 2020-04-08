@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## 4.6.0 - Wednesday, 8 April 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.5.1...4.6.0))
+### Added
+- Allow `@authenticated` to be set at controller level. (https://github.com/mpociot/laravel-apidoc-generator/pull/726)
+
 ## 4.5.1 - Saturday, 4 April 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.5.0...4.5.1))
 ### Fixed
 - Fix version constraint...again. (https://github.com/mpociot/laravel-apidoc-generator/pull/725)
