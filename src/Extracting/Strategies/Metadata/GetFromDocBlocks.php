@@ -17,15 +17,16 @@ class GetFromDocBlocks extends Strategy
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
         $methodDocBlock = $docBlocks['method'];
+        $classDocBlock = $docBlocks['class'];
 
-        list($routeGroupName, $routeGroupDescription, $routeTitle) = $this->getRouteGroupDescriptionAndTitle($methodDocBlock, $docBlocks['class']);
+        list($routeGroupName, $routeGroupDescription, $routeTitle) = $this->getRouteGroupDescriptionAndTitle($methodDocBlock, $classDocBlock);
 
         return [
             'groupName' => $routeGroupName,
             'groupDescription' => $routeGroupDescription,
             'title' => $routeTitle ?: $methodDocBlock->getShortDescription(),
             'description' => $methodDocBlock->getLongDescription()->getContents(),
-            'authenticated' => $this->getAuthStatusFromDocBlock($methodDocBlock->getTags()),
+            'authenticated' => $this->getAuthStatusFromDocBlock($classDocBlock->getTags())?:$this->getAuthStatusFromDocBlock($methodDocBlock->getTags()),
         ];
     }
 
@@ -48,7 +49,7 @@ class GetFromDocBlocks extends Strategy
      * @param DocBlock $methodDocBlock
      * @param DocBlock $controllerDocBlock
      *
-     * @return array The route group name, the group description, ad the route title
+     * @return array The route group name, the group description, and the route title
      */
     protected function getRouteGroupDescriptionAndTitle(DocBlock $methodDocBlock, DocBlock $controllerDocBlock)
     {
