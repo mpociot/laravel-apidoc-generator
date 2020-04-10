@@ -38,6 +38,13 @@ return [
     'router' => 'laravel',
 
     /*
+     * The storage to be used when generating assets.
+     * By default, uses 'local'. If you are using Laravel Vapor, please use S3 and make sure
+     * the correct bucket is correctly configured in the .env file
+     */
+    'storage' => 'local',
+
+    /*
      * The base URL to be used in examples and the Postman collection.
      * By default, this will be the value of config('app.url').
      */
