@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 class Generator
 {
@@ -55,7 +55,7 @@ class Generator
     {
         [$controllerName, $methodName] = Utils::getRouteClassAndMethodNames($route->getAction());
         $controller = new ReflectionClass($controllerName);
-        $method = $controller->getMethod($methodName);
+        $method = Utils::reflectRouteMethod([$controllerName, $methodName]);
 
         $parsedRoute = [
             'id' => md5($this->getUri($route) . ':' . implode($this->getMethods($route))),
@@ -88,7 +88,7 @@ class Generator
         return $parsedRoute;
     }
 
-    protected function fetchMetadata(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchMetadata(ReflectionClass $controller, ReflectionFunctionAbstract $method, Route $route, array $rulesToApply, array $context = [])
     {
         $context['metadata'] = [
             'groupName' => $this->config->get('default_group', ''),
@@ -101,22 +101,22 @@ class Generator
         return $this->iterateThroughStrategies('metadata', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchUrlParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchUrlParameters(ReflectionClass $controller, ReflectionFunctionAbstract $method, Route $route, array $rulesToApply, array $context = [])
     {
         return $this->iterateThroughStrategies('urlParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchQueryParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchQueryParameters(ReflectionClass $controller, ReflectionFunctionAbstract $method, Route $route, array $rulesToApply, array $context = [])
     {
         return $this->iterateThroughStrategies('queryParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchBodyParameters(ReflectionClass $controller, ReflectionFunctionAbstract $method, Route $route, array $rulesToApply, array $context = [])
     {
         return $this->iterateThroughStrategies('bodyParameters', $context, [$route, $controller, $method, $rulesToApply]);
     }
 
-    protected function fetchResponses(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchResponses(ReflectionClass $controller, ReflectionFunctionAbstract $method, Route $route, array $rulesToApply, array $context = [])
     {
         $responses = $this->iterateThroughStrategies('responses', $context, [$route, $controller, $method, $rulesToApply]);
         if (count($responses)) {
@@ -128,7 +128,7 @@ class Generator
         return [];
     }
 
-    protected function fetchRequestHeaders(ReflectionClass $controller, ReflectionMethod $method, Route $route, array $rulesToApply, array $context = [])
+    protected function fetchRequestHeaders(ReflectionClass $controller, ReflectionFunctionAbstract $method, Route $route, array $rulesToApply, array $context = [])
     {
         $headers = $this->iterateThroughStrategies('headers', $context, [$route, $controller, $method, $rulesToApply]);
 

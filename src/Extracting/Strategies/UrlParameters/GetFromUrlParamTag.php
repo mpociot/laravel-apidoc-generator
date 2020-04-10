@@ -12,13 +12,13 @@ use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use ReflectionClass;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 class GetFromUrlParamTag extends Strategy
 {
     use ParamHelpers;
 
-    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $routeRules, array $context = [])
+    public function __invoke(Route $route, ReflectionClass $controller, ReflectionFunctionAbstract $method, array $routeRules, array $context = [])
     {
         foreach ($method->getParameters() as $param) {
             $paramType = $param->getType();
