@@ -5,6 +5,10 @@ namespace Mpociot\ApiDoc\Tools;
 use Illuminate\Routing\Route;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionFunction;
+use ReflectionFunctionAbstract;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\VarExporter\VarExporter;
@@ -25,13 +29,19 @@ class Utils
      */
     public static function getRouteClassAndMethodNames($routeOrAction)
     {
-        $action = $routeOrAction instanceof Route ? $routeOrAction->getAction() : $routeOrAction;
+        $action = $routeOrAction instanceof Route
+            ? $routeOrAction->getAction()
+            : $routeOrAction;
 
-        if ($action['uses'] !== null) {
-            if (is_array($action['uses'])) {
-                return $action['uses'];
-            } elseif (is_string($action['uses'])) {
-                return explode('@', $action['uses']);
+        $uses = $action['uses'];
+
+        if ($uses !== null) {
+            if (is_array($uses)) {
+                return $uses;
+            } elseif (is_string($uses)) {
+                return explode('@', $uses);
+            } elseif (static::isInvokableObject($uses)) {
+                return [$uses, '__invoke'];
             }
         }
         if (array_key_exists(0, $action) && array_key_exists(1, $action)) {
@@ -170,5 +180,33 @@ class Utils
         }
 
         return $output . str_repeat(" ", $closingBraceIndentation) . "{$braces[1]}";
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public static function isInvokableObject($value): bool
+    {
+        return is_object($value) && method_exists($value, '__invoke');
+    }
+
+    /**
+     * @param array $routeControllerAndMethod
+     *
+     * @throws ReflectionException
+     *
+     * @return ReflectionFunctionAbstract
+     */
+    public static function reflectRouteMethod(array $routeControllerAndMethod): ReflectionFunctionAbstract
+    {
+        [$class, $method] = $routeControllerAndMethod;
+
+        if ($class instanceof \Closure) {
+            return new ReflectionFunction($class);
+        }
+
+        return (new ReflectionClass($class))->getMethod($method);
     }
 }

@@ -17,7 +17,7 @@ use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use ReflectionClass;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 /**
  * Parse a transformer response from the docblock ( @transformer || @transformercollection ).
@@ -27,7 +27,7 @@ class UseTransformerTags extends Strategy
     /**
      * @param Route $route
      * @param ReflectionClass $controller
-     * @param ReflectionMethod $method
+     * @param ReflectionFunctionAbstract $method
      * @param array $rulesToApply
      * @param array $context
      *
@@ -35,7 +35,7 @@ class UseTransformerTags extends Strategy
      *
      * @return array|null
      */
-    public function __invoke(Route $route, ReflectionClass $controller, ReflectionMethod $method, array $rulesToApply, array $context = [])
+    public function __invoke(Route $route, ReflectionClass $controller, ReflectionFunctionAbstract $method, array $rulesToApply, array $context = [])
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
@@ -113,13 +113,13 @@ class UseTransformerTags extends Strategy
 
     /**
      * @param array $tags
-     * @param ReflectionMethod $transformerMethod
+     * @param ReflectionFunctionAbstract $transformerMethod
      *
      * @throws Exception
      *
      * @return string
      */
-    private function getClassToBeTransformed(array $tags, ReflectionMethod $transformerMethod): string
+    private function getClassToBeTransformed(array $tags, ReflectionFunctionAbstract $transformerMethod): string
     {
         $modelTag = Arr::first(array_filter($tags, function ($tag) {
             return ($tag instanceof Tag) && strtolower($tag->getName()) == 'transformermodel';

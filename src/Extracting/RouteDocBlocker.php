@@ -27,7 +27,9 @@ class RouteDocBlocker
     public static function getDocBlocksFromRoute(Route $route): array
     {
         list($className, $methodName) = Utils::getRouteClassAndMethodNames($route);
-        $docBlocks = self::getCachedDocBlock($route, $className, $methodName);
+        $normalizedClassName = static::normalizeClassName($className);
+        $docBlocks = self::getCachedDocBlock($route, $normalizedClassName, $methodName);
+
         if ($docBlocks) {
             return $docBlocks;
         }
@@ -38,13 +40,31 @@ class RouteDocBlocker
             throw new \Exception("Error while fetching docblock for route: Class $className does not contain method $methodName");
         }
 
+        $method = Utils::reflectRouteMethod([$className, $methodName]);
+
         $docBlocks = [
-            'method' => new DocBlock($class->getMethod($methodName)->getDocComment() ?: ''),
+            'method' => new DocBlock($method->getDocComment() ?: ''),
             'class' => new DocBlock($class->getDocComment() ?: ''),
         ];
-        self::cacheDocBlocks($route, $className, $methodName, $docBlocks);
+        self::cacheDocBlocks($route, $normalizedClassName, $methodName, $docBlocks);
 
         return $docBlocks;
+    }
+
+    /**
+     * @param string|object $classNameOrInstance
+     *
+     * @return string
+     */
+    protected static function normalizeClassName($classNameOrInstance): string
+    {
+        if (is_object($classNameOrInstance)) {
+            // route handlers are not destroyed until the script
+            // ends so this should be perfectly safe.
+            $classNameOrInstance = get_class($classNameOrInstance).'::'.spl_object_id($classNameOrInstance);
+        }
+
+        return $classNameOrInstance;
     }
 
     protected static function getCachedDocBlock(Route $route, string $className, string $methodName)

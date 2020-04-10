@@ -18,7 +18,7 @@ use Mpociot\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use ReflectionClass;
-use ReflectionMethod;
+use ReflectionFunctionAbstract;
 
 /**
  * Parse an Eloquent API resource response from the docblock ( @apiResource || @apiResourcecollection ).
@@ -28,7 +28,7 @@ class UseApiResourceTags extends Strategy
     /**
      * @param Route $route
      * @param ReflectionClass $controller
-     * @param ReflectionMethod $method
+     * @param ReflectionFunctionAbstract $method
      * @param array $rulesToApply
      * @param array $context
      *
@@ -36,7 +36,7 @@ class UseApiResourceTags extends Strategy
      *
      * @return array|null
      */
-    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $rulesToApply, array $context = [])
+    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionFunctionAbstract $method, array $rulesToApply, array $context = [])
     {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */

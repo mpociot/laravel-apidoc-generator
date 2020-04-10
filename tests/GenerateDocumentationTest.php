@@ -54,7 +54,7 @@ class GenerateDocumentationTest extends TestCase
     }
 
     /** @test */
-    public function console_command_does_not_work_with_closure()
+    public function console_command_works_with_closure()
     {
         RouteFacade::get('/api/closure', function () {
             return 'hi';
@@ -64,8 +64,28 @@ class GenerateDocumentationTest extends TestCase
         config(['apidoc.routes.0.match.prefixes' => ['api/*']]);
         $output = $this->artisan('apidoc:generate');
 
-        $this->assertStringContainsString('Skipping route: [GET] api/closure', $output);
+        $this->assertStringContainsString('Processed route: [GET] api/closure', $output);
         $this->assertStringContainsString('Processed route: [GET] api/test', $output);
+    }
+
+    /** @test */
+    public function console_command_works_with_closure_using_dingo()
+    {
+        $api = app(\Dingo\Api\Routing\Router::class);
+        $api->version('v1', function ($api) {
+            $api->get('/closure', function () {
+                return 'foo';
+            });
+            $api->get('/test', TestController::class.'@withEndpointDescription');
+        });
+
+        config(['apidoc.router' => 'dingo']);
+        config(['apidoc.routes.0.match.prefixes' => ['*']]);
+        config(['apidoc.routes.0.match.versions' => ['v1']]);
+        $output = $this->artisan('apidoc:generate');
+
+        $this->assertStringContainsString('Processed route: [GET] closure', $output);
+        $this->assertStringContainsString('Processed route: [GET] test', $output);
     }
 
     /** @test */

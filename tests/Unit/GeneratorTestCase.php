@@ -1004,9 +1004,37 @@ abstract class GeneratorTestCase extends TestCase
         $this->assertSame("This will be the long description.\nIt can also be multiple lines long.", $parsed['metadata']['description']);
     }
 
+    /** @test */
+    public function can_use_closure_in_routes_uses()
+    {
+        /**
+         * A short title.
+         * A longer description.
+         * Can be multiple lines.
+         *
+         * @queryParam location_id required The id of the location.
+         * @bodyParam name required Name of the location
+         */
+        $handler = function () {
+            return 'hi';
+        };
+        $route = $this->createRouteUsesCallable('GET', '/api/closure/test', $handler);
+
+        $parsed = $this->generator->processRoute($route);
+
+        $this->assertSame('A short title.', $parsed['metadata']['title']);
+        $this->assertSame("A longer description.\nCan be multiple lines.", $parsed['metadata']['description']);
+        $this->assertCount(1, $parsed['queryParameters']);
+        $this->assertCount(1, $parsed['bodyParameters']);
+        $this->assertSame('The id of the location.', $parsed['queryParameters']['location_id']['description']);
+        $this->assertSame('Name of the location', $parsed['bodyParameters']['name']['description']);
+    }
+
     abstract public function createRoute(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
 
     abstract public function createRouteUsesArray(string $httpMethod, string $path, string $controllerMethod, $register = false, $class = TestController::class);
+
+    abstract public function createRouteUsesCallable(string $httpMethod, string $path, callable $handler, $register = false);
 
     public function dataResources()
     {
