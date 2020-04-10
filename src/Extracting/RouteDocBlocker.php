@@ -61,7 +61,7 @@ class RouteDocBlocker
         if (is_object($classNameOrInstance)) {
             // route handlers are not destroyed until the script
             // ends so this should be perfectly safe.
-            $classNameOrInstance = get_class($classNameOrInstance).'::'.spl_object_id($classNameOrInstance);
+            $classNameOrInstance = get_class($classNameOrInstance) . '::' . spl_object_id($classNameOrInstance);
         }
 
         return $classNameOrInstance;
