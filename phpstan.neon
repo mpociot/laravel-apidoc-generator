@@ -11,4 +11,4 @@ parameters:
         - '#(.*)NunoMaduro\\Collision(.*)#'
         - '#Instantiated class Whoops\\Exception\\Inspector not found\.#'
         - '#.+Dingo.+#'
-        - '#Call to an undefined Illuminate\Contracts\Filesystem\Filesystem::url()#'
+        - '#Call to an undefined method Illuminate\Contracts\Filesystem\Filesystem::url()#'
