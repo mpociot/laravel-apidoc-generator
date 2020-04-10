@@ -107,12 +107,12 @@ class GenerateDocumentation extends Command
             }
 
             if (! $this->doesControllerMethodExist($routeControllerAndMethod)) {
-                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).': Controller method does not exist.');
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath) . ': Controller method does not exist.');
                 continue;
             }
 
             if (! $this->isRouteVisibleForDocumentation($routeControllerAndMethod)) {
-                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).': @hideFromAPIDocumentation was specified.');
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath) . ': @hideFromAPIDocumentation was specified.');
                 continue;
             }
 
@@ -120,7 +120,7 @@ class GenerateDocumentation extends Command
                 $parsedRoutes[] = $generator->processRoute($route, $routeItem->getRules());
                 $this->info(sprintf($messageFormat, 'Processed', $routeMethods, $routePath));
             } catch (\Exception $exception) {
-                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath).'- Exception '.get_class($exception).' encountered : '.$exception->getMessage());
+                $this->warn(sprintf($messageFormat, 'Skipping', $routeMethods, $routePath) . '- Exception ' . get_class($exception) . ' encountered : ' . $exception->getMessage());
             }
         }
 
@@ -139,7 +139,7 @@ class GenerateDocumentation extends Command
             if (Utils::isInvokableObject($classOrObject)) {
                 return true;
             }
-            $routeControllerAndMethod = $classOrObject.'@'.$method;
+            $routeControllerAndMethod = $classOrObject . '@' . $method;
         }
 
         return ! is_callable($routeControllerAndMethod) && ! is_null($routeControllerAndMethod);

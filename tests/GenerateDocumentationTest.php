@@ -76,7 +76,7 @@ class GenerateDocumentationTest extends TestCase
             $api->get('/closure', function () {
                 return 'foo';
             });
-            $api->get('/test', TestController::class.'@withEndpointDescription');
+            $api->get('/test', TestController::class . '@withEndpointDescription');
         });
 
         config(['apidoc.router' => 'dingo']);
