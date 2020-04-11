@@ -10,6 +10,11 @@ return [
     'type' => 'static',
 
     /*
+     * Static output folder: Uncomment and change it if you need the documentation to be generated in a different folder
+     */
+    // 'output_folder' => 'public/docs',
+
+    /*
      * Settings for `laravel` type output.
      */
     'laravel' => [
