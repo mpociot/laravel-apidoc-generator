@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## 4..0 - Sunday, 12 April 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.6.0...4.7.0))
+## 4.7.0 - Sunday, 12 April 2020 ([compare to previous](https://github.com/mpociot/laravel-apidoc-generator/compare/4.6.0...4.7.0))
 ### Added
 - Support for Laravel Vapor. (https://github.com/mpociot/laravel-apidoc-generator/pull/729)
 - Allow customization of static output path. (https://github.com/mpociot/laravel-apidoc-generator/pull/730)
