@@ -10,7 +10,7 @@ return [
     'type' => 'static',
 
     /*
-     * Static output folder: Uncomment and change it if you need the documentation to be generated in a different folder
+     * Static output folder: HTML documentation and assets will be generated in this folder.
      */
    'output_folder' => 'public/docs',
 
