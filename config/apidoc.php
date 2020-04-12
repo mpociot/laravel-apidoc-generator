@@ -10,6 +10,11 @@ return [
     'type' => 'static',
 
     /*
+     * Static output folder: HTML documentation and assets will be generated in this folder.
+     */
+   'output_folder' => 'public/docs',
+
+    /*
      * Settings for `laravel` type output.
      */
     'laravel' => [

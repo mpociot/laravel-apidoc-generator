@@ -66,7 +66,7 @@ class Writer
         $this->documentarian = new Documentarian();
         $this->isStatic = $this->config->get('type') === 'static';
         $this->sourceOutputPath = 'resources/docs';
-        $this->outputPath = $this->isStatic ? 'public/docs' : 'resources/views/apidoc';
+        $this->outputPath = $this->isStatic ? ($this->config->get('output_folder') ?? 'public/docs') : 'resources/views/apidoc';
     }
 
     public function writeDocs(Collection $routes)
@@ -257,7 +257,7 @@ class Writer
 
     protected function copyAssetsFromSourceFolderToPublicFolder(): void
     {
-        $publicPath = 'public/docs';
+        $publicPath = $this->config->get('output_folder') ?? 'public/docs';
         if (! is_dir($publicPath)) {
             mkdir($publicPath, 0777, true);
             mkdir("{$publicPath}/css");
