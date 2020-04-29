@@ -22,6 +22,7 @@ trait FromDocBlockHelper
                 // @responseParam user_id integer The ID of the user.
                 preg_match('/(.+?)\s+(.+?)\s+(.*)/', $tag->getContent(), $content);
                 $content = preg_replace('/\s?No-example.?/', '', $content);
+                $description = '';
                 if (empty($content)) {
                     // this means only name and type were supplied
                     list($name, $type) = preg_split('/\s+/', $tag->getContent());
