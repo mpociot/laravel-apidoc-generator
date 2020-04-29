@@ -6,6 +6,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Mpociot\ApiDoc\Extracting\Strategies\ResponseParameters\GetFromResponseParamTag;
+use Mpociot\ApiDoc\Extracting\Strategies\ResponseParameters\GetFromTransformerParamTag;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
 use Mpociot\ApiDoc\Tools\Utils;
 use ReflectionClass;
@@ -164,7 +165,8 @@ class Generator
                 \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             ],
             'responseParameters' => [
-                GetFromResponseParamTag::class
+                GetFromResponseParamTag::class,
+                GetFromTransformerParamTag::class,
             ],
             'responses' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
