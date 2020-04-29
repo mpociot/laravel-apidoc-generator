@@ -341,6 +341,29 @@ public function getUser(int $id)
 }
 ```
 
+## Documenting parameters in responses
+
+Similarly to request parameters, you may provide documentation for response keys that get shown in a table in your docs.
+These are collected from `@responseParam` doc block tags that are collected from the controller method, or from the 
+`transform` or `__invoke` method in your configured transformer. Response parameter tags are written in the following 
+format:
+ 
+```
+@responseParam [param_name] [param_type] [description] [optional_example]
+```
+ 
+For example:
+
+```php
+/**
+ * @responseParam user_id int The id of the user. Example: 1
+ */
+public function getUser(int $id)
+{
+  // ...
+}
+```
+
 ## Generating responses automatically
 If you don't specify an example response using any of the above means, this package will attempt to get a sample response by making a request to the route (a "response call"). A few things to note about response calls:
 

@@ -30,18 +30,18 @@ class GetFromTransformerParamTag extends Strategy
         [$statusCode, $transformer] = $this->getStatusCodeAndTransformerClass($tag);
 
         // Reflect the transformer
-        $relection = new ReflectionClass($transformer);
+        $reflection = new ReflectionClass($transformer);
         $method = 'transform';
 
-        if (!$relection->hasMethod('transform')) {
+        if (!$reflection->hasMethod('transform')) {
             $method = '__invoke';
         }
-        if (!$relection->hasMethod($method)) {
+        if (!$reflection->hasMethod($method)) {
             return null;
         }
 
         return $this->getResponseParametersFromDocBlock(
-            (new DocBlock($relection->getMethod($method)->getDocComment() ?: ''))->getTags()
+            (new DocBlock($reflection->getMethod($method)->getDocComment() ?: ''))->getTags()
         );
     }
 }

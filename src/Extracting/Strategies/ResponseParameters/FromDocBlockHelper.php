@@ -36,7 +36,7 @@ trait FromDocBlockHelper
                     ? $this->generateDummyValue($type)
                     : $example;
 
-                return [$name => compact('type', 'description', 'value')];
+                return [$name => compact('type', 'description', 'value', 'example')];
             })->toArray();
 
         return $parameters;
