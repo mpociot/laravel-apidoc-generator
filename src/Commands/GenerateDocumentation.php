@@ -187,18 +187,20 @@ class GenerateDocumentation extends Command
         [$class, $method] = $routeControllerAndMethod;
         $reflection = new ReflectionClass($class);
 
-        $comment = $reflection->getMethod($method)->getDocComment();
+        $tags = collect();
 
-        if ($comment) {
+        foreach (
+            array_filter([
+                $reflection->getDocComment(),
+                $reflection->getMethod($method)->getDocComment()
+            ]) as $comment
+        ) {
             $phpdoc = new DocBlock($comment);
-
-            return collect($phpdoc->getTags())
-                ->filter(function ($tag) {
-                    return $tag->getName() === 'hideFromAPIDocumentation';
-                })
-                ->isEmpty();
+            $tags = $tags->concat($phpdoc->getTags());
         }
 
-        return true;
+        return $tags->filter(function ($tag) {
+            return $tag->getName() === 'hideFromAPIDocumentation';
+        })->isEmpty();
     }
 }
