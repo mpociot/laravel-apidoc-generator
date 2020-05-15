@@ -1,6 +1,6 @@
 ## Laravel API Documentation Generator
 
-> UPDATE: we're moving to [Scribe](https://github.com/knuckleswtf/scribe). Scribe is currently in beta and will be ready for v1 in a week or two. Check out the [list of changes](https://scribe.readthedocs.io/en/latest/whats-new.html) to get ready.
+> UPDATE: we're moving to [Scribe](https://github.com/knuckleswtf/scribe). Scribe is currently in beta and will be entering v1 soon. Check out the [list of changes](https://scribe.readthedocs.io/en/latest/whats-new.html) to get ready.
 
 Automatically generate your API documentation from your existing Laravel/Lumen/[Dingo](https://github.com/dingo/api) routes.
 
