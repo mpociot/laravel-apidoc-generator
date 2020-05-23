@@ -14,6 +14,7 @@
             "email": "m.pociot@gmail.com"
         }
     ],
+    "abandoned": "knuckleswtf/scribe",
     "require": {
         "php": ">=7.2.0",
         "ext-json": "*",
