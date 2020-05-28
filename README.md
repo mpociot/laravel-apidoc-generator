@@ -1,6 +1,4 @@
-## Laravel API Documentation Generator [abandoned]
-
-> UPDATE: This project has been abandoned in favour of [Scribe](https://github.com/knuckleswtf/scribe). See the docs [here](https://scribe.readthedocs.io/en/latest/).
+## Laravel API Documentation Generator
 
 Automatically generate your API documentation from your existing Laravel/Lumen/[Dingo](https://github.com/dingo/api) routes.
 
