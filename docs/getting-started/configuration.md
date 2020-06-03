@@ -64,13 +64,13 @@ You can specify a custom logo to be used on the generated documentation. Set the
 If you want to use this, please note that the image size must be 230 x 52.
 
 ## default_group
-When [documenting your api](/docs/laravel-api-doc-generator/getting-started/documenting-your-api), you use `@group` annotations to group API endpoints. Endpoints which do not have a group annotation will be grouped under the `default_group`. Defaults to **"general"**.
+When [documenting your api](/docs/laravel-apidoc-generator/getting-started/documenting-your-api), you use `@group` annotations to group API endpoints. Endpoints which do not have a group annotation will be grouped under the `default_group`. Defaults to **"general"**.
 
 ## example_languages
-For each endpoint, an example request is shown in each of the languages specified in this array. Currently only `bash`, `javascript`, `php` and `python` are supported. You can add your own language, but you must also define the corresponding view (see [Specifying languages for examples](/docs/laravel-api-doc-generator/getting-started/generating-documentation)). Default: `["bash", "javascript"]` 
+For each endpoint, an example request is shown in each of the languages specified in this array. Currently only `bash`, `javascript`, `php` and `python` are supported. You can add your own language, but you must also define the corresponding view (see [Specifying languages for examples](/docs/laravel-apidoc-generator/getting-started/generating-documentation)). Default: `["bash", "javascript"]` 
  
 ##  faker_seed
-When generating example requests, this package uses fzanninoto/faker to generate random values. If you would like the package to generate the same example values for parameters on each run, set this to any number (eg. 1234). (Note: alternatively, you can set example values for parameters when [documenting them.](/docs/laravel-api-doc-generator/getting-started/documenting-your-api))
+When generating example requests, this package uses fzanninoto/faker to generate random values. If you would like the package to generate the same example values for parameters on each run, set this to any number (eg. 1234). (Note: alternatively, you can set example values for parameters when [documenting them.](/docs/laravel-apidoc-generator/getting-started/documenting-your-api))
 
 ## routeMatcher
 The route matcher class provides the algorithm that determines what routes should be documented. The default matcher used is the included `\Mpociot\ApiDoc\Matching\RouteMatcher::class`, and you can provide your own custom implementation if you wish to programmatically change the algorithm. The provided matcher must be an instance of the `RouteMatcherInterface`.
@@ -246,7 +246,7 @@ These values support wildcards and paths, so you can have `'exclude' => ['users/
 After defining the routes in `match` (and `include` or `exclude`), `apply` is where you specify the settings to be applied to those routes when generating documentation. There are a bunch of settings you can tweak here:
 
 ### headers
-Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documentation. They will also be included in ["response calls"](/docs/laravel-api-doc-generator/getting-started/documenting-your-api). Headers are specified as key => value strings.
+Like we've demonstrated above, any headers you specify here will be added to the headers shown in the example requests in your documentation. They will also be included in ["response calls"](/docs/laravel-apidoc-generator/getting-started/documenting-your-api). Headers are specified as key => value strings.
 
 ### response_calls
-These are the settings that will be applied when making ["response calls"](/docs/laravel-api-doc-generator/getting-started/documenting-your-api). See the linked section for details.
+These are the settings that will be applied when making ["response calls"](/docs/laravel-apidoc-generator/getting-started/documenting-your-api). See the linked section for details.

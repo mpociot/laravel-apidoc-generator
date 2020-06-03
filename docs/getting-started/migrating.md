@@ -15,9 +15,9 @@ Note: This isn't meant to be an exhaustive guide to the changes in v4. Please se
 
 - Remove the `output` key. Source files now go to `resources/docs/source` and generated docs go to either `public/docs/` or `resources/views/apidoc`.
 
-- Make sure the `type` value is set appropriately. See [the docs](/docs/laravel-api-doc-generator/getting-started/configuration). 
+- Make sure the `type` value is set appropriately. See [the docs](/docs/laravel-apidoc-generator/getting-started/configuration). 
 
-- Remove the `bindings` section. It has been superseded by the `@urlParam` annotation, which works similarly to the existing `@queryParam` annotation. See [the docs](/docs/laravel-api-doc-generator/getting-started/documenting-your-api)
+- Remove the `bindings` section. It has been superseded by the `@urlParam` annotation, which works similarly to the existing `@queryParam` annotation. See [the docs](/docs/laravel-apidoc-generator/getting-started/documenting-your-api)
 
 - Remove the `response_calls.bindings` section. Use the `Example: ` feature of `@urlParam` to specify the value you want to be used in response calls.
 
@@ -32,9 +32,9 @@ The major change here is the introduction of the `urlParameters` section and the
 - The location of the source files for the generated docs has changed. Move any prepend/append files you've created from `public/docs/source` to the new location (`resources/docs/source`)
 
 ## API
-- Verify that any custom strategies you've written match the new signatures. See [the docs](/docs/laravel-api-doc-generator/extending/plugins). Also note the order of execution and the new stages present.
+- Verify that any custom strategies you've written match the new signatures. See [the docs](/docs/laravel-apidoc-generator/extending/plugins). Also note the order of execution and the new stages present.
 
 ## Other new features (highlights)
-- [Non-static docs/docs with authentication](/docs/laravel-api-doc-generator/getting-started/configuration)
-- [`@apiResource` for Eloquent API resources](/docs/laravel-api-doc-generator/getting-started/documenting-your-api)
+- [Non-static docs/docs with authentication](/docs/laravel-apidoc-generator/getting-started/configuration)
+- [`@apiResource` for Eloquent API resources](/docs/laravel-apidoc-generator/getting-started/documenting-your-api)
 - You can now mix and match response strategies and status codes as you like.
