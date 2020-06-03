@@ -1,3 +1,7 @@
+---
+title: Documenting Your API
+order: 4
+---
 # Documenting Your API
 This package generates documentation from your code using mainly annotations (in doc block comments).
 
@@ -45,7 +49,7 @@ class UserController extends Controller
 
 **Result:** 
 
-![Doc block result](http://headsquaredsoftware.co.uk/images/api_generator_docblock.png)
+![Doc block result](/img/api_generator_docblock.png)
 
 ## Specifying request parameters
 To specify a list of valid parameters your API route accepts, use the `@urlParam`, `@bodyParam` and `@queryParam` annotations.
@@ -91,12 +95,6 @@ public function listPosts()
 ```
 
 They will be included in the generated documentation text and example requests.
-
-**Result:**
-
-![](./../body_params_1.png)
-
-![](./../body_params_2.png)
 
 ### Example parameters
 For each parameter in your request, this package will generate a random value to be used in the example requests. If you'd like to specify an example value, you can do so by adding `Example: your-example` to the end of your description. For instance:

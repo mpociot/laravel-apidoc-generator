@@ -1,3 +1,7 @@
+---
+title: Plugins
+order: 1
+---
 # Extending functionality with plugins
 You can use plugins to alter how the Generator fetches data about your routes. For instance, suppose all your routes have a body parameter `organizationId`, and you don't want to annotate this with `@queryParam` on each method. You can create a plugin that adds this to all your body parameters. Let's see how to do this.
 
@@ -29,8 +33,6 @@ The `__invoke` method of the strategy is where you perform your actions and retu
  Here's what your strategy in our example would look like:
  
  ```php
-<?php
-
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
 

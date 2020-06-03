@@ -1,3 +1,8 @@
+---
+title: How This Works
+order: 2
+---
+
 # How This Works
 
 After installing this package and running the command `php artisan apidoc:generate` in your application, here's what happens:
