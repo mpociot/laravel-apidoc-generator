@@ -279,7 +279,8 @@ class Writer
         }
     }
 
-    protected function getSourceOutputPath(): string {
+    protected function getSourceOutputPath(): string
+    {
         return base_path($this->sourceOutputPath);
     }
 
@@ -318,7 +319,8 @@ class Writer
         $this->output->info("Wrote HTML documentation to: {$this->getOutputPath()}");
     }
 
-    protected function getOutputPath(): string {
+    protected function getOutputPath(): string
+    {
         return base_path($this->outputPath);
     }
 }
