@@ -203,7 +203,7 @@ class Writer
 
             $collection = $this->generatePostmanCollection($parsedRoutes);
             if ($this->isStatic) {
-                $collectionPath = "{$this->getOutputPath()}/collection.json";
+                $collectionPath = $this->getOutputPath()."/collection.json";
                 file_put_contents($collectionPath, $collection);
             } else {
                 $storageInstance = Storage::disk($this->config->get('storage'));
@@ -286,22 +286,23 @@ class Writer
 
     protected function moveOutputFromSourceFolderToTargetFolder(): void
     {
+        $outputPath = $this->getOutputPath();
         if ($this->isStatic) {
             // Move output (index.html, css/style.css and js/all.js) to public/docs
-            rename("{$this->getSourceOutputPath()}/index.html", "{$this->getOutputPath()}/index.html");
+            rename($this->getSourceOutputPath()."/index.html", "{$outputPath}/index.html");
         } else {
             // Move output to resources/views
-            if (! is_dir($this->getOutputPath())) {
-                mkdir($this->getOutputPath());
+            if (! is_dir($outputPath)) {
+                mkdir($outputPath);
             }
-            rename("{$this->getSourceOutputPath()}/index.html", "$this->getOutputPath()/index.blade.php");
-            $contents = file_get_contents("$this->getOutputPath()/index.blade.php");
+            rename($this->getSourceOutputPath()."/index.html", "$outputPath/index.blade.php");
+            $contents = file_get_contents("$outputPath/index.blade.php");
             //
             $contents = str_replace('href="css/style.css"', 'href="{{ asset(\'/docs/css/style.css\') }}"', $contents);
             $contents = str_replace('src="js/all.js"', 'src="{{ asset(\'/docs/js/all.js\') }}"', $contents);
             $contents = str_replace('src="images/', 'src="/docs/images/', $contents);
             $contents = preg_replace('#href="https?://.+?/docs/collection.json"#', 'href="{{ route("apidoc.json") }}"', $contents);
-            file_put_contents("$this->getOutputPath()/index.blade.php", $contents);
+            file_put_contents("$outputPath/index.blade.php", $contents);
         }
     }
 
@@ -316,7 +317,7 @@ class Writer
 
         $this->moveOutputFromSourceFolderToTargetFolder();
 
-        $this->output->info("Wrote HTML documentation to: {$this->getOutputPath()}");
+        $this->output->info("Wrote HTML documentation to: ".$this->getOutputPath());
     }
 
     protected function getOutputPath(): string
