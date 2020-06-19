@@ -20,12 +20,17 @@ class UseResponseFileTag extends Strategy
      * @param array $routeRules
      * @param array $context
      *
+     * @return array|null
      * @throws \Exception If the response file does not exist
      *
-     * @return array|null
      */
-    public function __invoke(Route $route, \ReflectionClass $controller, \ReflectionMethod $method, array $routeRules, array $context = [])
-    {
+    public function __invoke(
+        Route $route,
+        \ReflectionClass $controller,
+        \ReflectionMethod $method,
+        array $routeRules,
+        array $context = []
+    ) {
         $docBlocks = RouteDocBlocker::getDocBlocksFromRoute($route);
         /** @var DocBlock $methodDocBlock */
         $methodDocBlock = $docBlocks['method'];
@@ -57,17 +62,57 @@ class UseResponseFileTag extends Strategy
             preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $relativeFilePath = trim($result[2]);
             $filePath = storage_path($relativeFilePath);
-            if (! file_exists($filePath)) {
+            if (!file_exists($filePath)) {
                 throw new \Exception('@responseFile ' . $relativeFilePath . ' does not exist');
             }
             $status = $result[1] ?: 200;
             $content = $result[2] ? file_get_contents($filePath, true) : '{}';
-            $json = ! empty($result[3]) ? str_replace("'", '"', $result[3]) : '{}';
+            $json = !empty($result[3]) ? str_replace("'", '"', $result[3]) : '{}';
             $merged = array_merge(json_decode($content, true), json_decode($json, true));
-
-            return ['content' => json_encode($merged), 'status' => (int) $status];
+            $content = json_encode($merged);
+            $contentWithReplacedTags = $this->replaceJsonFileTags($content);
+            return ['content' => $content, 'status' => (int)$status];
         }, $responseFileTags);
 
         return $responses;
+    }
+
+    /**
+     * Replaces nested file tags @responseFile:path/to/file.json
+     *
+     * @param string $content
+     * @return string
+     */
+    protected function replaceJsonFileTags(string $content): string
+    {
+        // finding all matching responseFile tags
+        preg_match_all('/@responseFile:[\S]*[\s]*\.json?/', $content, $result);
+
+        // continuing if we get any result
+        if (count($result) > 0) {
+
+            foreach ($result[0] as $replaceValuePath) {
+
+                $relativeFilePath = str_replace('@responseFile:', '', $replaceValuePath);
+                $relativeFilePath = str_replace('\\', '', $relativeFilePath);
+                $filePath = storage_path($relativeFilePath);
+
+                if (!file_exists($filePath)) {
+                    throw new \Exception('@responseFile ' . $relativeFilePath . ' does not exist');
+                }
+
+                // fetching the file content and recursively replacing any matches within the file tagged
+                $fileContent = file_get_contents($filePath, true);
+                $normalizedFileContent = json_encode(json_decode($fileContent, true));
+                $nestedReplacedFileContent = $this->replaceJsonFileTags($normalizedFileContent);
+                $content = str_replace(
+                    '"' . $replaceValuePath . '"',
+                    $nestedReplacedFileContent,
+                    $content
+                );
+            }
+        }
+
+        return $content;
     }
 }
