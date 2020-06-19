@@ -71,7 +71,7 @@ class UseResponseFileTag extends Strategy
             $merged = array_merge(json_decode($content, true), json_decode($json, true));
             $content = json_encode($merged);
             $contentWithReplacedTags = $this->replaceJsonFileTags($content);
-            return ['content' => $content, 'status' => (int)$status];
+            return ['content' => $contentWithReplacedTags, 'status' => (int)$status];
         }, $responseFileTags);
 
         return $responses;
