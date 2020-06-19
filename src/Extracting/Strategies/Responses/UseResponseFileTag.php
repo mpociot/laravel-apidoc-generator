@@ -90,9 +90,7 @@ class UseResponseFileTag extends Strategy
 
         // continuing if we get any result
         if (count($result) > 0) {
-
             foreach ($result[0] as $replaceValuePath) {
-
                 $relativeFilePath = str_replace('@responseFile:', '', $replaceValuePath);
                 $relativeFilePath = str_replace('\\', '', $relativeFilePath);
                 $filePath = storage_path($relativeFilePath);
