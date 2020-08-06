@@ -17,7 +17,7 @@ PHP 7.2 and Laravel/Lumen 5.7 or higher are required.
 > If your application does not meet these requirements, you can check out the 3.x branch for older releases.
 
 ```sh
-composer require --dev mpociot/laravel-apidoc-generator
+composer require mpociot/laravel-apidoc-generator
 ```
 
 ### Laravel
