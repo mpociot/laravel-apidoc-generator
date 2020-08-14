@@ -69,13 +69,13 @@ class GetFromBodyParamTag extends Strategy
                     // this means only name and type were supplied
                     list($name, $type) = preg_split('/\s+/', $tag->getContent());
                     $required = false;
-                    $description = $this->formatNameAsDescription($name);
+                    $description = '';
                 } else {
                     list($_, $name, $type, $required, $description) = $content;
                     $description = trim($description);
                     if ($description == 'required' && empty(trim($required))) {
                         $required = $description;
-                        $description = $this->formatNameAsDescription($name);
+                        $description = '';
                     }
                     $required = trim($required) == 'required' ? true : false;
                 }
@@ -86,14 +86,13 @@ class GetFromBodyParamTag extends Strategy
                     ? $this->generateDummyValue($type)
                     : $example;
 
+                if (empty($description)) {
+                    $description = ucfirst(implode(' ', explode('_', $name)));
+                }
+
                 return [$name => compact('type', 'description', 'required', 'value')];
             })->toArray();
 
         return $parameters;
-    }
-
-    private function formatNameAsDescription(string $name)
-    {
-        return ucfirst(implode(' ', explode('_', $name)));
     }
 }
