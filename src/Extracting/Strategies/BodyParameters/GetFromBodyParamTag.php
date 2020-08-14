@@ -69,13 +69,13 @@ class GetFromBodyParamTag extends Strategy
                     // this means only name and type were supplied
                     list($name, $type) = preg_split('/\s+/', $tag->getContent());
                     $required = false;
-                    $description = $this->nameToDescription($name);
+                    $description = $this->formatNameAsDescription($name);
                 } else {
                     list($_, $name, $type, $required, $description) = $content;
                     $description = trim($description);
                     if ($description == 'required' && empty(trim($required))) {
                         $required = $description;
-                        $description = $this->nameToDescription($name);
+                        $description = $this->formatNameAsDescription($name);
                     }
                     $required = trim($required) == 'required' ? true : false;
                 }
