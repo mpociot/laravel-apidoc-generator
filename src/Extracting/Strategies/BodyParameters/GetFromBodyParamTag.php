@@ -69,7 +69,7 @@ class GetFromBodyParamTag extends Strategy
                     // this means only name and type were supplied
                     list($name, $type) = preg_split('/\s+/', $tag->getContent());
                     $required = false;
-                    $description = '';
+                    $description = ucfirst(implode(' ', explode('_', $name)));
                 } else {
                     list($_, $name, $type, $required, $description) = $content;
                     $description = trim($description);
