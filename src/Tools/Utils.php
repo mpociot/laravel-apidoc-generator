@@ -131,8 +131,9 @@ class Utils
                     $qs .= "$paramName" . '[]=' . urlencode($value[0]) . '&';
                 } else {
                     foreach ($value as $item => $itemValue) {
-                        if(!is_array($itemValue))
+                        if (!is_array($itemValue)) {
                             continue;
+                        }
 
                         $return = self::recursiveItemValue("[$item]", $itemValue);
 
@@ -157,17 +158,17 @@ class Utils
     {
         $item_values = [];
 
-        if(is_array($item_value)) {
+        if (is_array($item_value)) {
             foreach ($item_value as $key => $value) {
                 $item_values = array_merge(
-                    $item_values, 
+                    $item_values,
                     self::recursiveItemValue(
-                        sprintf("%s[%s]", $item, $key), 
+                        sprintf("%s[%s]", $item, $key),
                         $value
                     )
                 );
             }
-        }else{
+        } else {
             return [$item => $item_value];
         }
 
@@ -195,8 +196,9 @@ class Utils
                 } else {
                     // Hash query param (eg filter[name]=john should become "filter[name]": "john")
                     foreach ($value as $item => $itemValue) {
-                        if(!is_array($itemValue))
+                        if (!is_array($itemValue)) {
                             continue;
+                        }
 
                         $return = self::recursiveItemValue("[$item]", $itemValue);
 
