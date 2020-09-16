@@ -130,15 +130,48 @@ class Utils
                     // List query param (eg filter[]=haha should become "filter[]": "haha")
                     $qs .= "$paramName" . '[]=' . urlencode($value[0]) . '&';
                 } else {
+                    foreach ($value as $item => $itemValue) {
+                        if(!is_array($itemValue))
+                            continue;
+
+                        $return = self::recursiveItemValue("[$item]", $itemValue);
+
+                        unset($value[$item]);
+
+                        $value = array_merge($value, $return);
+                    }
+
                     // Hash query param (eg filter[name]=john should become "filter[name]": "john")
                     foreach ($value as $item => $itemValue) {
-                        $qs .= "$paramName" . '[' . urlencode($item) . ']=' . urlencode($itemValue) . '&';
+                        $item = strpos($item, '[')!==false ? str_replace(['%5B', '%5D'], ['[', ']'], urlencode($item)) : '[' . urlencode($item) . ']';
+                        $qs .= "$paramName" . $item . '=' . urlencode($itemValue) . '&';
                     }
                 }
             }
         }
 
         return rtrim($qs, '&');
+    }
+
+    private static function recursiveItemValue($item, $item_value)
+    {
+        $item_values = [];
+
+        if(is_array($item_value)) {
+            foreach ($item_value as $key => $value) {
+                $item_values = array_merge(
+                    $item_values, 
+                    self::recursiveItemValue(
+                        sprintf("%s[%s]", $item, $key), 
+                        $value
+                    )
+                );
+            }
+        }else{
+            return [$item => $item_value];
+        }
+
+        return $item_values;
     }
 
     public static function printQueryParamsAsKeyValue(
@@ -162,8 +195,21 @@ class Utils
                 } else {
                     // Hash query param (eg filter[name]=john should become "filter[name]": "john")
                     foreach ($value as $item => $itemValue) {
+                        if(!is_array($itemValue))
+                            continue;
+
+                        $return = self::recursiveItemValue("[$item]", $itemValue);
+
+                        unset($value[$item]);
+
+                        $value = array_merge($value, $return);
+                    }
+
+                    foreach ($value as $item => $itemValue) {
+                        $item = strpos($item, '[')!==false ? $item : "[$item]";
+
                         $output .= str_repeat(" ", $spacesIndentation);
-                        $output .= "$quote$parameter" . "[$item]$quote$delimiter $quote$itemValue$quote,\n";
+                        $output .= "$quote$parameter" . "$item$quote$delimiter $quote$itemValue$quote,\n";
                     }
                 }
             }
