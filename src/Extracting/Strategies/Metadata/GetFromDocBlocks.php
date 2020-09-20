@@ -26,7 +26,7 @@ class GetFromDocBlocks extends Strategy
             'groupDescription' => $routeGroupDescription,
             'title' => $routeTitle ?: $methodDocBlock->getShortDescription(),
             'description' => $methodDocBlock->getLongDescription()->getContents(),
-            'authenticated' => $this->getAuthStatusFromDocBlock($classDocBlock->getTags())?:$this->getAuthStatusFromDocBlock($methodDocBlock->getTags()),
+            'authenticated' => $this->getAuthStatusFromDocBlock($classDocBlock->getTags()) ?: $this->getAuthStatusFromDocBlock($methodDocBlock->getTags()),
         ];
     }
 
