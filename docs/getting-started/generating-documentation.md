@@ -26,7 +26,7 @@ The base URL used in the Postman collection will be the value of the `base_url` 
 ## Manually modifying the content of the generated documentation
 If you want to modify the content of your generated documentation without changing the routes, go ahead and edit the generated `index.md` file.
 
-This file is located in the `source` folder of  your `output` directory (see [configuration](config.html#output)), so by default, this is `public/docs/source/index.md`.
+This file is located in the `source` folder of  your `output` directory (see configuration), so by default, this is `public/docs/source/index.md`.
  
 After editing the markdown file, you can use the `apidoc:rebuild` command to rebuild your documentation into HTML.
 
@@ -40,7 +40,7 @@ php artisan apidoc:rebuild
  The contents of `prepend.md` will be added after the front matter and info text, while the contents of `append.md` will be added at the end of the document.
  
  ## Specifying language for examples
- For each endpoint, an example request is shown in [each language configured](config.html#example-languages). To add a language which is not supported by this package, you'll have to create your own view for how an example should render. Here's how:
+ For each endpoint, an example request is shown in each language configured. To add a language which is not supported by this package, you'll have to create your own view for how an example should render. Here's how:
  
  - Publish the vendor views by running:
  
@@ -54,8 +54,8 @@ php artisan apidoc:rebuild
 - `methods`: an array of the HTTP methods for that route
 - `boundUri`: the complete URL for the route, with any url parameters replaced (/users/{id} -> /users/1)
 - `headers`: key-value array of headers to be sent with route (according to your configuration)
-- `cleanQueryParameters`: key-value array of query parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
-- `cleanBodyParameters`: key-value array of body parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see [Example Parameters](documenting.html#example-parameters)) will not be present here.
+- `cleanQueryParameters`: key-value array of query parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see Example Parameters at Documenting your API) will not be present here.
+- `cleanBodyParameters`: key-value array of body parameters with example values to be sent with the request. Parameters which have been excluded from the example requests (see Example Parameters at Documenting your API will not be present here.
 
 - Add the language to the `example_languages` array in the package config.
 
