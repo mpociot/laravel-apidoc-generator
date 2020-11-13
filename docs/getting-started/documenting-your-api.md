@@ -337,6 +337,25 @@ public function getUser(int $id)
 {
   // ...
 }
+
+```
+
+The package can also replace nested response file tags provided within the json files.
+
+Just like doc block add `@responseFile` tag within the json content separated with by a colon and proceeded by the file to use
+
+Main File:
+```json
+{"id":5,"name":"Jessica Jones","gender":"female", "profile": "@responseFile:responses/profile/profile.json"}
+```
+The reference file:
+```json
+{"id":1,"active":true,"userId":5}
+```
+
+The Final Result:
+```json
+{"id":5,"name":"Jessica Jones","gender":"female", "profile": {"id":1,"active":true,"userId":5}}
 ```
 
 ## Generating responses automatically
