@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Http;
 
 use Illuminate\Support\Facades\Storage;
+use Mpociot\ApiDoc\Exceptions\FileNotFoundException;
 
 class Controller
 {
@@ -18,6 +19,10 @@ class Controller
      */
     public function json()
     {
+        if (!Storage::disk(config('apidoc.storage'))->has('apidoc/collection.json')) {
+            throw new FileNotFoundException(400, 'Please run php artisan apidoc:generate.');
+        }
+
         return response()->json(
             json_decode(Storage::disk(config('apidoc.storage'))->get('apidoc/collection.json'))
         );
