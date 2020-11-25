@@ -84,6 +84,11 @@ class PostmanCollectionWriter
                 'body' => [
                     'mode' => $mode,
                     $mode => json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT),
+                    "options" => [
+                        $mode => [
+                            "language" => "json"
+                        ]
+                    ],
                 ],
                 'description' => $route['metadata']['description'] ?? null,
                 'response' => [],
