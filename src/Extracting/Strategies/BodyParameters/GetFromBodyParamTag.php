@@ -86,6 +86,10 @@ class GetFromBodyParamTag extends Strategy
                     ? $this->generateDummyValue($type)
                     : $example;
 
+                if (empty($description)) {
+                    $description = ucfirst(implode(' ', explode('_', $name)));
+                }
+
                 return [$name => compact('type', 'description', 'required', 'value')];
             })->toArray();
 
