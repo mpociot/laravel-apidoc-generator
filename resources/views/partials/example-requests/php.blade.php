@@ -20,5 +20,5 @@ $response = $client->{{ strtolower($route['methods'][0]) }}(
 $response = $client->{{ strtolower($route['methods'][0]) }}('{{ rtrim($baseUrl, '/') . '/' . ltrim($route['boundUri'], '/') }}');
 @endif
 $body = $response->getBody();
-print_r(json_decode((string) $body));
+print_r(json_decode((string) $body, JSON_UNESCAPED_UNICODE));
 ```

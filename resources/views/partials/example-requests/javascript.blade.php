@@ -24,7 +24,7 @@ let headers = {
 @endif
 @if(count($route['cleanBodyParameters']))
 
-let body = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
+let body = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
 @endif
 
 fetch(url, {

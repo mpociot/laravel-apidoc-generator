@@ -7,7 +7,7 @@ curl -X {{$route['methods'][0]}} \
 @endforeach
 @endif
 @if(count($route['cleanBodyParameters']))
-    -d '{!! json_encode($route['cleanBodyParameters']) !!}'
+    -d '{!! json_encode($route['cleanBodyParameters'], JSON_UNESCAPED_UNICODE) !!}'
 @endif
 
 ```
