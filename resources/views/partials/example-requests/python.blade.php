@@ -4,7 +4,7 @@ import json
 
 url = '{{ rtrim($baseUrl, '/') }}/{{ ltrim($route['boundUri'], '/') }}'
 @if(count($route['cleanBodyParameters']))
-payload = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT) !!}
+payload = {!! json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
 @endif
 @if(count($route['cleanQueryParameters']))
 params = {!! \Mpociot\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "'", ":", 2, "{}") !!}
