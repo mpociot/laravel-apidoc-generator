@@ -1,5 +1,5 @@
 {
-    "name": "mpociot/laravel-apidoc-generator",
+    "name": "delyss/laravel-apidoc-generator",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
     "keywords": [
