@@ -56,7 +56,11 @@ class UseResponseFileTag extends Strategy
         $responses = array_map(function (Tag $responseFileTag) {
             preg_match('/^(\d{3})?\s?([\S]*[\s]*?)(\{.*\})?$/', $responseFileTag->getContent(), $result);
             $relativeFilePath = trim($result[2]);
-            $filePath = storage_path($relativeFilePath);
+            $filePath = storage_path();
+            if (config('apidoc.reponseFileBasePath')) {
+                $filePath = config('apidoc.reponseFileBasePath');
+            }
+            $filePath = $filePath . DIRECTORY_SEPARATOR . $relativeFilePath;
             if (! file_exists($filePath)) {
                 throw new \Exception('@responseFile ' . $relativeFilePath . ' does not exist');
             }
