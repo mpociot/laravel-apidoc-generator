@@ -12,7 +12,12 @@ return [
     /*
      * Static output folder: HTML documentation and assets will be generated in this folder.
      */
-   'output_folder' => 'public/docs',
+    'output_folder' => 'public/docs',
+    
+    /**
+     * Information that will be displayed in the Info menu
+     */
+    'info_blade' => 'Welcome to the generated API reference.',
 
     /*
      * Settings for `laravel` type output.
