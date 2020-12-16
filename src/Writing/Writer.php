@@ -91,8 +91,8 @@ class Writer
      */
     public function writeMarkdownAndSourceFiles(Collection $parsedRoutes)
     {
-        $targetFile = $this->sourceOutputPath . '/source/index.md';
-        $compareFile = $this->sourceOutputPath . '/source/.compare.md';
+        $targetFile = $this->getSourceOutputPath() . '/source/index.md';
+        $compareFile = $this->getSourceOutputPath() . '/source/.compare.md';
 
         $infoText = view('apidoc::partials.info')
             ->with('outputPath', 'docs')
@@ -146,11 +146,11 @@ class Writer
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection)
             ->with('parsedRoutes', $parsedRouteOutput);
 
-        $this->output->info('Writing index.md and source files to: ' . $this->sourceOutputPath);
+        $this->output->info('Writing index.md and source files to: ' . $this->getSourceOutputPath());
 
-        if (! is_dir($this->sourceOutputPath)) {
+        if (! is_dir($this->getSourceOutputPath())) {
             $documentarian = new Documentarian();
-            $documentarian->create($this->sourceOutputPath);
+            $documentarian->create($this->getSourceOutputPath());
         }
 
         // Write output file
@@ -169,7 +169,7 @@ class Writer
 
         file_put_contents($compareFile, $compareMarkdown);
 
-        $this->output->info('Wrote index.md and source files to: ' . $this->sourceOutputPath);
+        $this->output->info('Wrote index.md and source files to: ' . $this->getSourceOutputPath());
     }
 
     public function generateMarkdownOutputForEachRoute(Collection $parsedRoutes, array $settings): Collection
@@ -203,7 +203,7 @@ class Writer
 
             $collection = $this->generatePostmanCollection($parsedRoutes);
             if ($this->isStatic) {
-                $collectionPath = "{$this->outputPath}/collection.json";
+                $collectionPath = $this->getOutputPath()."/collection.json";
                 file_put_contents($collectionPath, $collection);
             } else {
                 $storageInstance = Storage::disk($this->config->get('storage'));
@@ -239,7 +239,7 @@ class Writer
 
     protected function getMarkdownToPrepend(): string
     {
-        $prependFile = $this->sourceOutputPath . '/source/prepend.md';
+        $prependFile = $this->getSourceOutputPath() . '/source/prepend.md';
         $prependFileContents = file_exists($prependFile)
             ? file_get_contents($prependFile) . "\n" : '';
 
@@ -248,7 +248,7 @@ class Writer
 
     protected function getMarkdownToAppend(): string
     {
-        $appendFile = $this->sourceOutputPath . '/source/append.md';
+        $appendFile = $this->getSourceOutputPath() . '/source/append.md';
         $appendFileContents = file_exists($appendFile)
             ? "\n" . file_get_contents($appendFile) : '';
 
@@ -257,39 +257,52 @@ class Writer
 
     protected function copyAssetsFromSourceFolderToPublicFolder(): void
     {
-        $publicPath = $this->config->get('output_folder') ?? 'public/docs';
+        $publicPath = base_path($this->config->get('output_folder') ?? base_path('public/docs'));
         if (! is_dir($publicPath)) {
             mkdir($publicPath, 0777, true);
-            mkdir("{$publicPath}/css");
-            mkdir("{$publicPath}/js");
         }
-        copy("{$this->sourceOutputPath}/js/all.js", "{$publicPath}/js/all.js");
-        rcopy("{$this->sourceOutputPath}/images", "{$publicPath}/images");
-        rcopy("{$this->sourceOutputPath}/css", "{$publicPath}/css");
+
+        if (! is_dir("{$publicPath}/css")) {
+            mkdir("{$publicPath}/css", 0777, true);
+        }
+
+        if (! is_dir("{$publicPath}/js")) {
+            mkdir("{$publicPath}/js", 0777, true);
+        }
+
+        copy("{$this->getSourceOutputPath()}/js/all.js", "{$publicPath}/js/all.js");
+        rcopy("{$this->getSourceOutputPath()}/images", "{$publicPath}/images");
+        rcopy("{$this->getSourceOutputPath()}/css", "{$publicPath}/css");
 
         if ($logo = $this->config->get('logo')) {
             copy($logo, "{$publicPath}/images/logo.png");
         }
     }
 
+    protected function getSourceOutputPath(): string
+    {
+        return base_path($this->sourceOutputPath);
+    }
+
     protected function moveOutputFromSourceFolderToTargetFolder(): void
     {
+        $outputPath = $this->getOutputPath();
         if ($this->isStatic) {
             // Move output (index.html, css/style.css and js/all.js) to public/docs
-            rename("{$this->sourceOutputPath}/index.html", "{$this->outputPath}/index.html");
+            rename($this->getSourceOutputPath()."/index.html", "{$outputPath}/index.html");
         } else {
             // Move output to resources/views
-            if (! is_dir($this->outputPath)) {
-                mkdir($this->outputPath);
+            if (! is_dir($outputPath)) {
+                mkdir($outputPath);
             }
-            rename("{$this->sourceOutputPath}/index.html", "$this->outputPath/index.blade.php");
-            $contents = file_get_contents("$this->outputPath/index.blade.php");
+            rename($this->getSourceOutputPath()."/index.html", "$outputPath/index.blade.php");
+            $contents = file_get_contents("$outputPath/index.blade.php");
             //
             $contents = str_replace('href="css/style.css"', 'href="{{ asset(\'/docs/css/style.css\') }}"', $contents);
             $contents = str_replace('src="js/all.js"', 'src="{{ asset(\'/docs/js/all.js\') }}"', $contents);
             $contents = str_replace('src="images/', 'src="/docs/images/', $contents);
             $contents = preg_replace('#href="https?://.+?/docs/collection.json"#', 'href="{{ route("apidoc.json") }}"', $contents);
-            file_put_contents("$this->outputPath/index.blade.php", $contents);
+            file_put_contents("$outputPath/index.blade.php", $contents);
         }
     }
 
@@ -297,13 +310,18 @@ class Writer
     {
         $this->output->info('Generating API HTML code');
 
-        $this->documentarian->generate($this->sourceOutputPath);
+        $this->documentarian->generate($this->getSourceOutputPath());
 
         // Move assets to public folder
         $this->copyAssetsFromSourceFolderToPublicFolder();
 
         $this->moveOutputFromSourceFolderToTargetFolder();
 
-        $this->output->info("Wrote HTML documentation to: {$this->outputPath}");
+        $this->output->info("Wrote HTML documentation to: ".$this->getOutputPath());
+    }
+
+    protected function getOutputPath(): string
+    {
+        return base_path($this->outputPath);
     }
 }
