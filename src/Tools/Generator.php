@@ -143,7 +143,10 @@ class Generator
         $context[$stage] = $context[$stage] ?? [];
         foreach ($strategies as $strategyClass) {
             $strategy = new $strategyClass($stage, $this->config);
-            $arguments[] = $context;
+
+            // The `Strategy` class expects the $context array as the 5th position, or array key 4
+            $contextPosition = 4;
+            $arguments[$contextPosition] = $context;
             $results = $strategy(...$arguments);
             if (! is_null($results)) {
                 foreach ($results as $index => $item) {
