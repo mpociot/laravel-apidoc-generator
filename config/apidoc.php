@@ -9,6 +9,11 @@ return [
      */
     'type' => 'static',
 
+    /**
+     * The base folder the response files are pulled from
+     */
+    'reponseFileBasePath' => storage_path(),
+
     /*
      * Static output folder: HTML documentation and assets will be generated in this folder.
      */
