@@ -278,6 +278,8 @@ class Writer
             // Move output (index.html, css/style.css and js/all.js) to public/docs
             rename("{$this->sourceOutputPath}/index.html", "{$this->outputPath}/index.html");
         } else {
+            $assetPath = str_replace('public', '', $this->config->get('output_folder'));
+
             // Move output to resources/views
             if (! is_dir($this->outputPath)) {
                 mkdir($this->outputPath);
@@ -285,9 +287,9 @@ class Writer
             rename("{$this->sourceOutputPath}/index.html", "$this->outputPath/index.blade.php");
             $contents = file_get_contents("$this->outputPath/index.blade.php");
             //
-            $contents = str_replace('href="css/style.css"', 'href="{{ asset(\'/docs/css/style.css\') }}"', $contents);
-            $contents = str_replace('src="js/all.js"', 'src="{{ asset(\'/docs/js/all.js\') }}"', $contents);
-            $contents = str_replace('src="images/', 'src="/docs/images/', $contents);
+            $contents = str_replace('href="css/style.css"', "href=\"{{ asset('{$assetPath}/css/style.css') }}\"", $contents);
+            $contents = str_replace('src="js/all.js"', "src=\"{{ asset('{$assetPath}/js/all.js') }}\"", $contents);
+            $contents = str_replace('src="images/', "src=\"{$assetPath}/images/", $contents);
             $contents = preg_replace('#href="https?://.+?/docs/collection.json"#', 'href="{{ route("apidoc.json") }}"', $contents);
             file_put_contents("$this->outputPath/index.blade.php", $contents);
         }
