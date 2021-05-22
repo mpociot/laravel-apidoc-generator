@@ -33,6 +33,7 @@ abstract class GeneratorTestCase extends TestCase
                 \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
             ],
             'headers' => [
+                \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromHeaderTag::class,
                 \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
             ],
             'bodyParameters' => [
