@@ -76,6 +76,7 @@ class Generator
 
         $headers = $this->fetchRequestHeaders($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['headers'] = $headers;
+        $parsedRoute['cleanHeaders'] = $this->cleanHeaders($headers);
 
         $bodyParameters = $this->fetchBodyParameters($controller, $method, $route, $routeRules, $parsedRoute);
         $parsedRoute['bodyParameters'] = $bodyParameters;
@@ -220,6 +221,26 @@ class Generator
         }
 
         return $values;
+    }
+
+    /**
+     * Create samples at index 0 for array parameters.
+     * Also filter out header which were excluded from having examples.
+     *
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function cleanHeaders(array $params)
+    {
+        $values = [];
+
+        // Remove params which have no examples.
+        $params = array_filter($params, function ($details) {
+            return ! empty($details);
+        });
+
+        return $params;
     }
 
     /**

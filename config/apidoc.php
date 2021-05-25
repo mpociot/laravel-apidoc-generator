@@ -215,6 +215,7 @@ return [
         ],
         'headers' => [
             \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromHeaderTag::class,
         ],
         'bodyParameters' => [
             \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
