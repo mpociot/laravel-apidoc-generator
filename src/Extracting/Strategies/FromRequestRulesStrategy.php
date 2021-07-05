@@ -111,7 +111,9 @@ class FromRequestRulesStrategy extends Strategy
 
                 $value = !empty($type) ? $this->generateDummyValue($type) : null;
 
-                return [ $name => compact('required', 'type', 'value') ];
+                $description = null;
+
+                return [ $name => compact('required', 'type', 'value', 'description') ];
             })
             ->toArray();
 
