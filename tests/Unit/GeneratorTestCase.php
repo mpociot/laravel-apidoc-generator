@@ -31,12 +31,14 @@ abstract class GeneratorTestCase extends TestCase
             ],
             'queryParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromRulesMethod::class,
             ],
             'headers' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
             ],
             'bodyParameters' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
+                \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromRulesMethod::class,
             ],
             'responses' => [
                 \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
@@ -241,6 +243,32 @@ abstract class GeneratorTestCase extends TestCase
                 'description' => 'Is found directly on the method.',
             ],
         ], $bodyParameters);
+    }
+
+    /** @test */
+    public function can_parse_form_request_rules()
+    {
+        $route = $this->createRoute('GET', '/api/test', 'withNonCommentedFormRequestParameter');
+        $queryParameters = $this->generator->processRoute($route)['queryParameters'];
+
+        $this->assertArraySubset([
+            'user_id' => [
+                'required' => true,
+                'type' => 'integer',
+            ],
+            'room_id' => [
+                'required' => true,
+                'type' => 'string',
+            ],
+            'forever' => [
+                'required' => false,
+                'type' => 'boolean',
+            ],
+            'accepted' => [
+                'required' => true,
+                'type' => 'boolean',
+            ],
+        ], $queryParameters);
     }
 
     /** @test */
