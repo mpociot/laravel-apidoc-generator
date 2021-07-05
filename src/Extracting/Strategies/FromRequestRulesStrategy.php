@@ -3,6 +3,7 @@
 namespace Mpociot\ApiDoc\Extracting\Strategies;
 
 use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Mpociot\ApiDoc\Extracting\ParamHelpers;
 use ReflectionClass;
@@ -71,7 +72,7 @@ class FromRequestRulesStrategy extends Strategy
             try {
                 $method = $parameterClass->getMethod('rules');
                 $requestInstance = $parameterClass->newInstance();
-                $rules = $method->invoke($requestInstance, $method);
+                $rules = $method->invoke($requestInstance, $requestInstance);
                 $parametersFromRules = $this->getParametersFromRequestRules($rules);
 
                 if (count($parametersFromRules)) {
