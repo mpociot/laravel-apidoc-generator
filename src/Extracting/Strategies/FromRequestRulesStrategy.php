@@ -12,7 +12,7 @@ class FromRequestRulesStrategy extends Strategy
 {
     use ParamHelpers;
 
-    const TYPE_RULES = [
+    public const TYPE_RULES = [
         'accepted' => 'boolean',
         'alpha' => 'string',
         'alpha_dash' => 'string',
