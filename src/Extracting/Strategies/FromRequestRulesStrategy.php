@@ -45,33 +45,44 @@ class FromRequestRulesStrategy extends Strategy
 
             $parameterClassName = $paramType->getName();
 
-            try {
-                $parameterClass = new ReflectionClass($parameterClassName);
-            } catch (\ReflectionException $e) {
-                continue;
-            }
+            $fromRequestClass = $this->extractFromRequestClass($parameterClassName);
 
-            if (
-                class_exists(LaravelFormRequest::class)
-                && $parameterClass->isSubclassOf(LaravelFormRequest::class)
-                && $parameterClass->hasMethod('rules')
-            ) {
-                try {
-                    $method = $parameterClass->getMethod('rules');
-                    $requestInstance = $parameterClass->newInstance();
-                    $rules = $method->invoke($requestInstance, $method);
-                    $parametersFromRules = $this->getParametersFromRequestRules($rules);
-
-                    if (count($parametersFromRules)) {
-                        return $parametersFromRules;
-                    }
-                } catch (\ReflectionException $e) {
-                    continue;
-                }
+            if (count($fromRequestClass)) {
+                return $fromRequestClass;
             }
         }
 
         return [];
+    }
+
+    protected function extractFromRequestClass(string $parameterClassName)
+    {
+        try {
+            $parameterClass = new ReflectionClass($parameterClassName);
+        } catch (\ReflectionException $e) {
+            return null;
+        }
+
+        if (
+            class_exists(LaravelFormRequest::class)
+            && $parameterClass->isSubclassOf(LaravelFormRequest::class)
+            && $parameterClass->hasMethod('rules')
+        ) {
+            try {
+                $method = $parameterClass->getMethod('rules');
+                $requestInstance = $parameterClass->newInstance();
+                $rules = $method->invoke($requestInstance, $method);
+                $parametersFromRules = $this->getParametersFromRequestRules($rules);
+
+                if (count($parametersFromRules)) {
+                    return $parametersFromRules;
+                }
+            } catch (\ReflectionException $e) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     protected function getParametersFromRequestRules($rules)
