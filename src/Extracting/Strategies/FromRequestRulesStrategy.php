@@ -48,7 +48,7 @@ class FromRequestRulesStrategy extends Strategy
 
             $fromRequestClass = $this->extractFromRequestClass($parameterClassName);
 
-            if (count($fromRequestClass)) {
+            if (!empty($fromRequestClass)) {
                 return $fromRequestClass;
             }
         }
@@ -97,7 +97,7 @@ class FromRequestRulesStrategy extends Strategy
             })
             ->mapWithKeys(function ($rules, $name) {
                 $rules = collect($rules)
-                    ->map(function ($rule) {
+                    ->filter(function ($rule) {
                         return is_string($rule);
                     })
                     ->all();
