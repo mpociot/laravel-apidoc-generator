@@ -95,6 +95,12 @@ class FromRequestRulesStrategy extends Strategy
                 return is_array($rules);
             })
             ->mapWithKeys(function ($rules, $name) {
+                $rules = collect($rules)
+                    ->map(function ($rule) {
+                        return is_string($rule);
+                    })
+                    ->all();
+
                 $required = in_array('required', $rules) || in_array('accepted', $rules);
 
                 $typeRules = array_intersect($rules, array_keys(self::TYPE_RULES));
