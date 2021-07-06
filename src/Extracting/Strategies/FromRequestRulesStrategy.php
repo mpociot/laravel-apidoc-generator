@@ -75,7 +75,7 @@ class FromRequestRulesStrategy extends Strategy
                 $rules = $method->invoke($requestInstance, $requestInstance);
                 $parametersFromRules = $this->getParametersFromRequestRules($rules);
 
-                if (count($parametersFromRules)) {
+                if (!empty($parametersFromRules)) {
                     return $parametersFromRules;
                 }
             } catch (\ReflectionException $e) {
