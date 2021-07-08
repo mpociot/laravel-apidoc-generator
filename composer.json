@@ -1,5 +1,5 @@
 {
-    "name": "mpociot/laravel-apidoc-generator",
+    "name": "fredmeng/laravel-apidoc-generator",
     "license": "MIT",
     "description": "Generate beautiful API documentation from your Laravel application",
     "keywords": [
@@ -22,7 +22,7 @@
         "illuminate/routing": "^5.7|^6.0|^7.0|^8.0",
         "illuminate/support": "^5.7|^6.0|^7.0|^8.0",
         "league/flysystem": "^1.0",
-        "mpociot/documentarian": "^0.4.0",
+        "mpociot/documentarian": "dev-master",
         "mpociot/reflection-docblock": "^1.0.1",
         "nunomaduro/collision": "^3.0|^4.0|^5.0",
         "ramsey/uuid": "^3.8|^4.0",
