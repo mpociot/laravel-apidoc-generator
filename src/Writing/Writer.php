@@ -95,7 +95,7 @@ class Writer
         $compareFile = $this->sourceOutputPath . '/source/.compare.md';
 
         $infoText = view('apidoc::partials.info')
-            ->with('outputPath', 'docs')
+            ->with('outputPath', $this->config->get('output'))
             ->with('showPostmanCollectionButton', $this->shouldGeneratePostmanCollection);
 
         $settings = ['languages' => $this->config->get('example_languages')];
