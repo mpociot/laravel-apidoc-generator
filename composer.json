@@ -15,26 +15,28 @@
         }
     ],
     "require": {
-        "php": ">=7.2.0",
+        "php": ">=8.0",
         "ext-json": "*",
-        "fzaninotto/faker": "^1.8",
-        "illuminate/console": "^5.7|^6.0|^7.0|^8.0",
-        "illuminate/routing": "^5.7|^6.0|^7.0|^8.0",
-        "illuminate/support": "^5.7|^6.0|^7.0|^8.0",
-        "league/flysystem": "^1.0",
-        "mpociot/documentarian": "^0.4.0",
-        "mpociot/reflection-docblock": "^1.0.1",
-        "nunomaduro/collision": "^3.0|^4.0|^5.0",
-        "ramsey/uuid": "^3.8|^4.0",
-        "symfony/var-exporter": "^4.0|^5.0"
+        "dms/phpunit-arraysubset-asserts": "^0.3.1",
+        "illuminate/console": "^8.73",
+        "illuminate/routing": "^8.73",
+        "illuminate/support": "^8.73",
+        "laravel/legacy-factories": "^1.1",
+        "league/flysystem": "^1.1",
+        "mnapoli/front-yaml": "^2.0",
+        "mnapoli/silly": "^1.7",
+        "mpociot/reflection-docblock": "^1.0",
+        "nunomaduro/collision": "^5.10",
+        "phpstan/phpstan": "^1.2",
+        "ramsey/uuid": "^4.2",
+        "symfony/var-exporter": "^5.3",
+        "windwalker/renderer": "^4.0"
     },
     "require-dev": {
-        "dms/phpunit-arraysubset-asserts": "^0.1.0",
-        "laravel/lumen-framework": "^5.7|^6.0|^7.0|^8.0",
-        "league/fractal": "^0.19.0",
-        "orchestra/testbench": "^3.7|^4.0|^5.0",
-        "phpstan/phpstan": "^0.11.15",
-        "phpunit/phpunit": "^8.0"
+        "laravel/lumen-framework": "^8.3",
+        "league/fractal": "^0.19.2",
+        "orchestra/testbench": "^6.23",
+        "phpunit/phpunit": "^9.5"
     },
     "suggest": {
         "league/fractal": "Required for transformers support"
@@ -42,7 +44,10 @@
     "autoload": {
         "psr-4": {
             "Mpociot\\ApiDoc\\": "src/"
-        }
+        },
+        "files": [
+            "src/includes/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

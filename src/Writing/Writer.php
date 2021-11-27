@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\Documentarian\Documentarian;
+use Mpociot\ApiDoc\Documentarian;
 
 class Writer
 {

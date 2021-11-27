@@ -6,7 +6,7 @@ use Dingo\Api\Routing\RouteCollection;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Illuminate\Support\Str;
-use Mpociot\ApiDoc\Matching\RouteMatcher\Match;
+use Mpociot\ApiDoc\Matching\RouteMatcher\Matcher;
 
 class RouteMatcher implements RouteMatcherInterface
 {
@@ -36,7 +36,7 @@ class RouteMatcher implements RouteMatcherInterface
                 }
 
                 if ($this->shouldIncludeRoute($route, $routeRule, $includes, $usingDingoRouter)) {
-                    $matchedRoutes[] = new Match($route, $routeRule['apply'] ?? []);
+                    $matchedRoutes[] = new Matcher($route, $routeRule['apply'] ?? []);
                 }
             }
         }

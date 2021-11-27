@@ -2,7 +2,7 @@
 
 namespace Mpociot\ApiDoc\Matching;
 
-use Mpociot\ApiDoc\Matching\RouteMatcher\Match;
+use Mpociot\ApiDoc\Matching\RouteMatcher\Matcher;
 
 interface RouteMatcherInterface
 {
@@ -12,7 +12,7 @@ interface RouteMatcherInterface
      * @param array $routeRules Route rules defined under the "routes" section in config
      * @param string $router
      *
-     * @return Match[]
+     * @return Matcher[]
      */
     public function getRoutes(array $routeRules = [], string $router = 'laravel');
 }
