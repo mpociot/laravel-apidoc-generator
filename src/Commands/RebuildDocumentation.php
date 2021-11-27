@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\ApiDoc\Commands;
+namespace LeonardoHipolito\ApiDoc\Commands;
 
 use Illuminate\Console\Command;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Writing\Writer;
+use LeonardoHipolito\ApiDoc\Tools\DocumentationConfig;
+use LeonardoHipolito\ApiDoc\Writing\Writer;
 
 class RebuildDocumentation extends Command
 {

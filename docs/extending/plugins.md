@@ -31,10 +31,10 @@ The `__invoke` method of the strategy is where you perform your actions and retu
  - the context. This contains all data for the route that has been parsed thus far in the previous stages. This means, by the `responses` stage, the context will contain the following keys: `metadata`, `bodyParameters` and `queryParameters`.
  
  Here's what your strategy in our example would look like:
- 
+
  ```php
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use LeonardoHipolito\ApiDoc\Extracting\Strategies\Strategy;
 
 class AddOrganizationIdBodyParameter extends Strategy
 {
@@ -58,26 +58,26 @@ The last thing to do is to register the strategy. Strategies are registered in a
 ...
     'strategies' => [
         'metadata' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
         ],
         'urlParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
         ],
         'headers' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
         ],
         'bodyParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
         ],
     ],
 ...
@@ -88,7 +88,7 @@ You can add, replace or remove strategies from here. In our case, we're adding o
 ```php
 
         'bodyParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
             AddOrganizationIdBodyParameter::class,
         ],
 ```

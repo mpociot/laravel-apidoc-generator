@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tests\Fixtures;
+namespace LeonardoHipolito\ApiDoc\Tests\Fixtures;
 
 /**
  * A demo test model.

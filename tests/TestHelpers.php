@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tests;
+namespace LeonardoHipolito\ApiDoc\Tests;
 
 use Illuminate\Contracts\Console\Kernel;
 

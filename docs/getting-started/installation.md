@@ -23,7 +23,7 @@ This will create an `apidoc.php` file in your `config` folder.
 Register the service provider in your `bootstrap/app.php`:
 
 ```php
-$app->register(\Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class);
+$app->register(\LeonardoHipolito\ApiDoc\ApiDocGeneratorServiceProvider::class);
 ```
 
 Next, copy the config file from `vendor/mpociot/laravel-apidoc-generator/config/apidoc.php` to your project as `config/apidoc.php`. 

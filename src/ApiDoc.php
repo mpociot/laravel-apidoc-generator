@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc;
+namespace LeonardoHipolito\ApiDoc;
 
 use Illuminate\Support\Facades\Route;
 

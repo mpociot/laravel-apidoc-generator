@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\ApiDoc\Extracting\Strategies\Metadata;
+namespace LeonardoHipolito\ApiDoc\Extracting\Strategies\Metadata;
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Extracting\RouteDocBlocker;
-use Mpociot\ApiDoc\Extracting\Strategies\Strategy;
+use LeonardoHipolito\ApiDoc\Extracting\RouteDocBlocker;
+use LeonardoHipolito\ApiDoc\Extracting\Strategies\Strategy;
 use Mpociot\Reflection\DocBlock;
 use Mpociot\Reflection\DocBlock\Tag;
 use ReflectionClass;

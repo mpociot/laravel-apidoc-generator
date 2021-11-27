@@ -6,13 +6,13 @@ $response = $client->{{ strtolower($route['methods'][0]) }}(
     '{{ rtrim($baseUrl, '/') . '/' . ltrim($route['boundUri'], '/') }}',
     [
 @if(!empty($route['headers']))
-        'headers' => {!! \Mpociot\ApiDoc\Tools\Utils::printPhpValue($route['headers'], 8) !!},
+        'headers' => {!! \LeonardoHipolito\ApiDoc\Tools\Utils::printPhpValue($route['headers'], 8) !!},
 @endif
 @if(!empty($route['cleanQueryParameters']))
-        'query' => {!! \Mpociot\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "'", "=>", 12, "[]", 8) !!},
+        'query' => {!! \LeonardoHipolito\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "'", "=>", 12, "[]", 8) !!},
 @endif
 @if(!empty($route['cleanBodyParameters']))
-        'json' => {!! \Mpociot\ApiDoc\Tools\Utils::printPhpValue($route['cleanBodyParameters'], 8) !!},
+        'json' => {!! \LeonardoHipolito\ApiDoc\Tools\Utils::printPhpValue($route['cleanBodyParameters'], 8) !!},
 @endif
     ]
 );

@@ -7,11 +7,15 @@
         "Documentation",
         "Laravel"
     ],
-    "homepage": "http://github.com/mpociot/laravel-apidoc-generator",
+    "homepage": "https://github.com/leonardohipolito/laravel-apidoc-generator",
     "authors": [
         {
             "name": "Marcel Pociot",
             "email": "m.pociot@gmail.com"
+        },
+        {
+            "name": "Leonardo Hipolito",
+            "email": "leonardohipolito.dev@gmail.com"
         }
     ],
     "require": {
@@ -43,7 +47,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mpociot\\ApiDoc\\": "src/"
+            "LeonardoHipolito\\ApiDoc\\": "src/"
         },
         "files": [
             "src/includes/helpers.php"
@@ -51,7 +55,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Mpociot\\ApiDoc\\Tests\\": "tests/"
+            "LeonardoHipolito\\ApiDoc\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -62,7 +66,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Mpociot\\ApiDoc\\ApiDocGeneratorServiceProvider"
+                "LeonardoHipolito\\ApiDoc\\ApiDocGeneratorServiceProvider"
             ]
         },
         "branch-alias": {

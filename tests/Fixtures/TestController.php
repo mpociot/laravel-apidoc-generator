@@ -1,10 +1,10 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tests\Fixtures;
+namespace LeonardoHipolito\ApiDoc\Tests\Fixtures;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Mpociot\ApiDoc\Tests\Unit\GeneratorTestCase;
+use LeonardoHipolito\ApiDoc\Tests\Unit\GeneratorTestCase;
 
 /**
  * @group Group A
@@ -152,8 +152,8 @@ class TestController extends Controller
     }
 
     /**
-     * @apiResource \Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource
-     * @apiResourceModel \Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     * @apiResource \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestUserApiResource
+     * @apiResourceModel \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestUser
      */
     public function withEloquentApiResource()
     {
@@ -163,8 +163,8 @@ class TestController extends Controller
     /**
      * @group Other😎
      *
-     * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResource
-     * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     * @apiResourceCollection LeonardoHipolito\ApiDoc\Tests\Fixtures\TestUserApiResource
+     * @apiResourceModel LeonardoHipolito\ApiDoc\Tests\Fixtures\TestUser
      */
     public function withEloquentApiResourceCollection()
     {
@@ -176,8 +176,8 @@ class TestController extends Controller
     /**
      * @group Other😎
      *
-     * @apiResourceCollection Mpociot\ApiDoc\Tests\Fixtures\TestUserApiResourceCollection
-     * @apiResourceModel Mpociot\ApiDoc\Tests\Fixtures\TestUser
+     * @apiResourceCollection LeonardoHipolito\ApiDoc\Tests\Fixtures\TestUserApiResourceCollection
+     * @apiResourceModel LeonardoHipolito\ApiDoc\Tests\Fixtures\TestUser
      */
     public function withEloquentApiResourceCollectionClass()
     {
@@ -315,7 +315,7 @@ class TestController extends Controller
     }
 
     /**
-     * @transformer 201 \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformer 201 \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestTransformer
      */
     public function transformerTagWithStatusCode()
     {
@@ -323,8 +323,8 @@ class TestController extends Controller
     }
 
     /**
-     * @transformer \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
-     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestModel
+     * @transformer \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformermodel \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestModel
      */
     public function transformerTagWithModel()
     {
@@ -340,8 +340,8 @@ class TestController extends Controller
     }
 
     /**
-     * @transformercollection \Mpociot\ApiDoc\Tests\Fixtures\TestTransformer
-     * @transformermodel \Mpociot\ApiDoc\Tests\Fixtures\TestModel
+     * @transformercollection \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestTransformer
+     * @transformermodel \LeonardoHipolito\ApiDoc\Tests\Fixtures\TestModel
      */
     public function transformerCollectionTagWithModel()
     {

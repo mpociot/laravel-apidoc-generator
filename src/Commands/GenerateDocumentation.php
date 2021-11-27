@@ -1,18 +1,18 @@
 <?php
 
-namespace Mpociot\ApiDoc\Commands;
+namespace LeonardoHipolito\ApiDoc\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
-use Mpociot\ApiDoc\Extracting\Generator;
-use Mpociot\ApiDoc\Matching\RouteMatcher\Matcher;
-use Mpociot\ApiDoc\Matching\RouteMatcherInterface;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
-use Mpociot\ApiDoc\Tools\Flags;
-use Mpociot\ApiDoc\Tools\Utils;
-use Mpociot\ApiDoc\Writing\Writer;
+use LeonardoHipolito\ApiDoc\Extracting\Generator;
+use LeonardoHipolito\ApiDoc\Matching\RouteMatcher\Matcher;
+use LeonardoHipolito\ApiDoc\Matching\RouteMatcherInterface;
+use LeonardoHipolito\ApiDoc\Tools\DocumentationConfig;
+use LeonardoHipolito\ApiDoc\Tools\Flags;
+use LeonardoHipolito\ApiDoc\Tools\Utils;
+use LeonardoHipolito\ApiDoc\Writing\Writer;
 use Mpociot\Reflection\DocBlock;
 use ReflectionClass;
 use ReflectionException;
@@ -83,7 +83,7 @@ class GenerateDocumentation extends Command
     }
 
     /**
-     * @param \Mpociot\ApiDoc\Extracting\Generator $generator
+     * @param \LeonardoHipolito\ApiDoc\Extracting\Generator $generator
      * @param Matcher[] $routes
      *
      * @return array

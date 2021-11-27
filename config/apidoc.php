@@ -205,26 +205,26 @@ return [
 
     'strategies' => [
         'metadata' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Metadata\GetFromDocBlocks::class,
         ],
         'urlParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\UrlParameters\GetFromUrlParamTag::class,
         ],
         'queryParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\QueryParameters\GetFromQueryParamTag::class,
         ],
         'headers' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\RequestHeaders\GetFromRouteRules::class,
         ],
         'bodyParameters' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\BodyParameters\GetFromBodyParamTag::class,
         ],
         'responses' => [
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
-            \Mpociot\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseTransformerTags::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseResponseTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseResponseFileTag::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\UseApiResourceTags::class,
+            \LeonardoHipolito\ApiDoc\Extracting\Strategies\Responses\ResponseCalls::class,
         ],
     ],
 
@@ -289,5 +289,5 @@ return [
      * declare your own implementation of RouteMatcherInterface
      *
      */
-    'routeMatcher' => \Mpociot\ApiDoc\Matching\RouteMatcher::class,
+    'routeMatcher' => \LeonardoHipolito\ApiDoc\Matching\RouteMatcher::class,
 ];

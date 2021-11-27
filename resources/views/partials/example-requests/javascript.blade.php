@@ -4,7 +4,7 @@ const url = new URL(
 );
 @if(count($route['cleanQueryParameters']))
 
-let params = {!! \Mpociot\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "\"", ":", 4, "{}") !!};
+let params = {!! \LeonardoHipolito\ApiDoc\Tools\Utils::printQueryParamsAsKeyValue($route['cleanQueryParameters'], "\"", ":", 4, "{}") !!};
 Object.keys(params)
     .forEach(key => url.searchParams.append(key, params[key]));
 @endif

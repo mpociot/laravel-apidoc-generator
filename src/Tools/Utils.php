@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace LeonardoHipolito\ApiDoc\Tools;
 
 use Illuminate\Routing\Route;
 use League\Flysystem\Adapter\Local;
@@ -90,7 +90,7 @@ class Utils
     public static function deleteDirectoryAndContents($dir)
     {
         $dir = ltrim($dir, '/');
-        $adapter = new Local(realpath(__DIR__ . '/../../'));
+        $adapter = new Local(realpath(__DIR__ . '/../../../laravel-apidoc-generator/'));
         $fs = new Filesystem($adapter);
         $fs->deleteDir($dir);
     }

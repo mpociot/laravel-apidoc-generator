@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\ApiDoc\Extracting\Strategies;
+namespace LeonardoHipolito\ApiDoc\Extracting\Strategies;
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\DocumentationConfig;
+use LeonardoHipolito\ApiDoc\Tools\DocumentationConfig;
 use ReflectionClass;
 use ReflectionMethod;
 

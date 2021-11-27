@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Tools;
+namespace LeonardoHipolito\ApiDoc\Tools;
 
 class Flags
 {

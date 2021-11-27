@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\ApiDoc\Extracting;
+namespace LeonardoHipolito\ApiDoc\Extracting;
 
 use Illuminate\Routing\Route;
-use Mpociot\ApiDoc\Tools\Utils;
+use LeonardoHipolito\ApiDoc\Tools\Utils;
 use Mpociot\Reflection\DocBlock;
 use ReflectionClass;
 

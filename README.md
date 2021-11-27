@@ -12,7 +12,7 @@ Automatically generate your API documentation from your existing Laravel/Lumen/[
 [![StyleCI](https://styleci.io/repos/57999295/shield?style=flat)](https://styleci.io/repos/57999295)
 
 ## Installation
-PHP 7.2 and Laravel/Lumen 5.7 or higher are required.
+PHP 8.0 and Laravel/Lumen 8.0 or higher are required.
 
 > If your application does not meet these requirements, you can check out the 3.x branch for older releases.
 
@@ -24,7 +24,7 @@ composer require --dev leonardohipolito/laravel-apidoc-generator
 Publish the config file by running:
 
 ```bash
-php artisan vendor:publish --provider="Mpociot\ApiDoc\ApiDocGeneratorServiceProvider" --tag=apidoc-config
+php artisan vendor:publish --provider="LeonardoHipolito\ApiDoc\ApiDocGeneratorServiceProvider" --tag=apidoc-config
 ```
 
 This will create an `apidoc.php` file in your `config` folder.
@@ -34,11 +34,16 @@ This will create an `apidoc.php` file in your `config` folder.
 - Register the service provider in your `bootstrap/app.php`:
 
 ```php
-$app->register(\Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class);
+$app->register(\LeonardoHipolito\ApiDoc\ApiDocGeneratorServiceProvider::class);
+$app->bind(\Illuminate\Contracts\Routing\UrlGenerator::class, function ($app) {
+      return new \Laravel\Lumen\Routing\UrlGenerator($app);
+});
 ```
 
-- Copy the config file from `vendor/mpociot/laravel-apidoc-generator/config/apidoc.php` to your project as `config/apidoc.php`. Then add to your `bootstrap/app.php`:
-
+- Copy the config file from `vendor/leonardohipolito/laravel-apidoc-generator/config/apidoc.php` to your project as `config/apidoc.php`. Then add to your `bootstrap/app.php`:
+```bash
+cp vendor/leonardohipolito/laravel-apidoc-generator/config/apidoc.php configs 
+```
 ```php
 $app->configure('apidoc');
 ```

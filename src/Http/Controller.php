@@ -1,6 +1,6 @@
 <?php
 
-namespace Mpociot\ApiDoc\Http;
+namespace LeonardoHipolito\ApiDoc\Http;
 
 use Illuminate\Support\Facades\Storage;
 
