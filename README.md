@@ -43,6 +43,9 @@ $app->register(\Mpociot\ApiDoc\ApiDocGeneratorServiceProvider::class);
 $app->configure('apidoc');
 ```
 
+## Frontend
+https://laravel.com/docs/10.x/frontend
+
 ## Documentation
 Check out the documentation at the [Beyond Code homepage](https://beyondco.de/docs/laravel-apidoc-generator/).
 
